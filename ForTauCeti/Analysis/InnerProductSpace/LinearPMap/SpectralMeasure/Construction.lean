@@ -164,7 +164,7 @@ theorem spectralPVM_def :
       (measurable_cayleyInv A) := by
   apply ProjValMeasure.ext_of_diag
   intro ξ
-  rw [hA.spectralPVM_diag, BorelCalculus.toProjValMeasure_diag, BorelCalculus.specDiag_def]
+  rw [hA.spectralPVM_diag, BorelCalculus.toProjValMeasure_diag]
   congr 1
   have := hA.isStarNormal_cayley
   apply Eq.symm
@@ -423,8 +423,7 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
     rw [resolvent_eq_cfcHom hA hz hzr, StarAlgHom.integral_representationDiagMeasure]
   have hdiag : (A.spectralPVM hA).diag ξ
       = Measure.map (cayleyInv A) ((cfcHom hU).representationDiagMeasure ξ) := by
-    rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag,
-      BorelCalculus.specDiag_def]
+    rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag]
   have hne : ∀ s : ℝ, z - (s : ℂ) ≠ 0 := by
     intro s hc
     exact hz (by simpa using congrArg Complex.im (sub_eq_zero.mp hc))
@@ -481,8 +480,7 @@ theorem specProjection_eq_borelCalculus (B : Set ℝ) (hB : MeasurableSet B) :
       = BorelCalculus.borelCalculus (hA.isStarNormal_cayley)
           (BorelCalculus.isBddMeasurable_indicator (a := A.cayley)
             (measurable_cayleyInv A hB)) := by
-  rw [specProjection_def, spectralPVM_def, BorelCalculus.toProjValMeasure_proj,
-    BorelCalculus.specProj_def]
+  rw [specProjection_def, spectralPVM_def, BorelCalculus.toProjValMeasure_proj]
 
 /-- The resolvent at `-i` as an image of the Borel calculus of the Cayley
 transform — the bridge that makes spectral projections commute with it. -/

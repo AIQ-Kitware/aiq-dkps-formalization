@@ -359,8 +359,8 @@ theorem conjugatePVM_spectralPVM
     apply TauCeti.ProjValMeasure.ext_of_diag
     intro ξ
     rw [conjugatePVM_diag, TauCeti.LinearPMap.spectralPVM_def,
-      TauCeti.BorelCalculus.toProjValMeasure_diag, TauCeti.BorelCalculus.specDiag_def]
-    rw [TauCeti.BorelCalculus.toProjValMeasure_diag, TauCeti.BorelCalculus.specDiag_def]
+      TauCeti.BorelCalculus.toProjValMeasure_diag]
+    rw [TauCeti.BorelCalculus.toProjValMeasure_diag]
     exact congrArg (MeasureTheory.Measure.map (TauCeti.LinearPMap.cayleyInv
       (PartialMapComplexification.complexify A)))
       (diagMeasure_conjugation A hA ξ)

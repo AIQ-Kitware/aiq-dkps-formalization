@@ -111,8 +111,7 @@ theorem tendsto_specProjection_Icc (x : H) :
     have hSm : MeasurableSet (κ ⁻¹' Set.Icc (-τ) τ) :=
       measurable_cayleyInv A measurableSet_Icc
     have hdiag : ((A.spectralPVM hA).diag x) = Measure.map κ μ := by
-      rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag,
-        BorelCalculus.specDiag_def, hμ, hκ]
+      rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag, hμ, hκ]
     -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the
     -- goal unsolved.  `integral_indicator_const` only applies once `Measure.map_apply`
     -- has put the measure in the right form, and `simp only` normalises past that shape

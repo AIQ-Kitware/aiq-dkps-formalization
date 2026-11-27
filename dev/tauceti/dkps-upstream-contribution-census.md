@@ -42,6 +42,37 @@ The focused Yosida, Stone uniqueness and spectral-projection build
 (7720 jobs), the full default build (22616 jobs) and `lake build Challenge`
 (20790 jobs) passed without warnings on the existing ext4-backed cache.
 
+## November 27 bounded Borel calculus consumption
+
+The bounded normal-operator calculus now uses `ContinuousLinearMap.borelCalculus`
+and `ContinuousLinearMap.spectralPVM` from the accepted #28859 integration
+`0ec5eb534c79f6de1055a7a522d295f35550b996`, head
+`6d0a839823911d3f4639b5229e6e143e7c03622a` (tauceti-ai-for-science,
+David Roe, Apache-2.0). Its PVM is built using the representation measure
+from #27902. The integration cites Conway and Rudin for its construction.
+[PR #28859](https://github.com/TauCetiProject/TauCeti/pull/28859) ·
+[Accepted commit](https://github.com/TauCetiProject/TauCeti/commit/0ec5eb534c79f6de1055a7a522d295f35550b996)
+
+DKPS's earlier implementation used polarization and continuous approximation
+to construct each operator and prove the algebra laws (Jon Crall and Claude
+Opus 5, Kitware 2026, Apache-2.0, at `8f3c8ef9b` and `1a20ed0ac`).
+The native star algebra homomorphism supplies those laws. Its diagonal
+identity recovers the polarized integral formula used by the conjugation
+and change-of-representation proofs. The real-coordinate PVM now uses
+`ProjValMeasure.map`, which replaces the separate indicator intersection,
+diagonal finiteness and total projection proofs.
+
+The two bounded half-line form estimates use `IsSelfAdjoint.spectralPVM_toPMap_top`
+from Forgejo #2123 and the native form estimates on the complementary
+spectral ranges. The existing predicate-based symbol interface remains
+in use while its consumers move to `BoundedBorelFunction`. The
+scalar types and the half-line hypotheses are preserved.
+[Forgejo #2123](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2123)
+
+The backport removes 968 net lines of Lean. The focused build (8839 jobs),
+full default build (22616 jobs) and `lake build Challenge` (20790 jobs)
+passed without warnings on the ext4-backed cache.
+
 ## November 27 census of other contributors' OperatorTheory integrations
 
 The review compares accepted TauCeti main `0be4294580a29a23dc04f8d6dc5c80ba83a11ea5`
@@ -57,7 +88,7 @@ integration does not identify a DKPS proof source.
 | --- | --- | --- |
 | SA-E09/E10, spectral restriction and gap resolvent | tauceti-ai-for-science, [Forgejo #1964](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1964), `c8bb063fe6bd7a441b156c5cc6e03b027dd29579` | Earlier DKPS results used domain invariance and a direct Cayley-symbol inverse. The accepted proof uses native reducing restrictions and a norm lower bound from the spectral projections on the two sides of the gap. Consume the restriction, self-adjointness, projection-range APIs and gap resolvent. |
 | SA-E11–E13, form bounds from spectral support | roed-math, [#41596](https://github.com/TauCetiProject/TauCeti/pull/41596), `81171bd524be1b4f119bb36877630bb96aaed6f8` | Consume the two half-line form bounds directly, including at the interval endpoints and on the zero spectral range. Retire the local interval form-bound proof. The same integration supplies the earlier Cayley PVM and resolvent APIs. The current roadmap also asks for a named resolvent predicate and the operator's full second-moment domain and action. |
-| SA-E44/E45, uniqueness and bounded compatibility | tauceti-ai-for-science, [Forgejo #2123](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2123), `54be75fd15440f9cd1312f7fd32b55cc2f837779` | `IsSelfAdjoint.eq_spectralPVM_iff` and `spectralPVM_toPMap_top` give the uniqueness characterization and pushforward comparison. The current E.1 also asks for the packaged `existsUnique_isSpectralMeasure` statement. The legacy DKPS bounded Borel calculus still uses its own representation-moment API. A further migration can identify its real-coordinate PVM with the native pushforward and use `TauCeti.cfc_inv_sub_eq_resolvent` after reconciling the signed resolvent conventions. |
+| SA-E44/E45, uniqueness and bounded compatibility | tauceti-ai-for-science, [Forgejo #2123](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2123), `54be75fd15440f9cd1312f7fd32b55cc2f837779` | `IsSelfAdjoint.eq_spectralPVM_iff` and `spectralPVM_toPMap_top` give the uniqueness characterization and pushforward comparison. The current E.1 also asks for the packaged `existsUnique_isSpectralMeasure` statement. The bounded Borel migration above consumes the pushforward comparison for the half-line form estimates. The unbundled symbol interface and resolvent-specific consumers still need direct native applications. |
 | SSP-B16 prerequisite, bounded pairwise π/2 estimate | tauceti-ai-for-science, [Forgejo #2441](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2441), `e5d890fd73f8e616241142c58517ef7212010e18` | Consume `ContinuousLinearMap.mul_norm_le_pi_div_two_mul_norm_sylvester_apply` after the existing RCLike transport. The native proof passes through finite spectral sums. The explicit Fourier inverse, compactness and arbitrary-dimensional Ky Fan estimates still need the DKPS solution formula. Full SSP-B16 concerns partial operators. |
 | SA-C37/C38/C41/C43, graph-norm estimates and closedness | tauceti-ai-for-science, [#42625](https://github.com/TauCetiProject/TauCeti/pull/42625), `d9704e3dae1ce39cc314e19c43e26a0ab12e1277` | Retire the unused scalar graph-norm definition and four laws. The canonical norm is `‖A.toGraphSpace x‖`, with the square identity and nonnegativity supplied by `norm_toGraphSpace_sq` from Forgejo #1197 and `norm_nonneg`. The free-beam graph embedding retains its separate analytic closedness argument. |
 | UO-A01 and integral-side UO-A02, unbounded spectral integral | chrisflav, [#43205](https://github.com/TauCetiProject/TauCeti/pull/43205), `53cb857c7f0558aea91b355f1b354e2f86c4d7a6` | Native `ProjValMeasure.spectralIntegral` supplies the maximal second-moment domain, action, norm, adjoint and normality laws. The local donor is a bounded spectral cut. Recovery of an arbitrary existing self-adjoint operator as the identity spectral integral is a separate comparison. |

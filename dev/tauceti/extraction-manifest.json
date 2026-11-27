@@ -2969,7 +2969,7 @@
       ],
       "current_namespace": "TauCeti.BorelCalculus",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BorelCalculus.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
@@ -2980,8 +2980,22 @@
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/28859",
+      "retired_local_declarations": [
+        "pair_conj",
+        "pair_mul_eq_inner_comp",
+        "pair_self_eq_integral"
+      ],
+      "migration_note": "November 27: Use the bundled star algebra homomorphism and its laws in place of the continuous-approximation proofs of algebra, adjoint and norm laws. The consumers still pass unbundled symbols. Local source anchor 1a20ed0ac. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent.",
+      "integration": "0ec5eb534c79f6de1055a7a522d295f35550b996",
+      "accepted_head": "6d0a839823911d3f4639b5229e6e143e7c03622a",
+      "accepted_upstream_declarations": [
+        "ContinuousLinearMap.borelCalculus_ofContinuousMap",
+        "ContinuousLinearMap.commute_borelCalculus_borelCalculus",
+        "ContinuousLinearMap.borelCalculus_congr_ae",
+        "ContinuousLinearMap.norm_borelCalculus_apply_le"
+      ]
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3012,20 +3026,50 @@
       ],
       "current_namespace": "TauCeti.BorelCalculus",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BorelCalculus.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization",
-        "Mathlib"
+        "TauCeti.Analysis.InnerProductSpace.BorelCalculus.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/28859",
+      "retired_local_declarations": [
+        "borelCalculus_apply",
+        "borelVector",
+        "eq_of_forall_norm_sub_le",
+        "exists_continuous_pair_close",
+        "inner_borelVector",
+        "integrable_of_bounded",
+        "norm_borelCalculus_le",
+        "norm_borelVector_le",
+        "norm_pairFunctional_le",
+        "norm_pair_le",
+        "norm_pair_le_crude",
+        "pairFunctional",
+        "pairFunctional_apply",
+        "pair_add_left",
+        "pair_add_right",
+        "pair_smul_left",
+        "pair_smul_right"
+      ],
+      "migration_note": "November 27: Replace the Riesz-vector construction with the native calculus, at the original complete complex Hilbert-space scope. Polarize its diagonal integral for the matrix-element comparison used downstream. The unbundled symbol interface remains during downstream migration. Local source anchor 8f3c8ef9b. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent.",
+      "integration": "0ec5eb534c79f6de1055a7a522d295f35550b996",
+      "accepted_head": "6d0a839823911d3f4639b5229e6e143e7c03622a",
+      "accepted_upstream_declarations": [
+        "ContinuousLinearMap.borelCalculus",
+        "ContinuousLinearMap.inner_borelCalculus_self",
+        "ContinuousLinearMap.spectralPVM_eq_ofRepresentation",
+        "ProjValMeasure.ofRepresentation_diag",
+        "BoundedBorelFunction.ofFunction",
+        "LinearMap.inner_polarization"
+      ]
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3054,20 +3098,47 @@
       ],
       "current_namespace": "TauCeti.BorelCalculus",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BorelCalculus.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative",
-        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic"
+        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Map",
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic",
+        "ForTauCeti.Analysis.InnerProductSpace.OperatorExt"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/28859",
+      "retired_local_declarations": [
+        "inner_specProj_self",
+        "isFiniteMeasure_specDiag",
+        "specDiag",
+        "specDiag_def",
+        "specProj",
+        "specProj_def",
+        "specProj_inter",
+        "specProj_univ",
+        "re_inner_eq_integral_reCoord",
+        "integrable_reCoord"
+      ],
+      "migration_note": "November 27: Use the native spectral PVM pushforward. The bounded form estimates use the #2123 bounded PVM comparison at 54be75fd15440f9cd1312f7fd32b55cc2f837779 and the partial-operator estimates on complementary spectral ranges. Local source anchor 1a20ed0ac. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent.",
+      "integration": "0ec5eb534c79f6de1055a7a522d295f35550b996",
+      "accepted_head": "6d0a839823911d3f4639b5229e6e143e7c03622a",
+      "accepted_upstream_declarations": [
+        "ContinuousLinearMap.spectralPVM",
+        "ContinuousLinearMap.borelCalculus_indicator",
+        "ProjValMeasure.map",
+        "ProjValMeasure.map_proj",
+        "ProjValMeasure.map_diag",
+        "IsSelfAdjoint.spectralPVM_toPMap_top",
+        "IsSelfAdjoint.re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj",
+        "IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj"
+      ]
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3098,7 +3169,14 @@
       ],
       "status": "partially-upstreamed",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/18907",
-      "migration_note": "October 25, following DKPS 9380d70b0: the polarised integral is defined directly over accepted StarAlgHom.representationDiagMeasure (cfcHom ha). The duplicate finite-sum measure theorem is removed; consumers use the accepted Mathlib finite-sum instance. Other integral-transport and polarization mathematics remains local and retains its scope and Kitware provenance. 2026-11-01: Retired the standalone local theorem TauCeti.BorelCalculus.exists_continuous_integral_norm_sub_le and its one-measure L1 approximation proof, now consumed directly as MeasureTheory.Measure.exists_continuous_integral_norm_sub_le in the accepted TauCeti.MeasureTheory.Function.ContinuousApproximation (SA-B02, PR #18907, integration commit 254557afab32f37a4214172559f7849c801f5ba3; ancestor of TauCeti pin 463ab293070d). Upstream explicitly adapted this Kitware DKPS proof, retaining Jon Crall and Claude Opus 5 credit, Apache-2.0; original complete donor exists at e4637c3919ae. The local polarized pair, local integral domination, and Borel functional-calculus transport statements retain their separate, not-yet-replaced semantics; no forwarding alias was added."
+      "migration_note": "October 25, following DKPS 9380d70b0: the polarised integral is defined directly over accepted StarAlgHom.representationDiagMeasure (cfcHom ha). The duplicate finite-sum measure theorem is removed; consumers use the accepted Mathlib finite-sum instance. Other integral-transport and polarization mathematics remains local and retains its scope and Kitware provenance. 2026-11-01: Retired the standalone local theorem TauCeti.BorelCalculus.exists_continuous_integral_norm_sub_le and its one-measure L1 approximation proof, now consumed directly as MeasureTheory.Measure.exists_continuous_integral_norm_sub_le in the accepted TauCeti.MeasureTheory.Function.ContinuousApproximation (SA-B02, PR #18907, integration commit 254557afab32f37a4214172559f7849c801f5ba3; ancestor of TauCeti pin 463ab293070d). Upstream explicitly adapted this Kitware DKPS proof, retaining Jon Crall and Claude Opus 5 credit, Apache-2.0; original complete donor exists at e4637c3919ae. The local polarized pair, local integral domination, and Borel functional-calculus transport statements retain their separate, not-yet-replaced semantics; no forwarding alias was added. November 27: Retire L¹ transport helpers used only by the former construction. Keep the polarized integral formula used for change of representation and conjugation. Local source anchor 8f3c8ef9b. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent.",
+      "retired_local_declarations": [
+        "diagMeasure_le_sum",
+        "norm_integral_sub_integral_le",
+        "norm_pair_sub_pair_le",
+        "pairVectors",
+        "pair_of_continuous"
+      ]
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",

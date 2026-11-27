@@ -66,32 +66,16 @@ theorem norm_sq_sum_of_pairwise_inner_eq_zero {ι : Type*} (s : Finset ι) (v : 
   exact Finset.sum_congr rfl fun i _ => by
     rw [norm_sq_eq_re_inner (𝕜 := ℂ), RCLike.re_eq_complex_re]
 
-/-- The Borel calculus of a symbol with an explicit uniform bound `M` has operator norm at
-most `2 * M`.  This is the explicit-bound form of `norm_borelCalculus_le`, whose bound is
-the packaged `chooseBound` of the admissibility witness. -/
+/-- The native sharp operator norm bound implies the estimate used in the band argument. -/
 theorem norm_borelCalculus_le_of_forall_norm_le {a : H →L[ℂ] H} (ha : IsStarNormal a)
     {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) {M : ℝ} (hM : 0 ≤ M)
     (hb : ∀ x, ‖f x‖ ≤ M) :
     ‖borelCalculus ha hf‖ ≤ 2 * M := by
-  refine ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun ξ => ?_
-  have hsq : ‖borelCalculus ha hf ξ‖ ^ 2 ≤
-      2 * M * ‖borelCalculus ha hf ξ‖ * ‖ξ‖ := by
-    have hnorm : (‖borelCalculus ha hf ξ‖ ^ 2 : ℝ) =
-        ‖⟪borelCalculus ha hf ξ, borelCalculus ha hf ξ⟫_ℂ‖ := by
-      rw [inner_self_eq_norm_sq_to_K (𝕜 := ℂ), norm_pow, RCLike.norm_ofReal, abs_norm]
-    rw [hnorm, inner_borelCalculus ha hf (borelCalculus ha hf ξ) ξ]
-    exact norm_pair_le ha hf.measurable hM hb _ ξ
-  rcases eq_or_lt_of_le (norm_nonneg (borelCalculus ha hf ξ)) with h0 | hpos
-  · rw [← h0]
-    positivity
-  · have h2 : ‖borelCalculus ha hf ξ‖ * ‖borelCalculus ha hf ξ‖ ≤
-        (2 * M * ‖ξ‖) * ‖borelCalculus ha hf ξ‖ := by
-      calc
-        ‖borelCalculus ha hf ξ‖ * ‖borelCalculus ha hf ξ‖
-            = ‖borelCalculus ha hf ξ‖ ^ 2 := (pow_two _).symm
-        _ ≤ 2 * M * ‖borelCalculus ha hf ξ‖ * ‖ξ‖ := hsq
-        _ = (2 * M * ‖ξ‖) * ‖borelCalculus ha hf ξ‖ := by ring
-    exact le_of_mul_le_mul_right h2 hpos
+  have := ha
+  rw [borelCalculus_eq_native]
+  refine (a.norm_borelCalculus_le hM ?_).trans (by linarith)
+  intro x
+  simpa only [IsBddMeasurable.toBoundedBorelFunction_apply] using hb x
 
 section BoundedSelfAdjoint
 

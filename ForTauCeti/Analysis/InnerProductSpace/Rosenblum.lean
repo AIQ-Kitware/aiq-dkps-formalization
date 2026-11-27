@@ -256,7 +256,7 @@ theorem ae_cayleyInv_mem_spectrum (v : E) :
     rw [show (A.spectralPVM hA).diag v
         = Measure.map (cayleyInv A) ((cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v)
       from by
-        rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag, BorelCalculus.specDiag_def],
+        rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag],
       Measure.map_apply (measurable_cayleyInv A) hmeas]
   rw [hmap] at hzero
   have := MeasureTheory.compl_mem_ae_iff.mpr hzero

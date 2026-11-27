@@ -6,35 +6,17 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative
-public import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic
+public import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Map
 public import ForTauCeti.Analysis.InnerProductSpace.OperatorExt
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic
 
 /-!
-# Projection-valued measures from the Borel calculus
+# Real-coordinate spectral projections
 
-Applying the bounded Borel functional calculus to indicator functions turns a
-normal operator into a projection-valued measure.  The sets are indexed along an
-arbitrary measurable *relabelling* `κ : spectrum ℂ a → ℝ`, because
-`TauCeti.ProjValMeasure ℝ` is a measure on the Borel sets of `ℝ` while the
-spectrum of a normal operator lives in `ℂ`; for a self-adjoint operator `κ` will
-be the real part, and for the Cayley transform of an unbounded self-adjoint
-operator it will be the inverse Cayley map.
-
-## Sources
-
-Applying a functional calculus to indicator functions to obtain a
-projection-valued measure is the standard route to the spectral theorem for a
-normal operator; see
-`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Polarization.lean` for the
-sources of the chain.  The relabelling parameter `κ` is this library's own, and is
-there so that the unbounded Cayley case is an instance rather than a special case.
-
-## Provenance
-
-*New*; see `dev/tauceti/dkps-upstream-contribution-census.md`.
-The target structure is the upstream, measurable-space-general
-`TauCeti.ProjValMeasure`, specialized to `ℝ`; only the construction filling it
-here remains local.
+Push Tau Ceti's spectral measure of a bounded normal operator forward along a
+measurable real coordinate. For a self-adjoint operator this coordinate is the
+real part on its spectrum. The formulas for indicators and diagonal measures
+connect the pushforward to the spectral-subspace consumers.
 -/
 
 public section
@@ -61,102 +43,30 @@ section Projections
 
 variable (ha : IsStarNormal a) {κ : spectrum ℂ a → ℝ} (hκ : Measurable κ)
 
-/-- The spectral projection attached to a Borel subset of `ℝ`, pulled back along
-the relabelling `κ`. -/
--- `@[expose]` here is a recorded compromise, not a clean carve-out. Consumers in this
--- module rewrite by definition name (`rw [specProjection, spectralPVM, specProj]`) and
--- index subtypes by `.domain`, so the bodies must reduce. The rubric-clean fix is a
--- `_def` lemma per definition plus rewiring every call site, which is a larger refactor
--- than a conversion pass; it is recorded debt rather than an endorsement.
-noncomputable def specProj (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
-  borelCalculus ha (isBddMeasurable_indicator (a := a) (hκ hB))
+/-- Reindex the spectral measure along a measurable real-valued coordinate. -/
+noncomputable def toProjValMeasure : TauCeti.ProjValMeasure ℝ H :=
+  letI := ha
+  a.spectralPVM.map κ hκ
 
-/-- Rewrite form of `specProj`, so a call site need not unfold the definition.
-
-Added 2026-07-30 by `FTC-EXPOSE-SPECMEAS` slice 2. Consumers were doing
-`rw [BorelCalculus.specProj]`, which needs the body exposed; this is the lemma the
-`api-design` rubric asks for instead. -/
-theorem specProj_def (B : Set ℝ) (hB : MeasurableSet B) :
-    specProj (H := H) ha hκ B hB
-      = borelCalculus ha (isBddMeasurable_indicator (a := a) (hκ hB)) := (rfl)
-
-/-- The relabelled diagonal measure. -/
--- `@[expose]` for the same reason as `toProjValMeasure`, whose exposed body references
--- this one. Recorded debt, not an endorsement.
-noncomputable def specDiag (κ' : spectrum ℂ a → ℝ) (ξ : H) : Measure ℝ :=
-  Measure.map κ' ((cfcHom ha).representationDiagMeasure ξ)
-
-/-- Rewrite form of `specDiag`, so a call site need not unfold the definition. -/
-theorem specDiag_def (κ' : spectrum ℂ a → ℝ) (ξ : H) :
-    specDiag ha κ' ξ = Measure.map κ' ((cfcHom ha).representationDiagMeasure ξ) := (rfl)
-
-include hκ in
-/-- The spectral diagonal measures are finite. -/
-theorem isFiniteMeasure_specDiag (ξ : H) : IsFiniteMeasure (specDiag ha κ ξ) := by
-  refine ⟨?_⟩
-  rw [specDiag, Measure.map_apply hκ MeasurableSet.univ]
-  exact measure_lt_top _ _
-
-/-- The weld: the diagonal matrix element of a spectral projection is the mass
-the relabelled diagonal measure gives to the set. -/
-theorem inner_specProj_self (B : Set ℝ) (hB : MeasurableSet B) (ξ : H) :
-    ⟪ξ, specProj ha hκ B hB ξ⟫_ℂ = (((specDiag ha κ ξ) B).toReal : ℂ) := by
-  rw [specProj, inner_borelCalculus_self, integral_indicator_const _ (hκ hB),
-    specDiag, Measure.map_apply hκ hB]
-  simp [Complex.real_smul, MeasureTheory.measureReal_def]
-
-/-- The whole line carries the identity. -/
-theorem specProj_univ :
-    specProj (H := H) ha hκ Set.univ MeasurableSet.univ = ContinuousLinearMap.id ℂ H := by
-  apply op_ext_of_inner_self
-  intro ξ
-  rw [inner_specProj_self]
-  have hm : ((specDiag ha κ ξ) Set.univ).toReal = ‖ξ‖ ^ 2 := by
-    rw [specDiag, Measure.map_apply hκ MeasurableSet.univ, Set.preimage_univ,
-      ← measureReal_def, StarAlgHom.representationDiagMeasure_real_univ]
-  rw [hm]
-  -- names the application so the norm bound applies to it directly.
-  change (((‖ξ‖ ^ 2 : ℝ)) : ℂ) = ⟪ξ, ξ⟫_ℂ
-  rw [inner_self_eq_norm_sq_to_K]
-  norm_cast
-
-/-- Multiplicativity: intersection of sets is composition of projections. -/
-theorem specProj_inter (B₁ B₂ : Set ℝ) (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) :
-    specProj (H := H) ha hκ B₁ hB₁ * specProj ha hκ B₂ hB₂
-      = specProj ha hκ (B₁ ∩ B₂) (hB₁.inter hB₂) := by
-  refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
-  have hprod : (fun x => (κ ⁻¹' B₁).indicator (fun _ => (1 : ℂ)) x *
-        (κ ⁻¹' B₂).indicator (fun _ => (1 : ℂ)) x)
-      = (κ ⁻¹' (B₁ ∩ B₂)).indicator (fun _ => (1 : ℂ)) := by
-    ext x
-    by_cases hx1 : x ∈ κ ⁻¹' B₁ <;> by_cases hx2 : x ∈ κ ⁻¹' B₂ <;>
-      simp only [Set.mem_preimage] at hx1 hx2 <;>
-      simp [Set.mem_preimage, Set.mem_inter_iff, hx1, hx2]
-  have hL : ⟪ψ, (specProj (H := H) ha hκ B₁ hB₁ * specProj ha hκ B₂ hB₂) ξ⟫_ℂ
-      = pair ha (fun x => (κ ⁻¹' B₁).indicator (fun _ => (1 : ℂ)) x *
-          (κ ⁻¹' B₂).indicator (fun _ => (1 : ℂ)) x) ψ ξ :=
-    (pair_mul_eq_inner_comp ha (isBddMeasurable_indicator (a := a) (hκ hB₁))
-      (isBddMeasurable_indicator (a := a) (hκ hB₂)) ψ ξ).symm
-  rw [hL, hprod, specProj, inner_borelCalculus]
-
-/-- **The projection-valued measure of a normal operator**, indexed along a
-measurable relabelling `κ` of its spectrum. -/
--- `@[expose]` for the same reason as `spectralPVM`, which is built from this and whose
--- exposed body cannot reference an unexposed one. Recorded debt, not an endorsement.
-noncomputable def toProjValMeasure : TauCeti.ProjValMeasure ℝ H where
-  proj := specProj ha hκ
-  diag := specDiag ha κ
-  diag_finite := isFiniteMeasure_specDiag ha hκ
-  inner_proj := inner_specProj_self ha hκ
-  proj_univ := specProj_univ ha hκ
-  proj_inter := specProj_inter ha hκ
-
-/-- The projections of the derived PVM are the spectral projections. -/
+/-- The projections of the pushed-forward measure are the calculus of pulled-back indicators. -/
 @[simp] theorem toProjValMeasure_proj (B : Set ℝ) (hB : MeasurableSet B) :
-    (toProjValMeasure (H := H) ha hκ).proj B hB = specProj ha hκ B hB := (rfl)
-/-- Its diagonal measures are the spectral diagonal measures. -/
+    (toProjValMeasure ha hκ).proj B hB =
+      borelCalculus ha (isBddMeasurable_indicator (a := a) (hκ hB)) := by
+  have := ha
+  rw [toProjValMeasure, ProjValMeasure.map_proj, borelCalculus_eq_native]
+  rw [show (isBddMeasurable_indicator (a := a) (hκ hB)).toBoundedBorelFunction =
+      BoundedBorelFunction.indicator (κ ⁻¹' B) (hκ hB) 1 from
+      BoundedBorelFunction.ext fun x => by
+        simp only [IsBddMeasurable.toBoundedBorelFunction_apply,
+          BoundedBorelFunction.indicator_apply]
+        rfl]
+  exact (a.borelCalculus_indicator (hκ hB)).symm
+
+/-- The diagonal measure of the pushforward in continuous representation coordinates. -/
 @[simp] theorem toProjValMeasure_diag (ξ : H) :
-    (toProjValMeasure (H := H) ha hκ).diag ξ = specDiag ha κ ξ := (rfl)
+    (toProjValMeasure ha hκ).diag ξ = Measure.map κ ((cfcHom ha).representationDiagMeasure ξ) := by
+  have := ha
+  rw [toProjValMeasure, ProjValMeasure.map_diag, spectralPVM_diag_eq_representation ha]
 end Projections
 
 section Coordinate
@@ -226,14 +136,14 @@ theorem boundedPVM_proj (B : Set ℝ) (hB : MeasurableSet B) :
     (boundedPVM hT).proj B hB =
       borelCalculus hT.isStarNormal
         (isBddMeasurable_indicator (a := T) (measurable_reCoord hB)) := by
-  rw [boundedPVM, toProjValMeasure_proj, specProj_def]
+  rw [boundedPVM, toProjValMeasure_proj]
 
 /-- The diagonal measures of `boundedPVM` are the pushforwards of the diagonal measures
 along the real-part relabelling.  Rewrite form for consumers outside this module. -/
 theorem boundedPVM_diag (ξ : H) :
     (boundedPVM hT).diag ξ = Measure.map reCoord ((cfcHom
       hT.isStarNormal).representationDiagMeasure ξ) := by
-  rw [boundedPVM, toProjValMeasure_diag, specDiag_def]
+  rw [boundedPVM, toProjValMeasure_diag]
 
 /-- **The bridge to the continuous functional calculus.**  A spectral projection
 of a bounded self-adjoint operator is the continuous functional calculus of any
@@ -243,7 +153,7 @@ theorem boundedPVM_proj_eq_cfcHom (s : Set ℝ) (hs : MeasurableSet s)
     (g : C(spectrum ℂ T, ℂ))
     (hg : ∀ w, g w = (reCoord ⁻¹' s).indicator (fun _ => (1 : ℂ)) w) :
     (boundedPVM hT).proj s hs = cfcHom hT.isStarNormal g := by
-  rw [boundedPVM, toProjValMeasure_proj, specProj,
+  rw [boundedPVM, toProjValMeasure_proj,
     ← borelCalculus_of_continuous hT.isStarNormal g (IsBddMeasurable.of_continuous g)]
   exact borelCalculus_congr_ae _ _ _ fun η =>
     Filter.Eventually.of_forall fun w => (hg w).symm
@@ -253,120 +163,55 @@ it** -- so its range and the orthogonal complement of its range are both
 invariant, i.e. every spectral subspace reduces the operator. -/
 theorem boundedPVM_proj_comm (s : Set ℝ) (hs : MeasurableSet s) :
     T * (boundedPVM hT).proj s hs = (boundedPVM hT).proj s hs * T := by
-  rw [boundedPVM, toProjValMeasure_proj, specProj]
+  rw [boundedPVM, toProjValMeasure_proj]
   exact borelCalculus_comm_self hT.isStarNormal _
 
-/-- **The real part of the quadratic form is the integral of the real
-coordinate against the diagonal measure**, together with the integrability that
-makes the integral meaningful.
+private theorem boundedPVM_eq_toPMap_top :
+    boundedPVM hT = ((T : H →ₗ[ℂ] H).toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top hT) := by
+  have := hT.isStarNormal
+  rw [hT.spectralPVM_toPMap_top]
+  rfl
 
-Stated because the two half-line bounds below are mirror images — an upper bound
-from `Ici` carrying no mass, a lower bound from `Iic` — and this fact is
-common to both and has no direction in it.  It was written out twice, fifteen
-identical lines each time; what genuinely differs between those theorems is
-only the final `integral_mono_ae` and which half-line is null. -/
-private theorem re_inner_eq_integral_reCoord
-    (hT : IsSelfAdjoint T) (ξ : H) :
-    (⟪T ξ, ξ⟫_ℂ).re =
-      ∫ w, reCoord (T := T) w ∂((cfcHom hT.isStarNormal).representationDiagMeasure ξ) := by
-  have hcoord : IsBddMeasurable (fun w : spectrum ℂ T => (w : ℂ)) :=
-    isBddMeasurable_coord (a := T)
-  have hbc : ⟪ξ, borelCalculus hT.isStarNormal hcoord ξ⟫_ℂ =
-      ∫ w, (w : ℂ) ∂((cfcHom hT.isStarNormal).representationDiagMeasure ξ) :=
-    inner_borelCalculus_self hT.isStarNormal hcoord ξ
-  rw [borelCalculus_coord hT.isStarNormal] at hbc
-  have hint : Integrable (fun w : spectrum ℂ T => (w : ℂ)) ((cfcHom
-    hT.isStarNormal).representationDiagMeasure ξ) :=
-    hcoord.integrable _
-  have hre : (⟪ξ, T ξ⟫_ℂ).re = ∫ w, ((w : ℂ)).re ∂((cfcHom
-    hT.isStarNormal).representationDiagMeasure ξ) := by
-    rw [hbc]
-    simpa [RCLike.re_eq_complex_re] using (integral_re (𝕜 := ℂ) hint).symm
-  rw [← inner_conj_symm, Complex.conj_re]
-  exact hre
-
-/-- The real coordinate is integrable against the diagonal measure. -/
-private theorem integrable_reCoord (hT : IsSelfAdjoint T) (ξ : H) :
-    Integrable (fun w : spectrum ℂ T => reCoord (T := T) w)
-      ((cfcHom hT.isStarNormal).representationDiagMeasure ξ) := by
-  have hcoord : IsBddMeasurable (fun w : spectrum ℂ T => (w : ℂ)) :=
-    isBddMeasurable_coord (a := T)
-  simpa [reCoord, RCLike.re_eq_complex_re] using (hcoord.integrable _).re
-
-/-- **Form bound from a spectral half-line.**  If the spectral projection of
-`[c, ∞)` kills `ξ`, then the quadratic form of `T` at `ξ` is at most `c ‖ξ‖²`.
-
-The diagonal measure of `ξ` is exactly the pushforward of the spectral measure,
-so killing the projection is the same as giving `[c, ∞)` no mass — and then the
-quadratic form, which *is* the integral of the coordinate against that measure
-(`borelCalculus_coord` plus `inner_borelCalculus_self`), is bounded by `c` times
-the total mass `‖ξ‖²`. -/
+/-- If the spectral projection on `[c, ∞)` kills a vector, its quadratic form is at most
+`c` times its squared norm. -/
 theorem re_inner_le_of_boundedPVM_proj_Ici_eq_zero (c : ℝ) {ξ : H}
     (hξ : (boundedPVM hT).proj (Set.Ici c) measurableSet_Ici ξ = 0) :
     (⟪T ξ, ξ⟫_ℂ).re ≤ c * ‖ξ‖ ^ 2 := by
-  set ha := hT.isStarNormal with hha
-  set μ := (cfcHom ha).representationDiagMeasure ξ with hμ
-  -- the diagonal measure gives the closed half-line no mass
-  have hnull : μ (reCoord ⁻¹' Set.Ici c) = 0 := by
-    have h := (boundedPVM hT).norm_sq_proj_apply (Set.Ici c) measurableSet_Ici ξ
-    rw [hξ, norm_zero] at h
-    have hmap : ((boundedPVM hT).diag ξ) (Set.Ici c) = μ (reCoord ⁻¹' Set.Ici c) := by
-      rw [boundedPVM, toProjValMeasure_diag, specDiag,
-        Measure.map_apply measurable_reCoord measurableSet_Ici]
-    rw [hmap] at h
-    exact (ENNReal.toReal_eq_zero_iff _).mp (by simpa using h.symm)
-      |>.resolve_right (measure_ne_top _ _)
-  -- almost every spectral point lies strictly below `c`
-  have hae : ∀ᵐ w ∂μ, reCoord (T := T) w ≤ c := by
-    rw [ae_iff]
-    refine measure_mono_null (fun w hw => ?_) hnull
-    exact not_lt.mp fun h => hw (le_of_lt h)
-  -- the quadratic form is the integral of the coordinate
-  have hform : (⟪T ξ, ξ⟫_ℂ).re = ∫ w, reCoord (T := T) w ∂μ :=
-    re_inner_eq_integral_reCoord hT ξ
-  rw [hform]
-  have hintc : Integrable (fun w : spectrum ℂ T => reCoord (T := T) w) μ :=
-    integrable_reCoord hT ξ
-  calc ∫ w, reCoord (T := T) w ∂μ ≤ ∫ _w : spectrum ℂ T, c ∂μ :=
-        integral_mono_ae hintc (integrable_const _) hae
-    _ = c * ‖ξ‖ ^ 2 := by
-        rw [integral_const, smul_eq_mul, hμ,
-          StarAlgHom.representationDiagMeasure_real_univ]
-        ring
+  let x : ((T : H →ₗ[ℂ] H).toPMap ⊤).domain := ⟨ξ, by simp⟩
+  have hx : (x : H) ∈ ((boundedPVM hT).proj (Set.Ici c)ᶜ
+      measurableSet_Ici.compl).range := by
+    refine ⟨ξ, ?_⟩
+    rw [ProjValMeasure.proj_compl _ _ measurableSet_Ici]
+    change (ContinuousLinearMap.id ℂ H - (boundedPVM hT).proj
+      (Set.Ici c) measurableSet_Ici) ξ = ξ
+    rw [_root_.sub_apply, ContinuousLinearMap.id_apply, hξ, sub_zero]
+  rw [boundedPVM_eq_toPMap_top hT] at hx
+  have hTop := LinearPMap.isSelfAdjoint_toPMap_top hT
+  have h := hTop.re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj
+    measurableSet_Ici.compl (fun _ hs => le_of_lt (lt_of_not_ge hs)) hx
+  change (⟪T ξ, ξ⟫_ℂ).re ≤ c * ‖ξ‖ ^ 2 at h
+  exact h
 
-/-- **Form bound from a spectral half-line, the other side.**  If the spectral
-projection of `(-∞, c]` kills `ξ`, the quadratic form of `T` at `ξ` is at least
-`c ‖ξ‖²`.  Same argument as
-`re_inner_le_of_boundedPVM_proj_Ici_eq_zero`, with the inequality reversed. -/
+/-- If the spectral projection on `(-∞, c]` kills a vector, its quadratic form is at least
+`c` times its squared norm. -/
 theorem le_re_inner_of_boundedPVM_proj_Iic_eq_zero (c : ℝ) {ξ : H}
     (hξ : (boundedPVM hT).proj (Set.Iic c) measurableSet_Iic ξ = 0) :
     c * ‖ξ‖ ^ 2 ≤ (⟪T ξ, ξ⟫_ℂ).re := by
-  set ha := hT.isStarNormal with hha
-  set μ := (cfcHom ha).representationDiagMeasure ξ with hμ
-  have hnull : μ (reCoord ⁻¹' Set.Iic c) = 0 := by
-    have h := (boundedPVM hT).norm_sq_proj_apply (Set.Iic c) measurableSet_Iic ξ
-    rw [hξ, norm_zero] at h
-    have hmap : ((boundedPVM hT).diag ξ) (Set.Iic c) = μ (reCoord ⁻¹' Set.Iic c) := by
-      rw [boundedPVM, toProjValMeasure_diag, specDiag,
-        Measure.map_apply measurable_reCoord measurableSet_Iic]
-    rw [hmap] at h
-    exact (ENNReal.toReal_eq_zero_iff _).mp (by simpa using h.symm)
-      |>.resolve_right (measure_ne_top _ _)
-  have hae : ∀ᵐ w ∂μ, c ≤ reCoord (T := T) w := by
-    rw [ae_iff]
-    refine measure_mono_null (fun w hw => ?_) hnull
-    exact le_of_lt (not_le.mp hw)
-  have hform : (⟪T ξ, ξ⟫_ℂ).re = ∫ w, reCoord (T := T) w ∂μ :=
-    re_inner_eq_integral_reCoord hT ξ
-  rw [hform]
-  have hintc : Integrable (fun w : spectrum ℂ T => reCoord (T := T) w) μ :=
-    integrable_reCoord hT ξ
-  calc c * ‖ξ‖ ^ 2 = ∫ _w : spectrum ℂ T, c ∂μ := by
-        rw [integral_const, smul_eq_mul, hμ,
-          StarAlgHom.representationDiagMeasure_real_univ]
-        ring
-    _ ≤ ∫ w, reCoord (T := T) w ∂μ :=
-        integral_mono_ae (integrable_const _) hintc hae
+  let x : ((T : H →ₗ[ℂ] H).toPMap ⊤).domain := ⟨ξ, by simp⟩
+  have hx : (x : H) ∈ ((boundedPVM hT).proj (Set.Iic c)ᶜ
+      measurableSet_Iic.compl).range := by
+    refine ⟨ξ, ?_⟩
+    rw [ProjValMeasure.proj_compl _ _ measurableSet_Iic]
+    change (ContinuousLinearMap.id ℂ H - (boundedPVM hT).proj
+      (Set.Iic c) measurableSet_Iic) ξ = ξ
+    rw [_root_.sub_apply, ContinuousLinearMap.id_apply, hξ, sub_zero]
+  rw [boundedPVM_eq_toPMap_top hT] at hx
+  have hTop := LinearPMap.isSelfAdjoint_toPMap_top hT
+  have h := hTop.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj
+    measurableSet_Iic.compl (fun _ hs => le_of_lt (lt_of_not_ge hs)) hx
+  change c * ‖ξ‖ ^ 2 ≤ (⟪T ξ, ξ⟫_ℂ).re at h
+  exact h
 
 end BoundedSelfAdjoint
 
