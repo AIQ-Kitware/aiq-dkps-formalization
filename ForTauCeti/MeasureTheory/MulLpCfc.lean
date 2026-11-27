@@ -15,22 +15,18 @@ public import Mathlib.Analysis.Normed.Algebra.GelfandFormula
 /-!
 # The functional calculus of a multiplication operator is multiplication by the composed symbol
 
-For a σ-finite measure `ρ` and a bounded measurable symbol `g`,
+For a σ-finite measure `ρ` and a bounded measurable symbol `g`, write `M_g` for the native
+multiplication operator of the `L∞` class of `g`. Then
 
 ```text
-cfc f (mulLp ρ g) = mulLp ρ (f ∘ g)
+cfc f M_g = M_{f ∘ g}
 ```
 
 for every `f` continuous on the spectrum.
 
-## Why this is not `map_cfc`
-
-`StarAlgHomClass.map_cfc` transports the functional calculus along a homomorphism of the
-*algebras*: it answers "what does `φ` do to `f(a)`".  Here the algebra is fixed and the change
-happens in the *symbol*, so nothing about `map_cfc` applies.  What does apply is **uniqueness**:
-`f ↦ mulLp ρ (f ∘ g)` is itself a continuous `⋆`-algebra homomorphism out of
-`C(spectrum ℂ (mulLp ρ g), ℂ)` sending the coordinate to `mulLp ρ g`, and
-`cfcHom_eq_of_continuous_of_map_id` says there is only one such map.
+The map `f ↦ M_{f ∘ g}` is a continuous `⋆`-algebra homomorphism from
+`C(spectrum ℂ M_g, ℂ)` that sends the coordinate to `M_g`.
+`cfcHom_eq_of_continuous_of_map_id` identifies it with the continuous functional calculus.
 
 The obstruction to even *writing down* that homomorphism is that `f` is defined on the spectrum
 while `g` takes values in `ℂ`.  `TauCeti.ae_mem_spectrum_mulLp` removes it: the symbol may be
@@ -41,7 +37,7 @@ empty-spectrum element is a subsingleton and the claim is `Subsingleton.elim`.
 
 ## Main results
 
-* `TauCeti.mulLpStarHom`: the `⋆`-algebra homomorphism `f ↦ mulLp ρ (f ∘ ĝ)`.
+* `TauCeti.mulLpStarHom`: the `⋆`-algebra homomorphism `f ↦ M_{f ∘ ĝ}`.
 * `TauCeti.continuous_mulLpStarHom`: it is continuous, with norm at most `1`.
 * `TauCeti.cfc_mulLp`: **the functional calculus of a multiplication operator.**
 
@@ -86,7 +82,8 @@ hypothesis discharged by `rfl`: composition with a fixed `ĝ` is applied pointwi
 commutes with every pointwise operation on `C(s, ℂ)` on the nose. -/
 noncomputable def mulLpStarHom (hĝ : Measurable ĝ) :
     C(↥s, ℂ) →⋆ₐ[ℂ] (Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ) where
-  toFun f := mulLp ρ (measurable_comp_contMap hĝ f) (norm_comp_contMap_le ĝ f)
+  toFun f := Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ (measurable_comp_contMap
+    hĝ f) (norm_comp_contMap_le ĝ f))
   map_one' := by
     refine mulLp_eq_one ρ _ _ ?_
     exact Filter.Eventually.of_forall fun _ => rfl
@@ -108,7 +105,8 @@ noncomputable def mulLpStarHom (hĝ : Measurable ĝ) :
 
 /-- The homomorphism, unfolded. -/
 theorem mulLpStarHom_apply (hĝ : Measurable ĝ) (f : C(↥s, ℂ)) :
-    mulLpStarHom ρ hĝ f = mulLp ρ (measurable_comp_contMap hĝ f) (norm_comp_contMap_le ĝ f) :=
+    mulLpStarHom ρ hĝ f = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ
+      (measurable_comp_contMap hĝ f) (norm_comp_contMap_le ĝ f)) :=
   (rfl)
 
 /-- **The homomorphism is continuous**, with norm at most `1`: multiplication by a symbol
@@ -130,15 +128,20 @@ include hg hgC in
 symbol.**
 
 Stated for an arbitrary symbol `h` that is almost everywhere `f ∘ g`, so that a call site never
-has to match a composition syntactically -- the same convention as the rest of the `mulLp` API. -/
-theorem cfc_mulLp {f : ℂ → ℂ} (hf : ContinuousOn f (spectrum ℂ (mulLp ρ hg hgC)))
+has to match a composition syntactically. -/
+theorem cfc_mulLp {f : ℂ → ℂ} (hf : ContinuousOn f (spectrum ℂ (Lp.multiplicationOperator
+  (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC))))
     {h : α → ℂ} (hh : Measurable h) {C' : ℝ} (hhC : ∀ x, ‖h x‖ ≤ C')
     (heq : ∀ᵐ x ∂ρ, h x = f (g x)) :
-    cfc f (mulLp ρ hg hgC) = mulLp ρ hh hhC := by
+    cfc f (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC)) =
+      Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hh hhC) := by
   classical
-  have hna : IsStarNormal (mulLp ρ hg hgC) := isStarNormal_mulLp ρ hg hgC
-  have hae : ∀ᵐ x ∂ρ, g x ∈ spectrum ℂ (mulLp ρ hg hgC) := ae_mem_spectrum_mulLp ρ hg hgC
-  set a : Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ := mulLp ρ hg hgC with ha
+  have hna : IsStarNormal (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC))
+    := isStarNormal_mulLp ρ hg hgC
+  have hae : ∀ᵐ x ∂ρ, g x ∈ spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp
+    ρ hg hgC)) := ae_mem_spectrum_mulLp ρ hg hgC
+  set a : Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ := Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ
+    hg hgC) with ha
   rcases Set.eq_empty_or_nonempty (spectrum ℂ a) with hemp | ⟨z₀, hz₀⟩
   · -- An element with empty spectrum forces the algebra to be a subsingleton.
     have hsub : Subsingleton (Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ) := by

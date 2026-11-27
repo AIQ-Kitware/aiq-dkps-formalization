@@ -11,16 +11,16 @@ public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagMeasureMul
 /-!
 # The bounded Borel calculus of a multiplication operator
 
-For a multiplication operator `mulLp ρ g` and a bounded Borel `h : ℂ → ℂ`,
+For the native multiplication operator `M_g` on `L²(ρ)` and a bounded Borel `h : ℂ → ℂ`,
 
 ```text
-h(mulLp ρ g) = mulLp ρ (h ∘ g).
+h(M_g) = M_{h ∘ g}.
 ```
 
 This is the Borel analogue of `cfc_mulLp`, and unlike that result it needs no continuity of `h`
 anywhere: the Borel calculus is defined by the polarised diagonal integrals, the diagonal
 measure of a vector `F` is `g_* (|F|² · ρ)` (`map_val_diagMeasure_mulLp`), and integrating
-`h` against that measure *is* the matrix element of `mulLp ρ (h ∘ g)`.  Polarisation
+`h` against that measure *is* the matrix element of `M_{h ∘ g}`.  Polarisation
 (`inner_polarization`) then recovers every matrix element from the diagonal ones.
 
 The statement quantifies over an arbitrary symbol `h'` almost everywhere equal to `h ∘ g`, so
@@ -67,7 +67,7 @@ section MatrixElements
 /-- The matrix element of a multiplication operator against a vector on the left. -/
 theorem inner_mulLp_left (ρ : Measure α) {h : α → ℂ} (hm : Measurable h) {C : ℝ}
     (hC : ∀ x, ‖h x‖ ≤ C) (F G : Lp ℂ 2 ρ) :
-    ⟪mulLp ρ hm hC F, G⟫_ℂ
+    ⟪Lp.multiplicationOperator (boundedSymbolLp ρ hm hC) F, G⟫_ℂ
       = ∫ x, (starRingEnd ℂ) (h x * (F : α → ℂ) x) * (G : α → ℂ) x ∂ρ := by
   rw [MeasureTheory.L2.inner_def]
   refine integral_congr_ae ?_
@@ -79,7 +79,8 @@ theorem inner_mulLp_left (ρ : Measure α) {h : α → ℂ} (hm : Measurable h) 
 symbol against the squared modulus. -/
 theorem inner_mulLp_self (ρ : Measure α) {h : α → ℂ} (hm : Measurable h) {C : ℝ}
     (hC : ∀ x, ‖h x‖ ≤ C) (F : Lp ℂ 2 ρ) :
-    ⟪F, mulLp ρ hm hC F⟫_ℂ = ∫ x, h x * ((‖(F : α → ℂ) x‖ : ℂ)) ^ 2 ∂ρ := by
+    ⟪F, Lp.multiplicationOperator (boundedSymbolLp ρ hm hC) F⟫_ℂ = ∫ x, h x * ((‖(F : α → ℂ) x‖ :
+      ℂ)) ^ 2 ∂ρ := by
   rw [MeasureTheory.L2.inner_def]
   refine integral_congr_ae ?_
   filter_upwards [coeFn_mulLp ρ hm hC F] with x hx
@@ -103,7 +104,8 @@ theorem integral_comp_val_diagMeasure_mulLp {h : ℂ → ℂ} (hm : Measurable h
     ∫ w, h (w : ℂ) ∂((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
       = ∫ x, h (g x) * ((‖(F : α → ℂ) x‖ : ℂ)) ^ 2 ∂ρ := by
   have h1 := integral_map (μ := (cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
-    (φ := (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ))
+    (φ := (Subtype.val : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ
+      hg hgC)) → ℂ))
     measurable_subtypeVal.aemeasurable (f := h) hm.aestronglyMeasurable
   rw [← h1, map_val_diagMeasure_mulLp ρ hg hgC F,
     integral_map hg.aemeasurable hm.aestronglyMeasurable,
@@ -121,7 +123,7 @@ theorem integral_comp_val_diagMeasure_eq_inner_mulLp {h : ℂ → ℂ} (hm : Mea
     {h' : α → ℂ} (hm' : Measurable h') {C' : ℝ} (hC' : ∀ x, ‖h' x‖ ≤ C')
     (heq : ∀ᵐ x ∂ρ, h' x = h (g x)) (F : Lp ℂ 2 ρ) :
     ∫ w, h (w : ℂ) ∂((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
-      = ⟪F, mulLp ρ hm' hC' F⟫_ℂ := by
+      = ⟪F, Lp.multiplicationOperator (boundedSymbolLp ρ hm' hC') F⟫_ℂ := by
   rw [integral_comp_val_diagMeasure_mulLp ρ hg hgC hm F, inner_mulLp_self ρ hm' hC' F]
   refine integral_congr_ae ?_
   filter_upwards [heq] with x hx
@@ -135,24 +137,25 @@ theorem borelCalculus_comp_val_mulLp {h : ℂ → ℂ} (hm : Measurable h) {C' :
     (hC : ∀ z, ‖h z‖ ≤ C') {h' : α → ℂ} (hm' : Measurable h') {C'' : ℝ}
     (hC' : ∀ x, ‖h' x‖ ≤ C'') (heq : ∀ᵐ x ∂ρ, h' x = h (g x)) :
     borelCalculus (isStarNormal_mulLp ρ hg hgC) (isBddMeasurable_comp_val hm hC)
-      = mulLp ρ hm' hC' := by
+      = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hm' hC') := by
   refine ContinuousLinearMap.ext fun ξ => ?_
   refine ext_inner_left ℂ fun ψ => ?_
   rw [inner_borelCalculus, pair_def]
   have hint : ∀ F : Lp ℂ 2 ρ,
       ∫ w, h (w : ℂ) ∂((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
-        = ⟪F, mulLp ρ hm' hC' F⟫_ℂ := fun F =>
+        = ⟪F, Lp.multiplicationOperator (boundedSymbolLp ρ hm' hC') F⟫_ℂ := fun F =>
     integral_comp_val_diagMeasure_eq_inner_mulLp ρ hg hgC hm hm' hC' heq F
   rw [hint (ξ + ψ), hint (ξ + Complex.I • ψ), hint (ξ - ψ), hint (ξ - Complex.I • ψ)]
-  exact _root_.LinearMap.inner_polarization (mulLp ρ hm' hC') ψ ξ
+  exact _root_.LinearMap.inner_polarization (Lp.multiplicationOperator (E := ℂ) (p := 2)
+    (boundedSymbolLp ρ hm' hC')) ψ ξ
 
 include hg hgC in
 /-- **The spectral projection of a Borel set acts on the model as multiplication by the
 indicator of its preimage under the symbol.** -/
 theorem specProjC_mulLp {S : Set ℂ} (hS : MeasurableSet S) :
     specProjC (isStarNormal_mulLp ρ hg hgC) hS
-      = mulLp ρ ((measurable_indicator_one hS).comp hg)
-          (fun x => norm_indicator_one_le (g x)) := by
+      = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ ((measurable_indicator_one
+        hS).comp hg) (fun x => norm_indicator_one_le (g x))) := by
   rw [specProjC_def]
   exact borelCalculus_comp_val_mulLp ρ hg hgC (measurable_indicator_one hS)
     norm_indicator_one_le ((measurable_indicator_one hS).comp hg)

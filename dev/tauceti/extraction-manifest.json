@@ -7307,7 +7307,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicModel",
         "ForTauCeti.Analysis.InnerProductSpace.RealSpectrumIntertwining",
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModel",
-        "ForTauCeti.MeasureTheory.RadonNikodymL2"
+        "ForTauCeti.MeasureTheory.RadonNikodymL2",
+        "ForTauCeti.MeasureTheory.MulLpAlgebra",
+        "DavisKahan.Specialized.FreeBeam.BeamTrialReal"
       ],
       "source_declarations": [
         "TauCeti.BorelCalculus.coordMulLp",
@@ -7328,14 +7330,33 @@
         "mulLpField_apply",
         "coeFn_mulLpField",
         "mulLpField_congr_ae",
-        "TauCeti.mulLp"
+        "TauCeti.mulLp",
+        "memLp_two_mul_complex",
+        "eLpNorm_two_mul_le",
+        "norm_toLp_mul_le",
+        "mulLp_apply",
+        "mulLp_eq_smul",
+        "adjoint_mulLp",
+        "star_mulLp_apply",
+        "TauCeti.DavisKahan.FreeBeam.Model.Real.beamPerturbation",
+        "memLp_two_mul_real",
+        "eLpNorm_two_mul_real_le",
+        "norm_toLp_mul_real_le",
+        "norm_toLp_beamSymbol_le",
+        "beamPerturbation_apply"
       ],
-      "original_source_anchor": "2696f12ced322d46f1fb896c6132524d866f2768; b5ef92d27f1ae6f9c1e2af3c45d25c9747d74fd3; df351cd5dbad33c595bb3982aa22482d7e6c3ec8; c809e2a61660cd2ec592dbc638e3c0c98b3148a1.",
-      "authors_license": "Jon Crall, Claude Opus 5 and Claude Fable 5 as credited in the source headers; Kitware 2026, Apache-2.0.",
+      "original_source_anchor": "2696f12ced322d46f1fb896c6132524d866f2768; b5ef92d27f1ae6f9c1e2af3c45d25c9747d74fd3; df351cd5dbad33c595bb3982aa22482d7e6c3ec8; c809e2a61660cd2ec592dbc638e3c0c98b3148a1; c30d516d3ae25bd07eb5321a72f4f659436f4e12; d44bb0ed19a75750444fbbaf6b3aa4b4436f4fec.",
+      "authors_license": "Jon Crall, Claude Opus 5, Claude Fable 5 and OpenAI GPT-5.6 Sol as credited in the source headers; Kitware 2026, Apache-2.0.",
       "final_tauceti_module": "TauCeti.MeasureTheory.Function.Lp.Multiplication",
       "final_declarations": [
         "MeasureTheory.Lp.multiplicationOperator",
-        "MeasureTheory.Lp.multiplicationOperator_ae"
+        "MeasureTheory.Lp.multiplicationOperator_ae",
+        "MeasureTheory.Lp.multiplicationOperator_of_ae_eq_const",
+        "MeasureTheory.Lp.multiplicationOperator_add",
+        "MeasureTheory.Lp.multiplicationOperator_smul",
+        "MeasureTheory.Lp.multiplicationOperator_comp_multiplicationOperator",
+        "MeasureTheory.Lp.norm_multiplicationOperator_le",
+        "MeasureTheory.Lp.adjoint_multiplicationOperator"
       ],
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/17156",
       "integration": "de7eb9dbeb51adc2e4af516b39323ee9fbb3a661",
@@ -7343,7 +7364,7 @@
         "ToeplitzOperators T1 bounded multiplier"
       ],
       "status": "accepted-upstream-local-duplicates-retired",
-      "migration_note": "November 27: Cyclic and multiplicity models use the native operator directly on the L∞ classes of the spectral coordinate. Retained real transport, intertwining and arbitrary RCLike field hypotheses. The generic complex mulLp forwarding definition still serves the algebra and measure transport layer. #42114 generalized the upstream operator to 1 ≤ p ≤ ∞. Direct DKPS proof descent is unestablished."
+      "migration_note": "November 27: Cyclic and multiplicity models, bounded functional calculi, measure transport, and the complex and real FreeBeam operators use the native operator directly on their L∞ symbols. The generic complex mulLp forwarding definition and its original L² construction and estimate proofs retire. Use native algebra, norm and adjoint laws. Keep the measure intertwiners and the original mathematical hypotheses. #42114 generalized the upstream operator to 1 ≤ p ≤ ∞. Direct DKPS proof descent is unestablished."
     },
     {
       "source_module": "ForTauCeti.MeasureTheory.MulLpSpectrum",

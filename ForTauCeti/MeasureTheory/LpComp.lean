@@ -18,7 +18,7 @@ almost-everywhere inverse the isometry is a unitary.
 Mathlib supplies the underlying additive map as `MeasureTheory.Lp.compMeasurePreserving`
 together with `MeasureTheory.Lp.norm_compMeasurePreserving`; what is added here is the
 `ℂ`-linear isometry packaging, the two-sided-inverse criterion, and the intertwining law with
-`TauCeti.mulLp`.
+TauCeti’s `Lp.multiplicationOperator`.
 
 ## Why this is the shape spectral multiplicity theory needs
 
@@ -66,10 +66,12 @@ different bounds, both larger than the essential supremum -- define the same bou
 `L²(ρ)`. -/
 theorem mulLp_congr_ae (ρ : Measure α) {g g' : α → ℂ} (hg : Measurable g) (hg' : Measurable g')
     {C C' : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (hgC' : ∀ x, ‖g' x‖ ≤ C') (h : g =ᵐ[ρ] g') :
-    mulLp ρ hg hgC = mulLp ρ hg' hgC' := by
-  refine ContinuousLinearMap.ext fun F => Lp.ext ?_
-  filter_upwards [coeFn_mulLp ρ hg hgC F, coeFn_mulLp ρ hg' hgC' F, h] with x h1 h2 h3
-  rw [h1, h2, h3]
+    Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC) =
+      Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hg' hgC') := by
+  have hclass : boundedSymbolLp ρ hg hgC = boundedSymbolLp ρ hg' hgC' :=
+    Lp.ext ((coeFn_boundedSymbolLp ρ hg hgC).trans
+      (h.trans (coeFn_boundedSymbolLp ρ hg' hgC').symm))
+  rw [hclass]
 
 end Congr
 
@@ -192,10 +194,11 @@ When `f` fixes the coordinate the symbol is unchanged -- `G ∘ f = G` -- and th
 statement that the unitary commutes with the multiplication operator. -/
 theorem compLp_mulLp (hf : MeasurePreserving f μ ν) {G : β → ℂ} (hG : Measurable G) {C : ℝ}
     (hGC : ∀ y, ‖G y‖ ≤ C) (F : Lp ℂ 2 ν) :
-    compLp f hf (mulLp ν hG hGC F)
-      = mulLp μ (hG.comp hf.measurable) (fun x => hGC (f x)) (compLp f hf F) := by
+    compLp f hf (Lp.multiplicationOperator (boundedSymbolLp ν hG hGC) F)
+      = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp μ (hG.comp hf.measurable) (fun
+        x => hGC (f x))) (compLp f hf F) := by
   refine Lp.ext ?_
-  filter_upwards [coeFn_compLp hf (mulLp ν hG hGC F),
+  filter_upwards [coeFn_compLp hf (Lp.multiplicationOperator (boundedSymbolLp ν hG hGC) F),
     hf.quasiMeasurePreserving.ae (coeFn_mulLp ν hG hGC F),
     coeFn_mulLp μ (hG.comp hf.measurable) (fun x => hGC (f x)) (compLp f hf F),
     coeFn_compLp hf F] with x h1 h2 h3 h4
@@ -206,16 +209,20 @@ theorem compLp_mulLp (hf : MeasurePreserving f μ ν) {G : β → ℂ} (hG : Mea
 source is the symbol on the target composed with the embedding. -/
 theorem embLpEquiv_mulLp {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α) {G : β → ℂ}
     (hG : Measurable G) {C : ℝ} (hGC : ∀ y, ‖G y‖ ≤ C) (F : Lp ℂ 2 (Measure.map e ρ)) :
-    embLpEquiv he ρ (mulLp (Measure.map e ρ) hG hGC F)
-      = mulLp ρ (hG.comp he.measurable) (fun x => hGC (e x)) (embLpEquiv he ρ F) :=
+    embLpEquiv he ρ (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (Measure.map e ρ)
+      hG hGC) F)
+      = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ (hG.comp he.measurable) (fun
+        x => hGC (e x))) (embLpEquiv he ρ F) :=
   compLp_mulLp (measurePreserving_of_measurableEmbedding he ρ) hG hGC F
 
 /-- The inverse of the pushforward unitary intertwines the multiplication operators the other
 way. -/
 theorem embLpEquiv_symm_mulLp {e : α → β} (he : MeasurableEmbedding e) (ρ : Measure α)
     {G : β → ℂ} (hG : Measurable G) {C : ℝ} (hGC : ∀ y, ‖G y‖ ≤ C) (F : Lp ℂ 2 ρ) :
-    (embLpEquiv he ρ).symm (mulLp ρ (hG.comp he.measurable) (fun x => hGC (e x)) F)
-      = mulLp (Measure.map e ρ) hG hGC ((embLpEquiv he ρ).symm F) := by
+    (embLpEquiv he ρ).symm (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ (hG.comp
+      he.measurable) (fun x => hGC (e x))) F)
+      = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (Measure.map e ρ) hG hGC)
+        ((embLpEquiv he ρ).symm F) := by
   refine (embLpEquiv he ρ).injective ?_
   rw [LinearIsometryEquiv.apply_symm_apply, embLpEquiv_mulLp,
     LinearIsometryEquiv.apply_symm_apply]

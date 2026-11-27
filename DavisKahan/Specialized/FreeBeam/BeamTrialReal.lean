@@ -132,108 +132,35 @@ theorem norm_beamSymbol_le (ε : ℝ) (t : ℝ) : ‖beamSymbol ε t‖ ≤ |ε|
       mul_le_mul_of_nonneg_left (beamClamp_le_one t) (abs_nonneg ε)
     _ = |ε| := mul_one _
 
-/-- A bounded real symbol multiplies real `L²` into itself.  This is kept local because the
-reusable `TauCeti.mulLp` API is intentionally the complex multiplication model. -/
-theorem memLp_two_mul_real {g : ℝ → ℝ} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ t, ‖g t‖ ≤ C) (F : BeamL2) :
-    MemLp (fun t => g t * F t) 2 unitIocMeasure := by
-  refine MemLp.mono' ((Lp.memLp F).norm.const_mul C)
-    (hg.aestronglyMeasurable.mul (Lp.aestronglyMeasurable F)) ?_
-  filter_upwards with t
-  rw [norm_mul]
-  exact mul_le_mul_of_nonneg_right (hgC t) (norm_nonneg _)
-
-/-- `L²` seminorm estimate for multiplication by a bounded real symbol. -/
-theorem eLpNorm_two_mul_real_le {g : ℝ → ℝ} {C : ℝ} (hg : Measurable g)
-    (hgC : ∀ t, ‖g t‖ ≤ C) (f : ℝ → ℝ)
-    (hf : AEStronglyMeasurable f unitIocMeasure) :
-    eLpNorm (fun t => g t * f t) 2 unitIocMeasure ≤
-      ENNReal.ofReal |C| * eLpNorm f 2 unitIocMeasure := by
-  have hle : eLpNorm (fun t => g t * f t) 2 unitIocMeasure ≤
-      eLpNorm ((|C| : ℝ) • f) 2 unitIocMeasure := by
-    refine eLpNorm_mono_ae (hg.aestronglyMeasurable.mul hf)
-      (Filter.Eventually.of_forall fun t => ?_)
-    simp only [Pi.smul_apply, smul_eq_mul, norm_mul, Real.norm_eq_abs, abs_abs]
-    exact mul_le_mul_of_nonneg_right ((hgC t).trans (le_abs_self C)) (abs_nonneg (f t))
-  rw [eLpNorm_const_smul] at hle
-  refine hle.trans_eq ?_
-  congr 1
-  rw [← ofReal_norm, Real.norm_eq_abs, abs_abs]
-
-/-- `L²` norm estimate for multiplication by a bounded real symbol. -/
-theorem norm_toLp_mul_real_le {g : ℝ → ℝ} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ t, ‖g t‖ ≤ C) (F : BeamL2) :
-    ‖MemLp.toLp (fun t => g t * F t) (memLp_two_mul_real hg hgC F)‖ ≤ |C| * ‖F‖ := by
-  rw [Lp.norm_toLp, Lp.norm_def, ← ENNReal.toReal_ofReal (abs_nonneg C), ← ENNReal.toReal_mul]
-  refine ENNReal.toReal_mono ?_
-    (eLpNorm_two_mul_real_le hg hgC _ (Lp.aestronglyMeasurable F))
-  exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top (Lp.eLpNorm_ne_top F)
-
-/-- Specialized norm bound for the Section 9 real multiplier. -/
-theorem norm_toLp_beamSymbol_le (ε : ℝ) (F : BeamL2) :
-    ‖MemLp.toLp (fun t => beamSymbol ε t * F t)
-        (memLp_two_mul_real (measurable_beamSymbol ε) (norm_beamSymbol_le ε) F)‖
-      ≤ |ε| * ‖F‖ := by
-  simpa only [abs_abs] using
-    (norm_toLp_mul_real_le (measurable_beamSymbol ε) (norm_beamSymbol_le ε) F)
-
 /-- Multiplication by `epsilon t` on real `L²(0,1)`. -/
 @[expose]
 def beamPerturbation (ε : ℝ) : BeamL2 →L[ℝ] BeamL2 :=
-  LinearMap.mkContinuous
-    { toFun := fun F => MemLp.toLp (fun t => beamSymbol ε t * F t)
-        (memLp_two_mul_real (measurable_beamSymbol ε) (norm_beamSymbol_le ε) F)
-      map_add' := fun F G => by
-        rw [← MemLp.toLp_add
-          (memLp_two_mul_real (measurable_beamSymbol ε) (norm_beamSymbol_le ε) F)
-          (memLp_two_mul_real (measurable_beamSymbol ε) (norm_beamSymbol_le ε) G)]
-        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
-        filter_upwards [Lp.coeFn_add F G] with t ht
-        simp only [Pi.add_apply, ht]
-        ring
-      map_smul' := fun c F => by
-        rw [RingHom.id_apply, ← MemLp.toLp_const_smul c
-          (memLp_two_mul_real (measurable_beamSymbol ε) (norm_beamSymbol_le ε) F)]
-        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
-        filter_upwards [Lp.coeFn_smul c F] with t ht
-        simp only [Pi.smul_apply, ht, smul_eq_mul]
-        ring }
-    |ε| (norm_toLp_beamSymbol_le ε)
-
-/-- Multiplication by `epsilon t`, unfolded to the defining `L²` class. -/
-theorem beamPerturbation_apply (ε : ℝ) (x : BeamL2) :
-    beamPerturbation ε x =
-      MemLp.toLp (fun t => beamSymbol ε t * x t)
-        (memLp_two_mul_real (measurable_beamSymbol ε) (norm_beamSymbol_le ε) x) := rfl
+  Lp.multiplicationOperator
+    (boundedSymbolLp unitIocMeasure (measurable_beamSymbol ε) (norm_beamSymbol_le ε))
 
 /-- The beam perturbation, as a function. -/
 theorem coeFn_beamPerturbation (ε : ℝ) (x : BeamL2) :
     (beamPerturbation ε x : ℝ → ℝ) =ᵐ[unitIocMeasure]
       fun t => (ε * t) * (x : ℝ → ℝ) t := by
   have hmul : (beamPerturbation ε x : ℝ → ℝ) =ᵐ[unitIocMeasure]
-      fun t => beamSymbol ε t * (x : ℝ → ℝ) t := by
-    rw [beamPerturbation_apply]
-    exact MemLp.coeFn_toLp _
+      fun t => beamSymbol ε t * (x : ℝ → ℝ) t :=
+    coeFn_multiplicationOperator_toLp _ x
   filter_upwards [hmul, ae_mem_unitIocMeasure] with t ht hmem
   rw [ht, beamSymbol, beamClamp_eq_self hmem]
 
 /-- The beam perturbation is bounded in norm by the clamping threshold. -/
 theorem norm_beamPerturbation_le (ε : ℝ) : ‖beamPerturbation ε‖ ≤ |ε| := by
-  refine ContinuousLinearMap.opNorm_le_bound _ (abs_nonneg ε) ?_
-  intro F
-  rw [beamPerturbation_apply]
-  exact norm_toLp_beamSymbol_le ε F
+  unfold beamPerturbation
+  exact (Lp.norm_multiplicationOperator_le _).trans
+    ((norm_boundedSymbolLp_le _ (measurable_beamSymbol ε) (norm_beamSymbol_le ε)).trans_eq
+      (abs_abs ε))
 
 /-- The multiplication perturbation is self-adjoint. -/
 theorem beamPerturbation_isSelfAdjoint (ε : ℝ) :
     (beamPerturbation ε).IsSymmetric := by
-  intro x y
-  rw [MeasureTheory.L2.inner_def, MeasureTheory.L2.inner_def]
-  refine integral_congr_ae ?_
-  filter_upwards [coeFn_beamPerturbation ε x, coeFn_beamPerturbation ε y] with t hx hy
-  simp only [RCLike.inner_apply, ContinuousLinearMap.coe_coe, hx, hy, map_mul,
-    starRingEnd_apply, star_trivial]
-  ring
+  apply ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+  rw [ContinuousLinearMap.isSelfAdjoint_iff', beamPerturbation, Lp.adjoint_multiplicationOperator]
+  congr 1
 
 /-- The perturbed real free beam `A + H`. -/
 @[expose]

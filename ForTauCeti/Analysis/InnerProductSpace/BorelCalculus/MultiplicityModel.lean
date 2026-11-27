@@ -141,16 +141,16 @@ end Coord
 /-- The truncated spectral coordinate as an `L∞` class for the model measure. -/
 @[expose] noncomputable def coordTruncLp (𝕜 : Type*) [RCLike 𝕜]
     (ρ : Measure (ℂ × ℕ)) (R : ℝ) (hR : 0 ≤ R) : Lp 𝕜 ∞ ρ :=
-  (memLp_top_of_bound ((measurable_coordTruncField 𝕜 R).comp measurable_fst).aestronglyMeasurable
-    _ (Filter.Eventually.of_forall fun p => norm_coordTruncField_le 𝕜 hR p.1)).toLp
-    (coordTruncField 𝕜 R ∘ Prod.fst)
+  boundedSymbolLp ρ ((measurable_coordTruncField 𝕜 R).comp measurable_fst)
+    (fun p => norm_coordTruncField_le 𝕜 hR p.1)
 
 /-- The native operator of the truncated coordinate acts by pointwise multiplication. -/
 theorem coeFn_coordTruncLp_multiplicationOperator (𝕜 : Type*) [RCLike 𝕜]
     (ρ : Measure (ℂ × ℕ)) {R : ℝ} (hR : 0 ≤ R) (F : Lp 𝕜 2 ρ) :
     (Lp.multiplicationOperator (coordTruncLp 𝕜 ρ R hR) F : ℂ × ℕ → 𝕜) =ᵐ[ρ]
-      fun p => coordTruncField 𝕜 R p.1 * F p :=
-  coeFn_multiplicationOperator_toLp _ F
+      fun p => coordTruncField 𝕜 R p.1 * F p := by
+  unfold coordTruncLp boundedSymbolLp
+  exact coeFn_multiplicationOperator_toLp _ F
 
 section Datum
 
@@ -344,8 +344,9 @@ section Equivalence
 operator.  This keeps the established complex Hahn--Hellinger and uniqueness theory unchanged
 while making the datum itself available at `𝕜 = ℝ`. -/
 theorem MultiplicityDatum.operator_eq_mulLp (D : MultiplicityDatum ℂ) :
-    D.operator = mulLp D.measure ((measurable_coordTrunc D.bound).comp measurable_fst)
-      (fun p => norm_coordTrunc_le D.bound_nonneg p.1) := by
+    D.operator = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure
+      ((measurable_coordTrunc D.bound).comp measurable_fst) (fun p => norm_coordTrunc_le
+      D.bound_nonneg p.1)) := by
   refine ContinuousLinearMap.ext fun F => Lp.ext ?_
   filter_upwards [D.coeFn_operator F,
     coeFn_mulLp D.measure ((measurable_coordTrunc D.bound).comp measurable_fst)
@@ -413,9 +414,9 @@ its unifier reaches the same defeq through the operator arguments alone. -/
 theorem starOperatorUnitaryEquiv_operator_of_mulLp_sliceSum {H : Type*} [NormedAddCommGroup H]
     [InnerProductSpace ℂ H] {cH : H → H} {A : H →L[ℂ] H} (D : MultiplicityDatum ℂ)
     (h : StarOperatorUnitaryEquiv cH star A
-      (mulLp (sliceSum fun k => D.base.restrict (D.level k))
-        ((measurable_coordTrunc D.bound).comp measurable_fst)
-        (fun p => norm_coordTrunc_le D.bound_nonneg p.1))) :
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (sliceSum fun k =>
+        D.base.restrict (D.level k)) ((measurable_coordTrunc D.bound).comp measurable_fst) (fun p =>
+        norm_coordTrunc_le D.bound_nonneg p.1)))) :
     StarOperatorUnitaryEquiv cH star A D.operator := by
   rw [MultiplicityDatum.operator_eq_mulLp]
   exact h
@@ -423,8 +424,8 @@ theorem starOperatorUnitaryEquiv_operator_of_mulLp_sliceSum {H : Type*} [NormedA
 /-- The two truncations of the coordinate agree where the model measure lives. -/
 theorem operator_eq_mulLp_of_le {D : MultiplicityDatum ℂ} {R : ℝ} (hR : 0 ≤ R)
     (hle : D.bound ≤ R) :
-    D.operator = mulLp D.measure ((measurable_coordTrunc R).comp measurable_fst)
-      (fun p => norm_coordTrunc_le hR p.1) := by
+    D.operator = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure
+      ((measurable_coordTrunc R).comp measurable_fst) (fun p => norm_coordTrunc_le hR p.1)) := by
   rw [D.operator_eq_mulLp]
   refine mulLp_congr_ae _ _ _ _ _ ?_
   filter_upwards [D.ae_norm_le_bound] with p hp
@@ -493,7 +494,8 @@ theorem mulLp_eq_coordMulLp (ha : IsStarNormal a) (ξ : H) {g : spectrum ℂ a �
     (hg : Measurable g) {C : ℝ} (hgC : ∀ w, ‖g w‖ ≤ C)
     (hgeq : ∀ w : spectrum ℂ a, g w = (w : ℂ)) (F : Lp ℂ 2 ((cfcHom ha).representationDiagMeasure
       ξ)) :
-    mulLp ((cfcHom ha).representationDiagMeasure ξ) hg hgC F =
+    Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ((cfcHom
+      ha).representationDiagMeasure ξ) hg hgC) F =
       Lp.multiplicationOperator (spectrumCoordinateLp ha ξ) F := by
   refine Lp.ext ?_
   filter_upwards [coeFn_mulLp ((cfcHom ha).representationDiagMeasure ξ) hg hgC F,
@@ -530,11 +532,12 @@ theorem exists_hasMultiplicityModel [TopologicalSpace.SeparableSpace H] (ha : Is
           (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry) F)
         = ((cyclicIsometry ha (ξ n)).comp
           (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry)
-          (mulLp _ (measurable_coordTrunc (‖a‖))
-            (norm_coordTrunc_le hR0) F) := by
+          (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp _ (measurable_coordTrunc
+            (‖a‖)) (norm_coordTrunc_le hR0)) F) := by
     intro n F
     have h1 : embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))
-        (mulLp _ (measurable_coordTrunc (‖a‖)) (norm_coordTrunc_le hR0) F)
+        (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp _ (measurable_coordTrunc
+          (‖a‖)) (norm_coordTrunc_le hR0)) F)
         = Lp.multiplicationOperator (spectrumCoordinateLp ha (ξ n))
             (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) F) :=
       (embLpEquiv_mulLp hemb ((cfcHom ha).representationDiagMeasure (ξ n))
@@ -547,14 +550,14 @@ theorem exists_hasMultiplicityModel [TopologicalSpace.SeparableSpace H] (ha : Is
   have hB : ∀ (n : ℕ)
       (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure (ξ
         n)))),
-      (mulLp _ ((measurable_coordTrunc (‖a‖)).comp measurable_fst)
-          (fun p => norm_coordTrunc_le hR0 p.1))
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp _ ((measurable_coordTrunc
+        (‖a‖)).comp measurable_fst) (fun p => norm_coordTrunc_le hR0 p.1)))
         (sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
           ((cfcHom ha).representationDiagMeasure (ξ n))) n F)
         = sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom
           ha).representationDiagMeasure (ξ n))) n
-          (mulLp _ (measurable_coordTrunc (‖a‖))
-            (norm_coordTrunc_le hR0) F) :=
+          (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp _ (measurable_coordTrunc
+            (‖a‖)) (norm_coordTrunc_le hR0)) F) :=
     fun n F => (sliceLp_mulLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
       ((cfcHom ha).representationDiagMeasure (ξ m))) n (measurable_coordTrunc (‖a‖))
       (norm_coordTrunc_le hR0) F).symm

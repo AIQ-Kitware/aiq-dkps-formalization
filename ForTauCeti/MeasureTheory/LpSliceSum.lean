@@ -65,7 +65,9 @@ noncomputable def lpCongrMeasure {μ ν : Measure α} (h : μ = ν) :
 the equality is substituted away, but the statement is what call sites need. -/
 theorem lpCongrMeasure_mulLp {μ ν : Measure α} (h : μ = ν) {g : α → ℂ} (hg : Measurable g)
     {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 μ) :
-    lpCongrMeasure h (mulLp μ hg hgC F) = mulLp ν hg hgC (lpCongrMeasure h F) := by
+    lpCongrMeasure h (Lp.multiplicationOperator (boundedSymbolLp μ hg hgC) F) =
+      Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ν hg hgC) (lpCongrMeasure h F) :=
+      by
   subst h
   rfl
 
@@ -303,19 +305,23 @@ on `L²(μ n)` becomes multiplication by `g ∘ Prod.fst` on `L²(sliceSum μ)`:
 multiplies by the *first* coordinate, so the slice index is a passive label. -/
 theorem sliceLp_mulLp (μ : ℕ → Measure X) (n : ℕ) {g : X → ℂ} (hg : Measurable g) {C : ℝ}
     (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 (μ n)) :
-    sliceLp μ n (mulLp (μ n) hg hgC F)
-      = mulLp (sliceSum μ) (hg.comp measurable_fst) (fun p => hgC p.1) (sliceLp μ n F) := by
+    sliceLp μ n (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (μ n) hg hgC) F)
+      = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (sliceSum μ) (hg.comp
+        measurable_fst) (fun p => hgC p.1)) (sliceLp μ n F) := by
   have h1 : (embLpEquiv (measurableEmbedding_sliceMap (X := X) n) (μ n)).symm
-        (mulLp (μ n) hg hgC F)
-      = mulLp ((μ n).map (sliceMap n)) (hg.comp measurable_fst) (fun p => hgC p.1)
+        (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (μ n) hg hgC) F)
+      = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ((μ n).map (sliceMap n))
+        (hg.comp measurable_fst) (fun p => hgC p.1))
         ((embLpEquiv (measurableEmbedding_sliceMap (X := X) n) (μ n)).symm F) :=
     embLpEquiv_symm_mulLp (measurableEmbedding_sliceMap n) (μ n) (hg.comp measurable_fst)
       (fun p => hgC p.1) F
   have h2 := lpCongrMeasure_mulLp (restrict_sliceSum μ n).symm (hg.comp measurable_fst)
     (fun p : X × ℕ => hgC p.1)
     ((embLpEquiv (measurableEmbedding_sliceMap (X := X) n) (μ n)).symm F)
-  have hstep : sliceLpEquiv μ n (mulLp (μ n) hg hgC F)
-      = mulLp ((sliceSum μ).restrict (slice n)) (hg.comp measurable_fst) (fun p => hgC p.1)
+  have hstep : sliceLpEquiv μ n (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (μ n)
+    hg hgC) F)
+      = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ((sliceSum μ).restrict (slice
+        n)) (hg.comp measurable_fst) (fun p => hgC p.1))
         (sliceLpEquiv μ n F) := by
     simp only [sliceLpEquiv, LinearIsometryEquiv.trans_apply]
     rw [h1, h2]

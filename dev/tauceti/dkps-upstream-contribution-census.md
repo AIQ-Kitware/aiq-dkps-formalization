@@ -1,5 +1,35 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native bounded symbols throughout spectral multiplicity
+
+All DKPS callers now use `MeasureTheory.Lp.multiplicationOperator` with native
+`L∞` classes. The last complex `TauCeti.mulLp` forwarding operator and its
+original (L²) construction lemmas retire. A bounded measurable representative
+is packaged as an `L∞` value by `boundedSymbolLp`. This preserves the
+original measurable-function entry points and the operator and measure
+hypotheses in the Radon–Nikodym, restriction, relabelling, slice-sum, continuous
+and Borel calculus, multiplicity uniqueness, and FreeBeam results.
+The real FreeBeam perturbation uses the same native operator, retiring
+the separate real multiplier construction. Its almost-everywhere formula,
+norm bound and symmetry remain at the original hypotheses.
+
+Almost-everywhere equations are checked at the symbol class. Addition,
+composition, constants, operator norm and adjoints use the native operator
+laws from #17156 and their generalized forms from #42114. DKPS retains the
+Radon–Nikodym and other measure-transport intertwiners, multiplicity proofs,
+and the functional-calculus computation for the composed symbol. The local
+multiplication proof is anchored at `c809e2a61` and the algebra at `c30d516d3`
+(Jon Crall, Claude Fable 5 and Claude Opus 5 as credited in the source files,
+Kitware 2026, Apache-2.0). The TauCeti pin stays `dde09e0dce`.
+[PR #17156](https://github.com/TauCetiProject/TauCeti/pull/17156) ·
+[PR #42114](https://github.com/TauCetiProject/TauCeti/pull/42114)
+
+The focused build (9641 jobs), full build (22672 jobs), and combined
+Challenge and result semantic-surface audit (22382 jobs) passed without
+warnings. The declaration-name comparison found the same 49 baseline
+findings after the five retired FreeBeam helpers were marked in the
+namespace migration map.
+
 ## November 27 native spectral multiplication
 
 The real- and complex-spectrum cyclic models and the field-indexed
@@ -20,9 +50,9 @@ pushforward measure by composing the native maximal-multiplication bridge,
 its spectrum formula, and the spectrum comparison for a total partial map.
 The almost-everywhere spectrum membership used by the functional calculus
 follows from Mathlib's support theorem. This retires the inverse estimate
-and indicator-vector contradiction. The general complex `mulLp` entry point
-now delegates to the native operator and still serves the older algebra and
-measure-transport statements.
+and indicator-vector contradiction. At this checkpoint the general complex
+`mulLp` entry point delegated to the native operator. The subsequent
+bounded-symbol migration above retires that entry point.
 
 Original DKPS sources are `2696f12ce`, `b5ef92d27`, `df351cd5d`, `c809e2a61`
 and `c30d516d3` (Jon Crall, Claude Fable 5 and Claude Opus 5 as credited in the

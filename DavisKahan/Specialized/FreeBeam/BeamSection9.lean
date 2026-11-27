@@ -181,7 +181,8 @@ theorem norm_beamSymbol_le (ε : ℝ) (t : ℝ) : ‖beamSymbol ε t‖ ≤ |ε|
 /-- **The Section 9 perturbation**: multiplication by `ε t` on `L²(0,1]`. -/
 @[expose]
 def beamPerturbation (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
-  mulLp unitIocMeasure (measurable_beamSymbol ε) (norm_beamSymbol_le ε)
+  Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp unitIocMeasure (measurable_beamSymbol
+    ε) (norm_beamSymbol_le ε))
 
 /-- The beam perturbation, as a function. -/
 theorem coeFn_beamPerturbation (ε : ℝ) (x : BeamL2) :
@@ -190,7 +191,8 @@ theorem coeFn_beamPerturbation (ε : ℝ) (x : BeamL2) :
   filter_upwards [coeFn_mulLp unitIocMeasure (measurable_beamSymbol ε)
     (norm_beamSymbol_le ε) x, ae_mem_unitIocMeasure] with t ht hmem
   rw [show (beamPerturbation ε x : ℝ → ℂ) t
-    = (mulLp unitIocMeasure (measurable_beamSymbol ε) (norm_beamSymbol_le ε) x :
+    = (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp unitIocMeasure
+      (measurable_beamSymbol ε) (norm_beamSymbol_le ε)) x :
         ℝ → ℂ) t from rfl, ht, beamSymbol, beamClamp_eq_self hmem]
 
 /-- The beam perturbation is bounded in norm by the clamping threshold. -/

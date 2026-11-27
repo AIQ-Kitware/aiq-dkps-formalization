@@ -101,7 +101,8 @@ theorem norm_datumSymbol_le (D : MultiplicityDatum ℂ) (p : ℂ × ℕ) :
 
 /-- The model operator really is multiplication by the model symbol. -/
 theorem operator_eq_mulLp_datumSymbol (D : MultiplicityDatum ℂ) :
-    D.operator = mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D) :=
+    D.operator = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure
+      (measurable_datumSymbol D) (norm_datumSymbol_le D)) :=
   operator_eq_mulLp_of_le D.bound_nonneg le_rfl
 
 /-- **The model symbol and the coordinate projection push the model measure to the same
@@ -156,11 +157,14 @@ A maximal vector on the `D` side is transported by the intertwiner to *some* vec
 side -- not necessarily a maximal one -- and the cheap domination is all that is asked of it. -/
 theorem absolutelyContinuous_base_of_intertwines {D E : MultiplicityDatum ℂ}
     (e : Lp ℂ 2 D.measure ≃ₗᵢ[ℂ] Lp ℂ 2 E.measure)
-    (he : ∀ x, e (mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D) x)
-      = mulLp E.measure (measurable_datumSymbol E) (norm_datumSymbol_le E) (e x)) :
+    (he : ∀ x, e (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure
+      (measurable_datumSymbol D) (norm_datumSymbol_le D)) x)
+      = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp E.measure
+        (measurable_datumSymbol E) (norm_datumSymbol_le E)) (e x)) :
     D.base ≪ E.base := by
   have haD : IsStarNormal
-      (mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D)) :=
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure
+        (measurable_datumSymbol D) (norm_datumSymbol_le D))) :=
     isStarNormal_mulLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D)
   obtain ⟨F₀, hF₀⟩ := exists_measureEquiv_map_val_diagMeasure_mulLp D.measure
     (measurable_datumSymbol D) (norm_datumSymbol_le D)

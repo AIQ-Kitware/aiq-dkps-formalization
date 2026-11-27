@@ -15,7 +15,7 @@ public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 /-!
 # The scalar spectral measure of a multiplication operator
 
-For a multiplication operator `mulLp ρ g` on `L²(ρ)` and a vector `F`, the scalar spectral
+For the native multiplication operator `M_g` on `L²(ρ)` and a vector `F`, the scalar spectral
 measure of `F` is the pushforward along the symbol of `|F|² · ρ`:
 
 ```text
@@ -109,16 +109,19 @@ variable (hgC : ∀ x, ‖g x‖ ≤ C)
 include hg hgC in
 /-- **The scalar spectral measure of a multiplication operator.**
 
-The measure `diagMeasure F` of the vector `F` for the operator `mulLp ρ g`, pushed forward from
+The measure `diagMeasure F` of the vector `F` for the multiplication operator, pushed forward from
 the spectrum subtype to `ℂ`, is the pushforward along the symbol of `|F|² · ρ`. -/
 theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
-    Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
+    Measure.map (Subtype.val : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2)
+      (boundedSymbolLp ρ hg hgC)) → ℂ)
         ((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
       = Measure.map g (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2) := by
-  have ha : IsStarNormal (mulLp ρ hg hgC) := isStarNormal_mulLp ρ hg hgC
+  have ha : IsStarNormal (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC)) :=
+    isStarNormal_mulLp ρ hg hgC
   have hwd : IsFiniteMeasure (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2) :=
     isFiniteMeasure_withDensity_enorm_sq ρ F
-  have hL : IsFiniteMeasure (Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
+  have hL : IsFiniteMeasure (Measure.map (Subtype.val : spectrum ℂ (Lp.multiplicationOperator
+    (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC)) → ℂ)
       ((cfcHom ha).representationDiagMeasure F)) := Measure.isFiniteMeasure_map _ _
   have hR : IsFiniteMeasure
       (Measure.map g (ρ.withDensity fun x => ‖(F : α → ℂ) x‖ₑ ^ 2)) :=
@@ -127,20 +130,24 @@ theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
   have hφc : Continuous fun z : ℂ => ((φ z : ℝ) : ℂ) :=
     Complex.continuous_ofReal.comp φ.continuous
   -- The left-hand side, through the characterisation of the diagonal measure.
-  have hleft : ∫ w : spectrum ℂ (mulLp ρ hg hgC), φ (w : ℂ) ∂((cfcHom
+  have hleft : ∫ w : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hg
+    hgC)), φ (w : ℂ) ∂((cfcHom
     ha).representationDiagMeasure F)
-      = (⟪F, cfc (fun z : ℂ => ((φ z : ℝ) : ℂ)) (mulLp ρ hg hgC) F⟫_ℂ).re := by
+      = (⟪F, cfc (fun z : ℂ => ((φ z : ℝ) : ℂ)) (Lp.multiplicationOperator (E := ℂ) (p := 2)
+        (boundedSymbolLp ρ hg hgC)) F⟫_ℂ).re := by
     have hComplex := (cfcHom ha).integral_representationDiagMeasure F
-      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (⟨fun w : spectrum ℂ (mulLp ρ hg hgC) => φ (w :
+      ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (⟨fun w : spectrum ℂ (Lp.multiplicationOperator
+        (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC)) => φ (w :
         ℂ),
         φ.continuous.comp continuous_subtypeVal⟩ :
-        C(spectrum ℂ (mulLp ρ hg hgC), ℝ)))
+        C(spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC)), ℝ)))
     change (∫ w, (φ (w : ℂ) : ℂ)
       ∂((cfcHom ha).representationDiagMeasure F)) = _ at hComplex
     rw [integral_complex_ofReal] at hComplex
     have hG := congrArg Complex.re hComplex
     simp only [Complex.ofReal_re] at hG
-    rw [hG, cfc_apply (f := fun z : ℂ => ((φ z : ℝ) : ℂ)) (a := mulLp ρ hg hgC) ha
+    rw [hG, cfc_apply (f := fun z : ℂ => ((φ z : ℝ) : ℂ)) (a := Lp.multiplicationOperator
+      (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC)) ha
       hφc.continuousOn]
     exact congrArg (fun T : Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ => (⟪F, T F⟫_ℂ).re)
       (congrArg (cfcHom ha) (ContinuousMap.ext fun _ => by simp))
@@ -151,13 +158,16 @@ theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
     intro x
     rw [Complex.norm_real, Real.norm_eq_abs]
     exact φ.norm_coe_le_norm (g x)
-  have hcfc : cfc (fun z : ℂ => ((φ z : ℝ) : ℂ)) (mulLp ρ hg hgC) = mulLp ρ hcm hcb :=
+  have hcfc : cfc (fun z : ℂ => ((φ z : ℝ) : ℂ)) (Lp.multiplicationOperator (E := ℂ) (p := 2)
+    (boundedSymbolLp ρ hg hgC)) = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hcm
+    hcb) :=
     cfc_mulLp ρ hg hgC hφc.continuousOn hcm hcb (Filter.Eventually.of_forall fun _ => rfl)
   -- The inner product against a multiplication operator is a weighted integral.
-  have hinner : (⟪F, mulLp ρ hcm hcb F⟫_ℂ).re
+  have hinner : (⟪F, Lp.multiplicationOperator (boundedSymbolLp ρ hcm hcb) F⟫_ℂ).re
       = ∫ x, φ (g x) * ‖(F : α → ℂ) x‖ ^ 2 ∂ρ := by
     rw [MeasureTheory.L2.inner_def]
-    have hcongr : ∫ x, ⟪(F : α → ℂ) x, ((mulLp ρ hcm hcb F : Lp ℂ 2 ρ) : α → ℂ) x⟫_ℂ ∂ρ
+    have hcongr : ∫ x, ⟪(F : α → ℂ) x, ((Lp.multiplicationOperator (boundedSymbolLp ρ hcm hcb) F :
+      Lp ℂ 2 ρ) : α → ℂ) x⟫_ℂ ∂ρ
         = ∫ x, ((φ (g x) * ‖(F : α → ℂ) x‖ ^ 2 : ℝ) : ℂ) ∂ρ := by
       refine integral_congr_ae ?_
       filter_upwards [coeFn_mulLp ρ hcm hcb F] with x hx
@@ -181,7 +191,8 @@ theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
 include hg hgC in
 /-- **Every vector's spectral measure is dominated by the pushforward of `ρ`.** -/
 theorem map_val_diagMeasure_mulLp_absolutelyContinuous (F : Lp ℂ 2 ρ) :
-    Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
+    Measure.map (Subtype.val : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2)
+      (boundedSymbolLp ρ hg hgC)) → ℂ)
         ((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
       ≪ Measure.map g ρ := by
   rw [map_val_diagMeasure_mulLp ρ hg hgC F]
@@ -195,7 +206,8 @@ sets -- which is exactly `withDensity_absolutelyContinuous'`. -/
 theorem absolutelyContinuous_map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ)
     (hF : ∀ᵐ x ∂ρ, (F : α → ℂ) x ≠ 0) :
     Measure.map g ρ
-      ≪ Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
+      ≪ Measure.map (Subtype.val : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2)
+        (boundedSymbolLp ρ hg hgC)) → ℂ)
         ((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F) := by
   rw [map_val_diagMeasure_mulLp ρ hg hgC F]
   refine Measure.AbsolutelyContinuous.map ?_ hg
@@ -213,7 +225,8 @@ vector, and hence a unitary invariant once combined with
 theorem exists_measureEquiv_map_val_diagMeasure_mulLp :
     ∃ F : Lp ℂ 2 ρ,
       MeasureEquiv
-        (Measure.map (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ)
+        (Measure.map (Subtype.val : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2)
+          (boundedSymbolLp ρ hg hgC)) → ℂ)
           ((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F))
         (Measure.map g ρ) := by
   obtain ⟨F, hF⟩ := exists_ae_ne_zero_lp_two ρ

@@ -255,9 +255,12 @@ section Multiplication
 function on both sides; restricting it to `s` is what the restricted measure sees. -/
 theorem extendLp_mulLp (μ : Measure α) (hs : MeasurableSet s) {g : α → ℂ} (hg : Measurable g)
     {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 (μ.restrict s)) :
-    extendLp μ hs (mulLp (μ.restrict s) hg hgC F) = mulLp μ hg hgC (extendLp μ hs F) := by
+    extendLp μ hs (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (μ.restrict s) hg
+      hgC) F) = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp μ hg hgC) (extendLp μ
+      hs F) := by
   refine Lp.ext ?_
-  filter_upwards [coeFn_extendLp μ hs (mulLp (μ.restrict s) hg hgC F),
+  filter_upwards [coeFn_extendLp μ hs (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp
+    (μ.restrict s) hg hgC) F),
     indicator_ae_eq_of_restrict (μ := μ) hs (coeFn_mulLp (μ.restrict s) hg hgC F),
     coeFn_mulLp μ hg hgC (extendLp μ hs F), coeFn_extendLp μ hs F] with x h1 h2 h3 h4
   rw [h1, h2, h3, h4]

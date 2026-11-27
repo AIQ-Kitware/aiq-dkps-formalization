@@ -46,8 +46,9 @@ theorem spectrum_multiplicationOperator_eq_support_map {g : α → ℂ} (hg : Me
 /-- A bounded measurable symbol takes values in its multiplication spectrum almost everywhere. -/
 theorem ae_mem_spectrum_mulLp (ρ : Measure α) [SigmaFinite ρ] {g : α → ℂ}
     (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) :
-    ∀ᵐ x ∂ρ, g x ∈ spectrum ℂ (mulLp ρ hg hgC) := by
-  rw [mulLp, spectrum_multiplicationOperator_eq_support_map]
+    ∀ᵐ x ∂ρ, g x ∈ spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hg
+      hgC)) := by
+  rw [boundedSymbolLp, spectrum_multiplicationOperator_eq_support_map]
   exact ae_of_ae_map hg.aemeasurable (ρ.map g).support_mem_ae
 
 end TauCeti

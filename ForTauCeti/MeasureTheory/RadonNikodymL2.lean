@@ -48,8 +48,7 @@ make the map invertible, its inverse being the same construction with `dν/dμ`.
 * `TauCeti.rnDerivL2_rnDerivL2`: the two isometries, for `dμ/dν` and for `dν/dμ`, are mutually
   inverse.
 * `TauCeti.rnDerivL2Equiv`: **the Radon--Nikodym unitary** `L²(μ) ≃ₗᵢ[ℂ] L²(ν)`.
-* `TauCeti.mulLp`: multiplication by a bounded measurable function, as a bounded operator on
-  `L²`.
+* `TauCeti.boundedSymbolLp`: the `L∞` class of a bounded measurable representative.
 * `TauCeti.rnDerivL2Equiv_mulLp`: **the intertwining law** -- the unitary carries multiplication
   by `g` on `L²(μ)` to multiplication by the same `g` on `L²(ν)`.
 * `TauCeti.mulLp_eq_conj_rnDerivL2`: the same, as an equality of bounded operators -- the two
@@ -312,41 +311,6 @@ end Isometry
 
 section Multiplication
 
-/-- A uniformly bounded measurable function multiplies `L²` into itself. -/
-theorem memLp_two_mul_complex (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 ρ) : MemLp (fun x => g x * F x) 2 ρ := by
-  refine MemLp.mono' ((Lp.memLp F).norm.const_mul C)
-    (hg.aestronglyMeasurable.mul (Lp.aestronglyMeasurable F)) ?_
-  filter_upwards with x
-  rw [norm_mul]
-  exact mul_le_mul_of_nonneg_right (hgC x) (norm_nonneg _)
-
-/-- **The seminorm bound for multiplication by a uniformly bounded function.**
-
-Stated with `|C|` rather than `C`: a bound hypothesis `∀ x, ‖g x‖ ≤ C` does not force `0 ≤ C`
-when the space is empty, and `ENNReal.ofReal` would silently truncate a negative `C`. -/
-theorem eLpNorm_two_mul_le (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (f : α → ℂ) (hf : AEStronglyMeasurable f ρ) :
-    eLpNorm (fun x => g x * f x) 2 ρ ≤ ENNReal.ofReal |C| * eLpNorm f 2 ρ := by
-  have hle : eLpNorm (fun x => g x * f x) 2 ρ ≤ eLpNorm (((|C| : ℝ) : ℂ) • f) 2 ρ := by
-    refine eLpNorm_mono_ae (hg.aestronglyMeasurable.mul hf)
-      (Filter.Eventually.of_forall fun x => ?_)
-    simp only [Pi.smul_apply, smul_eq_mul, norm_mul, Complex.norm_real, Real.norm_eq_abs, abs_abs]
-    exact mul_le_mul_of_nonneg_right ((hgC x).trans (le_abs_self C)) (norm_nonneg _)
-  rw [eLpNorm_const_smul] at hle
-  refine hle.trans_eq ?_
-  congr 1
-  rw [← ofReal_norm, Complex.norm_real, Real.norm_eq_abs, abs_abs]
-
-/-- **The bound that makes multiplication a bounded operator** on `L²`. -/
-theorem norm_toLp_mul_le (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 ρ) :
-    ‖MemLp.toLp (fun x => g x * F x) (memLp_two_mul_complex ρ hg hgC F)‖ ≤ |C| * ‖F‖ := by
-  rw [Lp.norm_toLp, Lp.norm_def, ← ENNReal.toReal_ofReal (abs_nonneg C), ← ENNReal.toReal_mul]
-  refine ENNReal.toReal_mono ?_
-    (eLpNorm_two_mul_le ρ hg hgC _ (Lp.aestronglyMeasurable F))
-  exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top (Lp.eLpNorm_ne_top F)
-
 /-- Applying the native multiplication operator of an essentially bounded representative
 is pointwise multiplication almost everywhere. -/
 theorem coeFn_multiplicationOperator_toLp {𝕜 : Type*} [NormedField 𝕜] {ρ : Measure α}
@@ -355,25 +319,33 @@ theorem coeFn_multiplicationOperator_toLp {𝕜 : Type*} [NormedField 𝕜] {ρ 
   filter_upwards [Lp.multiplicationOperator_ae (hg.toLp g) F, hg.coeFn_toLp] with x hm hx
   rw [hm, hx, smul_eq_mul]
 
-/-- Multiplication on `L²` by the `L∞` class of a bounded measurable representative. -/
-@[expose] noncomputable def mulLp (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) : Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ :=
-  Lp.multiplicationOperator
-    ((memLp_top_of_bound hg.aestronglyMeasurable C (Filter.Eventually.of_forall hgC)).toLp g)
+/-- The `L∞` class of a measurable symbol with a uniform pointwise bound. -/
+@[expose] noncomputable def boundedSymbolLp {𝕜 : Type*} [RCLike 𝕜] (ρ : Measure α)
+    {g : α → 𝕜} (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) : Lp 𝕜 ∞ ρ :=
+  (memLp_top_of_bound hg.aestronglyMeasurable C (Filter.Eventually.of_forall hgC)).toLp g
 
-/-- The multiplication operator, unfolded. -/
-theorem mulLp_apply (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 ρ) :
-    mulLp ρ hg hgC F = MemLp.toLp (fun x => g x * F x) (memLp_two_mul_complex ρ hg hgC F) := by
-  unfold mulLp
-  exact Lp.ext ((coeFn_multiplicationOperator_toLp _ F).trans (MemLp.coeFn_toLp _).symm)
+/-- The bounded symbol class agrees with its representative almost everywhere. -/
+theorem coeFn_boundedSymbolLp {𝕜 : Type*} [RCLike 𝕜] (ρ : Measure α) {g : α → 𝕜}
+    (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) :
+    (boundedSymbolLp ρ hg hgC : α → 𝕜) =ᵐ[ρ] g :=
+  MemLp.coeFn_toLp _
 
-/-- The multiplication operator really is pointwise multiplication. -/
+/-- The bounded symbol class inherits the uniform pointwise bound in `L∞`. -/
+theorem norm_boundedSymbolLp_le {𝕜 : Type*} [RCLike 𝕜] (ρ : Measure α) {g : α → 𝕜}
+    (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) :
+    ‖boundedSymbolLp ρ hg hgC‖ ≤ |C| := by
+  rw [boundedSymbolLp, Lp.norm_toLp, eLpNorm_exponent_top hg.aestronglyMeasurable,
+    ← ENNReal.toReal_ofReal (abs_nonneg C)]
+  exact ENNReal.toReal_mono ENNReal.ofReal_ne_top
+    (eLpNormEssSup_le_of_ae_bound (Filter.Eventually.of_forall
+      fun x => (hgC x).trans (le_abs_self C)))
+
+/-- Multiplication by a bounded representative is pointwise multiplication almost everywhere. -/
 theorem coeFn_mulLp (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
     (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 ρ) :
-    (mulLp ρ hg hgC F : α → ℂ) =ᵐ[ρ] fun x => g x * F x := by
-  rw [mulLp_apply]
-  exact MemLp.coeFn_toLp _
+    (Lp.multiplicationOperator (boundedSymbolLp ρ hg hgC) F : α → ℂ) =ᵐ[ρ]
+      fun x => g x * F x :=
+  coeFn_multiplicationOperator_toLp _ F
 
 /-- **The intertwining law for the Radon--Nikodym isometry.**  For a bounded measurable `g`,
 
@@ -385,9 +357,12 @@ The multiplier `√(dμ/dν)` is a pointwise scalar, so it commutes with multipl
 only work is moving the representatives between `μ`-a.e. and `ν`-a.e., which `ν ≪ μ` allows. -/
 theorem rnDerivL2_mulLp [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν) (hνμ : ν ≪ μ) {g : α → ℂ}
     (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 μ) :
-    rnDerivL2 hμν hνμ (mulLp μ hg hgC F) = mulLp ν hg hgC (rnDerivL2 hμν hνμ F) := by
+    rnDerivL2 hμν hνμ (Lp.multiplicationOperator (boundedSymbolLp μ hg hgC) F) =
+      Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ν hg hgC) (rnDerivL2 hμν hνμ F)
+      := by
   refine Lp.ext ?_
-  filter_upwards [coeFn_rnDerivL2 hμν hνμ (mulLp μ hg hgC F), hνμ.ae_le (coeFn_mulLp μ hg hgC F),
+  filter_upwards [coeFn_rnDerivL2 hμν hνμ (Lp.multiplicationOperator (boundedSymbolLp μ hg hgC) F),
+    hνμ.ae_le (coeFn_mulLp μ hg hgC F),
     coeFn_mulLp ν hg hgC (rnDerivL2 hμν hνμ F), coeFn_rnDerivL2 hμν hνμ F] with x h1 h2 h3 h4
   rw [h1, h2, h3, h4]
   ring
@@ -401,7 +376,9 @@ of the measure *class*: two multiplication operators built from equivalent measu
 symbol are unitarily equivalent. -/
 theorem rnDerivL2Equiv_mulLp [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν) (hνμ : ν ≪ μ)
     {g : α → ℂ} (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 μ) :
-    rnDerivL2Equiv hμν hνμ (mulLp μ hg hgC F) = mulLp ν hg hgC (rnDerivL2Equiv hμν hνμ F) := by
+    rnDerivL2Equiv hμν hνμ (Lp.multiplicationOperator (boundedSymbolLp μ hg hgC) F) =
+      Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ν hg hgC) (rnDerivL2Equiv hμν hνμ
+      F) := by
   rw [rnDerivL2Equiv_apply, rnDerivL2Equiv_apply]
   exact rnDerivL2_mulLp hμν hνμ hg hgC F
 
@@ -413,8 +390,10 @@ theorem rnDerivL2Equiv_mulLp [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ �
 -/
 theorem comp_mulLp_rnDerivL2 [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν) (hνμ : ν ≪ μ)
     {g : α → ℂ} (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) :
-    (rnDerivL2 hμν hνμ).toContinuousLinearMap.comp (mulLp μ hg hgC)
-      = (mulLp ν hg hgC).comp (rnDerivL2 hμν hνμ).toContinuousLinearMap := by
+    (rnDerivL2 hμν hνμ).toContinuousLinearMap.comp (Lp.multiplicationOperator (E := ℂ) (p := 2)
+      (boundedSymbolLp μ hg hgC))
+      = (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ν hg hgC)).comp (rnDerivL2 hμν
+        hνμ).toContinuousLinearMap := by
   refine ContinuousLinearMap.ext fun F => ?_
   simp only [ContinuousLinearMap.comp_apply, LinearIsometry.coe_toContinuousLinearMap]
   exact rnDerivL2_mulLp hμν hνμ hg hgC F
@@ -428,8 +407,10 @@ This is the form the multiplicity theory consumes: two multiplication models bui
 carried by a model is the measure class, not the measure. -/
 theorem mulLp_eq_conj_rnDerivL2 [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν) (hνμ : ν ≪ μ)
     {g : α → ℂ} (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) :
-    mulLp ν hg hgC = (rnDerivL2 hμν hνμ).toContinuousLinearMap.comp
-      ((mulLp μ hg hgC).comp (rnDerivL2 hνμ hμν).toContinuousLinearMap) := by
+    Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ν hg hgC) = (rnDerivL2 hμν
+      hνμ).toContinuousLinearMap.comp
+      ((Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp μ hg hgC)).comp (rnDerivL2 hνμ
+        hμν).toContinuousLinearMap) := by
   refine ContinuousLinearMap.ext fun G => ?_
   simp only [ContinuousLinearMap.comp_apply, LinearIsometry.coe_toContinuousLinearMap]
   rw [rnDerivL2_mulLp hμν hνμ hg hgC, rnDerivL2_rnDerivL2 hμν hνμ]

@@ -491,9 +491,10 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
       (∀ N : Set X, MeasurableSet N → (∀ n, μ n N = 0) → ρ N = 0) ∧
       ρ (D 0)ᶜ = 0 ∧
       StarOperatorUnitaryEquiv star star
-        (mulLp (sliceSum μ) (hg.comp measurable_fst) (fun p => hgC p.1))
-        (mulLp (sliceSum fun k => ρ.restrict (D k)) (hg.comp measurable_fst)
-          (fun p => hgC p.1)) := by
+        (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (sliceSum μ) (hg.comp
+          measurable_fst) (fun p => hgC p.1)))
+        (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (sliceSum fun k => ρ.restrict
+          (D k)) (hg.comp measurable_fst) (fun p => hgC p.1))) := by
   classical
   obtain ⟨S, hSmeas, hSequiv⟩ := exists_supports_measureEquiv_restrict μ
   refine ⟨dominatingMeasure μ, levelSet S, inferInstance,
@@ -514,9 +515,10 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
       (sliceSum fun n => (dominatingMeasure μ).restrict (S n)) :=
     measureEquiv_sliceSum hSequiv
   have step1 : StarOperatorUnitaryEquiv star star
-      (mulLp (sliceSum μ) (hg.comp measurable_fst) (fun p => hgC p.1))
-      (mulLp (sliceSum fun n => (dominatingMeasure μ).restrict (S n))
-        (hg.comp measurable_fst) (fun p => hgC p.1)) :=
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (sliceSum μ) (hg.comp
+        measurable_fst) (fun p => hgC p.1)))
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (sliceSum fun n =>
+        (dominatingMeasure μ).restrict (S n)) (hg.comp measurable_fst) (fun p => hgC p.1))) :=
     starOperatorUnitaryEquiv_of_intertwines (rnDerivL2Equiv heq.1 heq.2)
       (fun F => rnDerivL2Equiv_mulLp heq.1 heq.2 (hg.comp measurable_fst) (fun p => hgC p.1) F)
       fun F => (star_rnDerivL2Equiv heq.1 heq.2 F).symm
@@ -544,10 +546,11 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
     rw [← hmap, Measure.map_map (measurable_rankInv hSmeas) (measurable_rankMap hSmeas)]
     exact (Measure.map_congr hgf).trans Measure.map_id
   have step2 : StarOperatorUnitaryEquiv star star
-      (mulLp (sliceSum fun n => (dominatingMeasure μ).restrict (S n))
-        (hg.comp measurable_fst) (fun p => hgC p.1))
-      (mulLp (sliceSum fun k => (dominatingMeasure μ).restrict (levelSet S k))
-        (hg.comp measurable_fst) (fun p => hgC p.1)) :=
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (sliceSum fun n =>
+        (dominatingMeasure μ).restrict (S n)) (hg.comp measurable_fst) (fun p => hgC p.1)))
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp (sliceSum fun k =>
+        (dominatingMeasure μ).restrict (levelSet S k)) (hg.comp measurable_fst) (fun p => hgC p.1)))
+        :=
     starOperatorUnitaryEquiv_of_intertwines
       (compLpEquiv (rankInv S) (rankMap S) hpres' hpres hfg hgf)
       (fun F => compLp_mulLp hpres' (hg.comp measurable_fst) (fun p => hgC p.1) F)

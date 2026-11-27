@@ -416,7 +416,8 @@ statement is therefore conditional on the base measure being carried by the real
 theorem mulLp_ofReal_ofRealLp {α : Type*} [MeasurableSpace α] (ρ : Measure α) {g : α → ℝ}
     (hg : Measurable g) (hgLp : MemLp g ∞ ρ) {C : ℝ}
     (hgC : ∀ x, ‖((g x : ℝ) : ℂ)‖ ≤ C) (f : Lp ℝ 2 ρ) :
-    mulLp ρ (Complex.measurable_ofReal.comp hg) hgC (ofRealLp f)
+    Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ (Complex.measurable_ofReal.comp
+      hg) hgC) (ofRealLp f)
       = ofRealLp (Lp.multiplicationOperator (hgLp.toLp g) f) := by
   refine Lp.ext ?_
   filter_upwards [coeFn_mulLp ρ (Complex.measurable_ofReal.comp hg) hgC (ofRealLp f),
@@ -461,8 +462,10 @@ theorem operatorUnitaryEquiv_of_measureEquiv_real {D E : MultiplicityDatum ℝ}
   rw [MultiplicityDatum.operator_eq_multiplicationOperator_of_le (D := D) hR0 (le_max_left _ _),
     MultiplicityDatum.operator_eq_multiplicationOperator_of_le (D := E) hR0 (le_max_right _ _)]
   have hstar : StarOperatorUnitaryEquiv star star
-      (mulLp D.measure (Complex.measurable_ofReal.comp hgmeas) hgC')
-      (mulLp E.measure (Complex.measurable_ofReal.comp hgmeas) hgC') :=
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure
+        (Complex.measurable_ofReal.comp hgmeas) hgC'))
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp E.measure
+        (Complex.measurable_ofReal.comp hgmeas) hgC')) :=
     starOperatorUnitaryEquiv_of_intertwines (rnDerivL2Equiv hmeas.1 hmeas.2)
       (fun F => rnDerivL2Equiv_mulLp hmeas.1 hmeas.2
         (Complex.measurable_ofReal.comp hgmeas) hgC' F)
@@ -543,11 +546,12 @@ theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
           (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry) F)
         = ((cyclicIsometry ha (ξ n)).comp
           (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry)
-          (mulLp _ (measurable_coordTrunc (‖a‖))
-            (norm_coordTrunc_le hR0) F) := by
+          (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp _ (measurable_coordTrunc
+            (‖a‖)) (norm_coordTrunc_le hR0)) F) := by
     intro n F
     have h1 : embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))
-        (mulLp _ (measurable_coordTrunc (‖a‖)) (norm_coordTrunc_le hR0) F)
+        (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp _ (measurable_coordTrunc
+          (‖a‖)) (norm_coordTrunc_le hR0)) F)
         = Lp.multiplicationOperator (spectrumCoordinateLp ha (ξ n))
             (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) F) :=
       (embLpEquiv_mulLp hemb ((cfcHom ha).representationDiagMeasure (ξ n))
@@ -560,14 +564,14 @@ theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
   have hB : ∀ (n : ℕ)
       (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure (ξ
         n)))),
-      (mulLp _ ((measurable_coordTrunc (‖a‖)).comp measurable_fst)
-          (fun p => norm_coordTrunc_le hR0 p.1))
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp _ ((measurable_coordTrunc
+        (‖a‖)).comp measurable_fst) (fun p => norm_coordTrunc_le hR0 p.1)))
         (sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
           ((cfcHom ha).representationDiagMeasure (ξ n))) n F)
         = sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom
           ha).representationDiagMeasure (ξ n))) n
-          (mulLp _ (measurable_coordTrunc (‖a‖))
-            (norm_coordTrunc_le hR0) F) :=
+          (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp _ (measurable_coordTrunc
+            (‖a‖)) (norm_coordTrunc_le hR0)) F) :=
     fun n F => (sliceLp_mulLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
       ((cfcHom ha).representationDiagMeasure (ξ m))) n (measurable_coordTrunc (‖a‖))
       (norm_coordTrunc_le hR0) F).symm

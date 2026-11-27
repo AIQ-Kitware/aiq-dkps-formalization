@@ -224,8 +224,8 @@ the corresponding restriction of the base measure. -/
 theorem inner_mulLp_comp_eq_tsum (D : MultiplicityDatum ℂ) {h : ℂ → ℂ} (hm : Measurable h)
     {C : ℝ} (hC : ∀ z, ‖h z‖ ≤ C) (V W : Lp ℂ 2 D.measure) {vb wb : ℂ × ℕ → ℂ}
     (hvb : (V : ℂ × ℕ → ℂ) =ᵐ[D.measure] vb) (hwb : (W : ℂ × ℕ → ℂ) =ᵐ[D.measure] wb) :
-    ⟪mulLp D.measure (hm.comp (measurable_datumSymbol D))
-        (fun p => hC (datumSymbol D p)) V, W⟫_ℂ
+    ⟪Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure (hm.comp
+      (measurable_datumSymbol D)) (fun p => hC (datumSymbol D p))) V, W⟫_ℂ
       = ∑' n, ∫ z, (starRingEnd ℂ) (h z * vb (z, n)) * wb (z, n)
           ∂(D.base.restrict (D.level n)) := by
   have hae : ∀ᵐ p ∂D.measure,
@@ -235,16 +235,16 @@ theorem inner_mulLp_comp_eq_tsum (D : MultiplicityDatum ℂ) {h : ℂ → ℂ} (
     rw [h1, h2, h3]
   have hJint : Integrable (fun p => (starRingEnd ℂ) (h p.1 * vb p) * wb p) D.measure := by
     have hI := MeasureTheory.L2.integrable_inner (𝕜 := ℂ)
-      (mulLp D.measure (hm.comp (measurable_datumSymbol D))
-        (fun p => hC (datumSymbol D p)) V) W
+      (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure (hm.comp
+        (measurable_datumSymbol D)) (fun p => hC (datumSymbol D p))) V) W
     refine hI.congr ?_
     filter_upwards [coeFn_mulLp D.measure (hm.comp (measurable_datumSymbol D))
       (fun p => hC (datumSymbol D p)) V, hae] with p h1 h2
     rw [RCLike.inner_apply, h1, ← h2]
     simp only [Function.comp_apply]
     ring
-  calc ⟪mulLp D.measure (hm.comp (measurable_datumSymbol D))
-        (fun p => hC (datumSymbol D p)) V, W⟫_ℂ
+  calc ⟪Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure (hm.comp
+    (measurable_datumSymbol D)) (fun p => hC (datumSymbol D p))) V, W⟫_ℂ
       = ∫ p, (starRingEnd ℂ) (h (datumSymbol D p) * (V : ℂ × ℕ → ℂ) p)
           * (W : ℂ × ℕ → ℂ) p ∂D.measure :=
         inner_mulLp_left D.measure (hm.comp (measurable_datumSymbol D))
@@ -318,8 +318,8 @@ theorem spectralGeneratedLE_mulLp_datumSymbol (E : MultiplicityDatum ℂ) {S : S
       · rw [Set.indicator_of_notMem hz, norm_zero, zero_mul]
         exact norm_nonneg _
     · rintro h hm ⟨C, hC⟩
-      have horbit : ⟪mulLp E.measure (hm.comp (measurable_datumSymbol E))
-          (fun p => hC (datumSymbol E p))
+      have horbit : ⟪Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp E.measure (hm.comp
+        (measurable_datumSymbol E)) (fun p => hC (datumSymbol E p)))
           (indicatorConstLp 2 (hAm j) (hAfin j) (1 : ℂ)), w⟫_ℂ = 0 := by
         rw [← borelCalculus_comp_val_mulLp E.measure (measurable_datumSymbol E)
           (norm_datumSymbol_le E) hm hC (hm.comp (measurable_datumSymbol E))
@@ -532,19 +532,20 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S
     exact hpos h1
   -- The defect vector is orthogonal to every calculus orbit of the generators.
   have horth : ∀ (i : Fin k)
-      (f : spectrum ℂ (mulLp D.measure (measurable_datumSymbol D)
-        (norm_datumSymbol_le D)) → ℂ) (hf : IsBddMeasurable f),
+      (f : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure
+        (measurable_datumSymbol D) (norm_datumSymbol_le D))) → ℂ) (hf : IsBddMeasurable f),
       ⟪w, borelCalculus (isStarNormal_mulLp D.measure (measurable_datumSymbol D)
         (norm_datumSymbol_le D)) hf (v i)⟫_ℂ = 0 := by
     intro i f hf
     obtain ⟨h, hm, hC, hgeq⟩ := exists_comp_val_eq hf
-    have hfeq : f = fun ww : spectrum ℂ (mulLp D.measure (measurable_datumSymbol D)
-        (norm_datumSymbol_le D)) => h (ww : ℂ) := funext hgeq
+    have hfeq : f = fun ww : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2)
+      (boundedSymbolLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D))) => h (ww : ℂ)
+      := funext hgeq
     subst hfeq
     have hbc : borelCalculus (isStarNormal_mulLp D.measure (measurable_datumSymbol D)
         (norm_datumSymbol_le D)) hf (v i)
-        = mulLp D.measure (hm.comp (measurable_datumSymbol D))
-            (fun p => hC (datumSymbol D p)) (v i) := by
+        = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure (hm.comp
+          (measurable_datumSymbol D)) (fun p => hC (datumSymbol D p))) (v i) := by
       have hlem := borelCalculus_comp_val_mulLp D.measure (measurable_datumSymbol D)
         (norm_datumSymbol_le D) hm hC (hm.comp (measurable_datumSymbol D))
         (fun p => hC (datumSymbol D p)) (Filter.Eventually.of_forall fun p => rfl)
