@@ -65,15 +65,10 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
-/-! The real functional calculus on `H →L[𝕜] H`, and the two scalar-action facts Mathlib
-pairs it with, are theorems at every `RCLike` field
-(`ContinuousLinearMap.continuousFunctionalCalculusReal`), so they are activated here rather
-than quantified over.  Until 2026-09-04 they were section `variable`s, and every theorem in
-this section therefore asked its caller for three instances that instance search finds.  They
-are `local instance 100` rather than global because a global `Algebra ℝ (E →L[𝕜] E)` makes
-Lean's `•` elaborator drop an author-written `((r : ℝ) : 𝕜) •` coercion. -/
+/-! TauCeti supplies the real functional calculus once the real algebra and scalar tower
+are in scope. Enable those two instances locally to preserve scalar elaboration elsewhere. -/
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 
 
 /-- **Davis--Kahan 1970, Proposition 3.2.**
@@ -194,7 +189,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [CompleteSpace H]
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 
 
 /-- **Davis--Kahan 1970, the Remark after Proposition 3.2.**

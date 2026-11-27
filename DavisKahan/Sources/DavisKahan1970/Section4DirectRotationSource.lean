@@ -67,7 +67,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 
 /-- The displacement of a Definition 3.1 direct rotation, read on `U`, has the
 same approximation numbers as the displacement of the construction the proofs

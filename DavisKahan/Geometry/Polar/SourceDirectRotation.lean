@@ -65,7 +65,7 @@ here rather than quantified over.  They are `local instance 100` rather than
 global because a global `Algebra ℝ (E →L[𝕜] E)` makes Lean's `•` elaborator drop
 an author-written `((r : ℝ) : 𝕜) •` coercion. -/
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- **Davis--Kahan 1970, Definition 3.1.**

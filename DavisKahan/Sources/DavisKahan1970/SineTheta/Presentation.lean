@@ -82,7 +82,6 @@ local instance realNormedAlgebra : NormedAlgebra ℝ (F →L[𝕜] F) :=
       rw [← IsScalarTower.algebraMap_smul 𝕜]
       simpa using norm_smul_le (algebraMap ℝ 𝕜 r) T }
 
-attribute [local instance 100] ContinuousLinearMap.continuousFunctionalCalculusReal
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- The trial-coordinate part of the Davis--Kahan Section 2 setup.

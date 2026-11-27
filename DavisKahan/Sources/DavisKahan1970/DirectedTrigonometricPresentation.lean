@@ -64,7 +64,7 @@ open TauCeti.DavisKahan.RealSpectralRestriction
 open TauCeti.RealComplexification
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 noncomputable section

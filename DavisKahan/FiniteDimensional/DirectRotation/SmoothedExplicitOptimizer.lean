@@ -26,7 +26,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
 attribute [local instance] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-- The spectral optimal phase factor for a subspace pair, as an actual

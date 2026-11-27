@@ -28,7 +28,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E] [CompleteSpace E]
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 private theorem canonical_rotation_model

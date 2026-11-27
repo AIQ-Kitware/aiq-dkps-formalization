@@ -18,7 +18,7 @@ public section
 attribute [local instance] ContinuousLinearMap.realAlgebra ContinuousLinearMap.realIsScalarTower
 
 attribute [local instance] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
   ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-!
@@ -307,7 +307,7 @@ theorem theorem3_1_intertwiner_of_sameSpectralMultiplicity_complex
 
 
 attribute [local instance] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 
 /-- **Davis--Kahan 1970, Theorem 3.1, converse sentence, from the printed angle data alone.**
 

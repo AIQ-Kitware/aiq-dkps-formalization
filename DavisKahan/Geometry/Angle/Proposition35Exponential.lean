@@ -51,11 +51,6 @@ local instance realNormedAlgebra : NormedAlgebra ℝ (H →L[𝕜] H) :=
       rw [← IsScalarTower.algebraMap_smul 𝕜]
       simpa using norm_smul_le (algebraMap ℝ 𝕜 r) T }
 
-local instance realContinuousFunctionalCalculus :
-    ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint :=
-  ContinuousLinearMap.continuousFunctionalCalculusReal (𝕜 := 𝕜) (E := H)
-
-
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 

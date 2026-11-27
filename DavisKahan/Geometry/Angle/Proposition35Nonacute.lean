@@ -11,7 +11,7 @@ public import DavisKahan.Geometry.Polar.Section3Nonacute
 public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
   ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-!

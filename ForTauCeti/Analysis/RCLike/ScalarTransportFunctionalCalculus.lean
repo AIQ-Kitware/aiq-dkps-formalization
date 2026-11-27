@@ -191,22 +191,7 @@ theorem realAlgebra_eq_of_isScalarTower
     exact IsScalarTower.algebraMap_apply ℝ 𝕜 (E →L[𝕜] E) r
   exact hl.trans hr.symm
 
-
-
-/-- The continuous functional calculus over `ℝ` for bounded self-adjoint operators over
-an arbitrary `RCLike` field, supplied by the canonical TauCeti instance.
-
-The local theorem name is retained for downstream users that activate it explicitly;
-the instance itself and its proof now live upstream. -/
-theorem continuousFunctionalCalculusReal
-    {𝕜 : Type u} [RCLike 𝕜] {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-    [CompleteSpace E] :
-    ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint :=
-  instContinuousFunctionalCalculusRCLikeIsSelfAdjoint
-
 end ContinuousLinearMap
-
-attribute [local instance 100] ContinuousLinearMap.continuousFunctionalCalculusReal
 
 namespace TauCeti
 namespace ScalarTransport

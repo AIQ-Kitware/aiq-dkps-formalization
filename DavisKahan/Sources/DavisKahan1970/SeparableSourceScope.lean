@@ -57,7 +57,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
@@ -91,7 +91,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [Complet
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 
 /-- **Davis--Kahan 1970, Proposition 3.2, existence half, at the paper's
 separable ambient scope.** -/
@@ -119,7 +119,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [Complete
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 
 /-- **Davis--Kahan 1970, Proposition 3.5, commutations, at the paper's separable
 ambient scope.** -/

@@ -62,16 +62,10 @@ section CosineBlock
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
   [CompleteSpace H₁]
-/-! The real functional calculus on an operator algebra, and the two scalar-action facts
-Mathlib pairs it with, are theorems at every `RCLike` field
-(`ContinuousLinearMap.continuousFunctionalCalculusReal`), so they are activated here rather
-than quantified over.  Until 2026-09-04 they were section `variable`s on the generic-half
-algebras, and the source-facing classification theorems therefore asked their callers for
-instances that instance search finds.  `local instance 100` rather than global: a global
-`Algebra ℝ (E →L[𝕜] E)` makes Lean's `•` elaborator drop an author-written `((r : ℝ) : 𝕜) •`
-coercion. -/
+/-! TauCeti supplies the real functional calculus once the real algebra and scalar tower
+are in scope. Enable those two instances locally to preserve scalar elaboration elsewhere. -/
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 
 variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
   [CompleteSpace H₂]

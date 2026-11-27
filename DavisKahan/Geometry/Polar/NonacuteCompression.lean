@@ -28,7 +28,7 @@ variable {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H] [InnerProductSpac
   [CompleteSpace H]
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
 attribute [local instance] ContinuousLinearMap.instStarOrderedRingRCLike
 
 private theorem compression_eq_of_transport_gram

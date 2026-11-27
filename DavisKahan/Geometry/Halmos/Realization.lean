@@ -14,7 +14,7 @@ public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 public section
 
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
-  ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
+  ContinuousLinearMap.realIsScalarTower
   ContinuousLinearMap.instStarOrderedRingRCLike
 
 /-!

@@ -7197,6 +7197,25 @@
       "accepted_head": "335655bf383a624789a419fb4fbc876fa3f61be2",
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "2026-11-27: Native finite-spectral-sum bound in arbitrary complex Hilbert dimension replaces the complex operator-norm proof. The RCLike consumer retains its real restriction and complexification. The local explicit Fourier inverse and its uniqueness and compactness consequences support the ideal-norm theory. Other contributor implementation, direct DKPS proof descent undisclosed. This is the bounded prerequisite of SSP-B16."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
+      "source_declarations": [
+        "ContinuousLinearMap.continuousFunctionalCalculusReal"
+      ],
+      "original_source_anchor": "342438a6635f6d117987cbc160163f797472f154:ForTauCeti/Analysis/RCLike/ScalarTransportFunctionalCalculus.lean",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ContinuousFunctionalCalculus",
+      "final_declarations": [
+        "ContinuousLinearMap.instContinuousFunctionalCalculusRCLikeIsSelfAdjoint"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16260",
+      "integration": "831b47b60d27ea7de6b01449e708937cbf82a44e",
+      "roadmap_targets": [
+        "PD-A10"
+      ],
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27: Remove the forwarding theorem and its local instance activations. Use TauCeti's realification-based instance over arbitrary RCLike fields; keep the compatible real algebra and scalar tower local. The native authors independently wrote the realification proofs and retained the older DKPS real-calculus attribution. Naturality for a change between RCLike fields remains in the local transport module."
     }
   ],
   "current_consumption_pin": "f0f7c4b96aba257ab68e23f04a4e2bbd141b0532"
