@@ -19,6 +19,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm
 public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Sylvester.Basic
 
 /-!
 # The complete finite-dimensional `sin Θ` theorem family
@@ -225,7 +226,7 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ)
+    {δ : ℝ} (_hδ : 0 < δ)
     (hgap : Module.End.PointSpectraSeparated M ⊤ A Uᗮ δ) :
     δ * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
         (sinThetaEmbedding U X) ≤
@@ -247,8 +248,11 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     exact hgap.symm.le_abs_sub hlam' hmu
   have hEq : AU ∘ₗ Y - Y ∘ₗ M = C :=
     sylvester_projectedResidual_eq hA hU hUperp X M
-  have hSylv := frobenius_sylvester_le_of_pointSpectraSeparated
-    hAU hM hδ hgap' hEq
+  have hSylv := ContinuousLinearMap.mul_frobenius_le_frobenius_sylvester_apply
+    (A := AU.toContinuousLinearMap) (B := M.toContinuousLinearMap) hAU hM hgap'
+    Y.toContinuousLinearMap
+  simp only [ContinuousLinearMap.sylvester_apply, ContinuousLinearMap.toLinearMap_sub,
+    ContinuousLinearMap.toLinearMap_comp, LinearMap.coe_toContinuousLinearMap, hEq] at hSylv
   have hY : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := Uᗮ) Y =
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
         (sinThetaEmbedding U X) := by

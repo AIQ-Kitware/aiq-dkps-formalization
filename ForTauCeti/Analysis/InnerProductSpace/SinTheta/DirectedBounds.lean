@@ -243,10 +243,8 @@ the high `B`-block `Vᗮ`.  **The finite result is dispatched from the
 arbitrary-dimension theorem**
 `Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div`: finite
 operators are converted to bounded operators, and the *only* finite-dimensional
-ingredient is the eigenbasis spectrum ⟹ coercivity bridge
-(`lowerFormBound_of_pointSpectrumIn` / `upperFormBound_of_pointSpectrumIn`).  The whole sin-Θ
-construction and Sylvester estimate are the dimension-free infinite-dimensional
-core. -/
+step is converting point-spectrum containment to form bounds. The sine bound
+and Sylvester estimate apply in arbitrary dimension. -/
 theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -263,9 +261,9 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
   have hBpp : ∀ x, Bc x = B x := fun _ => rfl
   have hBself : Bc.IsSymmetric := fun x y => hB x y
   have hUc : ∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
-    fun x hx => lowerFormBound_of_pointSpectrumIn hA hU hUspec x hx
+    fun _ hx => hA.le_re_inner_apply_self_of_pointSpectrumIn (U := U) (fun _ hy => hU hy) hUspec hx
   have hVc : ∀ x ∈ V, RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
-    fun x hx => upperFormBound_of_pointSpectrumIn hB hV hVspec x hx
+    fun _ hx => hB.re_inner_apply_self_le_of_pointSpectrumIn (U := V) (fun _ hy => hV hy) hVspec hx
   have hExt := Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div
     (A := Ac) (B := Bc) U V hBself (fun x hx => hU hx) (fun x hx => hV hx)
     hg hUc hVc
@@ -322,8 +320,10 @@ theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantSeminorm 𝕜 E E)
   have : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
   exact UnitarilyInvariantSeminorm.apply_starProjection_comp_starProjection_le N
     hA hB hU hV hg
-    (fun x hx => lowerFormBound_of_pointSpectrumIn hA hU hUspec x hx)
-    (fun x hx => upperFormBound_of_pointSpectrumIn hB hV hVspec x hx)
+    (fun _ hx => hA.le_re_inner_apply_self_of_pointSpectrumIn (U := U)
+      (fun _ hy => hU hy) hUspec hx)
+    (fun _ hx => hB.re_inner_apply_self_le_of_pointSpectrumIn (U := V)
+      (fun _ hy => hV hy) hVspec hx)
 
 /-- **Every-unitarily-invariant-norm directed `sin Θ` theorem for the
 canonical spectral subspaces.**  The canonical spectral subspaces reduce
@@ -393,16 +393,18 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
       LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hB hW
   have hUhiForm : ∀ x ∈ U,
       (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
-    fun x hx => by simpa [Ac] using lowerFormBound_of_pointSpectrumIn hA hU hUhi x hx
+    fun _ hx => hA.le_re_inner_apply_self_of_pointSpectrumIn (U := U) (fun _ hy => hU hy) hUhi hx
   have hUloForm : ∀ x ∈ Uᗮ,
       RCLike.re ⟪Ac x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
-    fun x hx => by simpa [Ac] using upperFormBound_of_pointSpectrumIn hA hUperp hUlo x hx
+    fun _ hx => hA.re_inner_apply_self_le_of_pointSpectrumIn (U := Uᗮ)
+      (fun _ hy => hUperp hy) hUlo hx
   have hWhiForm : ∀ x ∈ W,
       (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Bc x, x⟫_𝕜 :=
-    fun x hx => by simpa [Bc] using lowerFormBound_of_pointSpectrumIn hB hW hWhi x hx
+    fun _ hx => hB.le_re_inner_apply_self_of_pointSpectrumIn (U := W) (fun _ hy => hW hy) hWhi hx
   have hWloForm : ∀ x ∈ Wᗮ,
       RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
-    fun x hx => by simpa [Bc] using upperFormBound_of_pointSpectrumIn hB hWperp hWlo x hx
+    fun _ hx => hB.re_inner_apply_self_le_of_pointSpectrumIn (U := Wᗮ)
+      (fun _ hy => hWperp hy) hWlo hx
   have hcore : ‖(U.starProjection - W.starProjection : E →L[𝕜] E)‖ ≤ ‖Bc - Ac‖ / g := by
     rw [← Submodule.projectionGap_def U W]
     exact Submodule.projectionGap_le_norm_sub_div (A := Ac) (B := Bc)

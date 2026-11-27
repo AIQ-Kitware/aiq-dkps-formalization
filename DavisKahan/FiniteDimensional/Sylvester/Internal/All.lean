@@ -6,6 +6,5 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier
-public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
 
 /-! # `DavisKahan/FiniteDimensional/Sylvester/Internal` -/

@@ -89,13 +89,13 @@ example {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} {δ c : ℝ} (hgap : Module.End.PointInternalGap A U δ)
     (hspec : Module.End.PointSpectrumIn A U (Set.Iic c)) :
     ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
-  upperFormBound_of_pointSpectrumIn hA ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mpr hgap.invariant) hspec
+  fun _ hx => hA.re_inner_apply_self_le_of_pointSpectrumIn hgap.invariant hspec hx
 
 example {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} {δ c : ℝ} (hgap : Module.End.PointInternalGap A U δ)
     (hspec : Module.End.PointSpectrumIn A U (Set.Ici c)) :
     ∀ x ∈ U, c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 :=
-  lowerFormBound_of_pointSpectrumIn hA ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mpr hgap.invariant) hspec
+  fun _ hx => hA.le_re_inner_apply_self_of_pointSpectrumIn hgap.invariant hspec hx
 
 end PointGaps
 

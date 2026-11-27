@@ -1,5 +1,36 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native finite form and Frobenius bounds
+
+The finite sine and Ritz arguments use the point-spectrum-to-form laws
+from #14418 (`1f2ab6873251`, PA-C20/C22) and the Ritz compression and
+orthogonal-complement specializations from #29565 (`97bf4705f603`).
+#14418 reports no vendored formalization. #29565 is a refactor of
+TauCeti's Ritz tangent proof and exposes the two reusable form bounds.
+The Ritz residuals and angle inequalities retain their original scope.
+[PR #14418](https://github.com/TauCetiProject/TauCeti/pull/14418) ·
+[PR #29565](https://github.com/TauCetiProject/TauCeti/pull/29565)
+
+The ordered Sylvester proof and ordered Ritz-to-interval reduction use
+the eigenbasis form bounds ported by Jon Crall in #13599 (`7ebf17ba0472`).
+The latter also uses the native bounded eigenvalue estimate from #24932.
+The remaining `Sylvester.Internal.SpectralBounds` implementations retire.
+[PR #13599](https://github.com/TauCetiProject/TauCeti/pull/13599) ·
+[PR #24932](https://github.com/TauCetiProject/TauCeti/pull/24932)
+
+The pairwise Frobenius residual bound now applies #15546's constant-one
+Sylvester estimate (`5ea5c7fb68f3`, SSP-B15). #15546 uses the coefficient
+identity from #14951 (SSP-B04); both integrations report no vendored
+formalization. The local eigenbasis calculation and Frobenius proof
+retire. The DKPS projected-residual statement and finite orbit
+certificate remain.
+[PR #14951](https://github.com/TauCetiProject/TauCeti/pull/14951) ·
+[PR #15546](https://github.com/TauCetiProject/TauCeti/pull/15546)
+
+The focused build (9140 jobs), full default build (22788 jobs), and combined
+Challenge and paper semantic-surface build (22494 jobs) passed without
+warnings. The declaration-name comparison kept the 49 baseline findings.
+
 ## November 27 native interval Sylvester and finite sine bounds
 
 The finite interval/exterior Sylvester estimates now use the two orientations

@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic
-public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 
@@ -173,25 +173,35 @@ theorem uiNorm_sylvester_le_of_orderedGap
   rcases hgap with hBA | hAB
   · let j₀ : Fin (Module.finrank 𝕜 E) := ⟨0, Module.finrank_pos⟩
     let c : ℝ := hB.eigenvalues rfl j₀
+    have hc : c ∈ Module.End.restrictedPointSpectrum B ⊤ := by
+      rw [Module.End.restrictedPointSpectrum_top]
+      exact hB.hasEigenvalue_eigenvalues rfl j₀
     have hBform : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
-      re_inner_le_of_eigenvalues_le hB (fun j =>
-        hB.eigenvalues_antitone rfl (Fin.zero_le j))
+      fun _ => hB.re_inner_apply_self_le_of_mem_spanIndices rfl (s := Set.univ)
+        (fun j _ => hB.eigenvalues_antitone rfl (Fin.zero_le j))
+        (by simp [OrthonormalBasis.mem_spanIndices_iff])
+    have hAspec : Module.End.PointSpectrumIn A ⊤ (Set.Ici (c + δ)) :=
+      Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
+        (fun _ hμ => hBA.add_le hc hμ)
     have hAform : ∀ y, (c + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜 :=
-      le_re_inner_of_le_eigenvalues hA fun i =>
-        hBA.add_le
-          (eigenvalue_mem_restrictedPointSpectrum_top hB j₀)
-          (eigenvalue_mem_restrictedPointSpectrum_top hA i)
+      fun _ => hA.le_re_inner_apply_self_of_pointSpectrumIn
+        (fun _ _ => Submodule.mem_top) hAspec Submodule.mem_top
     exact uiNorm_sylvester_le_of_form_bounds_aux N hA hB hδ hAform hBform hEq
   · let i₀ : Fin (Module.finrank 𝕜 F) := ⟨0, Module.finrank_pos⟩
     let c : ℝ := hA.eigenvalues rfl i₀
+    have hc : c ∈ Module.End.restrictedPointSpectrum A ⊤ := by
+      rw [Module.End.restrictedPointSpectrum_top]
+      exact hA.hasEigenvalue_eigenvalues rfl i₀
     have hAform : ∀ y, RCLike.re ⟪A y, y⟫_𝕜 ≤ c * ‖y‖ ^ 2 :=
-      re_inner_le_of_eigenvalues_le hA (fun i =>
-        hA.eigenvalues_antitone rfl (Fin.zero_le i))
+      fun _ => hA.re_inner_apply_self_le_of_mem_spanIndices rfl (s := Set.univ)
+        (fun i _ => hA.eigenvalues_antitone rfl (Fin.zero_le i))
+        (by simp [OrthonormalBasis.mem_spanIndices_iff])
+    have hBspec : Module.End.PointSpectrumIn B ⊤ (Set.Ici (c + δ)) :=
+      Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
+        (fun _ hμ => hAB.add_le hc hμ)
     have hBform : ∀ x, (c + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪B x, x⟫_𝕜 :=
-      le_re_inner_of_le_eigenvalues hB fun j =>
-        hAB.add_le
-          (eigenvalue_mem_restrictedPointSpectrum_top hA i₀)
-          (eigenvalue_mem_restrictedPointSpectrum_top hB j)
+      fun _ => hB.le_re_inner_apply_self_of_pointSpectrumIn
+        (fun _ _ => Submodule.mem_top) hBspec Submodule.mem_top
     have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint :=
       sylvester_adjoint_neg hA hB hEq
     have hbound := uiNorm_sylvester_le_of_form_bounds_aux

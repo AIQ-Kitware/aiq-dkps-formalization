@@ -64,24 +64,18 @@ theorem isTransverse_of_tanThetaIntervalGap
   rw [Submodule.disjoint_def]
   intro x hx hxperp
   rcases hx with ⟨y, rfl⟩
-  have hUperpRed : (Uᗮ ∈ Module.End.invtSubmodule A) :=
-      LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU
   have hxyUperp : X.toLinearMap y ∈ Uᗮ := hxperp
-  have hTopRed : (⊤ ∈ Module.End.invtSubmodule (compression A X)) := by
-    intro z _
-    exact Submodule.mem_top
   have hMspec : Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Iic α) := by
     apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
     intro lam hlam
     exact (Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mp hgap.1 hlam).2
   have hMupper :
       RCLike.re ⟪compression A X y, y⟫_𝕜 ≤ α * ‖y‖ ^ 2 :=
-    upperFormBound_of_pointSpectrumIn (isSymmetric_compression hA X)
-      hTopRed hMspec y Submodule.mem_top
+    hA.re_inner_ritz_le_of_pointSpectrumIn X.toLinearMap hMspec y
   have hAlower :
       (α + δ) * ‖X.toLinearMap y‖ ^ 2 ≤
         RCLike.re ⟪A (X.toLinearMap y), X.toLinearMap y⟫_𝕜 :=
-    lowerFormBound_of_pointSpectrumIn hA hUperpRed hgap.2 (X.toLinearMap y) hxyUperp
+    hA.le_re_inner_of_pointSpectrumIn_orthogonal hU hgap.2 hxyUperp
   have hinner :
       RCLike.re ⟪compression A X y, y⟫_𝕜 =
         RCLike.re ⟪A (X.toLinearMap y), X.toLinearMap y⟫_𝕜 := by
@@ -390,20 +384,16 @@ theorem tanThetaResidualWitness_scalar
       simpa [S, σ, v, y, sinThetaEmbedding] using
         U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := i)
     have hMupper : RCLike.re ⟪M v, v⟫_𝕜 ≤ α := by
-      have hTopRed : (⊤ ∈ Module.End.invtSubmodule M) := fun z _ => Submodule.mem_top
       have hspec : Module.End.PointSpectrumIn M ⊤ (Set.Iic α) := by
         apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
         intro lam hlam
         exact (Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mp hgap.1 hlam).2
       have hbound : RCLike.re ⟪M v, v⟫_𝕜 ≤ α * ‖v‖ ^ 2 :=
-        upperFormBound_of_pointSpectrumIn (isSymmetric_compression hA X)
-          hTopRed hspec v Submodule.mem_top
+        hA.re_inner_ritz_le_of_pointSpectrumIn X.toLinearMap hspec v
       simpa [hvnorm] using hbound
     have hAlower : α + δ ≤ RCLike.re ⟪A y, y⟫_𝕜 := by
-      have hUperpRed : (Uᗮ ∈ Module.End.invtSubmodule A) :=
-          LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU
       have hbound : (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜 :=
-        lowerFormBound_of_pointSpectrumIn hA hUperpRed hgap.2 y hyUperp
+        hA.le_re_inner_of_pointSpectrumIn_orthogonal hU hgap.2 hyUperp
       simpa [hynorm] using hbound
     have hred := (hA.isReducing_iff_mem_invtSubmodule U).mpr hU
     have hSyl := LinearMap.congr_fun

@@ -14,12 +14,9 @@ public import Mathlib.Analysis.Normed.Operator.Banach
 /-!
 # Finite-dimensional spectral subspaces
 
-Restriction/ambient point-spectrum correspondences, the real-spectrum bridge for finite
-continuous realizations, and the quadratic-form consequences used by Davis--Kahan.
+Restriction/ambient point-spectrum correspondences and the real-spectrum bridge for finite
+continuous realizations.
 Invariant submodules and orthogonal projections use canonical Mathlib and Tau Ceti APIs.
-
-The point-spectrum predicates name eigenvalue data explicitly; the quadratic-form results
-reduce to the generic bounded spectral-order API after restricting to an invariant subspace.
 -/
 
 public section
@@ -138,38 +135,6 @@ theorem real_spectrum_toContinuousLinearMap_eq (A : E →ₗ[𝕜] E) :
     apply hx0
     apply (ContinuousLinearMap.isUnit_iff_bijective.mp hunit).1
     simp [hS, hAx]
-
-/-- Spectral containment gives an upper form bound on an invariant subspace. -/
-theorem upperFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : (U ∈ Module.End.invtSubmodule A)) {c : ℝ}
-    (hSpec : Module.End.PointSpectrumIn A U (Set.Iic c)) :
-    ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
-  have := FiniteDimensional.completeSpace 𝕜 U
-  have hsym : IsSelfAdjoint (A.restrict hU).toContinuousLinearMap :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (hA.restrict_invariant hU)
-  have hspec : spectrum ℝ (A.restrict hU).toContinuousLinearMap ⊆ Set.Iic c := by
-    rw [real_spectrum_toContinuousLinearMap_eq, restrictedPointSpectrum_restrict]
-    intro lam hlam
-    obtain ⟨x, hxU, hx0, hAx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
-    exact (Module.End.pointSpectrumIn_iff.mp hSpec) x hxU hx0 lam hAx
-  intro x hx
-  exact ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic _ hsym hspec ⟨x, hx⟩
-
-/-- Spectral containment gives a lower form bound on an invariant subspace. -/
-theorem lowerFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : (U ∈ Module.End.invtSubmodule A)) {c : ℝ}
-    (hSpec : Module.End.PointSpectrumIn A U (Set.Ici c)) :
-    ∀ x ∈ U, c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
-  have := FiniteDimensional.completeSpace 𝕜 U
-  have hsym : IsSelfAdjoint (A.restrict hU).toContinuousLinearMap :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr (hA.restrict_invariant hU)
-  have hspec : spectrum ℝ (A.restrict hU).toContinuousLinearMap ⊆ Set.Ici c := by
-    rw [real_spectrum_toContinuousLinearMap_eq, restrictedPointSpectrum_restrict]
-    intro lam hlam
-    obtain ⟨x, hxU, hx0, hAx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
-    exact (Module.End.pointSpectrumIn_iff.mp hSpec) x hxU hx0 lam hAx
-  intro x hx
-  exact ContinuousLinearMap.le_re_inner_of_spectrum_subset_Ici _ hsym hspec ⟨x, hx⟩
 
 end SpectralOrder
 

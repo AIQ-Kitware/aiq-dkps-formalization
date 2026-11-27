@@ -10,7 +10,7 @@ public import TauCeti.Analysis.InnerProductSpace.SingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
-public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
+public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import TauCeti.Analysis.InnerProductSpace.MoorePenrose
 
@@ -346,39 +346,30 @@ private theorem exists_intervalGap_of_orderedGap
   let iTop : Fin (finrank 𝕜 F) := ⟨0, Module.finrank_pos⟩
   let α : ℝ := hM.eigenvalues rfl iTop
   let β : ℝ := -‖M.toContinuousLinearMap‖
-  have hupper : ∀ x : F, RCLike.re ⟪M x, x⟫_𝕜 ≤ α * ‖x‖ ^ 2 :=
-    re_inner_le_of_eigenvalues_le hM fun i =>
-      hM.eigenvalues_antitone rfl (Fin.zero_le i)
+  have hupper : Module.End.PointSpectrumIn M ⊤ (Set.Iic α) := by
+    refine Module.End.pointSpectrumIn_Iic_of_re_inner_apply_self_le fun x _ => ?_
+    exact hM.re_inner_apply_self_le_of_mem_spanIndices rfl (s := Set.univ)
+      (fun i _ => hM.eigenvalues_antitone rfl (Fin.zero_le i))
+      (by simp [OrthonormalBasis.mem_spanIndices_iff])
   have hlowerSpec : ∀ lam, lam ∈ Module.End.restrictedPointSpectrum M ⊤ → β ≤ lam := by
     intro lam hlam
-    rcases Module.End.mem_restrictedPointSpectrum_iff.mp hlam with ⟨x, -, hx0, hxEig⟩
-    have hxnorm : 0 < ‖x‖ := norm_pos_iff.mpr hx0
-    have hbound := M.toContinuousLinearMap.le_opNorm x
-    change ‖M x‖ ≤ ‖M.toContinuousLinearMap‖ * ‖x‖ at hbound
-    rw [hxEig, norm_smul, RCLike.norm_ofReal] at hbound
-    -- cancel the strictly positive norm factor before comparing
-    have habs : |lam| ≤ ‖M.toContinuousLinearMap‖ :=
-      le_of_mul_le_mul_right hbound hxnorm
-    dsimp [β]
+    have habs := ContinuousLinearMap.abs_le_norm_of_mem_restrictedPointSpectrum
+      (T := M.toContinuousLinearMap) hlam
+    change -‖M.toContinuousLinearMap‖ ≤ lam
     linarith [neg_abs_le lam]
-  have hβα : β ≤ α :=
-    hlowerSpec α (eigenvalue_mem_restrictedPointSpectrum_top hM iTop)
+  have hα : α ∈ Module.End.restrictedPointSpectrum M ⊤ := by
+    rw [Module.End.restrictedPointSpectrum_top]
+    exact hM.hasEigenvalue_eigenvalues rfl iTop
   have hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc β α) := by
     apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
     intro lam hlam
-    rcases Module.End.mem_restrictedPointSpectrum_iff.mp hlam with ⟨x, hxTop, hx0, hxEig⟩
-    have hxnorm : 0 < ‖x‖ ^ 2 := sq_pos_of_pos (norm_pos_iff.mpr hx0)
-    have hray : RCLike.re ⟪M x, x⟫_𝕜 = lam * ‖x‖ ^ 2 := by
-      rw [hxEig, inner_smul_left, RCLike.conj_ofReal,
-        RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-    have hu := hupper x
-    rw [hray] at hu
-    exact ⟨hlowerSpec lam (Module.End.mem_restrictedPointSpectrum hxTop hx0 hxEig), by nlinarith⟩
+    exact ⟨hlowerSpec lam hlam,
+      Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mp hupper hlam⟩
   have hAspec : Module.End.PointSpectrumIn A Uᗮ (Set.Ici (α + δ)) := by
     apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
     intro μ hμ
-    exact hgap.add_le (eigenvalue_mem_restrictedPointSpectrum_top hM iTop) hμ
-  exact ⟨β, α, hβα, hMspec, hAspec⟩
+    exact hgap.add_le hα hμ
+  exact ⟨β, α, hlowerSpec α hα, hMspec, hAspec⟩
 
 /-- An ordered Ritz-to-unwanted-spectrum gap forces transversality. -/
 theorem isTransverse_of_orderedRitzGap
