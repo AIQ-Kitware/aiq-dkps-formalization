@@ -1,4 +1,4 @@
-\section{Symbols and conventions}
+\section{Symbols, conventions, and terminology}
 \label{app:notation}
 
 We write $\sym{A}$ for a reference operator and
@@ -77,6 +77,57 @@ $\sym{Matching},\like{SingletonCost}{\symglyph{SingletonCost}_i},\like{PairCost}
 $\sym{MatchingEdgeWeight};\ \like{TraceCost}{\symglyph{TraceCost}(M)}$ & Edge weight $\like{SingletonCost}{\symglyph{SingletonCost}_i}+\like{SingletonCost}{\symglyph{SingletonCost}_j}-\like{PairCost}{\symglyph{PairCost}_{ij}}$; total trace-norm displacement cost of the matching.\\
 \end{longtable}
 \endgroup
+
+\subsection{Terminology}
+\label{app:terminology}
+
+The following terms describe the roles of the mathematical objects used in
+\cref{sec:sine-theta,sec:example-transport}.
+
+\begin{description}
+\item[Ambient space and operator.] The whole Hilbert space
+$\sym{AmbientHilbertSpace}$ in which the subspaces lie, and the operator acting
+on that space. In the sine-theta statement the ambient operator is
+$\sym{Acurrent}$.
+
+\item[Reference and perturbed operators.] The reference operator is
+$\sym{A}$; an additive perturbation $\sym{H}$ gives the perturbed operator
+$\sym{Acurrent}=\sym{A}+\sym{H}$. The choice of which operator supplies the
+desired spectral subspace depends on the approximation problem.
+
+\item[Exact subspace.] The desired subspace specified by the spectral
+decomposition of the operator of interest. In the sine-theta statement,
+it is $\DKRange(\sym{F0})$ for $\sym{Acurrent}$, with orthogonal complement
+$\DKRange(\sym{F1})$. In the perturbation application in the introduction,
+the desired subspace instead belongs to the reference operator $\sym{A}$.
+An exact formula, as in the transport theorem, gives an equality for the
+quantity being determined.
+
+\item[Trial subspace and trial operator.] The trial subspace is a candidate
+approximation to the desired subspace, represented by $\DKRange(\sym{E0})$.
+The self-adjoint trial operator $\sym{TrialOperator}$ represents an
+approximation to the action of the ambient operator in trial coordinates.
+
+\item[Residual.] The difference
+$\sym{Acurrent}\sym{E0}-\sym{E0}\sym{TrialOperator}$ between the ambient
+action and the embedded trial action. For unbounded operators this identity
+holds on the appropriate domain, with a bounded residual $\sym{R}$.
+
+\item[Spectral separation.] A lower bound $\sym{delta}>0$ on the distance
+between the relevant spectra. In the sine-theta theorem these are the
+spectra of the trial operator and the complementary block $\sym{Lambda1}$;
+the interval and ordered separation hypotheses are given in
+\cref{sec:gap-geometry}.
+
+\item[Transporter and competitor.] A transporter is an ambient orthogonal
+or unitary map carrying the source subspace onto the target subspace.
+A competitor is another map satisfying the same constraint.
+
+\item[Full displacement.] The operator $\sym{Identity}-\sym{Wcompetitor}$
+on the whole ambient space for a transporter $\sym{Wcompetitor}$. Its
+restriction to source directions is represented by
+$(\sym{Identity}-\sym{Wcompetitor})\sym{Psource}$.
+\end{description}
 
 \section{Reading the Lean signatures}
 \label{app:lean-guide}

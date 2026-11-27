@@ -235,8 +235,9 @@ $\sym{v}$ satisfies the eigenvector equation with eigenvalue $\sym{mu}$.
 With sufficient spectral separation, a small residual can identify an accurate
 approximation to an invariant subspace even when repeated or nearby eigenvalues
 make individual eigenvectors difficult to distinguish. Davis--Kahan theory bounds the angles
-between approximate and exact spectral subspaces in terms of a residual or
-perturbation and a separation between the relevant spectra
+between a candidate subspace (the trial subspace) and the desired spectral
+subspace of the operator of interest (the exact subspace) in terms of a
+residual or perturbation and a separation between the relevant spectra
 \citep{davis1970rotation}.
 
 In applications, one often works with a perturbed operator
@@ -485,11 +486,8 @@ are arranged in the same order, then
   \max_j |\like{SpectralValue}{\symglyph{SpectralValue}_j}(\sym{A})-\like{SpectralValue}{\symglyph{SpectralValue}_j}(\sym{Acurrent})|\leq\dkOperatorNorm{\sym{H}}.
   \label{eq:history-weyl}
 \end{equation}
-This is an estimate on \emph{eigenvalues}; it does not tell us which
-individual eigenvector of $\sym{A}$ corresponds to which eigenvector of $\sym{Acurrent}$.
-
-The limitation already appears in two dimensions.  For any $\sym{EigenvalueExampleEpsilon}>0$,
-put
+The distinction between eigenvalue and eigenspace stability can already be
+seen in two dimensions. For any $\sym{EigenvalueExampleEpsilon}>0$, put
 \begin{equation}
  \like{A}{\symglyph{A}_\varepsilon}=\begin{pmatrix}0&0\\0&\sym{EigenvalueExampleEpsilon}\end{pmatrix},
  \qquad
@@ -506,11 +504,10 @@ uniquely determined, but its orthonormal eigenbasis is not.
 
 Rellich developed a rigorous perturbation theory of self-adjoint operators
 in papers published from 1937 to 1942. Kato's 1966 book gives a systematic
-account \citep{simon2018kato,kato1966perturbation}. The Davis--Kahan residual
-bounds address a related approximation question: given a trial space and its
-residual, spectral separation bounds its angle from an exact spectral
-subspace. The estimate can therefore assess the accuracy of a
-Rayleigh--Ritz approximation.
+account \citep{simon2018kato,kato1966perturbation}. For a Rayleigh--Ritz
+trial subspace, the Davis--Kahan residual bounds estimate its angle from the
+desired exact spectral subspace using the residual norm and spectral
+separation.
 
 \subsection{Two orthogonal projections}
 \label{sec:related-two-projections}
@@ -706,13 +703,10 @@ that need not contain an isolated finite cluster of eigenvalues.
 Our formalization uses Borel functional calculus to construct projections for
   these spectral sets, including for unbounded self-adjoint operators.
 
-The Courant--Fischer min--max principle and Weyl-type eigenvalue
-perturbation bounds provide complementary information about spectral
-\emph{values} \citep{bhatia1997matrix,kato1966perturbation}.  They do
-not by themselves identify a stable basis inside a multiple-eigenvalue
-cluster, or quantify the movement of its invariant subspace.  The Courant--Fischer and Weyl results that we formalized describe extremal
-Rayleigh quotients and eigenvalue stability. The angle estimates add control
-of the associated subspaces.
+Our formalization includes the Courant--Fischer min--max principle and
+Weyl's eigenvalue perturbation inequalities
+\citep{bhatia1997matrix,kato1966perturbation}. The Davis--Kahan angle estimates
+complement these results by bounding the perturbation of spectral subspaces.
 
 Davis studied the rotation of eigenvectors under perturbation in
 1963 and 1965 \citep{davis1963rotation,davis1965rotation}.  The
@@ -999,8 +993,8 @@ We develop the sine-theta theorem and its proof below; the remaining source
 results are summarized in Appendix~\ref{app:dk-inventory}, with hypotheses
 and conclusions in Section~\ref{app:dk-result-summaries}. The main text also
 explains the spectral-selection results needed to interpret the angle bounds.
-Appendix~\ref{app:notation} collects the notation used here and in the
-direct-rotation argument.
+Appendix~\ref{app:notation} collects the notation and terminology used here
+and in the direct-rotation argument.
 
 \subsection{The sine-theta theorem for self-adjoint operators}
 \label{sec:sine-theta}

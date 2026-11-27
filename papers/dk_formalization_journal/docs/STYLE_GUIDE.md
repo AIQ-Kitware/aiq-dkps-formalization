@@ -124,6 +124,16 @@ appropriate to the supported history.
 For graph optimization, distinguish maximum-weight matching from maximum
 cardinality matching, and state whether the graph is finite and general.
 
+Keep the terminology reference in the notation appendix concise. Define
+role-dependent terms such as exact, trial, reference, and ambient at first
+substantive use; use the glossary for quick reminders rather than additional
+derivations. Exact spectral data are relative to the operator being studied.
+An exact formula gives an equality for the specified quantity. When describing
+an estimate, identify what error it bounds and the quantities entering the
+bound. Omit follow-up negative qualifications that add no relevant information
+to the surrounding argument; preserve qualifications that delimit a theorem's
+hypotheses or conclusion.
+
 Give hover reminders enough detail to recover the object: its defining formula,
 the spaces it maps between, and its role in the argument where these help.
 Identify conditions on special cases, such as orthogonality of the Rayleigh

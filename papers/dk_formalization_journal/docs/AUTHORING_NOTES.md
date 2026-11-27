@@ -61,6 +61,18 @@ revises those passages only. For subsequent reviews:
 - `IsTrialResidual` is a Lean structure valued in `Prop`; describing it as a
   structure that codifies the three conditions is appropriate.
 
+## Terminology and exposition review (27 November 2026)
+
+- Transition directly from Weyl's eigenvalue bound to the two-dimensional
+  example illustrating eigenspace instability.
+- Describe the Rayleigh--Ritz residual bound as an angle estimate for the
+  trial subspace relative to the desired exact spectral subspace.
+- Remove the redundant negative qualification following the Courant--Fischer
+  and Weyl discussion, retaining the link to the formalized angle estimates.
+- Add a short terminology reference within the notation appendix and define
+  trial/exact at their first substantive use. Preserve the existing appendix
+  lettering and keep the broader journal restructuring separate.
+
 ## Manuscript correction pass (28 October 2026)
 
 The accepted edits are now applied. The original review is preserved in Git;
