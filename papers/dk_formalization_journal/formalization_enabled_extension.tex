@@ -94,8 +94,7 @@ theorem real_nuclear_transport_matching
     (hKL : Module.finrank Real K = Module.finrank Real L) :
     IsLeast (realTransportCosts 1 K L)
       (realNuclearMatchingMinimum
-        (positivePrincipalAngles K L)) := by
-  (*@\laaettr@*)
+        (positivePrincipalAngles K L)) := by (*@\laaettr@*)
 
 theorem real_schatten_transport_matching
     (p : Real) (hp1 : 1 <= p) (hp2 : p < 2)
@@ -103,8 +102,7 @@ theorem real_schatten_transport_matching
     (hKL : Module.finrank Real K = Module.finrank Real L) :
     IsLeast (realTransportCosts p K L)
       (realPositiveSchattenMatchingMinimum p
-        (positivePrincipalAngles K L)) := by
-  (*@\laaettr@*)
+        (positivePrincipalAngles K L)) := by (*@\laaettr@*)
 \end{lstlisting}
 \end{minipage}\par
 

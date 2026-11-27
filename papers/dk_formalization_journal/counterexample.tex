@@ -127,43 +127,40 @@ Apply \cref{thm:small-angle} with
 $\sym{theta}=\min\{\sym{EpsilonAngle}/2,\sym{PiConstant}/4\}$.
 \end{proof}
 
-\Cref{lst:prop44-refutation} gives the formalized arbitrarily small-angle
-counterexample and the explicit negation of the finite-dimensional printed
+\Cref{lst:prop44-refutation} presents the counterexample for every positive
+acute angle and the explicit negation of the finite-dimensional printed
 Proposition~4.4. The latter is a proposition quantified over real
 finite-dimensional inner-product spaces and unitarily invariant seminorms;
 the four-dimensional trace-norm witness refutes it.
 
 % Source declarations (namespace TauCeti.DavisKahan.FiniteDimensional):
 % DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean:
-%   arbitrarilySmall_fullDisplacement_refuted
+%   SmallAngleCounterexample.Ortho4, SmallAngleCounterexample.traceDisplacement,
+%   SmallAngleCounterexample.directRotation_not_traceNorm_optimal
 % DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:
 %   E4 (in ShortRotationCounterexample), DavisKahanProposition4_4_Finite,
 %   not_davisKahanProposition4_4_Finite
 \noindent\begin{minipage}{\linewidth}
 \begin{lstlisting}[style=leanpaper,
-  caption={Lean signatures for the arbitrarily small-angle witness and the
-  refutation of Proposition~4.4. In this ASCII transcription,
-  \texttt{E4} abbreviates \texttt{EuclideanSpace Real (Fin 4)}.
-  The Ky Fan sum of all four singular values is the trace norm;
-  principal angle index zero selects the largest angle.},
+  caption={Lean presentation of the counterexample and the refutation of
+  Proposition~4.4. Here \texttt{E4} denotes $\sym{RealField}^4$,
+  \texttt{Ortho4} its orthogonal transformations, and
+  \texttt{traceDisplacement W} the trace norm of $\sym{Identity}-W$.
+  Principal angles are indexed from zero in decreasing order.},
   label={lst:prop44-refutation}]
-theorem arbitrarilySmall_fullDisplacement_refuted
-    (epsilon : Real) (hepsilon : 0 < epsilon) :
+theorem directRotation_not_traceNorm_optimal
+    (theta : Real) (hpos : 0 < theta)
+    (hangle : theta < Real.pi / 2) :
     (*@$\exists$@*) (U V : Submodule Real E4)
-      (hacute : Submodule.IsAcute U V)
-      (W : LinearIsometryEquiv (RingHom.id Real) E4 E4),
+      (hUV : Submodule.IsAcute U V) (W : Ortho4),
       U.map W.toLinearMap = V (*@$\land$@*)
-      0 < Submodule.principalAngles U V 0 (*@$\land$@*)
-      Submodule.principalAngles U V 0 < epsilon (*@$\land$@*)
-      Submodule.principalAngles U V 0 <= Real.pi / 3 (*@$\land$@*)
-      (LinearMap.id - W.toLinearMap).kyFanSum 4 <
-        (LinearMap.id -
-          (directRotation U V hacute).toLinearMap).kyFanSum 4 := by
-  (*@\laaettr@*)
+      Submodule.principalAngles U V 0 = theta (*@$\land$@*)
+      Submodule.principalAngles U V 1 = theta (*@$\land$@*)
+      traceDisplacement W <
+        traceDisplacement (directRotation U V hUV) := by (*@\laaettr@*)
 
 theorem not_davisKahanProposition4_4_Finite :
-    Not DavisKahanProposition4_4_Finite.{0} := by
-  (*@\laaettr@*)
+    Not DavisKahanProposition4_4_Finite.{0} := by (*@\laaettr@*)
 \end{lstlisting}
 \end{minipage}\par
 

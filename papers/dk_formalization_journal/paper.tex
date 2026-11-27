@@ -89,7 +89,7 @@
 }
 % Proof bodies are omitted only in the paper's presentations; the Lean
 % declarations in the accompanying source contain their proofs.
-\newcommand{\laaettr}{\ensuremath{\square_{\mathrm{R}}}}
+\newcommand{\laaettr}{\ensuremath{\square}}
 \lstdefinestyle{leanpaper}{%
   language=lean,
   escapeinside={(*@}{@*)},
@@ -1255,8 +1255,7 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     N.Mem (sourceDirectedSinThetaOperator E0 F0) ->
     N.Mem R ->
       delta * N.gaugeReal (sourceDirectedSinThetaOperator E0 F0) <=
-        N.gaugeReal R := by
-  (*@\laaettr@*)
+        N.gaugeReal R := by (*@\laaettr@*)
 \end{lstlisting}
 \end{minipage}\par
 

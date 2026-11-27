@@ -488,6 +488,29 @@ theorem kyFanSum_lt (theta : Real) (h0 : 0 < theta) (h1 : theta < Real.pi / 2) :
     nlinarith
   exact lt_of_pow_lt_pow_left₀ 2 (by positivity) hsquares
 
+/-- Orthogonal transformations of the real four-dimensional ambient space. -/
+abbrev Ortho4 := E4 ≃ₗᵢ[ℝ] E4
+
+/-- The trace norm of the full displacement from the identity on `E4`. -/
+def traceDisplacement (W : Ortho4) : ℝ :=
+  (LinearMap.id - W.toLinearMap).kyFanSum 4
+
+/-- A presentation of the counterexample at every positive acute angle.
+The two largest principal angles equal `theta`, and the competitor carries
+`U` onto `V` with strictly smaller trace displacement than the direct rotation. -/
+theorem directRotation_not_traceNorm_optimal
+    (theta : ℝ) (hpos : 0 < theta) (hangle : theta < Real.pi / 2) :
+    ∃ (U V : Submodule ℝ E4) (hUV : Submodule.IsAcute U V) (W : Ortho4),
+      U.map W.toLinearMap = V ∧
+      Submodule.principalAngles U V 0 = theta ∧
+      Submodule.principalAngles U V 1 = theta ∧
+      traceDisplacement W < traceDisplacement (directRotation U V hUV) := by
+  refine ⟨U4, V4 theta, acute theta (cos_pos theta hpos hangle), Wequiv theta,
+    rfl, ?_, ?_, ?_⟩
+  · simpa using principalAngles_eq theta hpos hangle (0 : Fin 4) (by norm_num)
+  · simpa using principalAngles_eq theta hpos hangle (1 : Fin 4) (by norm_num)
+  · exact kyFanSum_lt theta hpos hangle
+
 /-- Recovering the sign-matrix competitor at the original angle. -/
 theorem Wmat_pi_div_four : Wmat (Real.pi / 4) = ShortRotationCounterexample.Wmat := by
   have hroot := Real.sq_sqrt (by norm_num : (0 : Real) ≤ 2)
