@@ -22,7 +22,7 @@ open TauCeti.DavisKahan.Sylvester
 spectral projections of a real self-adjoint closed operator from the Cayley
 projection-valued measure.  This module does the same one level down, for the
 **bounded** projection-valued measure
-`TauCeti.BorelCalculus.boundedPVM`, which is the object the Appendix
+the native real-line spectral measure, which is the object the Appendix
 almost-invariance argument actually consumes.
 
 The single new ingredient is `conjugateOperator_boundedPVM_proj`: every band
@@ -127,10 +127,11 @@ polarisation sum is its own conjugate. -/
 theorem conjugateOperator_boundedPVM_proj (hT : IsSelfAdjoint T)
     (B : Set ℝ) (hB : MeasurableSet B) :
     conjugateOperator
-        ((TauCeti.BorelCalculus.boundedPVM
-          (isSelfAdjoint_complexify_bounded hT)).proj B hB)
-      = (TauCeti.BorelCalculus.boundedPVM
-          (isSelfAdjoint_complexify_bounded hT)).proj B hB := by
+        ((((complexify T).toLinearMap.toPMap ⊤).spectralPVM
+          (LinearPMap.isSelfAdjoint_toPMap_top (isSelfAdjoint_complexify_bounded hT))).proj B hB)
+      = (((complexify T).toLinearMap.toPMap ⊤).spectralPVM
+          (LinearPMap.isSelfAdjoint_toPMap_top (isSelfAdjoint_complexify_bounded hT))).proj
+      B hB := by
   set hTc := isSelfAdjoint_complexify_bounded hT with hhTc
   set κ := TauCeti.BorelCalculus.reCoord (T := complexify T) with hκ
   have hSm : MeasurableSet (κ ⁻¹' B) :=
@@ -184,16 +185,16 @@ descending the complex band projection of `complexify T`.  It is well defined be
 the canonical conjugation, and a conjugation-fixed operator *is* a complexification. -/
 def realBandProjection (hT : IsSelfAdjoint T) (B : Set ℝ) (hB : MeasurableSet B) :
     E →L[ℝ] E :=
-  realPartOperator ((TauCeti.BorelCalculus.boundedPVM
-    (isSelfAdjoint_complexify_bounded hT)).proj B hB)
+  realPartOperator ((((complexify T).toLinearMap.toPMap ⊤).spectralPVM
+          (LinearPMap.isSelfAdjoint_toPMap_top (isSelfAdjoint_complexify_bounded hT))).proj B hB)
 
 /-- **The defining property of the descended band projection.**  Every law below is this
 identity plus injectivity or isometry of `complexify`. -/
 theorem complexify_realBandProjection (hT : IsSelfAdjoint T)
     (B : Set ℝ) (hB : MeasurableSet B) :
     complexify (realBandProjection hT B hB)
-      = (TauCeti.BorelCalculus.boundedPVM
-          (isSelfAdjoint_complexify_bounded hT)).proj B hB :=
+      = (((complexify T).toLinearMap.toPMap ⊤).spectralPVM
+          (LinearPMap.isSelfAdjoint_toPMap_top (isSelfAdjoint_complexify_bounded hT))).proj B hB :=
   complexify_realPartOperator (conjugateOperator_boundedPVM_proj hT B hB)
 
 /-- Descended band projections are self-adjoint. -/
@@ -202,8 +203,9 @@ theorem realBandProjection_isSelfAdjoint (hT : IsSelfAdjoint T)
     IsSelfAdjoint (realBandProjection hT B hB) :=
   (complexify_isSelfAdjoint_iff _).1 <| by
     rw [complexify_realBandProjection]
-    exact (TauCeti.BorelCalculus.boundedPVM
-      (isSelfAdjoint_complexify_bounded hT)).isSelfAdjoint_proj B hB
+    let P := ((complexify T).toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top (isSelfAdjoint_complexify_bounded hT))
+    exact P.isSelfAdjoint_proj B hB
 
 /-- Multiplicativity: intersection of Borel sets is composition of descended band
 projections. -/
@@ -214,8 +216,9 @@ theorem realBandProjection_inter (hT : IsSelfAdjoint T)
   complexify_injective <| by
     rw [complexify_mul, complexify_realBandProjection, complexify_realBandProjection,
       complexify_realBandProjection]
-    exact (TauCeti.BorelCalculus.boundedPVM
-      (isSelfAdjoint_complexify_bounded hT)).proj_inter B₁ B₂ hB₁ hB₂
+    exact (((complexify T).toLinearMap.toPMap ⊤).spectralPVM
+          (LinearPMap.isSelfAdjoint_toPMap_top (isSelfAdjoint_complexify_bounded hT))).proj_inter
+      B₁ B₂ hB₁ hB₂
 
 /-- Descended band projections are idempotent. -/
 theorem realBandProjection_idem (hT : IsSelfAdjoint T)
@@ -224,8 +227,9 @@ theorem realBandProjection_idem (hT : IsSelfAdjoint T)
       = realBandProjection hT B hB :=
   complexify_injective <| by
     rw [complexify_mul, complexify_realBandProjection]
-    exact (TauCeti.BorelCalculus.boundedPVM
-      (isSelfAdjoint_complexify_bounded hT)).proj_idem B hB
+    exact (((complexify T).toLinearMap.toPMap ⊤).spectralPVM
+          (LinearPMap.isSelfAdjoint_toPMap_top (isSelfAdjoint_complexify_bounded hT))).proj_idem
+      B hB
 
 /-- Disjoint bands give orthogonal descended projections. -/
 theorem realBandProjection_mul_eq_zero (hT : IsSelfAdjoint T)
@@ -233,23 +237,19 @@ theorem realBandProjection_mul_eq_zero (hT : IsSelfAdjoint T)
     (hdisj : B₁ ∩ B₂ = ∅) :
     realBandProjection hT B₁ hB₁ * realBandProjection hT B₂ hB₂ = 0 :=
   complexify_injective <| by
-    rw [complexify_mul, complexify_realBandProjection,
-      complexify_realBandProjection, complexify_zero,
-      (TauCeti.BorelCalculus.boundedPVM
-        (isSelfAdjoint_complexify_bounded hT)).proj_inter B₁ B₂ hB₁ hB₂,
-      (TauCeti.BorelCalculus.boundedPVM
-        (isSelfAdjoint_complexify_bounded hT)).proj_congr hdisj
-        (hB₁.inter hB₂) MeasurableSet.empty,
-      (TauCeti.BorelCalculus.boundedPVM
-        (isSelfAdjoint_complexify_bounded hT)).proj_empty]
+    rw [complexify_mul, complexify_realBandProjection, complexify_realBandProjection,
+      complexify_zero]
+    let P := ((complexify T).toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top (isSelfAdjoint_complexify_bounded hT))
+    exact P.proj_mul_eq_zero_of_disjoint hB₁ hB₂ (Set.disjoint_iff_inter_eq_empty.mpr hdisj)
 
 /-- The whole line carries the identity. -/
 theorem realBandProjection_univ (hT : IsSelfAdjoint T) :
     realBandProjection hT Set.univ MeasurableSet.univ = ContinuousLinearMap.id ℝ E :=
   complexify_injective <| by
     rw [complexify_realBandProjection, complexify_id]
-    exact (TauCeti.BorelCalculus.boundedPVM
-      (isSelfAdjoint_complexify_bounded hT)).proj_univ
+    exact (((complexify T).toLinearMap.toPMap ⊤).spectralPVM
+          (LinearPMap.isSelfAdjoint_toPMap_top (isSelfAdjoint_complexify_bounded hT))).proj_univ
 
 /-- **A descended band projection commutes with its operator**, so every real spectral
 band reduces `T`. -/
@@ -268,21 +268,8 @@ theorem norm_comp_realBandProjection_sub_smul_le (hT : IsSelfAdjoint T)
     {B : Set ℝ} (hB : MeasurableSet B) {lam r : ℝ} (hr : 0 ≤ r)
     (hband : ∀ t ∈ B, |t - lam| ≤ r) :
     ‖T ∘L realBandProjection hT B hB - lam • realBandProjection hT B hB‖ ≤ 2 * r := by
-  have hc : complexify (T ∘L realBandProjection hT B hB
-      - lam • realBandProjection hT B hB)
-      = complexify T ∘L (TauCeti.BorelCalculus.boundedPVM
-          (isSelfAdjoint_complexify_bounded hT)).proj B hB
-        - ((lam : ℝ) : ℂ) • (TauCeti.BorelCalculus.boundedPVM
-          (isSelfAdjoint_complexify_bounded hT)).proj B hB := by
-    rw [complexify_sub, complexify_comp, complexify_real_smul,
-      complexify_realBandProjection]
-  have hnorm : ‖T ∘L realBandProjection hT B hB - lam • realBandProjection hT B hB‖
-      = ‖complexify T ∘L (TauCeti.BorelCalculus.boundedPVM
-          (isSelfAdjoint_complexify_bounded hT)).proj B hB
-        - ((lam : ℝ) : ℂ) • (TauCeti.BorelCalculus.boundedPVM
-          (isSelfAdjoint_complexify_bounded hT)).proj B hB‖ := by
-    rw [← hc, norm_complexify]
-  rw [hnorm]
+  rw [← norm_complexify (T ∘L realBandProjection hT B hB - lam • realBandProjection hT B hB),
+    complexify_sub, complexify_comp, complexify_real_smul, complexify_realBandProjection]
   exact TauCeti.BorelCalculus.norm_comp_boundedPVM_proj_sub_smul_le
     (isSelfAdjoint_complexify_bounded hT) hB hr hband
 

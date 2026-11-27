@@ -463,7 +463,7 @@ theorem sinTheta_generalSeparation
 Actually constructing the measurable spectral subspace of a bounded
 self-adjoint operator over a general `RCLike` field requires the bounded Borel
 functional calculus.  Over `ℂ` that calculus exists in this development and is
-*not* experimental: it is `TauCeti.BorelCalculus.boundedPVM`, with the spectral
+*not* experimental: it is the native real-line spectral measure, with the spectral
 subspace itself at
 `DavisKahan/SpectralTheory/BoundedSelfAdjointSpectralProjection.lean` as
 `boundedSelfAdjointSpectralSubspace`.  The general case is its complexification
@@ -494,7 +494,7 @@ countable additivity or multiplicativity in `s`; a genuine projection-valued
 measure supplies this and much more, so the hypothesis is weaker than the object
 that discharges it.
 
-At `𝕜 = ℂ` it is discharged by `TauCeti.BorelCalculus.boundedPVM`: `proj_idem`
+At `𝕜 = ℂ` it is discharged by the native real-line spectral measure: `proj_idem`
 is its `proj_idem` field, and `proj_comm` is the commutation of a spectral
 projection with its own operator.  The instance is deliberately *not* declared
 in this file, which would drag the whole Borel-calculus import chain into this

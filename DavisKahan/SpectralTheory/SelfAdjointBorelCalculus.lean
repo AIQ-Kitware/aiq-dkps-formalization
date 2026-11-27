@@ -214,9 +214,10 @@ theorem boundedSelfAdjointBorelCalculusC_indicator
       (measurable_const.indicator hs)
       (indicator_one_bdd s) =
       boundedSelfAdjointSpectralProjection A hA s hs := by
-  have := (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA).isStarNormal
-  rw [boundedSelfAdjointSpectralProjection, boundedSelfAdjointSpectralPVM,
-    TauCeti.BorelCalculus.boundedPVM_proj, boundedSelfAdjointBorelCalculusC]
+  have hAsa := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have := hAsa.isStarNormal
+  rw [boundedSelfAdjointSpectralProjection, TauCeti.BorelCalculus.boundedPVM_proj hAsa,
+    boundedSelfAdjointBorelCalculusC]
   congr 1
   ext w
   by_cases hw : TauCeti.BorelCalculus.reCoord w ∈ s <;> simp [hw]

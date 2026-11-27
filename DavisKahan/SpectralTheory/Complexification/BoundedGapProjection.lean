@@ -125,10 +125,9 @@ theorem realBoundedSpectralProjectionIicOfGap_idem
   apply complexify_injective
   rw [complexify_mul,
     complexify_realBoundedSpectralProjectionIicOfGap]
-  exact (boundedSelfAdjointSpectralPVM (complexify B)
-    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-      ((complexify_isSelfAdjoint_iff B).2 hB))).proj_idem
-        (Set.Iic alpha) measurableSet_Iic
+  let P := ((complexify B).toLinearMap.toPMap ⊤).spectralPVM
+    (LinearPMap.isSelfAdjoint_toPMap_top ((complexify_isSelfAdjoint_iff B).2 hB))
+  exact P.proj_idem (Set.Iic alpha) measurableSet_Iic
 
 /-- The real lower spectral branch selected across the gap. -/
 noncomputable def realBoundedSpectralSubspaceIicOfGap

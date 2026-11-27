@@ -203,7 +203,9 @@ theorem spectralProjection_pairwise_orthogonal
       boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) ∘L
         boundedSelfAdjointSpectralProjection A hA (cell j) (hcell j) = 0 := by
   intro i j hij
-  let P := boundedSelfAdjointSpectralPVM A hA
+  let P := (A.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
   change P.proj (cell i) (hcell i) * P.proj (cell j) (hcell j) = 0
   rw [P.proj_inter]
   have hd : Disjoint (cell i) (cell j) := hdisj (Set.mem_univ i) (Set.mem_univ j) hij
@@ -252,7 +254,9 @@ theorem spectralProjection_finset_sum_eq_id
     (hcover : realSpectrum A ⊆ ⋃ i, cell i) :
     ∑ i, boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) =
       ContinuousLinearMap.id ℂ H := by
-  let P := boundedSelfAdjointSpectralPVM A hA
+  let P := (A.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
   have hunion : P.proj (⋃ i, cell i) (MeasurableSet.iUnion hcell) =
       P.proj Set.univ MeasurableSet.univ := by
     apply spectralPVM_proj_congr_of_inter_spectrum_eq A hA
@@ -279,7 +283,9 @@ theorem spectralProjection_select_left
   rw [ContinuousLinearMap.comp_finsetSum,
     Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
   · rw [ContinuousLinearMap.comp_smul]
-    let P := boundedSelfAdjointSpectralPVM A hA
+    let P := (A.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
     change rep i • (P.proj (cell i) (hcell i) * P.proj (cell i) (hcell i)) =
       rep i • P.proj (cell i) (hcell i)
     rw [P.proj_idem]
@@ -301,7 +307,9 @@ theorem spectralProjection_select_right
   rw [ContinuousLinearMap.finsetSum_comp,
     Finset.sum_eq_single_of_mem i (Finset.mem_univ i)]
   · rw [ContinuousLinearMap.smul_comp]
-    let P := boundedSelfAdjointSpectralPVM A hA
+    let P := (A.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
     change rep i • (P.proj (cell i) (hcell i) * P.proj (cell i) (hcell i)) =
       rep i • P.proj (cell i) (hcell i)
     rw [P.proj_idem]

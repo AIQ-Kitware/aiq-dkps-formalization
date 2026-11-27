@@ -561,11 +561,14 @@ theorem unitaryGroup_finiteSpectralStep
       ∑ i, Complex.exp (((t * S.representative i : ℝ) : ℂ) * Complex.I) •
         boundedSelfAdjointSpectralProjection A hA (S.cell i)
           (S.measurable_cell i) := by
+  let P := (A.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
   rw [unitaryGroup, smul_smul]
   exact unitaryGroup_finiteDiagonal
     (fun i => boundedSelfAdjointSpectralProjection A hA (S.cell i) (S.measurable_cell i))
     S.representative
-    (fun i => (boundedSelfAdjointSpectralPVM A hA).proj_idem (S.cell i) (S.measurable_cell i))
+    (fun i => P.proj_idem (S.cell i) (S.measurable_cell i))
     (spectralProjection_pairwise_orthogonal A hA S.cell S.measurable_cell S.pairwise_disjoint)
     S.sum_projection_eq_one t
 
@@ -595,14 +598,20 @@ theorem finiteSpectralStep_reconstruction
       SB.representative := rfl
   simp only [hUA, hUB]
   simp only [hSAop, hSBop]
+  let PA := (A.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
+  let PB := (B.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hB))
   exact finiteDiagonal_sylvester_reconstruction
     (fun i => boundedSelfAdjointSpectralProjection A hA (SA.cell i) (SA.measurable_cell i))
     (fun j => boundedSelfAdjointSpectralProjection B hB (SB.cell j) (SB.measurable_cell j))
     SA.representative SB.representative
-    (fun i => (boundedSelfAdjointSpectralPVM A hA).proj_idem (SA.cell i) (SA.measurable_cell i))
+    (fun i => PA.proj_idem (SA.cell i) (SA.measurable_cell i))
     (spectralProjection_pairwise_orthogonal A hA SA.cell SA.measurable_cell SA.pairwise_disjoint)
     SA.sum_projection_eq_one
-    (fun j => (boundedSelfAdjointSpectralPVM B hB).proj_idem (SB.cell j) (SB.measurable_cell j))
+    (fun j => PB.proj_idem (SB.cell j) (SB.measurable_cell j))
     (spectralProjection_pairwise_orthogonal B hB SB.cell SB.measurable_cell SB.pairwise_disjoint)
     SB.sum_projection_eq_one
     (separatedSylvesterMultiplier d hd)
@@ -813,6 +822,12 @@ theorem spectral_step_integral_right_inverse
     rw [tendsto_iff_norm_sub_tendsto_zero]
     exact squeeze_zero (fun n => norm_nonneg _)
       (fun n => (SB n).norm_operator_sub_le.trans (hSB n)) honeover
+  let PA := (A.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))
+  let PB := (B.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hB))
   -- each finite reciprocal integral solves the finite Sylvester equation
   have hsolve : ∀ n, (SA n).operator ∘L
       (∫ t : ℝ, separatedSylvesterMultiplier d hd t •
@@ -839,12 +854,12 @@ theorem spectral_step_integral_right_inverse
         (fun j => boundedSelfAdjointSpectralProjection B hB ((SB n).cell j)
           ((SB n).measurable_cell j))
         (SA n).representative (SB n).representative
-        (fun i => (boundedSelfAdjointSpectralPVM A hA).proj_idem
+        (fun i => PA.proj_idem
           ((SA n).cell i) ((SA n).measurable_cell i))
         (spectralProjection_pairwise_orthogonal A hA (SA n).cell
           (SA n).measurable_cell (SA n).pairwise_disjoint)
         (SA n).sum_projection_eq_one
-        (fun j => (boundedSelfAdjointSpectralPVM B hB).proj_idem
+        (fun j => PB.proj_idem
           ((SB n).cell j) ((SB n).measurable_cell j))
         (spectralProjection_pairwise_orthogonal B hB (SB n).cell
           (SB n).measurable_cell (SB n).pairwise_disjoint)

@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 public import Mathlib.Analysis.CStarAlgebra.Spectrum
+import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded
 
 /-!
 # Almost-invariant finite-dimensional enlargements
@@ -23,7 +24,7 @@ boundedness and self-adjointness — in particular no compactness, so the constr
 serves trial subspaces whose compressions have continuous spectrum.
 
 The construction partitions an interval carrying the spectrum into finitely many short
-subintervals, applies the spectral projections of `boundedPVM` to a finite spanning set of
+subintervals, applies the real-line spectral projections to a finite spanning set of
 `F₀`, and spans `F` by the resulting vectors.  Almost-invariance is the Pythagorean
 combination of one band estimate per subinterval.
 
@@ -76,33 +77,24 @@ at most `2 * r` in operator norm. -/
 theorem norm_comp_boundedPVM_proj_sub_smul_le (hT : IsSelfAdjoint T)
     {B : Set ℝ} (hB : MeasurableSet B) {lam r : ℝ} (hr : 0 ≤ r)
     (hband : ∀ t ∈ B, |t - lam| ≤ r) :
-    ‖T ∘L (boundedPVM hT).proj B hB -
-      ((lam : ℝ) : ℂ) • (boundedPVM hT).proj B hB‖ ≤ 2 * r := by
-  have := hT.isStarNormal
-  let ind : BoundedBorelFunction (spectrum ℂ T) :=
-    BoundedBorelFunction.indicator (reCoord ⁻¹' B) (measurable_reCoord hB) 1
-  let coord := BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ T))
-  have hcalc : T.borelCalculus (coord * ind - ((lam : ℝ) : ℂ) • ind) =
-      T ∘L (boundedPVM hT).proj B hB -
-        ((lam : ℝ) : ℂ) • (boundedPVM hT).proj B hB := by
-    rw [map_sub, map_mul, map_smul, T.borelCalculus_restrict_id, boundedPVM_proj]
-    rfl
-  rw [← hcalc]
-  refine (T.norm_borelCalculus_le hr fun w => ?_).trans (by linarith)
-  have hCoord : coord w = (w : ℂ) := by simp [coord]
-  by_cases hw : w ∈ reCoord (T := T) ⁻¹' B
-  · have hind : ind w = 1 := by simp [ind, hw]
-    have hre : (w : ℂ) = (((w : ℂ).re : ℝ) : ℂ) := hT.mem_spectrum_eq_re w.property
-    have hmem : (w : ℂ).re ∈ B := by rwa [Set.mem_preimage, reCoord_apply] at hw
-    calc
-      ‖(coord * ind - ((lam : ℝ) : ℂ) • ind) w‖ = ‖(w : ℂ) - ((lam : ℝ) : ℂ)‖ := by
-        simp only [sub_apply, mul_apply, smul_apply, hCoord, hind, smul_eq_mul, mul_one]
-      _ = ‖((((w : ℂ).re - lam : ℝ)) : ℂ)‖ := by rw [hre]; norm_cast
-      _ = |(w : ℂ).re - lam| := by rw [Complex.norm_real, Real.norm_eq_abs]
-      _ ≤ r := hband _ hmem
-  · have hind : ind w = 0 := by simp [ind, hw]
-    simpa only [sub_apply, mul_apply, smul_apply, hind, mul_zero, smul_zero, sub_zero,
-      norm_zero] using hr
+    ‖T ∘L ((T.toLinearMap.toPMap ⊤).spectralPVM
+        (LinearPMap.isSelfAdjoint_toPMap_top hT)).proj B hB -
+      ((lam : ℝ) : ℂ) • ((T.toLinearMap.toPMap ⊤).spectralPVM
+        (LinearPMap.isSelfAdjoint_toPMap_top hT)).proj B hB‖ ≤ 2 * r := by
+  let A := T.toLinearMap.toPMap ⊤
+  have hA : IsSelfAdjoint A := LinearPMap.isSelfAdjoint_toPMap_top hT
+  let P := (A.spectralPVM hA).proj B hB
+  have hcut : T ∘L P - (lam : ℂ) • P = A.spectralCut hA B hB lam r hr hband := by
+    ext x
+    have hx := hA.mem_graph_spectralCut B hB lam r hr hband x
+    have hdom : P x ∈ A.domain := by simp [A]
+    have hact := A.mem_graph_snd_inj (A.mem_graph ⟨P x, hdom⟩) hx rfl
+    change T (P x) = A.spectralCut hA B hB lam r hr hband x + (lam : ℂ) • P x at hact
+    change T (P x) - (lam : ℂ) • P x = _
+    exact sub_eq_of_eq_add hact
+  change ‖T ∘L P - (lam : ℂ) • P‖ ≤ 2 * r
+  rw [hcut]
+  exact (hA.norm_spectralCut_le B hB lam r hr hband).trans (by linarith)
 
 /-- **Almost-invariant finite-dimensional enlargement.**  Every finite-dimensional
 subspace of a complex Hilbert space is contained in a finite-dimensional subspace that a
@@ -168,19 +160,20 @@ theorem exists_finiteDimensional_le_almostInvariant (hT : IsSelfAdjoint T)
     · exact key i j h
     · exact (key j i h).symm
   -- Spectral projections of the bands.
+  let P := (T.toLinearMap.toPMap ⊤).spectralPVM (LinearPMap.isSelfAdjoint_toPMap_top hT)
   set p : Fin m → (H →L[ℂ] H) :=
-    fun j => (boundedPVM hT).proj (I j) (hImeas j) with hp_def
+    fun j => P.proj (I j) (hImeas j) with hp_def
   have hpsa : ∀ j, IsSelfAdjoint (p j) := fun j =>
-    (boundedPVM hT).isSelfAdjoint_proj (I j) (hImeas j)
+    P.isSelfAdjoint_proj (I j) (hImeas j)
   have hpp : ∀ i j : Fin m, i ≠ j → p i * p j = 0 := by
     intro i j hij
     rw [hp_def]
-    rw [(boundedPVM hT).proj_inter (I i) (I j) (hImeas i) (hImeas j),
-      (boundedPVM hT).proj_congr ((hIdisj i j hij).inter_eq)
+    rw [P.proj_inter (I i) (I j) (hImeas i) (hImeas j),
+      P.proj_congr ((hIdisj i j hij).inter_eq)
         ((hImeas i).inter (hImeas j)) MeasurableSet.empty,
-      (boundedPVM hT).proj_empty]
+      P.proj_empty]
   have hidem : ∀ j : Fin m, p j * p j = p j := fun j =>
-    (boundedPVM hT).proj_idem (I j) (hImeas j)
+    P.proj_idem (I j) (hImeas j)
   have hcomm : ∀ j : Fin m, T * p j = p j * T := fun j =>
     boundedPVM_proj_comm hT (I j) (hImeas j)
   have hband : ∀ j : Fin m,
@@ -225,17 +218,18 @@ theorem exists_finiteDimensional_le_almostInvariant (hT : IsSelfAdjoint T)
     refine op_ext_of_inner_self fun ξ => ?_
     rw [sum_apply, inner_sum]
     have hterm : ∀ j ∈ Finset.univ (α := Fin m),
-        ⟪ξ, p j ξ⟫_ℂ = ((((boundedPVM hT).diag ξ) (I j)).toReal : ℂ) :=
-      fun j _ => (boundedPVM hT).inner_proj (I j) (hImeas j) ξ
+        ⟪ξ, p j ξ⟫_ℂ = (((P.diag ξ) (I j)).toReal : ℂ) :=
+      fun j _ => P.inner_proj (I j) (hImeas j) ξ
     rw [Finset.sum_congr rfl hterm]
     have hU : MeasurableSet (⋃ j ∈ Finset.univ (α := Fin m), I j) :=
       Finset.measurableSet_biUnion _ fun j _ => hImeas j
-    have hmeasU : ((boundedPVM hT).diag ξ) (⋃ j ∈ Finset.univ (α := Fin m), I j) =
-        ∑ j : Fin m, ((boundedPVM hT).diag ξ) (I j) := by
+    have hmeasU : (P.diag ξ) (⋃ j ∈ Finset.univ (α := Fin m), I j) =
+        ∑ j : Fin m, (P.diag ξ) (I j) := by
       refine measure_biUnion_finset ?_ fun j _ => hImeas j
       intro i _ j _ hij
       exact hIdisj i j hij
-    have hUc : ((boundedPVM hT).diag ξ) (⋃ j ∈ Finset.univ (α := Fin m), I j)ᶜ = 0 := by
+    have hUc : (P.diag ξ) (⋃ j ∈ Finset.univ (α := Fin m), I j)ᶜ = 0 := by
+      dsimp only [P]
       rw [boundedPVM_diag hT ξ, Measure.map_apply (measurable_reCoord (T := T)) hU.compl]
       have hpre : reCoord (T := T) ⁻¹' (⋃ j ∈ Finset.univ (α := Fin m), I j)ᶜ =
           (∅ : Set (spectrum ℂ T)) := by
@@ -246,13 +240,13 @@ theorem exists_finiteDimensional_le_almostInvariant (hT : IsSelfAdjoint T)
         exact Set.mem_biUnion (Finset.mem_univ j) hj
       rw [hpre]
       exact measure_empty
-    have hUuniv : ((boundedPVM hT).diag ξ) (⋃ j ∈ Finset.univ (α := Fin m), I j) =
-        ((boundedPVM hT).diag ξ) Set.univ := by
+    have hUuniv : (P.diag ξ) (⋃ j ∈ Finset.univ (α := Fin m), I j) =
+        (P.diag ξ) Set.univ := by
       rw [← measure_add_measure_compl hU, hUc, add_zero]
     have huniv : ⟪ξ, ContinuousLinearMap.id ℂ H ξ⟫_ℂ =
-        ((((boundedPVM hT).diag ξ) Set.univ).toReal : ℂ) := by
-      have h := (boundedPVM hT).inner_proj Set.univ MeasurableSet.univ ξ
-      rwa [(boundedPVM hT).proj_univ] at h
+        (((P.diag ξ) Set.univ).toReal : ℂ) := by
+      have h := P.inner_proj Set.univ MeasurableSet.univ ξ
+      rwa [P.proj_univ] at h
     rw [huniv, ← hUuniv, hmeasU, ENNReal.toReal_sum (fun j _ => measure_ne_top _ _),
       Complex.ofReal_sum]
   -- The enlargement.

@@ -240,12 +240,14 @@ theorem nonneg_of_lyapunov_nonneg {X G : H →L[ℂ] H}
   have hmain : ∀ β : ℝ, 0 < β → β ≤ 1 → ∀ x : H,
       -β * ‖x‖ ^ 2 ≤ RCLike.re ⟪X x, x⟫_ℂ := by
     intro β hβ hβ1 x
+    let spectralMeasure :=
+      (X.toLinearMap.toPMap ⊤).spectralPVM (LinearPMap.isSelfAdjoint_toPMap_top hX)
     set P : H →L[ℂ] H :=
-      (TauCeti.BorelCalculus.boundedPVM hX).proj (Set.Iic (-β)) measurableSet_Iic with hPdef
+      spectralMeasure.proj (Set.Iic (-β)) measurableSet_Iic with hPdef
     have hPsa : IsSelfAdjoint P :=
-      (TauCeti.BorelCalculus.boundedPVM hX).isSelfAdjoint_proj _ _
+      spectralMeasure.isSelfAdjoint_proj _ _
     have hPidem : P * P = P :=
-      (TauCeti.BorelCalculus.boundedPVM hX).proj_idem _ _
+      spectralMeasure.proj_idem _ _
     have hPcomm : X * P = P * X :=
       TauCeti.BorelCalculus.boundedPVM_proj_comm hX (Set.Iic (-β)) measurableSet_Iic
     -- the spectral form bound on the range of `P`
@@ -258,13 +260,11 @@ theorem nonneg_of_lyapunov_nonneg {X G : H →L[ℂ] H}
           iff_false, not_and]
         intro h1 h2
         linarith
-      have hmul := (TauCeti.BorelCalculus.boundedPVM hX).proj_inter
-        (Set.Ici (-β / 2)) (Set.Iic (-β)) measurableSet_Ici measurableSet_Iic
-      rw [(TauCeti.BorelCalculus.boundedPVM hX).proj_congr hdisj
-        (measurableSet_Ici.inter measurableSet_Iic) MeasurableSet.empty,
-        (TauCeti.BorelCalculus.boundedPVM hX).proj_empty] at hmul
-      have := congrArg (fun T : H →L[ℂ] H => T v) hmul
-      simpa [hPdef] using this
+      have hmul := spectralMeasure.proj_mul_eq_zero_of_disjoint
+        (B := Set.Ici (-β / 2)) (C := Set.Iic (-β))
+        measurableSet_Ici measurableSet_Iic (Set.disjoint_iff_inter_eq_empty.mpr hdisj)
+      change spectralMeasure.proj (Set.Ici (-β / 2)) measurableSet_Ici (P v) = 0
+      exact congrArg (fun T : H →L[ℂ] H => T v) hmul
     -- pointwise consequences of `P` being a self-adjoint idempotent commuting with `X`
     have hPP : ∀ y : H, P (P y) = P y := fun y => by
       have := congrArg (fun T : H →L[ℂ] H => T y) hPidem
@@ -417,7 +417,7 @@ theorem nonneg_of_lyapunov_nonneg {X G : H →L[ℂ] H}
       have : G (P x) = G 0 := by rw [hGP, map_zero]
       exact hGinj this
     have hfin := TauCeti.BorelCalculus.le_re_inner_of_boundedPVM_proj_Iic_eq_zero hX (-β)
-      (show (TauCeti.BorelCalculus.boundedPVM hX).proj (Set.Iic (-β)) measurableSet_Iic x = 0
+      (show spectralMeasure.proj (Set.Iic (-β)) measurableSet_Iic x = 0
         from hP0)
     simpa [RCLike.re_to_complex] using hfin
   -- pass to the limit

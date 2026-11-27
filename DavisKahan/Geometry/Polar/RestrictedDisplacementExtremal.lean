@@ -106,7 +106,9 @@ private theorem cosine_norm_le_on_low_range
       (Set.Iic c₂) measurableSet_Iic) :
     ‖C x‖ ≤ c₁ * ‖x‖ := by
   let PVM : TauCeti.ProjValMeasure ℝ E :=
-    boundedSelfAdjointSpectralPVM C D.cosine_selfAdjoint
+    (C.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.cosine_selfAdjoint))
   let P : E →L[ℂ] E := PVM.proj (Set.Iic c₂) measurableSet_Iic
   have hPstar : P =
       (boundedSelfAdjointSpectralSubspace C D.cosine_selfAdjoint
@@ -189,7 +191,7 @@ private theorem cosine_norm_le_on_low_range
       _ ≤ c₁ * ‖z‖ ^ 2 := by
         have hyNorm : ‖y‖ ≤ ‖z‖ := by
           exact
-            (boundedSelfAdjointSpectralPVM C D.cosine_selfAdjoint).norm_proj_apply_le
+            PVM.norm_proj_apply_le
               (Set.Iic c₂) measurableSet_Iic z
         have hySq : ‖y‖ ^ 2 ≤ ‖z‖ ^ 2 :=
           pow_le_pow_left₀ (norm_nonneg _) hyNorm 2
@@ -236,7 +238,9 @@ theorem lt_approximationNumber_competitor_of_lt_direct
   have hCsa : IsSelfAdjoint C :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.cosine_selfAdjoint
   let PVM : TauCeti.ProjValMeasure ℝ E :=
-    boundedSelfAdjointSpectralPVM C D.cosine_selfAdjoint
+    (C.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.cosine_selfAdjoint))
   let P : E →L[ℂ] E := PVM.proj (Set.Iic c₂) measurableSet_Iic
   let Q : E →L[ℂ] E := PVM.proj (Set.Ioi c₂) measurableSet_Ioi
   have hQeq : Q = ContinuousLinearMap.id ℂ E - P := by
@@ -403,7 +407,9 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
       have hcCs : c < cs := by dsimp only [c]; linarith
       have hc1 : c <= 1 := hcCs.le.trans hcs1
       let PVM : TauCeti.ProjValMeasure ℝ E :=
-        boundedSelfAdjointSpectralPVM C D.cosine_selfAdjoint
+        (C.toLinearMap.toPMap ⊤).spectralPVM
+          (LinearPMap.isSelfAdjoint_toPMap_top
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.cosine_selfAdjoint))
       let P : E →L[ℂ] E := PVM.proj (Set.Iic c) measurableSet_Iic
       let Q : E →L[ℂ] E := PVM.proj (Set.Ioi c) measurableSet_Ioi
       have hQeq : Q = ContinuousLinearMap.id ℂ E - P := by
@@ -529,7 +535,9 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
       have hcCa : c < ca := by dsimp only [c]; linarith
       have hc1 : c <= 1 := hcCa.le.trans hca1
       let PVM : TauCeti.ProjValMeasure ℝ E :=
-        boundedSelfAdjointSpectralPVM C D.cosine_selfAdjoint
+        (C.toLinearMap.toPMap ⊤).spectralPVM
+          (LinearPMap.isSelfAdjoint_toPMap_top
+            (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.cosine_selfAdjoint))
       let P : E →L[ℂ] E := PVM.proj (Set.Iic c) measurableSet_Iic
       let Q : E →L[ℂ] E := PVM.proj (Set.Ioi c) measurableSet_Ioi
       have hQeq : Q = ContinuousLinearMap.id ℂ E - P := by

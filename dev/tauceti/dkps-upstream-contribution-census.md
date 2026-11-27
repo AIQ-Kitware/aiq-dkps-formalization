@@ -1,5 +1,35 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 bounded real-line spectral measure
+
+The bounded self-adjoint consumers now take TauCeti's native spectral
+measure of the operator as an everywhere-defined partial map. This retires
+the separate `boundedPVM` and `boundedSelfAdjointSpectralPVM` factories.
+The indicator and diagonal-measure formulas use
+`IsSelfAdjoint.spectralPVM_toPMap_top` from tauceti-ai-for-science's
+Forgejo #2123 at `54be75fd15440f9cd1312f7fd32b55cc2f837779` and the
+bounded normal-operator calculus from #28859. The native comparison
+identifies the partial-map PVM with the real-part pushforward of the bounded
+PVM, so these proofs retain the original Borel bands. The retired DKPS
+factories are recorded at `f4485de9b55f21252491ce4fc0981a90fddb43aa`
+and `81a1db68905ea2c43403bca7b01f1f3016082a0e` (Kitware 2026, Apache-2.0).
+The Forgejo integration does not identify a DKPS proof source.
+[Forgejo #2123](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2123) ·
+[#28859](https://github.com/TauCetiProject/TauCeti/pull/28859)
+
+The bounded band estimate for the Appendix now applies the graph and norm
+laws of the spectral cut from Jon Crall's DKPS-derived #44695
+(`391615e058611f8ea2939836b382f716e2095ca4`). The complex proof keeps the
+original `2 * r` bound, and the real proof transports it by the isometric
+complexification. The former proof was developed at `590075db7` (Jon Crall
+and Claude Fable 5, Kitware 2026, Apache-2.0).
+[PR #44695](https://github.com/TauCetiProject/TauCeti/pull/44695)
+
+The focused build (9793 jobs), full default build (22786 jobs), and
+combined Challenge and paper semantic-surface build (22492 jobs) passed
+without warnings. All 17 available Davis–Kahan comparator signatures
+matched, and the 49 baseline name-drift findings stayed the same.
+
 ## November 27 native spectral projections and ranges
 
 The spectral projection and range of a complex self-adjoint partial map are

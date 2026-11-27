@@ -72,7 +72,9 @@ unconditional statements about complex Hilbert spaces. -/
 noncomputable instance boundedBorelProjection_complex :
     BoundedBorelProjection ℂ H where
   proj A hA s hs := boundedSelfAdjointSpectralProjection A hA s hs
-  proj_idem A hA s hs := (boundedSelfAdjointSpectralPVM A hA).proj_idem s hs
+  proj_idem A hA s hs := ((A.toLinearMap.toPMap ⊤).spectralPVM
+      (LinearPMap.isSelfAdjoint_toPMap_top
+        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA))).proj_idem s hs
   proj_comm _A hA s hs :=
     TauCeti.BorelCalculus.boundedPVM_proj_comm
       ((ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mpr hA) s hs

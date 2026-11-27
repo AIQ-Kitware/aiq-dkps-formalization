@@ -3112,7 +3112,10 @@
         "specProj_univ",
         "toProjValMeasure",
         "toProjValMeasure_diag",
-        "toProjValMeasure_proj"
+        "toProjValMeasure_proj",
+        "TauCeti.DavisKahanExt.boundedSelfAdjointSpectralPVM",
+        "boundedPVM_eq_toPMap_top",
+        "norm_comp_boundedPVM_proj_sub_smul_le"
       ],
       "current_namespace": "TauCeti.BorelCalculus",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
@@ -3146,9 +3149,12 @@
         "toProjValMeasure",
         "toProjValMeasure_diag",
         "toProjValMeasure_proj",
-        "borelCalculus_comm_self"
+        "borelCalculus_comm_self",
+        "boundedPVM",
+        "boundedPVM_eq_toPMap_top",
+        "TauCeti.DavisKahanExt.boundedSelfAdjointSpectralPVM"
       ],
-      "migration_note": "November 27: Use the native spectral PVM pushforward. The bounded form estimates use the #2123 bounded PVM comparison at 54be75fd15440f9cd1312f7fd32b55cc2f837779 and the partial-operator estimates on complementary spectral ranges. Local source anchor 1a20ed0ac. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent. November 27: Use native ProjValMeasure.map directly for the bounded self-adjoint real-coordinate PVM. Native spectral commutant supplies bounded projection commutation. The old unbundled indicator formula uses the accepted borelCalculus_indicator law during migration.",
+      "migration_note": "November 27: Use the native spectral PVM pushforward. The bounded form estimates use the #2123 bounded PVM comparison at 54be75fd15440f9cd1312f7fd32b55cc2f837779 and the partial-operator estimates on complementary spectral ranges. Local source anchor 1a20ed0ac. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent. November 27: Use native ProjValMeasure.map directly for the bounded self-adjoint real-coordinate PVM. Native spectral commutant supplies bounded projection commutation. The old unbundled indicator formula uses the accepted borelCalculus_indicator law during migration. The remaining boundedPVM and boundedSelfAdjointSpectralPVM factories retire in favor of the native spectral measure on the everywhere-defined partial map. #2123 supplies the comparison to the real-part pushforward and does not identify a DKPS proof source. #28859 supplies the Borel indicator and diagonal-measure formulas. The original bounded-PVM factory is at f4485de9b55f21252491ce4fc0981a90fddb43aa (Jon Crall and Claude Opus 5), and the paper-facing factory is at 81a1db68905ea2c43403bca7b01f1f3016082a0e (Jon Crall and OpenAI GPT-5.6 Thinking), Kitware 2026, Apache-2.0. The complex band estimate uses the graph and norm laws from Jon Crall’s accepted DKPS spectral-cut port #44695 at 391615e058611f8ea2939836b382f716e2095ca4. Its original 2r statement is preserved, and RealBandProjection transports the bound by the isometric complexification. The original AlmostInvariant proof is at 590075db7 (Jon Crall and Claude Fable 5, Kitware 2026, Apache-2.0).",
       "integration": "0ec5eb534c79f6de1055a7a522d295f35550b996",
       "accepted_head": "6d0a839823911d3f4639b5229e6e143e7c03622a",
       "accepted_upstream_declarations": [
@@ -3160,7 +3166,12 @@
         "IsSelfAdjoint.spectralPVM_toPMap_top",
         "IsSelfAdjoint.re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj",
         "IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj",
-        "ContinuousLinearMap.forall_commute_spectralPVM_proj_iff"
+        "ContinuousLinearMap.forall_commute_spectralPVM_proj_iff",
+        "LinearPMap.spectralPVM",
+        "LinearPMap.isSelfAdjoint_toPMap_top",
+        "IsSelfAdjoint.mem_graph_spectralCut",
+        "IsSelfAdjoint.norm_spectralCut_le",
+        "ProjValMeasure.proj_mul_eq_zero_of_disjoint"
       ]
     },
     {
