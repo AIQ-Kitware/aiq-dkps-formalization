@@ -1,5 +1,5 @@
 /- Applications of the accepted bounded Sylvester API. -/
-import TauCeti.Analysis.InnerProductSpace.Sylvester
+import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 
 noncomputable section
 -- slide-begin

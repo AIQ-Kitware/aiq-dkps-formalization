@@ -17,7 +17,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Block
 public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
-public import TauCeti.Analysis.InnerProductSpace.Sylvester
+public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 import Mathlib.Analysis.InnerProductSpace.Semisimple
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles

@@ -9,7 +9,7 @@ public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
-public import TauCeti.Analysis.InnerProductSpace.Projection.Acute
+public import TauCeti.Analysis.InnerProductSpace.Projection.Acute.PrincipalAngle
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap

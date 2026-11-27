@@ -6,7 +6,7 @@ Authors: Claude Opus 5
 module
 
 public import DavisKahan.SpectralTheory.CircleRieszEndpoints
-public import TauCeti.Analysis.InnerProductSpace.Sylvester
+public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 
 /-!
 # Rosenblum's theorem: solving the Sylvester equation

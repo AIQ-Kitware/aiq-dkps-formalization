@@ -8,6 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
 public import ForTauCeti.Analysis.OperatorIdeal.Family.UnitaryTransport
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
+import TauCeti.Analysis.InnerProductSpace.Projection.Basic
 
 /-!
 # Finite-rank unitary truncations without increasing ideal costs

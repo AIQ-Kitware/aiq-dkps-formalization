@@ -29,6 +29,7 @@ module
 public import Mathlib
 public import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
 public import Acharyya2025.Weyl
+import TauCeti.Analysis.Real.Sqrt
 
 public section
 
@@ -52,8 +53,11 @@ theorem abs_one_sub_inv_sqrt_le {μ δ : ℝ}
     (hδ : δ ≤ 1/2)            -- hypothesis: the deviation budget is at most 1/2
     (hμ : |μ - 1| ≤ δ) :      -- hypothesis: `μ` lies within `δ` of 1
     -- Conclusion: the inverse-square-root rescaling moves `1` by at most `δ`.
-    |1 - (Real.sqrt μ)⁻¹| ≤ δ :=
-  Real.abs_one_sub_inv_sqrt_le hδ hμ
+    |1 - (Real.sqrt μ)⁻¹| ≤ δ := by
+  have hhalf : (1 / 2 : ℝ) ≤ μ := by linarith [(abs_le.mp hμ).1]
+  have hsqrt : (1 / 2 : ℝ) ≤ Real.sqrt μ :=
+    Real.le_sqrt_of_sq_le (by nlinarith)
+  exact (Real.abs_one_sub_inv_sqrt_le_abs_sub_one μ (by linarith)).trans hμ
 
 /-! ### The quantitative polar factor -/
 
