@@ -639,15 +639,12 @@ theorem spectraCanonicalAbsoluteValue_inner_pos
   have hBpositive := (ContinuousLinearMap.nonneg_iff_isPositive).mp hBnonneg
   have hBform : ∀ z : H, 0 ≤ RCLike.re ⟪B z, z⟫_ℂ := fun z =>
     hBpositive.re_inner_nonneg_left z
-  have hBsym : (B : H →ₗ[ℂ] H).IsSymmetric :=
-    (ContinuousLinearMap.isSelfAdjoint_modulus _).isSymmetric
   have hBinj : Function.Injective B :=
     (ContinuousLinearMap.isUnit_iff_bijective.mp
       (isUnit_spectraCanonicalAbsoluteValue U V hacute)).1
   have hne : RCLike.re ⟪B x, x⟫_ℂ ≠ 0 := by
     intro hzero
-    have hsq := TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
-      hBsym hBform x
+    have hsq := ContinuousLinearMap.norm_apply_sq_le_of_nonneg_of_le hBnonneg le_rfl x
     have hsq0 : ‖B x‖ ^ 2 ≤ 0 := by
       calc
         ‖B x‖ ^ 2 ≤ ‖B‖ * RCLike.re ⟪B x, x⟫_ℂ := hsq
@@ -1612,8 +1609,11 @@ private theorem re_inner_ge_of_inverse_norm_le
     (hRsa : IsSelfAdjoint R) (hRpos : ∀ z : H, 0 ≤ RCLike.re ⟪R z, z⟫_ℂ)
     (hRnorm : ‖R‖ ≤ c⁻¹) (hCpos : ∀ z : H, 0 ≤ RCLike.re ⟪C z, z⟫_ℂ) (z : H) :
     c * ‖z‖ ^ 2 ≤ RCLike.re ⟪C z, z⟫_ℂ := by
-  have hRbound := TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
-    hRsa.isSymmetric hRpos (C z)
+  have hRpositive : R.IsPositive := ⟨hRsa.isSymmetric, fun x => by
+    rw [ContinuousLinearMap.reApplyInnerSelf_apply]
+    exact hRpos x⟩
+  have hRbound := ContinuousLinearMap.norm_apply_sq_le_of_nonneg_of_le
+    hRpositive.nonneg le_rfl (C z)
   have hRCz : R (C z) = z := by
     have h := congrArg (fun T : H →L[ℂ] H => T z) hRC
     simpa only [mul_apply_eq_comp, one_apply_eq_self] using h

@@ -10,6 +10,7 @@ public import Mathlib.Algebra.Group.Semiconj.Units
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.InnerProductSpace.Positive
 public import TauCeti.Analysis.InnerProductSpace.Coercive
+public import TauCeti.Analysis.InnerProductSpace.Positive.Basic
 public import Mathlib.Analysis.Normed.Operator.Banach
 
 /-! # Complements to coercive bounded invertibility
@@ -27,8 +28,9 @@ Invertibility now uses Mathlib's
 with the positive real constant viewed in `ℝ≥0` and `RCLike.re_le_norm`.
 The local `isUnit_of_coercive` facade and its closed-range proof are retired.
 The arbitrary-real coercive norm bound now uses the accepted Tau Ceti
-`ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive` directly. The positive-operator
-inverse norm and inverse algebra below remain donor mathematics. The original development and
+`ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive` directly.
+The exact inverse-defect norm below uses TauCeti's positive-operator
+Cauchy–Schwarz and invertibility laws. The original development and
 its authorship are recorded in the provenance below; using Mathlib's criterion
 does not assert that its proof descended from this repository.
 
@@ -71,68 +73,6 @@ open scoped InnerProductSpace
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
-
-/-- `1 + W⋆ W` is invertible for every bounded Hilbert-space operator `W`:
-its quadratic form dominates `‖z‖ ^ 2`, so the operator Lax–Milgram lemma
-applies. -/
-theorem isUnit_one_add_star_mul_self (W : E →L[𝕜] E) :
-    IsUnit (1 + star W * W) := by
-  refine _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
-    (c := 1) one_pos fun z => ?_
-  apply le_trans ?_ (RCLike.re_le_norm _)
-  change ‖z‖ ^ 2 * 1 ≤ _
-  have h : (1 + star W * W) z = z + star W (W z) := rfl
-  rw [h]
-  simp only [inner_add_left, map_add, inner_self_eq_norm_sq,
-    ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
-  nlinarith [sq_nonneg ‖W z‖]
-
-omit [CompleteSpace E] in
-/-- Cauchy–Schwarz for the semi-inner product induced by a positive symmetric
-operator, in operator-norm form: `‖B y‖ ^ 2 ≤ ‖B‖ * re ⟪B y, y⟫`.  The proof
-evaluates the nonnegative quadratic form at `y - ‖B‖⁻¹ • B y`; no square
-roots or functional calculus are involved. -/
-theorem norm_apply_sq_le_of_positive {B : E →L[𝕜] E}
-    (hB : (B : E →ₗ[𝕜] E).IsSymmetric)
-    (hBpos : ∀ z, 0 ≤ RCLike.re ⟪B z, z⟫_𝕜) (y : E) :
-    ‖B y‖ ^ 2 ≤ ‖B‖ * RCLike.re ⟪B y, y⟫_𝕜 := by
-  rcases eq_or_lt_of_le (norm_nonneg B) with hs | hs
-  · have hB0 : B = 0 := norm_eq_zero.mp hs.symm
-    simp [hB0]
-  · set t : ℝ := ‖B‖⁻¹ with htdef
-    have ht : 0 < t := inv_pos.mpr hs
-    have hts : t * ‖B‖ = 1 := inv_mul_cancel₀ hs.ne'
-    have hsym : ⟪B (B y), y⟫_𝕜 = ⟪B y, B y⟫_𝕜 := hB (B y) y
-    have h1 : ⟪B (y - (t : 𝕜) • B y), y - (t : 𝕜) • B y⟫_𝕜
-        = ⟪B y, y⟫_𝕜 - (t : 𝕜) * ⟪B y, B y⟫_𝕜 - (t : 𝕜) * ⟪B y, B y⟫_𝕜
-          + (t : 𝕜) * ((t : 𝕜) * ⟪B (B y), B y⟫_𝕜) := by
-      rw [map_sub, map_smul]
-      simp only [inner_sub_left, inner_sub_right, inner_smul_left,
-        inner_smul_right, RCLike.conj_ofReal]
-      rw [hsym]
-      ring
-    have h2 : (0 : ℝ) ≤ RCLike.re ⟪B y, y⟫_𝕜 - t * ‖B y‖ ^ 2 - t * ‖B y‖ ^ 2
-        + t * (t * RCLike.re ⟪B (B y), B y⟫_𝕜) := by
-      have h0 := hBpos (y - (t : 𝕜) • B y)
-      rw [h1] at h0
-      simpa [map_sub, map_add, RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-        using h0
-    have h3 : RCLike.re ⟪B (B y), B y⟫_𝕜 ≤ ‖B‖ * ‖B y‖ ^ 2 := by
-      calc RCLike.re ⟪B (B y), B y⟫_𝕜 ≤ ‖⟪B (B y), B y⟫_𝕜‖ := RCLike.re_le_norm _
-        _ ≤ ‖B (B y)‖ * ‖B y‖ := norm_inner_le_norm _ _
-        _ ≤ (‖B‖ * ‖B y‖) * ‖B y‖ :=
-            mul_le_mul_of_nonneg_right (B.le_opNorm (B y)) (norm_nonneg _)
-        _ = ‖B‖ * ‖B y‖ ^ 2 := by ring
-    have key : t * (t * RCLike.re ⟪B (B y), B y⟫_𝕜) ≤ t * ‖B y‖ ^ 2 := by
-      refine mul_le_mul_of_nonneg_left ?_ ht.le
-      calc t * RCLike.re ⟪B (B y), B y⟫_𝕜 ≤ t * (‖B‖ * ‖B y‖ ^ 2) :=
-            mul_le_mul_of_nonneg_left h3 ht.le
-        _ = ‖B y‖ ^ 2 := by rw [← mul_assoc, hts, one_mul]
-    have h7 : t * ‖B y‖ ^ 2 ≤ RCLike.re ⟪B y, y⟫_𝕜 := by linarith
-    calc ‖B y‖ ^ 2 = ‖B‖ * (t * ‖B y‖ ^ 2) := by
-          rw [← mul_assoc, mul_comm ‖B‖ t, hts, one_mul]
-      _ ≤ ‖B‖ * RCLike.re ⟪B y, y⟫_𝕜 :=
-          mul_le_mul_of_nonneg_left h7 (norm_nonneg B)
 
 /-- The arithmetic core of the lower bound: if the "energy" `c` and the
 "square" `d` of a positive operator at a unit vector satisfy `c² ≤ d` and the
@@ -227,15 +167,10 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
     rw [hB0, add_zero, Ring.inverse_one, sub_self, norm_zero]
     norm_num
   set N : E →L[𝕜] E := 1 + B with hNdef
-  have hNcoer : ∀ z, (1 : ℝ) * ‖z‖ ^ 2 ≤ RCLike.re ⟪N z, z⟫_𝕜 := by
-    intro z
-    have hNz : N z = z + B z := rfl
-    rw [hNz, inner_add_left, map_add, inner_self_eq_norm_sq]
-    have := hBpos z
-    linarith
-  have hNunit : IsUnit N := _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
-      (c := ⟨1, by positivity⟩) one_pos
-      (fun z => (mul_comm _ _).le.trans ((hNcoer z).trans (RCLike.re_le_norm _)))
+  have hBpositive : B.IsPositive := ⟨hB.isSymmetric, fun z => by
+    rw [_root_.ContinuousLinearMap.reApplyInnerSelf_apply]
+    exact hBpos z⟩
+  have hNunit : IsUnit N := hBpositive.isUnit_one_add
   set R : E →L[𝕜] E := Ring.inverse N with hRdef
   have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
   have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit
@@ -273,7 +208,8 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
       intro y
       have hb0 := hBpos y
       have hb := hbs y
-      have hc := norm_apply_sq_le_of_positive hB.isSymmetric hBpos y
+      have hc := _root_.ContinuousLinearMap.norm_apply_sq_le_of_nonneg_of_le
+        hBpositive.nonneg le_rfl y
       rw [hval y, hNsq y, abs_of_nonneg (by positivity)]
       rw [div_mul_eq_mul_div, le_div_iff₀ (by linarith : (0 : ℝ) < 1 + ‖B‖)]
       nlinarith [hb, hc]
@@ -315,7 +251,8 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
       obtain ⟨u, hu1, hu2⟩ :=
         B.exists_lt_apply_of_lt_opNorm (r := ‖B‖ - ε) (by linarith [hε.1])
       have hb0 := hBpos u
-      have hcs := norm_apply_sq_le_of_positive hB.isSymmetric hBpos u
+      have hcs := _root_.ContinuousLinearMap.norm_apply_sq_le_of_nonneg_of_le
+        hBpositive.nonneg le_rfl u
       have hbge : (‖B‖ - ε) ^ 2 / ‖B‖ ≤ RCLike.re ⟪B u, u⟫_𝕜 := by
         rw [div_le_iff₀ hs]
         have hsq : (‖B‖ - ε) * (‖B‖ - ε) ≤ ‖B u‖ * ‖B u‖ :=

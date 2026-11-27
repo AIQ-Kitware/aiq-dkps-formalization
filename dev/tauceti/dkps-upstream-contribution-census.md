@@ -1,5 +1,42 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 Lyapunov positivity and positive-operator estimates
+
+The unbounded quarter-angle positivity proof uses
+`ContinuousLinearMap.le_re_of_mem_spectrum_of_positive_lyapunov` at a
+zero lower form bound. This replaces the separate square-root similarity,
+spectrum-transport and dissipativity proofs in
+`ForTauCeti/Analysis/InnerProductSpace/LyapunovPositivity.lean`. The
+unbounded application uses injectivity of its positive weight. Its
+spectral compression produces the positive invertible operator used in
+the native theorem. The local proof originated at
+`ca250f447167afea1042702f45b070747d6dc91b` (Jon Crall and Claude Opus 5,
+Kitware 2026, Apache-2.0). The native half-plane estimate came from
+Jon Crall's bounded SSP-C31 port #27804. Native coercive invertibility
+comes from #26821.
+[#27804](https://github.com/TauCetiProject/TauCeti/pull/27804) ·
+[#26821](https://github.com/TauCetiProject/TauCeti/pull/26821)
+
+The graph and Part III proofs use the Hilbert-space positivity and
+invertibility theorem from tauceti-ai-for-science's independently
+formalized #16152. Its inverse theorem supports real and complex scalars.
+The direct-rotation and inverse-defect proofs use the positive-operator
+bound from the same contributor's #42554, including the incomplete
+ambient scope of the original Cauchy–Schwarz statement. The Lyapunov proof
+uses the zero-form kernel theorem from their Morse–Bott #38017. The latter
+two integrations give no DKPS proof attribution. The retired coercivity
+helpers are recorded at `cdb920532` (Jon Crall and Claude Fable 5,
+Kitware 2026, Apache-2.0).
+[#16152](https://github.com/TauCetiProject/TauCeti/pull/16152) ·
+[#42554](https://github.com/TauCetiProject/TauCeti/pull/42554) ·
+[#38017](https://github.com/TauCetiProject/TauCeti/pull/38017)
+
+The focused build (9957 jobs), full default build (22786 jobs), and
+combined Challenge and paper semantic-surface build (22492 jobs) passed
+without warnings. All 17 available Davis–Kahan comparator signatures
+matched. The name-drift check kept the 49 baseline findings. The change
+removes 250 net lines of Lean.
+
 ## November 27 Gram spectral measure and projection laws
 
 The Gram rank and band estimates and their paper callers use

@@ -280,18 +280,31 @@ alias banach_sylvester_lower_bound_unboundedA :=
   DavisKahan1970.theorem5_1_banach_sylvester_unboundedA
 
 /-! ## Graph and Riccati theory (continued) -/
-/-- Bounded coercive invertibility, using Mathlib's canonical Hilbert-space criterion. -/
+/-- Bounded coercive invertibility, using the native quadratic-form criterion. -/
 theorem bounded_coercive_isUnit {𝕜 E : Type*} [RCLike 𝕜]
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     {N : E →L[𝕜] E} {c : ℝ} (hc : 0 < c)
     (hcoer : ∀ z, c * ‖z‖ ^ 2 ≤ RCLike.re (inner 𝕜 (N z) z)) : IsUnit N :=
-  _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
-      (c := ⟨c, by positivity⟩) hc
-      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
-alias bounded_one_add_star_mul_self_isUnit :=
-  TauCeti.ContinuousLinearMap.isUnit_one_add_star_mul_self
-alias bounded_positive_cauchy_schwarz :=
-  TauCeti.ContinuousLinearMap.norm_apply_sq_le_of_positive
+  _root_.ContinuousLinearMap.isUnit_of_coercive N hc hcoer
+
+/-- The positive Gram perturbation of the identity is invertible. -/
+theorem bounded_one_add_star_mul_self_isUnit {𝕜 E : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    (W : E →L[𝕜] E) : IsUnit (1 + star W * W) := by
+  rw [_root_.ContinuousLinearMap.star_eq_adjoint]
+  exact W.isPositive_adjoint_comp_self.isUnit_one_add
+
+/-- The positive-operator Cauchy–Schwarz bound in operator-norm form. -/
+theorem bounded_positive_cauchy_schwarz {𝕜 E : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {B : E →L[𝕜] E}
+    (hB : (B : E →ₗ[𝕜] E).IsSymmetric)
+    (hBpos : ∀ z, 0 ≤ RCLike.re (inner 𝕜 (B z) z)) (y : E) :
+    ‖B y‖ ^ 2 ≤ ‖B‖ * RCLike.re (inner 𝕜 (B y) y) := by
+  have hpositive : B.IsPositive := ⟨hB, fun z => by
+    rw [_root_.ContinuousLinearMap.reApplyInnerSelf_apply]
+    exact hBpos z⟩
+  exact _root_.ContinuousLinearMap.norm_apply_sq_le_of_nonneg_of_le hpositive.nonneg le_rfl y
+
 alias bounded_inverse_defect_norm :=
   TauCeti.ContinuousLinearMap.norm_one_sub_inverse_one_add
 

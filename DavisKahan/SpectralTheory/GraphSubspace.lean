@@ -325,11 +325,12 @@ theorem norm_projection_sub_projection_graphSubspace
     projection_graphSubspace_formula U X hX
   -- units and inverses
   have hNunit : IsUnit N := by
-    rw [hN]
-    exact TauCeti.ContinuousLinearMap.isUnit_one_add_star_mul_self X
+    rw [hN, ContinuousLinearMap.star_eq_adjoint]
+    exact X.isPositive_adjoint_comp_self.isUnit_one_add
   have hMunit : IsUnit M := by
-    have h := TauCeti.ContinuousLinearMap.isUnit_one_add_star_mul_self (star X)
-    rwa [star_star, ← hMdef] at h
+    have h := (star X).isPositive_adjoint_comp_self.isUnit_one_add
+    change IsUnit (1 + (star X).adjoint * star X) at h
+    rwa [← ContinuousLinearMap.star_eq_adjoint, star_star, ← hMdef] at h
   have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
   have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit
   have hMR' : M * R' = 1 := Ring.mul_inverse_cancel M hMunit
