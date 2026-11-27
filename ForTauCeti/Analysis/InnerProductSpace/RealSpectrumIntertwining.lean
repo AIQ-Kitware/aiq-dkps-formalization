@@ -50,13 +50,6 @@ theorem norm_realCoord_le (ha : IsSelfAdjoint a) (x : spectrum ℝ a) :
   rw [← realSpectrumHomeomorph_symm_apply_coe ha x]
   exact (isBddMeasurable_coord (a := a)).norm_le_chooseBound _
 
-/-- **The real coordinate symbol is admissible** for the real-spectrum bounded Borel symbol
-algebra: measurable and uniformly bounded. -/
-theorem isRealSpectrumBddMeasurable_realCoord (ha : IsSelfAdjoint a) :
-    IsRealSpectrumBddMeasurable (fun x : spectrum ℝ a => ((x : ℝ) : ℂ)) :=
-  ⟨measurable_realCoord, (isBddMeasurable_coord (a := a)).chooseBound,
-    (isBddMeasurable_coord (a := a)).chooseBound_nonneg, norm_realCoord_le ha⟩
-
 end Symbol
 
 section Multiplication

@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.RealSpectrumBorelSymbols
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicModel
 public import Mathlib.Dynamics.Ergodic.MeasurePreserving
 public import Mathlib.MeasureTheory.Function.LpSpace.Basic
 public import Mathlib.MeasureTheory.Integral.Bochner.Basic
@@ -120,9 +121,8 @@ section Measure
 /-- **The diagonal spectral measure of a self-adjoint operator, on its real spectrum.**
 
 This is `(cfcHom ha.isStarNormal).representationDiagMeasure ξ` pushed forward along
-`realSpectrumHomeomorph ha : spectrum ℂ a ≃ₜ spectrum ℝ a`.  It is the measure that
-`realSpectrumBddSymbols a` is square-integrated against, and the real-spectrum counterpart of
-the scalar spectral measure the cyclic multiplication model runs on. -/
+`realSpectrumHomeomorph ha : spectrum ℂ a ≃ₜ spectrum ℝ a`. This is the measure
+used to integrate the squared norm of a bounded Borel symbol on the real spectrum. -/
 noncomputable def realSpectrumDiagMeasure (ha : IsSelfAdjoint a) (ξ : H) :
     Measure (spectrum ℝ a) :=
   ((cfcHom ha.isStarNormal).representationDiagMeasure ξ).map (realSpectrumHomeomorph ha)

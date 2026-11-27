@@ -64,6 +64,19 @@ omit [CompleteSpace H] in
     (hf : IsBddMeasurable f) (x : spectrum ℂ a) : hf.toBoundedBorelFunction x = f x := by
   rw [toBoundedBorelFunction, BoundedBorelFunction.ofFunction_apply]
 
+omit [CompleteSpace H] in
+/-- The underlying function of a bounded Borel symbol is admissible. -/
+theorem ofBoundedBorelFunction (f : BoundedBorelFunction (spectrum ℂ a)) :
+    IsBddMeasurable (f : spectrum ℂ a → ℂ) :=
+  ⟨f.measurable, f.exists_bound⟩
+
+omit [CompleteSpace H] in
+/-- Bundling the underlying function recovers the original symbol. -/
+@[simp]
+theorem toBoundedBorelFunction_ofBoundedBorelFunction (f : BoundedBorelFunction (spectrum ℂ a)) :
+    (ofBoundedBorelFunction f).toBoundedBorelFunction = f :=
+  BoundedBorelFunction.ext fun x => toBoundedBorelFunction_apply _ x
+
 end IsBddMeasurable
 
 variable (ha : IsStarNormal a) {f : spectrum ℂ a → ℂ}

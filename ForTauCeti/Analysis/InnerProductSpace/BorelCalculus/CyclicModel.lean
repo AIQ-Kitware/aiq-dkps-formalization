@@ -11,6 +11,7 @@ public import Mathlib.Analysis.Normed.Operator.Extend
 public import Mathlib.MeasureTheory.Function.ContinuousMapDense
 public import Mathlib.MeasureTheory.Function.L2Space
 public import TauCeti.MeasureTheory.Function.Lp.Multiplication
+public import TauCeti.MeasureTheory.Function.Lp.Norm
 
 /-!
 # The cyclic multiplication model of the spectral theorem
@@ -30,9 +31,9 @@ the cyclic subspace**, and the coordinate symbol acts through it as `a` itself.
 
 The construction is the usual density/extension argument, assembled from three pieces.
 
-1. `bddSymbols a` is the `ℂ`-submodule of bounded measurable symbols.  Two linear maps leave
-   it: `symbolCalculus ha ξ` into `H`, and `symbolToLp ha ξ` into `L²`.  Layer 1 says these
-   have the *same* norm (`norm_symbolCalculus`).
+1. Both linear maps take `BoundedBorelFunction (spectrum ℂ a)` as input.
+   The images under `symbolCalculus ha ξ` in `H` and `symbolToLp ha ξ` in `L²`
+   have the same norm (`norm_symbolCalculus`).
 2. `denseRange_symbolToLp` says the second one has dense range.  This is where finiteness and
    regularity of `representationDiagMeasure` are used: on the compact spectrum, continuous symbols
    are
@@ -64,7 +65,7 @@ plan and the cost of each.
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Extraction class: **authored in place** for the Tau Ceti staging layer.
-* Spectra influence: **none** — this module imports only Mathlib and `ForTauCeti`.
+* Spectra influence: **none**.
 -/
 
 public section
@@ -74,31 +75,6 @@ open MeasureTheory
 
 namespace TauCeti
 
-/-- The squared `L²` norm of the class of a square-integrable function is the integral of the
-squared pointwise norm.
-
-Stated for `ℂ` and `p = 2` only, which is the case the multiplication model needs; the proof
-is the inner-product formula for `L²` together with `⟪z, z⟫ = ‖z‖²`. -/
-theorem norm_toLp_two_sq {α : Type*} [MeasurableSpace α] {μ : Measure α} {f : α → ℂ}
-    (hf : MemLp f 2 μ) : ‖hf.toLp f‖ ^ 2 = ∫ x, ‖f x‖ ^ 2 ∂μ := by
-  have hinner : ((‖hf.toLp f‖ ^ 2 : ℝ) : ℂ) = ⟪hf.toLp f, hf.toLp f⟫_ℂ := by
-    rw [inner_self_eq_norm_sq_to_K]; norm_cast
-  rw [L2.inner_def] at hinner
-  have hae : (fun x => ⟪(hf.toLp f : α → ℂ) x, (hf.toLp f : α → ℂ) x⟫_ℂ)
-      =ᵐ[μ] fun x => ((‖f x‖ ^ 2 : ℝ) : ℂ) := by
-    filter_upwards [hf.coeFn_toLp] with x hx
-    rw [hx, inner_self_eq_norm_sq_to_K]
-    norm_cast
-  rw [integral_congr_ae hae, integral_complex_ofReal] at hinner
-  exact_mod_cast hinner
-
-/-- The squared `L²` norm of a class is the integral of the squared pointwise norm of any of
-its representatives -- in particular of the canonical one. -/
-theorem norm_Lp_two_sq {α : Type*} [MeasurableSpace α] {μ : Measure α}
-    (F : MeasureTheory.Lp ℂ 2 μ) : ‖F‖ ^ 2 = ∫ x, ‖F x‖ ^ 2 ∂μ := by
-  conv_lhs => rw [← MeasureTheory.Lp.toLp_coeFn F (MeasureTheory.Lp.memLp F)]
-  exact norm_toLp_two_sq _
-
 namespace BorelCalculus
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
@@ -106,101 +82,72 @@ variable {a : H →L[ℂ] H}
 
 section Symbols
 
-/-- **The bounded measurable symbols**, as a `ℂ`-submodule of all functions on the spectrum.
+/-- Evaluate the bounded Borel calculus at the cyclic vector. -/
+noncomputable def symbolCalculus (ha : IsStarNormal a) (ξ : H) :
+    BoundedBorelFunction (spectrum ℂ a) →ₗ[ℂ] H :=
+  letI := ha
+  (ContinuousLinearMap.apply ℂ H ξ).toLinearMap.comp a.borelCalculus.toLinearMap
 
-The Borel calculus takes a symbol *together with* a proof of `IsBddMeasurable`, which is a
-`Prop`, so bundling the proof into the carrier loses nothing and gains a domain the
-linear-algebra API can talk about. -/
-def bddSymbols (a : H →L[ℂ] H) : Submodule ℂ (spectrum ℂ a → ℂ) where
-  carrier := {f | IsBddMeasurable f}
-  add_mem' hf hg := hf.add hg
-  zero_mem' := ⟨measurable_const, 0, le_rfl, fun _ => by simp⟩
-  smul_mem' c _ hf := hf.const_smul c
+/-- The symbol calculus is the native bounded Borel calculus evaluated at the vector. -/
+@[simp] theorem symbolCalculus_apply (ha : IsStarNormal a) (ξ : H)
+    (f : BoundedBorelFunction (spectrum ℂ a)) :
+    haveI := ha
+    symbolCalculus ha ξ f = a.borelCalculus f ξ := by rfl
 
-omit [CompleteSpace H] in
-/-- Membership in `bddSymbols` is exactly admissibility for the Borel calculus. -/
-theorem mem_bddSymbols {f : spectrum ℂ a → ℂ} : f ∈ bddSymbols a ↔ IsBddMeasurable f := Iff.rfl
-
-omit [CompleteSpace H] in
-/-- The admissibility proof carried by an element of `bddSymbols`.  Consumers cannot unfold
-the submodule's carrier, so this is the accessor they use. -/
-theorem isBddMeasurable_coe (f : bddSymbols a) :
-    IsBddMeasurable (f : spectrum ℂ a → ℂ) := mem_bddSymbols.mp f.property
-
-/-- **The calculus map on symbols**: `f ↦ f(a) ξ`, as a `ℂ`-linear map out of the bounded
-measurable symbols. -/
-noncomputable def symbolCalculus (ha : IsStarNormal a) (ξ : H) : bddSymbols a →ₗ[ℂ] H where
-  toFun f := borelCalculus ha (isBddMeasurable_coe f) ξ
-  map_add' f g := by
-    have h : borelCalculus ha (isBddMeasurable_coe (f + g))
-        = borelCalculus ha (isBddMeasurable_coe f) + borelCalculus ha (isBddMeasurable_coe g) :=
-      borelCalculus_add ha (isBddMeasurable_coe f) (isBddMeasurable_coe g)
-    rw [h]; rfl
-  map_smul' c f := by
-    have h : borelCalculus ha (isBddMeasurable_coe (c • f))
-        = c • borelCalculus ha (isBddMeasurable_coe f) :=
-      borelCalculus_const_smul ha c (isBddMeasurable_coe f)
-    rw [h]; rfl
-
-/-- The calculus map on symbols, unfolded. -/
-@[simp] theorem symbolCalculus_apply (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
-    symbolCalculus ha ξ f = borelCalculus ha (isBddMeasurable_coe f) ξ := (rfl)
-
-/-- A bounded measurable symbol is square-integrable against the scalar spectral measure,
-which is finite. -/
-theorem memLp_two_of_isBddMeasurable (ha : IsStarNormal a) (ξ : H) {f : spectrum ℂ a → ℂ}
-    (hf : IsBddMeasurable f) : MemLp f 2 ((cfcHom ha).representationDiagMeasure ξ) :=
-  MemLp.of_bound hf.measurable.aestronglyMeasurable hf.chooseBound
-    (Filter.Eventually.of_forall hf.norm_le_chooseBound)
+/-- A bounded Borel symbol is square-integrable for the finite scalar spectral measure. -/
+theorem memLp_two_symbol (ha : IsStarNormal a) (ξ : H)
+    (f : BoundedBorelFunction (spectrum ℂ a)) :
+    MemLp f 2 ((cfcHom ha).representationDiagMeasure ξ) :=
+  MemLp.of_bound f.measurable.aestronglyMeasurable ‖f‖
+    (Filter.Eventually.of_forall f.norm_coe_le_norm)
 
 /-- **The symbol-to-`L²` map**: a bounded measurable symbol, viewed as an element of `L²` of
 the scalar spectral measure of `ξ`. -/
 noncomputable def symbolToLp (ha : IsStarNormal a) (ξ : H) :
-    bddSymbols a →ₗ[ℂ] Lp ℂ 2 ((cfcHom ha).representationDiagMeasure ξ) where
+    BoundedBorelFunction (spectrum ℂ a) →ₗ[ℂ] Lp ℂ 2 ((cfcHom ha).representationDiagMeasure ξ) where
   toFun f := MemLp.toLp (f : spectrum ℂ a → ℂ)
-    (memLp_two_of_isBddMeasurable ha ξ (isBddMeasurable_coe f))
+    (memLp_two_symbol ha ξ f)
   map_add' _ _ := MemLp.toLp_add _ _
   map_smul' c _ := MemLp.toLp_const_smul c _
 
 /-- The symbol-to-`L²` map, unfolded. -/
-theorem symbolToLp_apply (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
+theorem symbolToLp_apply (ha : IsStarNormal a) (ξ : H) (f : BoundedBorelFunction (spectrum ℂ a)) :
     symbolToLp ha ξ f = MemLp.toLp (f : spectrum ℂ a → ℂ)
-      (memLp_two_of_isBddMeasurable ha ξ (isBddMeasurable_coe f)) := (rfl)
+      (memLp_two_symbol ha ξ f) := (rfl)
 
 /-- The `L²` class of a bounded measurable symbol is represented by that symbol. -/
-theorem coeFn_symbolToLp (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
+theorem coeFn_symbolToLp (ha : IsStarNormal a) (ξ : H) (f : BoundedBorelFunction (spectrum ℂ a)) :
     (symbolToLp ha ξ f : spectrum ℂ a → ℂ) =ᵐ[(cfcHom ha).representationDiagMeasure ξ] (f :
       spectrum ℂ a → ℂ) := by
   rw [symbolToLp_apply]
   exact MemLp.coeFn_toLp _
 
 /-- The squared `L²` norm of a bounded measurable symbol. -/
-theorem norm_symbolToLp_sq (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
-    ‖symbolToLp ha ξ f‖ ^ 2 = ∫ x, ‖(f : spectrum ℂ a → ℂ) x‖ ^ 2 ∂((cfcHom
-      ha).representationDiagMeasure ξ) := by
-  rw [symbolToLp_apply]
-  exact norm_toLp_two_sq _
+theorem norm_symbolToLp_sq (ha : IsStarNormal a) (ξ : H) (f : BoundedBorelFunction (spectrum ℂ a)) :
+    ‖symbolToLp ha ξ f‖ ^ 2 = ∫ x, ‖f x‖ ^ 2 ∂((cfcHom ha).representationDiagMeasure ξ) :=
+  Lp.norm_sq_eq_integral_of_ae_eq (coeFn_symbolToLp ha ξ f)
 
 /-- **The isometry identity, in norm form.**  On bounded measurable symbols, `f ↦ f(a) ξ` has
 exactly the `L²(μ_ξ)` norm of the symbol.
 
 The native squared-norm identity gives the bound used to extend the map in
 `cyclicIsometry`. -/
-theorem norm_symbolCalculus (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
+theorem norm_symbolCalculus (ha : IsStarNormal a) (ξ : H)
+    (f : BoundedBorelFunction (spectrum ℂ a)) :
     ‖symbolCalculus ha ξ f‖ = ‖symbolToLp ha ξ f‖ := by
   have hsq : ‖symbolCalculus ha ξ f‖ ^ 2 = ‖symbolToLp ha ξ f‖ ^ 2 := by
     have := ha
-    rw [symbolCalculus_apply, borelCalculus_eq_native, norm_symbolToLp_sq]
-    simpa only [← a.spectralPVM_diag, spectralPVM_diag_eq_representation ha,
-      IsBddMeasurable.toBoundedBorelFunction_apply] using
-      a.norm_sq_borelCalculus_apply (isBddMeasurable_coe f).toBoundedBorelFunction ξ
+    rw [symbolCalculus_apply, norm_symbolToLp_sq]
+    simpa only [← a.spectralPVM_diag, spectralPVM_diag_eq_representation ha] using
+      a.norm_sq_borelCalculus_apply f ξ
   rw [← Real.sqrt_sq (norm_nonneg (symbolCalculus ha ξ f)),
     ← Real.sqrt_sq (norm_nonneg (symbolToLp ha ξ f)), hsq]
 
 /-- The norm bound consumed by `LinearMap.extendOfNorm`: the constant is `1`, because the
 symbol map is an isometry. -/
 theorem exists_norm_symbolCalculus_le (ha : IsStarNormal a) (ξ : H) :
-    ∃ C : ℝ, ∀ f : bddSymbols a, ‖symbolCalculus ha ξ f‖ ≤ C * ‖symbolToLp ha ξ f‖ :=
+    ∃ C : ℝ, ∀ f : BoundedBorelFunction (spectrum ℂ a),
+      ‖symbolCalculus ha ξ f‖ ≤ C * ‖symbolToLp ha ξ f‖ :=
   ⟨1, fun f => by rw [one_mul, norm_symbolCalculus]⟩
 
 end Symbols
@@ -209,22 +156,24 @@ section Density
 
 /-- **Bounded measurable symbols are dense in `L²` of the scalar spectral measure.**
 
-The spectrum is compact and `(cfcHom ha).representationDiagMeasure ξ` is a finite regular measure
-on it, so
-continuous symbols are already dense (`ContinuousMap.toLp_denseRange`); and a continuous symbol
-is bounded and measurable, hence lies in `bddSymbols`.  This is the only place regularity of
-the diagonal measure is used. -/
+The spectrum is compact and its diagonal measure is finite and regular.
+The continuous symbols are dense by `ContinuousMap.toLp_denseRange` and give
+bounded Borel symbols via `BoundedBorelFunction.ofContinuousMap`. -/
 theorem denseRange_symbolToLp (ha : IsStarNormal a) (ξ : H) :
     DenseRange (symbolToLp ha ξ) := by
   refine (ContinuousMap.toLp_denseRange (α := spectrum ℂ a) ℂ ((cfcHom
     ha).representationDiagMeasure ξ)
     (p := 2) ℂ (by simp)).mono ?_
   rintro _ ⟨g, rfl⟩
-  refine ⟨⟨fun x => g x, mem_bddSymbols.mpr (IsBddMeasurable.of_continuous g)⟩, ?_⟩
+  refine ⟨BoundedBorelFunction.ofContinuousMap g, ?_⟩
   rw [symbolToLp_apply,
     ← Lp.toLp_coeFn (ContinuousMap.toLp 2 ((cfcHom ha).representationDiagMeasure ξ) ℂ g) (Lp.memLp
       _)]
-  exact (MemLp.toLp_eq_toLp_iff _ _).2 (ContinuousMap.coeFn_toLp _ g).symm
+  apply (MemLp.toLp_eq_toLp_iff _ _).2
+  filter_upwards [ContinuousMap.coeFn_toLp (𝕜 := ℂ) (p := 2)
+    ((cfcHom ha).representationDiagMeasure ξ) g]
+    with x hx
+  rw [BoundedBorelFunction.ofContinuousMap_apply, hx]
 
 end Density
 
@@ -257,8 +206,10 @@ noncomputable def cyclicIsometry (ha : IsStarNormal a) (ξ : H) :
 
 /-- **The defining property of the cyclic isometry**: on the class of a bounded measurable
 symbol it is the Borel calculus at `ξ`. -/
-theorem cyclicIsometry_symbolToLp (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
-    cyclicIsometry ha ξ (symbolToLp ha ξ f) = borelCalculus ha (isBddMeasurable_coe f) ξ :=
+theorem cyclicIsometry_symbolToLp (ha : IsStarNormal a) (ξ : H)
+    (f : BoundedBorelFunction (spectrum ℂ a)) :
+    haveI := ha
+    cyclicIsometry ha ξ (symbolToLp ha ξ f) = a.borelCalculus f ξ :=
   LinearMap.extendOfNorm_eq (denseRange_symbolToLp ha ξ)
     (exists_norm_symbolCalculus_le ha ξ) f
 
@@ -277,7 +228,9 @@ theorem cyclicIsometry_mem_cyclicSubspace (ha : IsStarNormal a) (ξ : H)
   refine (denseRange_symbolToLp ha ξ).induction_on F
     ((isClosed_cyclicSubspace ha ξ).preimage (cyclicIsometry ha ξ).continuous) fun f => ?_
   rw [cyclicIsometry_symbolToLp]
-  exact borelCalculus_apply_mem_cyclicSubspace ha (isBddMeasurable_coe f) ξ
+  have h := borelCalculus_apply_mem_cyclicSubspace ha (.ofBoundedBorelFunction f) ξ
+  simpa only [borelCalculus_eq_native,
+    IsBddMeasurable.toBoundedBorelFunction_ofBoundedBorelFunction] using h
 
 /-- **The range of the cyclic isometry is the cyclic subspace.**
 
@@ -289,47 +242,29 @@ theorem range_cyclicIsometry (ha : IsStarNormal a) (ξ : H) :
   · obtain ⟨F, rfl⟩ := hy
     exact cyclicIsometry_mem_cyclicSubspace ha ξ F
   · refine cyclicSubspace_le ha (isClosed_range_cyclicIsometry ha ξ) fun f hf => ?_
-    exact ⟨symbolToLp ha ξ ⟨f, mem_bddSymbols.mpr hf⟩,
-      cyclicIsometry_symbolToLp ha ξ ⟨f, mem_bddSymbols.mpr hf⟩⟩
+    refine ⟨symbolToLp ha ξ hf.toBoundedBorelFunction, ?_⟩
+    rw [borelCalculus_eq_native]
+    exact cyclicIsometry_symbolToLp ha ξ hf.toBoundedBorelFunction
 
 end Isometry
 
 section Intertwining
 
-/-- The coordinate multiple of a bounded measurable symbol is again bounded measurable. -/
-theorem isBddMeasurable_coord_mul {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
-    IsBddMeasurable (fun w : spectrum ℂ a => (w : ℂ) * f w) :=
-  (isBddMeasurable_coord (a := a)).mul hf
-
-/-- The coordinate multiple of a bounded measurable symbol, as an element of `bddSymbols`. -/
-theorem coordMul_mem_bddSymbols (f : bddSymbols a) :
-    (fun w : spectrum ℂ a => (w : ℂ) * (f : spectrum ℂ a → ℂ) w) ∈ bddSymbols a :=
-  mem_bddSymbols.mpr (isBddMeasurable_coord_mul (isBddMeasurable_coe f))
-
-/-- **The intertwining law on symbols.**  Multiplying a symbol by the coordinate is applying
-the operator to the value of the calculus.
-
-This needs no spectral theorem: `borelCalculus_coord` says the calculus of the inclusion symbol
-is `a` itself, and `borelCalculus_mul` says the calculus is multiplicative. -/
-theorem symbolCalculus_coord_mul (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
-    symbolCalculus ha ξ ⟨fun w : spectrum ℂ a => (w : ℂ) * (f : spectrum ℂ a → ℂ) w,
-        coordMul_mem_bddSymbols f⟩
+/-- Multiplying a symbol by the coordinate applies the operator to the calculus at the vector. -/
+theorem symbolCalculus_coord_mul (ha : IsStarNormal a) (ξ : H)
+    (f : BoundedBorelFunction (spectrum ℂ a)) :
+    symbolCalculus ha ξ
+        (BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ a)) * f)
       = a (symbolCalculus ha ξ f) := by
-  have h := borelCalculus_mul ha (isBddMeasurable_coord (a := a)) (isBddMeasurable_coe f)
-  rw [borelCalculus_coord ha] at h
-  have h2 := congrArg (fun T : H →L[ℂ] H => T ξ) h
-  simpa using h2
+  have := ha
+  rw [symbolCalculus_apply, symbolCalculus_apply, map_mul, a.borelCalculus_restrict_id]
+  rfl
 
-/-- **The intertwining law, through the isometry.**  On the image of a bounded measurable
-symbol, the cyclic isometry carries multiplication by the coordinate to the action of `a`.
-
-Together with `range_cyclicIsometry` this identifies `a` on the cyclic subspace with
-multiplication by the coordinate on `L²(μ_ξ)`: the two agree on a dense subspace, and both
-sides are continuous. -/
-theorem cyclicIsometry_coord_mul (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
+/-- On symbols the cyclic isometry intertwines coordinate multiplication with the operator. -/
+theorem cyclicIsometry_coord_mul (ha : IsStarNormal a) (ξ : H)
+    (f : BoundedBorelFunction (spectrum ℂ a)) :
     cyclicIsometry ha ξ (symbolToLp ha ξ
-        ⟨fun w : spectrum ℂ a => (w : ℂ) * (f : spectrum ℂ a → ℂ) w,
-          coordMul_mem_bddSymbols f⟩)
+        (BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ a)) * f))
       = a (cyclicIsometry ha ξ (symbolToLp ha ξ f)) := by
   rw [cyclicIsometry_symbolToLp, cyclicIsometry_symbolToLp]
   exact symbolCalculus_coord_mul ha ξ f
@@ -363,15 +298,19 @@ theorem coeFn_spectrumCoordinateLp_multiplicationOperator (ha : IsStarNormal a) 
 
 /-- On the class of a bounded measurable symbol, coordinate multiplication is multiplication
 of symbols. -/
-theorem coordMulLp_symbolToLp (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
+theorem coordMulLp_symbolToLp (ha : IsStarNormal a) (ξ : H)
+    (f : BoundedBorelFunction (spectrum ℂ a)) :
     Lp.multiplicationOperator (spectrumCoordinateLp ha ξ) (symbolToLp ha ξ f)
-      = symbolToLp ha ξ ⟨fun w : spectrum ℂ a => (w : ℂ) * (f : spectrum ℂ a → ℂ) w,
-        coordMul_mem_bddSymbols f⟩ := by
+      = symbolToLp ha ξ (BoundedBorelFunction.ofContinuousMap
+        ((ContinuousMap.id ℂ).restrict (spectrum ℂ a)) * f) := by
   refine Lp.ext ?_
   filter_upwards [coeFn_spectrumCoordinateLp_multiplicationOperator ha ξ (symbolToLp ha ξ f),
     coeFn_symbolToLp ha ξ f,
-    coeFn_symbolToLp ha ξ ⟨_, coordMul_mem_bddSymbols f⟩] with w hmul hf hprod
-  rw [hmul, hf, hprod]
+    coeFn_symbolToLp ha ξ
+      (BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ a)) * f)]
+    with w hmul hf hprod
+  rw [hmul, hf, hprod, mul_apply, BoundedBorelFunction.ofContinuousMap_apply]
+  rfl
 
 /-- **The multiplication model.**  The cyclic isometry intertwines multiplication by the
 coordinate on `L²(μ_ξ)` with the operator `a` on `H`:

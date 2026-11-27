@@ -212,25 +212,17 @@ section CyclicIsometry
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable {A : H →L[ℂ] H}
 
-/-- The pointwise conjugate of a bounded measurable symbol, as a bounded measurable symbol. -/
-def conjSymbol (f : TauCeti.BorelCalculus.bddSymbols A) :
-    TauCeti.BorelCalculus.bddSymbols A :=
-  ⟨fun x => (starRingEnd ℂ) ((f : _root_.spectrum ℂ A → ℂ) x),
-    TauCeti.BorelCalculus.mem_bddSymbols.mpr
-      (TauCeti.BorelCalculus.isBddMeasurable_coe f).conj⟩
-
 /-- **Conjugating an `L²` class conjugates the symbol.**  The symbol-to-`L²` map intertwines
-`conjSymbol` with `star`. -/
+conjugation on the symbol with pointwise `star` on the class. -/
 theorem star_symbolToLp (hA : IsStarNormal A) (ξ : H)
-    (f : TauCeti.BorelCalculus.bddSymbols A) :
+    (f : BoundedBorelFunction (_root_.spectrum ℂ A)) :
     star (TauCeti.BorelCalculus.symbolToLp hA ξ f)
-      = TauCeti.BorelCalculus.symbolToLp hA ξ (conjSymbol f) := by
+      = TauCeti.BorelCalculus.symbolToLp hA ξ (star f) := by
   refine Lp.ext ?_
   filter_upwards [Lp.coeFn_star (TauCeti.BorelCalculus.symbolToLp hA ξ f),
     TauCeti.BorelCalculus.coeFn_symbolToLp hA ξ f,
-    TauCeti.BorelCalculus.coeFn_symbolToLp hA ξ (conjSymbol f)] with x h1 h2 h3
-  rw [h1, Pi.star_apply, h2, h3]
-  rfl
+    TauCeti.BorelCalculus.coeFn_symbolToLp hA ξ (star f)] with x h1 h2 h3
+  rw [h1, Pi.star_apply, h2, h3, BoundedBorelFunction.star_apply]
 
 end CyclicIsometry
 
@@ -258,9 +250,17 @@ theorem cyclicIsometry_star (hT : IsSelfAdjoint T) {ξ : Eℂ} (hξ : conjugatio
         ((conjugation (E := E)).continuous.comp
           (TauCeti.BorelCalculus.cyclicIsometry _ ξ).continuous)) fun f => ?_
   rw [star_symbolToLp, TauCeti.BorelCalculus.cyclicIsometry_symbolToLp,
-    TauCeti.BorelCalculus.cyclicIsometry_symbolToLp,
-    conjugation_borelCalculus_of_fixed hT (TauCeti.BorelCalculus.isBddMeasurable_coe f) hξ]
-  rfl
+    TauCeti.BorelCalculus.cyclicIsometry_symbolToLp]
+  let hf := TauCeti.BorelCalculus.IsBddMeasurable.ofBoundedBorelFunction f
+  have h := conjugation_borelCalculus_of_fixed hT hf hξ
+  have hstar : hf.conj.toBoundedBorelFunction = star f :=
+    BoundedBorelFunction.ext fun x => by
+      rw [TauCeti.BorelCalculus.IsBddMeasurable.toBoundedBorelFunction_apply,
+        BoundedBorelFunction.star_apply]
+      rfl
+  simpa only [TauCeti.BorelCalculus.borelCalculus_eq_native,
+    TauCeti.BorelCalculus.IsBddMeasurable.toBoundedBorelFunction_ofBoundedBorelFunction, hstar]
+    using h.symm
 
 end Equivariance2
 

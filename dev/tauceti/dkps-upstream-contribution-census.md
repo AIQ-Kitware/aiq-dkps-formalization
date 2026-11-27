@@ -1,5 +1,39 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native bounded Borel symbols in the cyclic models
+
+The complex and real spectrum cyclic models now take
+`BoundedBorelFunction` directly. Bryan Ehrlich's #14874
+(`57555a42c8b9`, SA-B01) supplies the pointwise star algebra and
+measurable pullback. #19548 (`d26a5d70ae3a`, SA-B37) supplies the
+supremum norm. The old symbol submodules, real-spectrum admissibility
+predicate, and paper-local conjugate-symbol construction are retired.
+The real-spectrum reindexing uses the two native pullbacks and is a
+star algebra equivalence. It retains the original pointwise formulas
+in both directions.
+[PR #14874](https://github.com/TauCetiProject/TauCeti/pull/14874) ·
+[PR #19548](https://github.com/TauCetiProject/TauCeti/pull/19548)
+
+The cyclic vector evaluation and coordinate multiplication use the native
+bounded Borel calculus from #28859. The squared-norm proof uses
+`Lp.norm_sq_eq_integral_of_ae_eq` from Forgejo #6923 (`38116cc7d762`),
+which covers arbitrary normed additive coefficient groups. DKPS retains
+the cyclic-density, extension, range and unitary intertwining arguments.
+Existing customers of the raw complex-spectrum admissibility predicate
+use its conversion to and from the bundled symbol.
+[PR #28859](https://github.com/TauCetiProject/TauCeti/pull/28859) ·
+[Forgejo #6923](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/6923)
+
+The DKPS symbol construction dates to `2696f12ced32` and the
+real-spectrum transport to `3bbead40e6e5` (Jon Crall with Claude Fable 5
+and Claude Opus 5 respectively, Kitware 2026, Apache-2.0). Direct DKPS
+proof descent for the TauCeti implementations is unestablished.
+
+The focused cyclic builds (8987 jobs), full default build (22676 jobs),
+and combined Challenge and result semantic-surface build (22382 jobs)
+passed without warnings. The name comparison reported the same 49
+baseline findings.
+
 ## November 27 native real-part and conjugation APIs for Lᵖ
 
 The real multiplicity models now use the inclusion `Lp.ofRealLI`, real

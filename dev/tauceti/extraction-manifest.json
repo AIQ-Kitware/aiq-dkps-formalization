@@ -7562,6 +7562,78 @@
       "accepted_head": "810b9af686f5554b84d37443b360a14e421ff0c2",
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "November 27. Replace the local fixed submodule and isometric equivalence with the native selfAdjoint carrier, scalar inclusion, real part and inverse identity. Retype the multiplicity operator preservation and multiplier intertwiners from 9ef7d61e5c9eed2081697966b67c489807456830 on these native maps. Preserve the arbitrary-exponent real-representative characterizations and both inverse identities at Mathlib's direct compLp operations. The real-valued witness uses #36916's star_eq_self_of_ae_eq_ofReal (31c225fb24e8b6d2d6228e341c17e4b627745c83). #40879 (d2255bc079f6322a02cd0a32e45f5b6656d7fe0c, accepted head 2838701651d7dc45a04f3fc8852adbd4daa939b8) supplies norm_ofRealCLM_compLp for every exponent. DKPS proof descent for these integrations is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicModel",
+      "source_declarations": [
+        "TauCeti.norm_toLp_two_sq",
+        "TauCeti.norm_Lp_two_sq",
+        "TauCeti.BorelCalculus.bddSymbols",
+        "TauCeti.BorelCalculus.mem_bddSymbols",
+        "TauCeti.BorelCalculus.isBddMeasurable_coe",
+        "TauCeti.BorelCalculus.memLp_two_of_isBddMeasurable",
+        "TauCeti.BorelCalculus.isBddMeasurable_coord_mul",
+        "TauCeti.BorelCalculus.coordMul_mem_bddSymbols",
+        "TauCeti.DavisKahan.RealSpectralRestriction.conjSymbol"
+      ],
+      "original_source_anchor": "2696f12ced322d46f1fb896c6132524d866f2768:ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/CyclicModel.lean; 40ba298bcc4bd54d9ce8f3ea8e21f1dce37a57ab:DavisKahan/SpectralTheory/Real/RealCyclicDecomposition.lean.",
+      "authors_license": "Jon Crall and Claude Fable 5 for CyclicModel, Jon Crall and Claude Opus 5 for RealCyclicDecomposition, Kitware 2026, Apache-2.0.",
+      "final_tauceti_modules": [
+        "TauCeti.MeasureTheory.Function.BoundedBorel",
+        "TauCeti.MeasureTheory.Function.Lp.Norm",
+        "TauCeti.Analysis.InnerProductSpace.BorelCalculus.Basic"
+      ],
+      "final_declarations": [
+        "TauCeti.BoundedBorelFunction",
+        "TauCeti.BoundedBorelFunction.ofFunction",
+        "TauCeti.BoundedBorelFunction.ofContinuousMap",
+        "TauCeti.BoundedBorelFunction.norm_coe_le_norm",
+        "TauCeti.BoundedBorelFunction.star_apply",
+        "MeasureTheory.Lp.integral_norm_sq_eq_norm_sq",
+        "MeasureTheory.Lp.norm_sq_eq_integral_of_ae_eq",
+        "ContinuousLinearMap.borelCalculus",
+        "ContinuousLinearMap.borelCalculus_restrict_id"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/14874",
+      "integration": "57555a42c8b9ce4b90d39b639588cebcf07b5a7d",
+      "roadmap_targets": [
+        "SA-B01",
+        "SA-B37"
+      ],
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27. #14874 introduces the bounded Borel algebra and measurable pullback. #19548 (d26a5d70ae3aa7dbbe2fab4faa6475869827e498) equips the carrier with the supremum norm. Evaluate the native #28859 calculus (0ec5eb534c79f6de1055a7a522d295f35550b996) at the cyclic vector and use ordinary multiplication and star of native symbols. Forgejo #6923 (38116cc7d762b7624c2e2ae832a95b1f0a98af7d, accepted head 895910183e2299d9ee2ed22cef43e9e361cc8816) supplies the squared L² norm for any a.e. representative, using the earlier #11905 class-norm identity (cf93e5a27eafbefccc4175e2184aa0013b54f00e). Keep the cyclic extension, density, range and intertwining proofs and the real conjugation argument. The raw admissibility interface remains for its existing customers. Direct DKPS proof descent for the native suppliers is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.RealSpectrumBorelSymbols",
+      "source_declarations": [
+        "TauCeti.BorelCalculus.IsRealSpectrumBddMeasurable",
+        "TauCeti.BorelCalculus.IsRealSpectrumBddMeasurable.add",
+        "TauCeti.BorelCalculus.IsRealSpectrumBddMeasurable.const_smul",
+        "TauCeti.BorelCalculus.realSpectrumBddSymbols",
+        "TauCeti.BorelCalculus.mem_realSpectrumBddSymbols",
+        "TauCeti.BorelCalculus.isRealSpectrumBddMeasurable_coe",
+        "TauCeti.BorelCalculus.IsRealSpectrumBddMeasurable.comp_realSpectrumHomeomorph",
+        "TauCeti.BorelCalculus.IsBddMeasurable.comp_realSpectrumHomeomorph_symm",
+        "TauCeti.BorelCalculus.isBddMeasurable_comp_realSpectrumHomeomorph_iff",
+        "TauCeti.BorelCalculus.realSpectrumBddSymbolsEquiv",
+        "TauCeti.BorelCalculus.coe_realSpectrumBddSymbolsEquiv",
+        "TauCeti.BorelCalculus.coe_realSpectrumBddSymbolsEquiv_symm",
+        "TauCeti.BorelCalculus.realSpectrumBddSymbolsEquiv_apply_apply",
+        "TauCeti.BorelCalculus.isRealSpectrumBddMeasurable_realCoord"
+      ],
+      "original_source_anchor": "3bbead40e6e50a425d35db16f4fe4e898c475713:ForTauCeti/Analysis/InnerProductSpace/RealSpectrumBorelSymbols.lean; b5ef92d27f1ae6f9c1e2af3c45d25c9747d74fd3:ForTauCeti/Analysis/InnerProductSpace/RealSpectrumIntertwining.lean.",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.MeasureTheory.Function.BoundedBorel",
+      "final_declarations": [
+        "TauCeti.BoundedBorelFunction",
+        "TauCeti.BoundedBorelFunction.compStarAlgHom'",
+        "TauCeti.BoundedBorelFunction.compStarAlgHom'_apply",
+        "StarAlgEquiv.ofStarAlgHom"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/14874",
+      "integration": "57555a42c8b9ce4b90d39b639588cebcf07b5a7d",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27. Retire the real-spectrum admissibility predicate and submodule. The local spectrum-specific realSpectrumBorelEquiv is assembled from the two native pullbacks and preserves the original reindexing as a star algebra equivalence. The set-level measurability helpers and the prepared real-coordinate bounds remain. No DKPS proof descent is established for #14874."
     }
   ],
   "current_consumption_pin": "dde09e0dcec0e44e75739723bb2ba5baae6ae417"

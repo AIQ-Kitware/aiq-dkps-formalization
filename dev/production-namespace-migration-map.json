@@ -2928,7 +2928,7 @@
   "TauCeti.DavisKahan.Experimental.RealSpectralRestriction.complexify_realSelfAdjointSpectralProjection": "TauCeti.DavisKahan.RealSpectralRestriction.complexify_realSelfAdjointSpectralProjection",
   "TauCeti.DavisKahan.Experimental.RealSpectralRestriction.complexify_realSpectralCutoff": "TauCeti.DavisKahan.RealSpectralRestriction.complexify_realSpectralCutoff",
   "TauCeti.DavisKahan.Experimental.RealSpectralRestriction.conjComap": "TauCeti.DavisKahan.RealSpectralRestriction.conjComap",
-  "TauCeti.DavisKahan.Experimental.RealSpectralRestriction.conjSymbol": "TauCeti.DavisKahan.RealSpectralRestriction.conjSymbol",
+  "TauCeti.DavisKahan.Experimental.RealSpectralRestriction.conjSymbol": "",
   "TauCeti.DavisKahan.Experimental.RealSpectralRestriction.conjugateOperator_borelCalculus": "TauCeti.DavisKahan.RealSpectralRestriction.conjugateOperator_borelCalculus",
   "TauCeti.DavisKahan.Experimental.RealSpectralRestriction.conjugateOperator_boundedPVM_proj": "TauCeti.DavisKahan.RealSpectralRestriction.conjugateOperator_boundedPVM_proj",
   "TauCeti.DavisKahan.Experimental.RealSpectralRestriction.conjugateOperator_cayley": "TauCeti.DavisKahan.RealSpectralRestriction.conjugateOperator_cayley",

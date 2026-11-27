@@ -19,7 +19,8 @@ for a self-adjoint `a`.
 ## Why this costs nothing
 
 The three preceding modules did all the work.  `realSpectrumHomeomorph` moved the spectrum,
-`realSpectrumBddSymbols` moved the symbols, and `realSpectrumDiagMeasureLpEquiv` moved the
+`realSpectrumBorelEquiv` reindexes bounded Borel symbols, and
+`realSpectrumDiagMeasureLpEquiv` moved the
 `L²` space -- and that last transport is a linear isometric *equivalence*, not merely a linear
 isometry, because the underlying map is a Borel isomorphism.  So the real-spectrum model is
 literally the old isometry precomposed with an isometric equivalence, and the range of a
@@ -110,10 +111,11 @@ class is the class of a bounded measurable symbol, the real-spectrum model retur
 of the Borel calculus of that symbol at `ξ` -- which is the defining property
 `cyclicIsometry_symbolToLp` of the complex-spectrum model, moved across the transport. -/
 theorem realSpectrumCyclicIsometry_eq_borelCalculus (ha : IsSelfAdjoint a) (ξ : H)
-    (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) (f : bddSymbols a)
+    (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ))
+    (f : BoundedBorelFunction (spectrum ℂ a))
     (hF : realSpectrumDiagMeasureLpEquiv ha ξ F = symbolToLp ha.isStarNormal ξ f) :
-    realSpectrumCyclicIsometry ha ξ F
-      = borelCalculus ha.isStarNormal (isBddMeasurable_coe f) ξ := by
+    haveI := ha.isStarNormal
+    realSpectrumCyclicIsometry ha ξ F = a.borelCalculus f ξ := by
   rw [realSpectrumCyclicIsometry_apply, hF]
   exact cyclicIsometry_symbolToLp ha.isStarNormal ξ f
 
