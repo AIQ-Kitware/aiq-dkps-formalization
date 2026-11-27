@@ -4263,8 +4263,11 @@
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
       "source_declarations": [
         "cayley_intertwines",
+        "cfc_apply_of_apply_eq_real_smul",
+        "cfc_intertwines_selfAdjoint",
         "cfcHom_cayley_intertwines",
         "cfcHom_intertwines",
+        "cfcHom_intertwines_selfAdjoint",
         "continuous_symbolRestrict",
         "resolvent_intertwines",
         "resolvent_intertwines'",
@@ -4273,20 +4276,30 @@
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner",
+      "final_tauceti_modules": [
+        "TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Intertwining",
+        "TauCeti.Analysis.Normed.Operator.LinearPMap.Cayley"
+      ],
       "ownership_class": "tauceti",
       "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
-      "provenance_class": "partially upstreamed; Cayley intertwining now forwards to Tau Ceti",
+      "provenance_class": "accepted resolvent, Cayley and continuous-calculus APIs; direct DKPS proof descent unestablished",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
-        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
-        "Mathlib"
+        "Mathlib.Analysis.InnerProductSpace.Adjoint",
+        "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
+        "TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Intertwining",
+        "TauCeti.Analysis.Normed.Operator.Banach"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "partially-upstreamed",
-      "upstream_pr": null,
-      "migration_note": "The local self-adjoint partial-map intertwiner now uses Tau Ceti's `Intertwines.comp_cayley_eq`; its consumers use the canonical inverse directly; additional functional-calculus API remains local."
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16184",
+      "integration": "78d22ee9e5dad58dbb36f72e7d9fb817c3aa2629",
+      "final_declarations": [
+        "LinearPMap.Intertwines.comp_eq_of_isResolventAt",
+        "LinearPMap.Intertwines.comp_cayley_eq",
+        "ContinuousLinearMap.comp_cfc_eq_cfc_comp"
+      ],
+      "migration_note": "November 27: Retire the local compact-symbol intertwining engines, their ancillary declarations and the two-sided resolvent facade. The two-sided law is from #15674 (8d3388cdba32302fd18e56cd33247e96c6ccd309); #34977 gave it its current namespace. SpectralProjectionNaturality uses native Cayley intertwining and the #28859 spectral commutant at 0ec5eb534c79f6de1055a7a522d295f35550b996. Rectangular continuous calculus over arbitrary RCLike follows from native comp_cfc_eq_cfc_comp after realification, using #16260 realification and the hypothesis-free calculus transport and spectrum comparison from #34009 (29dd569d83f3e7211a572d81abd1e26d959a2b6d). Keep the one-sided resolvent comparison at its weaker hypotheses and the arbitrary-dimensional eigenvector formulation. Sources: 1c3a75354d80f0df4225d66cd7cab8974bc4190a, cf073b9a202071425ec0c5b8dff1b79295d1d1a4, 9b6bf0033c16d8edabcfb95bde1ae97b019fe36f and ced824d83c4fb91b734042d888c2694bd0e99de8 (Jon Crall and, for SpectralProjectionNaturality, Claude Opus 5, Kitware 2026, Apache-2.0)."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",

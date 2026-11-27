@@ -6,7 +6,6 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
-public import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.BorelNatural
 
 /-!
@@ -15,30 +14,9 @@ public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.BorelNatural
 A unitary `e` commuting with a self-adjoint partial map `A` commutes with every
 spectral projection `E_A(B)`.
 
-This is the missing "Borel step" that `SeparatedIntertwiner` records as open in
-general: it carries an intertwining relation past the *continuous* functional
-calculus into the *bounded Borel* one.  In the generality of an arbitrary
-bounded intertwiner that is a monotone-class argument on the sesquilinear form.
-For a **unitary** intertwiner it is already available, because
-`BorelCalculus.borelCalculus_comp_val_of_intertwines` transports the diagonal
-measures themselves.  That is exactly the case a reducing-subspace argument
-needs, since a subspace reduces `A` if and only if its *reflection* -- a
-unitary -- commutes with `A`.
-
-Both spectral projections use `Complex.inverseCayleyCoord` to pull back real
-Borel sets. The comparison below relates the spectrum-subtype and complex
-plane versions of the indicator.
-
-## Sources
-
-*Follows nothing in particular*: the commutation that a reducing-subspace
-uniqueness argument needs between a spectral projection and a projection onto a
-reducing subspace.
-
-## Provenance
-
-*New.*  Composes `SeparatedIntertwiner.cayley_intertwines` with
-`BorelCalculus.specProjC_apply_of_intertwines`.
+The native Cayley intertwining theorem and the spectral commutant of the
+bounded Cayley transform give the commutation law. The comparison below
+relates the real and complex indicators using `Complex.inverseCayleyCoord`.
 -/
 
 public section
@@ -71,18 +49,16 @@ theorem specProjection_apply_of_unitary_intertwines (e : H ≃ₗᵢ[ℂ] H)
     (hint : ∀ x : A.domain, A ⟨e (x : H), hmaps x⟩ = e (A x))
     (B : Set ℝ) (hB : MeasurableSet B) (x : H) :
     e (specProjection hA B hB x) = specProjection hA B hB (e x) := by
-  have hcay : e.toLinearIsometry.toContinuousLinearMap ∘L A.cayley
-      = A.cayley ∘L e.toLinearIsometry.toContinuousLinearMap :=
-    cayley_intertwines hA hA hmaps hint
-  have he : ∀ z : H, e (A.cayley z) = A.cayley (e z) := by
-    intro z
-    have h := congrArg (fun T : H →L[ℂ] H => T z) hcay
-    simpa only [ContinuousLinearMap.coe_comp, Function.comp_apply,
-      LinearIsometry.coe_toContinuousLinearMap,
-      LinearIsometryEquiv.coe_toLinearIsometry] using h
-  rw [specProjection_eq_specProjC hA B hB]
-  exact BorelCalculus.specProjC_apply_of_intertwines (hA.isStarNormal_cayley) e he
-    (Complex.measurable_inverseCayleyCoord hB) x
+  let X := e.toLinearIsometry.toContinuousLinearMap
+  have hX : A.Intertwines A X := ⟨hmaps, fun y => (hint y).symm⟩
+  have hcay : Commute X A.cayley :=
+    hX.comp_cayley_eq hA.neg_I_mem_resolventSet hA.neg_I_mem_resolventSet
+  have := hA.isStarNormal_cayley
+  rw [specProjection_def, hA.spectralPVM_proj]
+  have hproj := (A.cayley.forall_commute_spectralPVM_proj_iff X).mpr hcay
+    ((fun w : _root_.spectrum ℂ A.cayley => Complex.inverseCayleyCoord (w : ℂ)) ⁻¹' B)
+    ((Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hB)
+  exact DFunLike.congr_fun hproj.eq x
 
 end LinearPMap
 end TauCeti

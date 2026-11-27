@@ -1,5 +1,36 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 Cayley and continuous-calculus intertwining
+
+The DKPS spectral projection naturality theorem now uses `LinearPMap.Intertwines.comp_cayley_eq`
+from #16184 (SA-D33/D34, integration `78d22ee9e5dad58dbb36f72e7d9fb817c3aa2629`)
+and the bounded spectral commutant from #28859. The rectangular real continuous
+calculus proof restricts scalars and applies the same #16184 integration's
+`ContinuousLinearMap.comp_cfc_eq_cfc_comp`, using realification from #16260
+and the spectrum and calculus transport laws from #34009. The original
+continuity hypothesis on the union of the two spectra suffices over every
+`RCLike` field, including in infinite dimension.
+[PR #16184](https://github.com/TauCetiProject/TauCeti/pull/16184) ·
+[PR #16260](https://github.com/TauCetiProject/TauCeti/pull/16260) ·
+[PR #34009](https://github.com/TauCetiProject/TauCeti/pull/34009) ·
+[PR #28859](https://github.com/TauCetiProject/TauCeti/pull/28859)
+
+The local compact-symbol proof engines, Cayley helper and two-sided resolvent
+facade retire. The accepted two-sided law came from #15674 (SA-D31/D32,
+integration `8d3388cdba32302fd18e56cd33247e96c6ccd309`). DKPS retains the
+asymmetric one-sided resolvent comparison and its arbitrary-dimensional
+eigenvector formulation. The older DKPS sources are `1c3a75354`, `cf073b9a2`
+and `9b6bf0033` for intertwining and `ced824d83` for spectral projection
+naturality (Jon Crall and, in the latter module, Claude Opus 5, Kitware 2026,
+Apache-2.0). #16184 credits Mathlib's `Commute.cfcHom` proof. #16260 separately
+keeps credit for the older DKPS real calculus and discloses independently
+written realification proofs. These dependencies do not establish proof descent
+from the retired DKPS declarations.
+[PR #15674](https://github.com/TauCetiProject/TauCeti/pull/15674)
+
+The focused build (8911 jobs), full default build (22612 jobs), and combined
+Challenge and result semantic-surface audit (22330 jobs) passed without warnings.
+
 ## November 27 compact-time Yosida convergence consumption
 
 TauCeti accepted our SA-E24 submission from head
