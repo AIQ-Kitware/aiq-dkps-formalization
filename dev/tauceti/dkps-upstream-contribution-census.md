@@ -3,14 +3,14 @@
 November 24 late review repairs:
 
 - [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736) at
-  `0e2c7a425dfab5cae248f10783751561000fb7ea` exposes the SA-E24
+  `c00248fbb5d67ac97142e3815566f2390bdcf111` exposes the SA-E24
   `UniformCauchySeqOn` endpoint along cocompact real shifts on every bounded
   time set. A Lean probe derives the earlier positive-integer estimate.
   `ContinuousLinearMap.restrictScalars_exp` generalizes the accepted private
   Stone proof to RCLike endomorphisms. Stone now applies it directly. The
   Duhamel and convergence ancestry remains DKPS/Spectra. The latest repair
-  states the skew-adjoint generator and time-segment hypotheses, applies pointwise
-  scalar-restriction laws, and shares the scaled-difference norm calculation.
+  makes the scalar casts explicit at both Yosida call sites and documents the
+  simultaneous distance bound in the shared metric criterion.
   Focused compilation (6448 jobs) and lint, axiom and style checks passed.
 - #44700 at `6c71d1289130f9b379a1a5d6d42204080d86196f` covers the opposite-shift example in Toeplitz Layer 6 §6.1.
   The block-section and inverse matrix entry APIs now use the
