@@ -41,15 +41,6 @@ Write $\sym{OrthogonalGroup}$ for the orthogonal group of real
 $n\times n$ matrices, defined by $\sym{Wcompetitor}^T\sym{Wcompetitor}=\sym{Identity}$.
 
 % Note:
-% this corresponds to exists_minimizing_real_nuclear_transport_matching
-% in ../../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean
-%  It states that an orthogonal transporter attains the matching cost and
-%  minimizes trace displacement over every orthogonal competitor.
-%  The matching costs are defined in RealMatchingExponent.lean realNuclearMatchingCost
-%  (DavisKahan/FiniteDimensional/DirectRotation/RealMatchingExponent.lean:136).
-%  The endpoint proof uses the 1<p<2 theorem in RealMatchingAttainment.lean:296
-%  (DavisKahan/FiniteDimensional/DirectRotation/RealMatchingAttainment.lean:296)
-%  exists_minimizing_real_schatten_transport_matching
 \begin{theorem}[Real trace-norm matching reduction]%
 \label{thm:real-matching-example}
 For equal-dimensional real subspaces $\sym{MatchingSourceSubspace},\sym{MatchingTargetSubspace}$ as above,
@@ -82,12 +73,12 @@ The exponent-dependent matching costs are developed in the proof below.
 %   realPositiveSchattenMatchingMinimum_one.
 \noindent\begin{minipage}{\linewidth}
 \begin{lstlisting}[style=leanpaper,
-  caption={Lean presentation theorems for the trace-norm and Schatten
-  matching reductions. The omitted context supplies a finite-dimensional
-  real inner-product space \texttt{E}. The set \texttt{realTransportCosts p K L}
-  contains the power costs $\|\sym{Identity}-T\|_p^p$ of orthogonal transporters
-  $T$ carrying $K$ onto $L$. The function \texttt{positivePrincipalAngles}
-  retains the labels of the strictly positive principal angles.},
+  caption={The attained trace-norm and Schatten matching minima.
+  Here \texttt{E} is a finite-dimensional real inner-product space.
+  The set \texttt{realTransportCosts p K L} consists of the costs
+  $\|\sym{Identity}-T\|_p^p$ for orthogonal $T$ carrying $K$ onto $L$.
+  The function \texttt{positivePrincipalAngles} keeps the original labels
+  of the positive angles, including repeated values.},
   label={lst:real-transport-matching}]
 theorem real_nuclear_transport_matching
     (K L : Submodule Real E)

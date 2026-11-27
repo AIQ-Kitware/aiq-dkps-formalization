@@ -130,29 +130,29 @@ $\sym{theta}=\min\{\sym{EpsilonAngle}/2,\sym{PiConstant}/4\}$.
 \Cref{lst:prop44-refutation} presents the formalized counterexample for every
 positive acute angle.
 
-% Source declarations (namespace TauCeti.DavisKahan.FiniteDimensional):
-% DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean:
-%   SmallAngleCounterexample.Ortho4, SmallAngleCounterexample.traceDisplacement,
-%   SmallAngleCounterexample.directRotation_not_traceNorm_optimal
-% DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:
-%   E4 (in ShortRotationCounterexample)
+% Source: DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean,
+% TauCeti.DavisKahan.FiniteDimensional.SmallAngleCounterexample.explicit_traceNorm_counterexample.
+% U4 is defined in ShortRotationCounterexample.lean.
 \noindent\begin{minipage}{\linewidth}
 \begin{lstlisting}[style=leanpaper,
-  caption={Lean presentation of the counterexample to Proposition~4.4. Here \texttt{E4} denotes $\sym{RealField}^4$,
-  \texttt{Ortho4} its orthogonal transformations, and
-  \texttt{traceDisplacement W} the trace norm of $\sym{Identity}-W$.
-  Principal angles are indexed from zero in decreasing order.},
+  caption={The explicit counterexample to Proposition~4.4.
+  In $\sym{RealField}^4$, \texttt{U4} is the first coordinate plane,
+  \texttt{Wequiv theta} is the orthogonal map in~\eqref{eq:wtheta},
+  and \texttt{V4 theta} is its image of \texttt{U4}.
+  Principal angles are indexed from zero in decreasing order.
+  \texttt{traceDisplacement W} is $\|\sym{Identity}-W\|_1$.},
   label={lst:prop44-refutation}]
-theorem directRotation_not_traceNorm_optimal
+theorem explicit_traceNorm_counterexample
     (theta : Real) (hpos : 0 < theta)
     (hangle : theta < Real.pi / 2) :
-    (*@$\exists$@*) (U V : Submodule Real E4)
-      (hUV : Submodule.IsAcute U V) (W : Ortho4),
-      U.map W.toLinearMap = V (*@$\land$@*)
-      Submodule.principalAngles U V 0 = theta (*@$\land$@*)
-      Submodule.principalAngles U V 1 = theta (*@$\land$@*)
-      traceDisplacement W <
-        traceDisplacement (directRotation U V hUV) := by (*@\laaettr@*)
+    let V := V4 theta
+    let W := Wequiv theta
+    let R := directRotation U4 V
+      (acute theta (cos_pos theta hpos hangle))
+    U4.map W.toLinearMap = V (*@$\land$@*)
+      U4.principalAngles V 0 = theta (*@$\land$@*)
+      U4.principalAngles V 1 = theta (*@$\land$@*)
+      traceDisplacement W < traceDisplacement R := by (*@\laaettr@*)
 \end{lstlisting}
 \end{minipage}\par
 

@@ -38,11 +38,22 @@ open scoped ENNReal Topology
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [FiniteDimensional ℝ E]
 
+/-- The positive principal angles, indexed by their original labels so
+equal positive angles retain their multiplicities. -/
+def positivePrincipalAngles (K L : Submodule ℝ E)
+    (j : {j : Fin (Module.finrank ℝ K) // 0 < K.principalAngles L j}) : ℝ :=
+  K.principalAngles L j.val
+
 /-- The actual displacement operators of the entire real orthogonal
 transport fiber. This includes all determinant classes and all mixing. -/
 def realTransportDisplacements (K L : Submodule ℝ E) : Set (E →L[ℝ] E) :=
   (fun W : E →L[ℝ] E => 1-W) ''
     {W | W ∈ unitary (E →L[ℝ] E) ∧ W * K.starProjection * star W = L.starProjection}
+
+/-- All Schatten power costs of real orthogonal transports from `K` onto `L`,
+for finite exponents `p ≥ 1`. Sum the displacement singular values raised to `p`. -/
+def realTransportCosts (p : ℝ) (K L : Submodule ℝ E) : Set ℝ :=
+  singularValuePowerSum p '' realTransportDisplacements K L
 
 /-- The literal spectral-power minimum over actual ambient transports. -/
 def realTransportPowerMinimum (p : ℝ) (K L : Submodule ℝ E) : ℝ :=
@@ -155,6 +166,16 @@ private theorem nuclear_displacement (V : E ≃ₗᵢ[ℝ] E) :
     (1-(V : E →L[ℝ] E))
   simpa only [ENNReal.toReal_one, Real.rpow_one, displacement_toLinearMap] using h
 
+private theorem realTransportDisplacements_nonempty
+    (K L : Submodule ℝ E) (hKL : Module.finrank ℝ K = Module.finrank ℝ L) :
+    (realTransportDisplacements K L).Nonempty := by
+  let q := ENNReal.ofReal (3/2 : ℝ)
+  have hq : q.toReal = (3/2 : ℝ) := ENNReal.toReal_ofReal (by norm_num)
+  have : Fact (1 ≤ q) := ⟨ENNReal.one_le_ofReal.mpr (by norm_num)⟩
+  obtain ⟨V₀, hV₀, _, _⟩ := exists_minimizing_real_schatten_transport_matching
+    q ENNReal.ofReal_ne_top (by rw [hq]; norm_num) (by rw [hq]; norm_num) K L hKL
+  exact ⟨_, displacement_mem_of_map_eq K L V₀ hV₀⟩
+
 /-- The unrestricted real nuclear transport minimum is the closed finite
 matching value. An actual ambient orthogonal transporter attains it, and
 its accepted nuclear norm bounds every ambient orthogonal competitor.
@@ -171,13 +192,7 @@ theorem exists_minimizing_real_nuclear_transport_matching
         UnitarilyInvariantSeminorm.schatten ℝ E E 1 (LinearMap.id - T.toLinearMap) ≤
           UnitarilyInvariantSeminorm.schatten ℝ E E 1 (LinearMap.id - V.toLinearMap) := by
   have : CompleteSpace E := FiniteDimensional.completeSpace ℝ E
-  let q := ENNReal.ofReal (3/2 : ℝ)
-  have hq : q.toReal = (3/2 : ℝ) := ENNReal.toReal_ofReal (by norm_num)
-  have : Fact (1 ≤ q) := ⟨ENNReal.one_le_ofReal.mpr (by norm_num)⟩
-  obtain ⟨V₀, hV₀, _, _⟩ := exists_minimizing_real_schatten_transport_matching
-    q ENNReal.ofReal_ne_top (by rw [hq]; norm_num) (by rw [hq]; norm_num) K L hKL
-  have hne : (realTransportDisplacements K L).Nonempty :=
-    ⟨_, displacement_mem_of_map_eq K L V₀ hV₀⟩
+  have hne := realTransportDisplacements_nonempty K L hKL
   obtain ⟨B, hB, hvalue, hmin⟩ := exists_attains_singularValuePowerMinimum
     1 zero_lt_one (isCompact_realTransportDisplacements K L) hne
   rcases hB with ⟨W, ⟨hW, htrans⟩, rfl⟩
@@ -231,5 +246,43 @@ theorem exists_minimizing_real_schatten_transport_matching_of_one_le
     · simpa only [ENNReal.toReal_one, Real.rpow_one] using hc
     · simpa only [ENNReal.toReal_one, Real.rpow_one] using hmin V hV
   · exact exists_minimizing_real_schatten_transport_matching p hp hp1 hp2 K L hKL
+
+private theorem isLeast_realTransportPowerMinimum (p : ℝ) (hp : 0 < p)
+    (K L : Submodule ℝ E) (hKL : Module.finrank ℝ K = Module.finrank ℝ L) :
+    IsLeast (realTransportCosts p K L) (realTransportPowerMinimum p K L) := by
+  have : CompleteSpace E := FiniteDimensional.completeSpace ℝ E
+  obtain ⟨A, hA, hvalue, hmin⟩ := exists_attains_singularValuePowerMinimum p hp
+    (isCompact_realTransportDisplacements K L) (realTransportDisplacements_nonempty K L hKL)
+  change realTransportPowerMinimum p K L = singularValuePowerSum p A at hvalue
+  rw [hvalue]
+  refine ⟨Set.mem_image_of_mem _ hA, ?_⟩
+  rintro _ ⟨B, hB, rfl⟩
+  exact hmin hB
+
+/-- The trace-norm matching value is attained among all ambient orthogonal
+transports and is a lower bound for every such transport's trace cost. -/
+theorem real_nuclear_transport_matching
+    (K L : Submodule ℝ E) (hKL : Module.finrank ℝ K = Module.finrank ℝ L) :
+    IsLeast (realTransportCosts 1 K L)
+      (realNuclearMatchingMinimum (positivePrincipalAngles K L)) := by
+  have hmin := isLeast_realTransportPowerMinimum 1 zero_lt_one K L hKL
+  rw [realTransportPowerMinimum_one_eq_nuclearMatching K L hKL] at hmin
+  exact hmin
+
+/-- For `1 ≤ p < 2`, the positive-angle matching value is the attained least
+Schatten power cost over the entire real orthogonal transport fiber. -/
+theorem real_schatten_transport_matching
+    (p : ℝ) (hp1 : 1 ≤ p) (hp2 : p < 2)
+    (K L : Submodule ℝ E) (hKL : Module.finrank ℝ K = Module.finrank ℝ L) :
+    IsLeast (realTransportCosts p K L)
+      (realPositiveSchattenMatchingMinimum p (positivePrincipalAngles K L)) := by
+  rcases hp1.eq_or_lt with rfl | hp1
+  · rw [realPositiveSchattenMatchingMinimum_one]
+    · exact real_nuclear_transport_matching K L hKL
+    · intro j
+      exact ⟨K.principalAngles_nonneg L j.val, K.principalAngles_le_pi_div_two L j.val⟩
+  · have hmin := isLeast_realTransportPowerMinimum p (zero_lt_one.trans hp1) K L hKL
+    rw [realTransportPowerMinimum_eq_matching p hp1 hp2 K L hKL] at hmin
+    exact hmin
 
 end TauCeti.DavisKahan.FiniteDimensional.RealTransport

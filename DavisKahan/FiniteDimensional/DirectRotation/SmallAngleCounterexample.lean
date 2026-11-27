@@ -495,9 +495,23 @@ abbrev Ortho4 := E4 ≃ₗᵢ[ℝ] E4
 def traceDisplacement (W : Ortho4) : ℝ :=
   (LinearMap.id - W.toLinearMap).kyFanSum 4
 
-/-- A presentation of the counterexample at every positive acute angle.
-The two largest principal angles equal `theta`, and the competitor carries
-`U` onto `V` with strictly smaller trace displacement than the direct rotation. -/
+/-- The explicit four-dimensional competitor transports the source plane to
+its image, with both principal angles equal to `theta` and strictly less
+trace displacement than the canonical direct rotation. -/
+theorem explicit_traceNorm_counterexample
+    (theta : ℝ) (hpos : 0 < theta) (hangle : theta < Real.pi / 2) :
+    let V := V4 theta
+    let W := Wequiv theta
+    let R := directRotation U4 V (acute theta (cos_pos theta hpos hangle))
+    U4.map W.toLinearMap = V ∧
+      U4.principalAngles V 0 = theta ∧
+      U4.principalAngles V 1 = theta ∧
+      traceDisplacement W < traceDisplacement R := by
+  refine ⟨rfl, ?_, ?_, kyFanSum_lt theta hpos hangle⟩
+  · simpa using principalAngles_eq theta hpos hangle (0 : Fin 4) (by norm_num)
+  · simpa using principalAngles_eq theta hpos hangle (1 : Fin 4) (by norm_num)
+
+/-- The trace-norm counterexample at every positive acute angle. -/
 theorem directRotation_not_traceNorm_optimal
     (theta : ℝ) (hpos : 0 < theta) (hangle : theta < Real.pi / 2) :
     ∃ (U V : Submodule ℝ E4) (hUV : Submodule.IsAcute U V) (W : Ortho4),
@@ -505,11 +519,8 @@ theorem directRotation_not_traceNorm_optimal
       Submodule.principalAngles U V 0 = theta ∧
       Submodule.principalAngles U V 1 = theta ∧
       traceDisplacement W < traceDisplacement (directRotation U V hUV) := by
-  refine ⟨U4, V4 theta, acute theta (cos_pos theta hpos hangle), Wequiv theta,
-    rfl, ?_, ?_, ?_⟩
-  · simpa using principalAngles_eq theta hpos hangle (0 : Fin 4) (by norm_num)
-  · simpa using principalAngles_eq theta hpos hangle (1 : Fin 4) (by norm_num)
-  · exact kyFanSum_lt theta hpos hangle
+  exact ⟨U4, V4 theta, acute theta (cos_pos theta hpos hangle), Wequiv theta,
+    explicit_traceNorm_counterexample theta hpos hangle⟩
 
 /-- Recovering the sign-matrix competitor at the original angle. -/
 theorem Wmat_pi_div_four : Wmat (Real.pi / 4) = ShortRotationCounterexample.Wmat := by
