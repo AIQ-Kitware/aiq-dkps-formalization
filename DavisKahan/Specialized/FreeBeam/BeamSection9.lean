@@ -15,7 +15,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
 public import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
 public import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz
 public import ForTauCeti.MeasureTheory.MulLpAlgebra
 
@@ -815,8 +815,8 @@ theorem beamSpecProjection_lowSet_diff_eq_zero :
     TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint
         (beamLowSet \ ({0} : Set ℝ))
         (measurableSet_beamLowSet.diff (measurableSet_singleton 0)) = 0 :=
-  TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet
-    beamOperator_isSelfAdjoint _ _
+  beamOperator_isSelfAdjoint.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet
+    (measurableSet_beamLowSet.diff (measurableSet_singleton 0))
     (fun _ hlam => beamOperator_mem_resolventSet_of_mem_lowSet_diff hlam)
 
 /-- **Everything below the gap is a zero mode**: the spectral projection of the whole

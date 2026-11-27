@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
 /-!
 # The Sylvester spectral gap

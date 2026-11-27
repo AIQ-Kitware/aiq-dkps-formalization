@@ -10,7 +10,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
 /-!
 # Boundedness from a bounded spectrum
@@ -22,7 +22,7 @@ sharp centered estimate `‖A - (β+α)/2‖ ≤ (α-β)/2`.
 The proof assembles three facts about the native spectral measure
 `LinearPMap.spectralPVM`:
 
-* `specProjection_eq_zero_of_subset_resolventSet` — the spectral projection
+* `IsSelfAdjoint.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet` — the spectral projection
   vanishes off the spectrum, so `E([β,α]ᶜ) = 0`;
 * `ProjValMeasure.proj_compl` — complementation gives `E([β,α]) = 1`, so every
   vector lies in the spectral range of `[β, α]`;
@@ -78,8 +78,7 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
   -- the spectral projection of the complement vanishes
   have hprojc :
       TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl = 0 :=
-    TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _
-      hBm.compl hres
+    hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet hBm.compl hres
   -- the interval carries the full projection
   have hprojid :
       TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm

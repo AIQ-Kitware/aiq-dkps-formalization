@@ -10,7 +10,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import DavisKahan.Sylvester.ClosedSylvesterEquation
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic
 
 public section
 
@@ -23,16 +23,8 @@ This leaf converts half-line containment of the spectrum of a closed
 self-adjoint operator into the quadratic-form semibounds consumed by the ordered
 branches of the unbounded Sylvester theorem.
 
-Until 2026-07-29 the proof ran through Spectra's Born measure: the measure of a
-domain vector has its support in the spectrum, its first moment is the diagonal
-matrix element, and integrating the pointwise half-line inequality gave the form
-bound.  That route needs the identity function to be integrable against the
-measure, which is a second-moment fact.
-
-The native route needs no integral at all.  `E((-∞, c)) = 0` is the support
-statement of `ForTauCeti/…/LinearPMap/SpectralSupport.lean`, and the form bound
-then comes from the *bounded* one on `[c, τ]` in the limit `τ → ∞` —
-`TauCeti.LinearPMap.le_re_inner_of_specProjection_Iio_eq_zero`.
+The native support theorem makes the projection on the open complement
+vanish. Tau Ceti's half-line criterion gives the form bound on the domain.
 -/
 
 open scoped InnerProductSpace
@@ -58,16 +50,15 @@ theorem semiboundedBelow_of_spectrum_subset_Ici
   apply (LinearPMap.semiboundedBelow_iff _ _).mpr
   intro x
   have hzero :
-      TauCeti.LinearPMap.specProjection hA (Set.Iio c) measurableSet_Iio = 0 := by
-    refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _
-      measurableSet_Iio fun lam hlam => ?_
+      (A.spectralPVM hA).proj (Set.Iio c) measurableSet_Iio = 0 := by
+    refine hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Iio ?_
+    intro lam hlam
     by_contra hnot
     have hroot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
       rw [_root_.LinearPMap.mem_spectrum_iff]
       exact hnot
     exact absurd (hσ hroot) (by simpa using not_le.mpr hlam)
-  simpa using
-    TauCeti.LinearPMap.le_re_inner_of_specProjection_Iio_eq_zero hA hzero x
+  exact (hA.spectralPVM_proj_Iio_eq_zero_iff c).mp hzero x
 
 /-- Genuine spectral containment in `(-∞, c]` implies the matching upper
 quadratic-form bound. -/
@@ -80,16 +71,15 @@ theorem semiboundedAbove_of_spectrum_subset_Iic
   apply (LinearPMap.semiboundedAbove_iff _ _).mpr
   intro x
   have hzero :
-      TauCeti.LinearPMap.specProjection hA (Set.Ioi c) measurableSet_Ioi = 0 := by
-    refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _
-      measurableSet_Ioi fun lam hlam => ?_
+      (A.spectralPVM hA).proj (Set.Ioi c) measurableSet_Ioi = 0 := by
+    refine hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Ioi ?_
+    intro lam hlam
     by_contra hnot
     have hroot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
       rw [_root_.LinearPMap.mem_spectrum_iff]
       exact hnot
     exact absurd (hσ hroot) (by simpa using not_le.mpr hlam)
-  simpa using
-    TauCeti.LinearPMap.re_inner_le_of_specProjection_Ioi_eq_zero hA hzero x
+  exact (hA.spectralPVM_proj_Ioi_eq_zero_iff c).mp hzero x
 
 end DavisKahan
 end TauCeti

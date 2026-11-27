@@ -42,6 +42,42 @@ The focused Yosida, Stone uniqueness and spectral-projection build
 (7720 jobs), the full default build (22616 jobs) and `lake build Challenge`
 (20790 jobs) passed without warnings on the existing ext4-backed cache.
 
+## November 27 Rosenblum, spectral support and half-line form bounds
+
+The disjoint-spectrum Sylvester uniqueness results now use
+`LinearPMap.Intertwines.eq_zero_of_disjoint_spectrum` and
+`LinearPMap.SylvesterEquation.eq_of_disjoint_spectrum` from #38148 at
+`319186790ad16c0efd2951975077a03f2288dcbd`, accepted head
+`f0cb6cfca448da61d0691b2e28e9f98012c3b15d`. The integration by
+tauceti-ai-for-science uses the accepted DKPS-derived Sylvester interface
+and a continuous Cayley symbol that vanishes at the shared pole. DKPS's
+removed proof used damped real spectral separators and a strong limit.
+The local source is `47e8c0b597ccae555e135b6947d3955ac5049efe`
+(Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0). The native
+uniqueness proof is a separate development. The DKPS paper statements
+retain the complex domain-aware scope and disjointness hypothesis.
+[PR #38148](https://github.com/TauCetiProject/TauCeti/pull/38148)
+
+The local `SpectralSupport` and `SpectralFormBounds` modules retire.
+The paper and donor consumers use the native support and half-line
+form criteria from roed-math's #41596 at
+`81171bd524be1b4f119bb36877630bb96aaed6f8`, covering SA-E08 and
+SA-E11/E12. The two vector-local bounds used in min–max derive from the
+same integration's spectral-range estimates (SA-E13). A vector killed
+by the closed half-line projection lies in the complementary range,
+which supplies the native hypothesis directly. This removes both
+interval limit arguments and preserves their endpoint hypotheses.
+The earlier support and form proofs are at
+`e16bb824dc5c906fbaf341fefbe68aa65ee0ecdb` (Jon Crall and Claude
+Opus 5), and the vector-local proofs originated at
+`028207b91ec15a8c178efe95ebbfe75b2e078a52` (Jon Crall, OpenAI
+GPT-5.6 Thinking, Claude Opus 5, Kitware 2026, Apache-2.0).
+[PR #41596](https://github.com/TauCetiProject/TauCeti/pull/41596)
+
+This slice removes 1042 net lines of Lean. The focused build (10051 jobs),
+full default build (22612 jobs), Challenge (20786 jobs) and Hilbert–Schmidt
+Sylvester audit (9559 jobs) passed without warnings.
+
 ## November 27 spectral projection and resolvent consumption
 
 The spectral projection proofs now use

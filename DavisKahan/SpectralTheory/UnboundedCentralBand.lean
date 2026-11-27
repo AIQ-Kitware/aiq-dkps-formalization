@@ -28,7 +28,7 @@ directly.
 
 The complement side needs one step.  `((Icc l r)ᶜ` is not the exterior — it also
 contains the two open gaps `(l - d, l)` and `(r, r + d)` — but those consist of
-resolvent points, so `specProjection_eq_zero_of_subset_resolventSet` kills them
+resolvent points, so the spectral support theorem kills them
 and the two spectral ranges coincide.  `specProjection_eq_of_diff_eq_zero` below
 is the bookkeeping that combines the two sets; there is no general
 `specProjection (S ∪ T)` additivity lemma, and none is needed.
@@ -81,7 +81,8 @@ theorem specProjection_gaps_eq_zero
     TauCeti.LinearPMap.specProjection hA
         (Set.Ioo (l - d) l ∪ Set.Ioo r (r + d))
         (measurableSet_Ioo.union measurableSet_Ioo) = 0 := by
-  refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _ _ ?_
+  refine hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet
+    (measurableSet_Ioo.union measurableSet_Ioo) ?_
   intro lam hlam
   have hnot : lam ∉ _root_.LinearPMap.realSpectrum A := by
     intro hmem
@@ -318,8 +319,8 @@ theorem re_inner_le_of_realSpectrum_subset_Iic
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {c : ℝ}
     (h : _root_.LinearPMap.realSpectrum A ⊆ Set.Iic c) (x : A.domain) :
     (⟪A x, (x : H)⟫_ℂ).re ≤ c * ‖(x : H)‖ ^ 2 := by
-  refine TauCeti.LinearPMap.re_inner_le_of_specProjection_Ioi_eq_zero hA ?_ x
-  refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _ _ ?_
+  refine (hA.spectralPVM_proj_Ioi_eq_zero_iff c).mp ?_ x
+  refine hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Ioi ?_
   intro lam hlam
   have hnot : lam ∉ _root_.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
     simp only [Set.mem_Iic, not_le]
@@ -335,8 +336,8 @@ theorem le_re_inner_of_realSpectrum_subset_Ici
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {c : ℝ}
     (h : _root_.LinearPMap.realSpectrum A ⊆ Set.Ici c) (x : A.domain) :
     c * ‖(x : H)‖ ^ 2 ≤ (⟪A x, (x : H)⟫_ℂ).re := by
-  refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iio_eq_zero hA ?_ x
-  refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hA _ _ ?_
+  refine (hA.spectralPVM_proj_Iio_eq_zero_iff c).mp ?_ x
+  refine hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Iio ?_
   intro lam hlam
   have hnot : lam ∉ _root_.LinearPMap.realSpectrum A := fun hmem => absurd (h hmem) (by
     simp only [Set.mem_Ici, not_le]

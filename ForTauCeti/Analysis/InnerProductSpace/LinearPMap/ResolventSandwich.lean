@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic
 public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
 public import Mathlib.Analysis.InnerProductSpace.Positive
 
@@ -71,15 +71,14 @@ The theorems below take the **form lower bound** `β ‖x‖² ≤ re ⟪A x, x�
 `dom A` as their hypothesis, and derive it from `spectrum A ⊆ [β, ∞)` in the
 last section.  Three reasons, in order of weight.
 
-1. It is what the surrounding API produces: `SpectralFormBounds.lean` ends at
-   exactly this statement, and `RealLowerBound.lean` consumes a bound of this
-   shape to manufacture the resolvent point.
+1. Tau Ceti's half-line criterion gives this statement, and
+   `RealLowerBound.lean` uses this bound to construct the resolvent point.
 2. It is strictly the weaker hypothesis, so the theorems are stronger, and it
    survives compression to a subspace — which is how the Davis--Kahan consumer
    meets the operator.
 3. It avoids the spectral measure entirely on the main path.  The proof below
    is Cauchy--Schwarz twice; routing it through the diagonal measure and
-   `spectralPVM_resolvent_formula` would make a functional-calculus dependency
+   `IsSelfAdjoint.inner_resolvent_apply_eq_integral` would make a functional-calculus dependency
    out of an estimate that has none.
 
 ## The proof, in one paragraph
@@ -535,15 +534,14 @@ variable [CompleteSpace E]
 
 `spectrum A ⊆ [β, ∞)`, read through `mem_of_subset_ofReal_image`, puts every
 real `l < β` in the resolvent set; the spectral measure therefore gives no mass
-to `(-∞, β)`, and `le_re_inner_of_specProjection_Iio_eq_zero` converts that into
-the form bound. -/
+to `(-∞, β)`, so the native half-line criterion gives the form bound. -/
 theorem lowerFormBound_of_spectrum_subset_Ici (hA : IsSelfAdjoint A) {β : ℝ}
     (hσ : _root_.LinearPMap.spectrum A ⊆
       (RCLike.ofReal (K := ℂ) '' Set.Ici β)) (x : A.domain) :
     β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re := by
-  refine le_re_inner_of_specProjection_Iio_eq_zero hA ?_ x
-  refine specProjection_eq_zero_of_subset_resolventSet hA _ measurableSet_Iio
-    fun l hl => ?_
+  refine (hA.spectralPVM_proj_Iio_eq_zero_iff β).mp ?_ x
+  refine hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Iio ?_
+  intro l hl
   have hroot : (l : ℂ) ∈ A.resolventSet := by
     by_contra hnot
     have hmem : (l : ℂ) ∈ _root_.LinearPMap.spectrum A :=

@@ -274,13 +274,11 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
         "ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
@@ -321,14 +319,12 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
         "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.Rosenblum",
         "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner",
         "ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate",
@@ -3432,17 +3428,70 @@
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic",
       "ownership_class": "tauceti",
-      "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
+      "roadmap_target": "SA-E11/E12 global half-line form bounds and SA-E13 range bounds",
       "provenance_class": "new",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/41596",
+      "integration": "81171bd524be1b4f119bb36877630bb96aaed6f8",
+      "accepted_head": "81ac90ae300b8a13dab49958b113afdcfb02fa71",
+      "accepted_upstream_declarations": [
+        "IsSelfAdjoint.spectralPVM_proj_Iio_eq_zero_iff",
+        "IsSelfAdjoint.spectralPVM_proj_Ioi_eq_zero_iff",
+        "IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj",
+        "IsSelfAdjoint.re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj"
+      ],
+      "retired_local_declarations": [
+        "le_re_inner_of_specProjection_Iio_eq_zero",
+        "re_inner_le_of_specProjection_Ioi_eq_zero",
+        "specProjection_Icc_eq_symm_of_Ici_eq_one",
+        "specProjection_eq_one_of_compl_eq_zero",
+        "tendsto_specProjection_Icc_right",
+        "re_inner_specProjection_Icc_bounds"
+      ],
+      "migration_note": "November 27: Use the native open-half-line criteria and range bounds. Retire the strong-limit proofs and their interval lemma after migrating the vector-local consumers. Earlier source e16bb824dc5c906fbaf341fefbe68aa65ee0ecdb, Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralVectorBounds (original proofs at 028207b91ec15a8c178efe95ebbfe75b2e078a52)",
+      "source_declarations": [
+        "le_re_inner_of_specProjection_Iic_apply_eq_zero",
+        "re_inner_le_of_specProjection_Ici_apply_eq_zero",
+        "specProjection_Ici_apply_eq_self_of_Iic_apply_eq_zero",
+        "specProjection_Iic_apply_eq_self_of_Ici_apply_eq_zero",
+        "tendsto_specProjection_inter_of_fix"
+      ],
+      "current_namespace": "TauCeti.LinearPMap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralVectorBounds",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SA-E13 native spectral-range bounds at the DKPS vector-local half-line hypotheses",
+      "provenance_class": "DKPS proofs by Jon Crall, OpenAI GPT-5.6 Thinking and Claude Opus 5, Kitware 2026, Apache-2.0",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank"
+      ],
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/41596",
+      "integration": "81171bd524be1b4f119bb36877630bb96aaed6f8",
+      "accepted_head": "81ac90ae300b8a13dab49958b113afdcfb02fa71",
+      "retired_local_declarations": [
+        "specProjection_Ici_apply_eq_self_of_Iic_apply_eq_zero",
+        "specProjection_Iic_apply_eq_self_of_Ici_apply_eq_zero",
+        "tendsto_specProjection_inter_of_fix"
+      ],
+      "accepted_upstream_declarations": [
+        "IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj",
+        "IsSelfAdjoint.re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj"
+      ],
+      "migration_note": "November 27: a vector annihilated on the closed half-line lies in the complementary open spectral range. Apply the native range estimates and keep the original closed-half-line hypotheses."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3471,9 +3520,7 @@
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
@@ -3502,8 +3549,8 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport",
-        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity"
+        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -3572,8 +3619,7 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport"
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup"
       ],
       "status": "staged",
       "upstream_pr": null,
@@ -3620,22 +3666,27 @@
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic",
       "ownership_class": "tauceti",
-      "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
+      "roadmap_target": "SA-E08 spectral support on the spectrum",
       "provenance_class": "new",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid",
-        "ForTauCeti.Analysis.InnerProductSpace.Rosenblum"
+      "downstream_users": [],
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/41596",
+      "integration": "81171bd524be1b4f119bb36877630bb96aaed6f8",
+      "accepted_head": "81ac90ae300b8a13dab49958b113afdcfb02fa71",
+      "accepted_upstream_declarations": [
+        "IsSelfAdjoint.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet",
+        "LinearPMap.mem_resolventSet_of_norm_mul_lt_one"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "retired_local_declarations": [
+        "diag_eq_zero_of_subset_resolventSet",
+        "specProjection_eq_zero_of_norm_resolvent_mul_lt_one",
+        "specProjection_eq_zero_of_subset_resolventSet"
+      ],
+      "migration_note": "November 27: Remove the local resolvent-neighborhood and covering proof. The accepted proof uses Cayley spectral mapping, with the same support conclusion. Local source e16bb824dc5c906fbaf341fefbe68aa65ee0ecdb, Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The local endpoint was selected from Spectra. The old small-resolvent-ball lemma follows by feeding LinearPMap.mem_resolventSet_of_norm_mul_lt_one to the native spectral support theorem."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -4168,30 +4219,45 @@
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Rosenblum",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Rosenblum",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.Rosenblum",
       "ownership_class": "tauceti",
-      "roadmap_target": "The Hilbert-Schmidt space as an l2 of columns, the Sylvester one-parameter unitary group it carries, the identification of that group's generator with Z -> i(A Z - Z B), and the pairwise-to-vector spectral gap for it.",
-      "provenance_class": "staged in ForTauCeti",
-      "direct_dependencies": [
-        "TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport",
-        "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner",
-        "Mathlib"
-      ],
+      "roadmap_target": "SSP-B17/B19 complex domain-aware Rosenblum uniqueness",
+      "provenance_class": "Separate native uniqueness proof using the accepted DKPS-derived Sylvester interface",
+      "direct_dependencies": [],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "November 27: Use Complex.inverseCayleyCoord from #29129, and the native PVM pushforward and pole-nullity theorems from #41596 and Forgejo #1165. Keep continuity off the pole on the whole complex plane and the existing damped separator argument.",
+      "status": "retired-upstream-subsumed-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/38148",
+      "migration_note": "November 27: Use Complex.inverseCayleyCoord from #29129, and the native PVM pushforward and pole-nullity theorems from #41596 and Forgejo #1165. Keep continuity off the pole on the whole complex plane and the existing damped separator argument. November 27: Remove the local separator and Cayley-damping proof. The native proof uses the accepted DKPS-derived Sylvester interface and a separate Cayley-symbol argument. The local endpoint is at 47e8c0b597ccae555e135b6947d3955ac5049efe, Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The file path reflects the accepted Sylvester refactor #44399.",
       "retired_local_declarations": [
         "cayleyCoordFun",
-        "continuousOn_cayleyCoordFun"
+        "continuousOn_cayleyCoordFun",
+        "ae_cayleyInv_mem_spectrum",
+        "cayleySymbolFun",
+        "cfcHom_separator_eq_zero",
+        "continuous_cayleySymbolFun",
+        "continuous_damp",
+        "damp",
+        "damp_le",
+        "damp_le_one",
+        "damp_nonneg",
+        "eq_zero_of_intertwines_of_disjoint_spectrum",
+        "exists_spectralSeparator",
+        "norm_cayleySymbolFun_le",
+        "norm_sq_cfcHom_apply",
+        "tendsto_cayleySymbolFun",
+        "tendsto_cfcHom_separator",
+        "tendsto_damp",
+        "continuousOn_inverseCayleyCoord"
       ],
       "accepted_upstream_declarations": [
-        "Complex.inverseCayleyCoord",
-        "IsSelfAdjoint.spectralPVM_eq_map",
-        "LinearPMap.cayley_diagMeasure_singleton_one"
-      ]
+        "LinearPMap.sylvesterEquation_zero_iff_intertwines",
+        "LinearPMap.Intertwines.eq_zero_of_disjoint_spectrum",
+        "LinearPMap.SylvesterEquation.eq_of_disjoint_spectrum",
+        "ContinuousLinearMap.eq_zero_of_comp_eq_comp_of_disjoint_spectrum"
+      ],
+      "integration": "319186790ad16c0efd2951975077a03f2288dcbd",
+      "accepted_head": "f0cb6cfca448da61d0691b2e28e9f98012c3b15d"
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -4217,9 +4283,7 @@
         "Mathlib"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.Rosenblum"
-      ],
+      "downstream_users": [],
       "status": "partially-upstreamed",
       "upstream_pr": null,
       "migration_note": "The local self-adjoint partial-map intertwiner now uses Tau Ceti's `Intertwines.comp_cayley_eq`; its consumers use the canonical inverse directly; additional functional-calculus API remains local."
@@ -6797,8 +6861,7 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
-        "ForTauCeti.Analysis.InnerProductSpace.Rosenblum"
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction"
       ],
       "prepared_head": "0a85d596da2d7bad3fe178a69713133b0493a303",
       "prepared_packet": "/home/joncrall/code/tauceti-dkps-campaign/waves/2026-11-17/pr29129",

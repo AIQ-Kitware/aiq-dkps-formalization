@@ -49,7 +49,7 @@ reflection is a unitary commuting with `A`.
 Once `specProjection` intertwining exists for a general bounded `X` the endgame
 is short: for disjoint closed spectra pick a Borel `B ⊇ σ(A)` missing `σ(B)`, and
 `X = E_A(B) X = X E_B(B) = 0` by
-`specProjection_eq_zero_of_subset_resolventSet`.
+`IsSelfAdjoint.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet`.
 
 ## Provenance
 

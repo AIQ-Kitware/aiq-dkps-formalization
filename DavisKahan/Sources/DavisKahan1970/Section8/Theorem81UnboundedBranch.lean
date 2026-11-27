@@ -142,7 +142,7 @@ theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
     (alpha + delta) * ‖(x : H)‖ ^ 2 ≤ (⟪B x, (x : H)⟫_ℂ).re := by
   have hgapzero : TauCeti.LinearPMap.specProjection hB
       (Set.Ioo alpha (alpha + delta)) measurableSet_Ioo = 0 := by
-    refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet hB _ _ ?_
+    refine hB.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Ioo ?_
     intro lam hlam
     have := hrep lam hlam
     have hresRoot : ((lam : ℝ) : ℂ) ∈ _root_.LinearPMap.resolventSet B := by

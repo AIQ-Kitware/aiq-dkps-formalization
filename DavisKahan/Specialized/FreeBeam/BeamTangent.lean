@@ -439,8 +439,8 @@ theorem beamPerturbed_mem_resolventSet_of_neg (ε : ℝ) (hε : 0 ≤ ε)
 theorem beamPerturbed_specProjection_Iio_zero (ε : ℝ) (hε : 0 ≤ ε) :
     TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
       (Set.Iio 0) measurableSet_Iio = 0 :=
-  TauCeti.LinearPMap.specProjection_eq_zero_of_subset_resolventSet
-    (beamPerturbed_isSelfAdjoint ε) _ _
+  (beamPerturbed_isSelfAdjoint ε).spectralPVM_proj_eq_zero_of_forall_mem_resolventSet
+    measurableSet_Iio
     (fun _ hlam => beamPerturbed_mem_resolventSet_of_neg ε hε hlam)
 
 /-- Hence the low spectral range lies inside the domain: it is the spectral range

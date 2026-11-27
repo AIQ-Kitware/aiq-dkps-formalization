@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 public import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Additivity
 public import TauCeti.MeasureTheory.Constructions.BorelSpace.Real
 
@@ -75,14 +75,14 @@ theorem specProjection_comp_self (Bset : Set ℝ) (hBset : MeasurableSet Bset) :
 
 
 /-- **A cell carrying a nonzero projection meets the spectrum.**  Contrapositive
-of `specProjection_eq_zero_of_subset_resolventSet`; it is what lets empty cells
+of the native spectral support theorem; it is what lets empty cells
 be discarded and the separation hypothesis be used on the survivors. -/
 theorem exists_mem_spectrum_of_specProjection_ne_zero (B : Set ℝ) (hB : MeasurableSet B)
     (h : specProjection hA B hB ≠ 0) :
     ∃ lam ∈ B, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
   by_contra hcon
   push Not at hcon
-  refine h (specProjection_eq_zero_of_subset_resolventSet hA B hB fun lam hlam => ?_)
+  refine h (hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet hB fun lam hlam => ?_)
   have := hcon lam hlam
   have hroot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
     by_contra hnot

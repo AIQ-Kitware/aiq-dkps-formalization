@@ -9,7 +9,7 @@ public import DavisKahan.Sylvester.PairwiseSpectrumGap
 public import DavisKahan.Sylvester.ClosedSylvesterEquation
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-public import ForTauCeti.Analysis.InnerProductSpace.Rosenblum
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Rosenblum
 
 /-!
 # Homogeneous Sylvester uniqueness at arbitrary spectral separation
@@ -19,13 +19,9 @@ intertwines the two operators, and Rosenblum's theorem then forces a bounded
 intertwiner of disjoint spectra to vanish.  Unlike the older uniqueness lemma,
 no interval/exterior or ordered half-line geometry is required.
 
-Until 2026-07-29 this ran through Spectra: the Sylvester equation was converted
-into `GeneratorIntertwines` between the two Yosida groups, and the donor's
-`generatorIntertwiner_eq_zero_of_disjoint_spectrum` closed it.  The generator
-layer was pure overhead — the intertwining relation *is* the Sylvester equation
-— so the conversion is gone and the native
-`TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum` is applied
-directly.
+The domain-aware equation uses Tau Ceti's `LinearPMap.SylvesterEquation`.
+The zero-defect equivalence gives `LinearPMap.Intertwines`, and
+`LinearPMap.Intertwines.eq_zero_of_disjoint_spectrum` gives uniqueness.
 -/
 
 public section
@@ -55,9 +51,8 @@ theorem Sylvester_homogeneous_eq_zero_of_disjoint_spectrum
       (_root_.LinearPMap.spectrum B))
     (hEq : _root_.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
-  refine TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum hA hB
-    (fun y => hEq.mapsTo_domain y) (fun y => ?_) hdisj
-  simpa using sub_eq_zero.mp (hEq.equation y)
+  have hIntertwines := _root_.LinearPMap.sylvesterEquation_zero_iff_intertwines.mp hEq
+  exact hIntertwines.eq_zero_of_disjoint_spectrum hB hA hdisj.symm
 
 /-- Positive pairwise spectral distance gives homogeneous uniqueness for raw
 self-adjoint partial maps. -/
@@ -88,11 +83,8 @@ theorem Sylvester_solution_unique_of_disjoint_spectrum
       (_root_.LinearPMap.spectrum B))
     (hX : _root_.LinearPMap.SylvesterEquation A B X C)
     (hY : _root_.LinearPMap.SylvesterEquation A B Y C) :
-    X = Y := by
-  have hhom : _root_.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
-    simpa using hX.sub hY
-  exact sub_eq_zero.mp
-    (Sylvester_homogeneous_eq_zero_of_disjoint_spectrum hA hB hdisj hhom)
+    X = Y :=
+  hX.eq_of_disjoint_spectrum hY hA hB hdisj
 
 /-- Two bounded raw partial-map Sylvester solutions coincide under positive
 pairwise spectral separation.  A corollary of

@@ -9,7 +9,7 @@ public import DavisKahan.Sylvester.HomogeneousUniqueness
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
 public section
 
