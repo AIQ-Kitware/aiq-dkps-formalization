@@ -221,25 +221,29 @@ needs `Set.Iic (u ^ 2)`, but nothing in the proof looks at the band, and a
 lemma that names one is a lemma the next cutoff cannot reuse. -/
 theorem gramOperator_comm_gramSpectralPVM_proj (X : E0 →L[ℂ] E1)
     (s : Set ℝ) (hs : MeasurableSet s) (y : E0) :
-    ApproximationNumber.gramOperator X ((gramSpectralPVM X).proj s hs y) =
-      (gramSpectralPVM X).proj s hs (ApproximationNumber.gramOperator X y) := by
+    ApproximationNumber.gramOperator X (((gramLinearPMap X).spectralPVM
+      (gramLinearPMap_isSelfAdjoint X)).proj s hs y) =
+      ((gramLinearPMap X).spectralPVM
+          (gramLinearPMap_isSelfAdjoint X)).proj s hs (ApproximationNumber.gramOperator X y) := by
   have hyDom : y ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
   have hcomm := (((gramLinearPMap_isSelfAdjoint X).intertwines_spectralPVM_proj s hs).apply_eq
       (⟨y, hyDom⟩ : (gramLinearPMap X).domain)).symm
-  simp only [gramLinearPMap_apply] at hcomm
-  simpa only [← gramSpectralPVM_proj_eq_specProjection] using hcomm
+  simpa only [gramLinearPMap_apply] using hcomm
 
 /-- The graph denominator inherits the commutation, being `1` minus the Gram
 operator. -/
 theorem doubleAngleDenominator_comm_gramSpectralPVM_proj (X : E0 →L[ℂ] E1)
     (s : Set ℝ) (hs : MeasurableSet s) (y : E0) :
-    doubleAngleDenominator X ((gramSpectralPVM X).proj s hs y) =
-      (gramSpectralPVM X).proj s hs (doubleAngleDenominator X y) := by
+    doubleAngleDenominator X (((gramLinearPMap X).spectralPVM
+      (gramLinearPMap_isSelfAdjoint X)).proj s hs y) =
+      ((gramLinearPMap X).spectralPVM
+          (gramLinearPMap_isSelfAdjoint X)).proj s hs (doubleAngleDenominator X y) := by
   have hCQ' :
-      (ContinuousLinearMap.adjoint X ∘SL X) ((gramSpectralPVM X).proj s hs y) =
-        (gramSpectralPVM X).proj s hs
+      (ContinuousLinearMap.adjoint X ∘SL X) (((gramLinearPMap X).spectralPVM
+        (gramLinearPMap_isSelfAdjoint X)).proj s hs y) =
+        ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj s hs
           ((ContinuousLinearMap.adjoint X ∘SL X) y) := by
     simpa only [ApproximationNumber.gramOperator] using gramOperator_comm_gramSpectralPVM_proj X s hs y
   dsimp only [doubleAngleDenominator]
@@ -521,14 +525,15 @@ theorem norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le
     (X : E0 →L[ℂ] E1) (hcontractive : ‖X‖ < 1) {u v : ℝ}
     (hu0 : 0 ≤ u) (huv : u < v) (hv1 : v < 1) :
     ‖doubleAngleTangentOperator X hcontractive ∘L
-        (gramSpectralPVM X).proj (Set.Iic (u ^ 2)) measurableSet_Iic‖ ≤
+        ((gramLinearPMap X).spectralPVM
+            (gramLinearPMap_isSelfAdjoint X)).proj (Set.Iic (u ^ 2)) measurableSet_Iic‖ ≤
       DavisKahan.TanTwoTheta.doubleAngleTangent v := by
   classical
   have hv0 : 0 ≤ v := hu0.trans huv.le
   have hdenv : 0 < 1 - v ^ 2 := by nlinarith
   have htanv0 : 0 ≤ DavisKahan.TanTwoTheta.doubleAngleTangent v :=
     DavisKahan.TanTwoTheta.doubleAngleTangent_nonneg hv0 hv1
-  let PVM : ProjValMeasure ℝ E0 := gramSpectralPVM X
+  let PVM : ProjValMeasure ℝ E0 := (gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)
   let Q : E0 →L[ℂ] E0 := PVM.proj (Set.Iic (u ^ 2)) measurableSet_Iic
   let T := doubleAngleTangentOperator X hcontractive
   show ‖T ∘L Q‖ ≤ DavisKahan.TanTwoTheta.doubleAngleTangent v
@@ -557,32 +562,20 @@ theorem norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le
     apply hinj
     rw [hDQ, hDw, hQidem]
   have huvSq : u ^ 2 < v ^ 2 := by nlinarith
-  have hhighZero :
-      (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
+  have hhighZero : PVM.proj (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
+    have hdisj : Disjoint (Set.Ici (v ^ 2)) (Set.Iic (u ^ 2)) := by
+      rw [Set.disjoint_left]
+      exact fun _ hlow hhigh => (not_le_of_gt huvSq) (hlow.trans hhigh)
+    have hmul := PVM.proj_mul_eq_zero_of_disjoint measurableSet_Ici measurableSet_Iic hdisj
     rw [← hQw]
-    have hinter : Set.Ici (v ^ 2) ∩ Set.Iic (u ^ 2) = ∅ := by
-      ext s
-      simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic,
-        Set.mem_empty_iff_false, iff_false]
-      exact fun hs => (not_le_of_gt huvSq) (hs.1.trans hs.2)
-    change (gramSpectralPVM X).proj (Set.Ici (v ^ 2)) measurableSet_Ici
-      ((gramSpectralPVM X).proj (Set.Iic (u ^ 2)) measurableSet_Iic w) = 0
-    rw [← mul_apply_eq_comp,
-      (gramSpectralPVM X).proj_inter,
-      (gramSpectralPVM X).proj_congr hinter
-        (measurableSet_Ici.inter measurableSet_Iic) MeasurableSet.empty,
-      (gramSpectralPVM X).proj_empty, zero_apply]
+    change PVM.proj (Set.Ici (v ^ 2)) measurableSet_Ici (Q w) = 0
+    rw [← mul_apply_eq_comp, hmul, zero_apply]
   have hwDom : w ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
-  have hhighZero' :
-      ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
-          (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
-    rw [← gramSpectralPVM_proj_eq_specProjection]
-    exact hhighZero
   have henergy := LinearPMap.re_inner_le_of_specProjection_Ici_apply_eq_zero
     (gramLinearPMap_isSelfAdjoint X)
-    (⟨w, hwDom⟩ : (gramLinearPMap X).domain) hhighZero'
+    (⟨w, hwDom⟩ : (gramLinearPMap X).domain) hhighZero
   have hXenergy : ‖X w‖ ^ 2 ≤ v ^ 2 * ‖w‖ ^ 2 := by
     calc
       ‖X w‖ ^ 2 = (⟪ApproximationNumber.gramOperator X w, w⟫_ℂ).re :=
@@ -650,7 +643,7 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
   have hau : a < u := by dsimp only [u]; linarith
   have huv : u < v := by dsimp only [u]; linarith
   have hu0 : 0 ≤ u := ha0.trans hau.le
-  let PVM : ProjValMeasure ℝ E0 := gramSpectralPVM X
+  let PVM : ProjValMeasure ℝ E0 := (gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)
   let P : E0 →L[ℂ] E0 := PVM.proj (Set.Ioi (u ^ 2)) measurableSet_Ioi
   let Q : E0 →L[ℂ] E0 := PVM.proj (Set.Iic (u ^ 2)) measurableSet_Iic
   let T := doubleAngleTangentOperator X hcontractive
@@ -664,9 +657,9 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
       ((LinearMap.lift_rank_comp_le_right P.toLinearMap T.toLinearMap).trans
         (Cardinal.lift_le_nat_iff.mpr hPrank)))
   have hQeq : Q = ContinuousLinearMap.id ℂ E0 - P := by
-    dsimp only [Q, P, PVM]
+    dsimp only [Q, P]
     simpa only [Set.compl_Ioi] using
-      (gramSpectralPVM X).proj_compl (Set.Ioi (u ^ 2)) measurableSet_Ioi
+      PVM.proj_compl (Set.Ioi (u ^ 2)) measurableSet_Ioi
   have herr : T - R = T ∘L Q := by
     ext x
     change T x - T (P x) = T (Q x)

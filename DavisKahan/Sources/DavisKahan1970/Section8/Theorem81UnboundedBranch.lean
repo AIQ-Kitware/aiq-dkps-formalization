@@ -162,8 +162,10 @@ theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
   have hall : ∀ c : ℝ, c < alpha + delta →
       c * ‖(x : H)‖ ^ 2 ≤ (⟪B x, (x : H)⟫_ℂ).re := by
     intro c hc
-    have hinter := TauCeti.LinearPMap.specProjection_apply_specProjection hB
-      (B := Set.Iic c) (C := Set.Ioi alpha) measurableSet_Iic measurableSet_Ioi (x : H)
+    have hinter := DFunLike.congr_fun
+      ((B.spectralPVM hB).proj_inter (Set.Iic c) (Set.Ioi alpha)
+        measurableSet_Iic measurableSet_Ioi) (x : H)
+    rw [_root_.mul_apply_eq_comp] at hinter
     rw [hfix] at hinter
     have hsub : Set.Iic c ∩ Set.Ioi alpha ⊆ Set.Ioo alpha (alpha + delta) := by
       rintro s ⟨hs1, hs2⟩

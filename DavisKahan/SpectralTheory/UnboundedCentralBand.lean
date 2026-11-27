@@ -64,7 +64,8 @@ theorem specProjection_eq_of_diff_eq_zero
     have h := TauCeti.LinearPMap.specProjection_add_compl_apply hA hS x
     rw [hSx, zero_add] at h
     exact h
-  have hinter := TauCeti.LinearPMap.specProjection_apply_specProjection hA hU hS.compl x
+  have hinter := DFunLike.congr_fun ((A.spectralPVM hA).proj_inter U Sᶜ hU hS.compl) x
+  rw [_root_.mul_apply_eq_comp] at hinter
   rw [hcompl] at hinter
   rw [hinter]
   subst heq

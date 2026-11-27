@@ -108,30 +108,18 @@ theorem gramLinearPMap_isSelfAdjoint (X : E0 →L[ℂ] E1) :
     IsSelfAdjoint (gramLinearPMap X) :=
   _root_.LinearPMap.isSelfAdjoint_toPMap_top (gramOperator_isSelfAdjoint X)
 
-/-- The native Tau Ceti spectral PVM of `X†X`. -/
-noncomputable def gramSpectralPVM (X : E0 →L[ℂ] E1) : ProjValMeasure ℝ E0 :=
-  _root_.LinearPMap.spectralPVM (gramLinearPMap X) (gramLinearPMap_isSelfAdjoint X)
-
-/-- Definitional bridge between the named Gram PVM and Tau Ceti's pointwise
-spectral-projection API.  Keeping this as a named equality avoids repeatedly
-asking the elaborator to unfold the full spectral construction through a
-`change` tactic. -/
-theorem gramSpectralPVM_proj_eq_specProjection (X : E0 →L[ℂ] E1)
-    (B : Set ℝ) (hB : MeasurableSet B) :
-    (gramSpectralPVM X).proj B hB =
-      ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj B hB := by
-  rfl
-
 /-- A strict lower threshold for `a_n(X)` forces at least `n+1` dimensions in
 `E_{X†X}([r²,∞))`. -/
 theorem natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber
     (X : E0 →L[ℂ] E1) (n : ℕ) {r : ℝ}
     (hr0 : 0 ≤ r) (hr : r < (X.singularValue n : ℝ)) :
     ((n + 1 : ℕ) : Cardinal) ≤
-      ((gramSpectralPVM X).proj (Set.Ici (r ^ 2)) measurableSet_Ici).rank := by
+      (((gramLinearPMap X).spectralPVM
+          (gramLinearPMap_isSelfAdjoint X)).proj (Set.Ici (r ^ 2)) measurableSet_Ici).rank := by
   classical
   let P : E0 →L[ℂ] E0 :=
-    (gramSpectralPVM X).proj (Set.Ici (r ^ 2)) measurableSet_Ici
+    ((gramLinearPMap X).spectralPVM
+        (gramLinearPMap_isSelfAdjoint X)).proj (Set.Ici (r ^ 2)) measurableSet_Ici
   obtain ⟨s, hrs, v, hv, hV⟩ :=
     TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace X n hr0
       (by exact hr)
@@ -155,10 +143,7 @@ theorem natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber
       rw [gramLinearPMap_domain]
       exact Submodule.mem_top
     have henergy := LinearPMap.re_inner_le_of_specProjection_Ici_apply_eq_zero
-      (gramLinearPMap_isSelfAdjoint X) (⟨z, hzDom⟩ : (gramLinearPMap X).domain) (by
-        rw [← gramSpectralPVM_proj_eq_specProjection X
-          (Set.Ici (r ^ 2)) measurableSet_Ici]
-        simpa only [P] using hPz)
+      (gramLinearPMap_isSelfAdjoint X) (⟨z, hzDom⟩ : (gramLinearPMap X).domain) hPz
     have hupper : ‖X z‖ ^ 2 ≤ r ^ 2 * ‖z‖ ^ 2 := by
       calc
         ‖X z‖ ^ 2 = RCLike.re ⟪gramOperator X z, z⟫_ℂ := by
@@ -191,11 +176,13 @@ theorem natCast_succ_le_rank_gramProjection_Ici_of_lt_approximationNumber
 theorem rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
     (X : E0 →L[ℂ] E1) (n : ℕ) {r : ℝ}
     (hr0 : 0 ≤ r) (hr : (X.singularValue n : ℝ) < r) :
-    ((gramSpectralPVM X).proj (Set.Ioi (r ^ 2)) measurableSet_Ioi).rank ≤
+    (((gramLinearPMap X).spectralPVM
+        (gramLinearPMap_isSelfAdjoint X)).proj (Set.Ioi (r ^ 2)) measurableSet_Ioi).rank ≤
       (n : Cardinal) := by
   classical
+  let PVM := (gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)
   let P : E0 →L[ℂ] E0 :=
-    (gramSpectralPVM X).proj (Set.Ioi (r ^ 2)) measurableSet_Ioi
+    PVM.proj (Set.Ioi (r ^ 2)) measurableSet_Ioi
   by_contra hnot
   have hlt : (n : Cardinal) < P.rank := lt_of_not_ge hnot
   have hnrank : ((n + 1 : ℕ) : Cardinal) ≤ Module.rank ℂ P.range := by
@@ -217,43 +204,16 @@ theorem rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
     have hxP : x ∈ P.range := hspan_le hxspan
     have hPx : P x = x := by
       rcases hxP with ⟨y, rfl⟩
-      change P (P y) = P y
-      simpa only [mul_apply_eq_comp] using
-        congrArg (fun T : E0 →L[ℂ] E0 => T y)
-          ((gramSpectralPVM X).proj_idem (Set.Ioi (r ^ 2)) measurableSet_Ioi)
-    have hzlow :
-        (gramSpectralPVM X).proj (Set.Iic (r ^ 2)) measurableSet_Iic x = 0 := by
-      let Q : E0 →L[ℂ] E0 :=
-        (gramSpectralPVM X).proj (Set.Iic (r ^ 2)) measurableSet_Iic
-      have hinter : Set.Iic (r ^ 2) ∩ Set.Ioi (r ^ 2) = ∅ := by
-        ext t
-        simp only [Set.mem_inter_iff, Set.mem_Iic, Set.mem_Ioi,
-          Set.mem_empty_iff_false, iff_false]
-        exact fun ht => (not_lt_of_ge ht.1) ht.2
-      have hQP_raw :
-          (gramSpectralPVM X).proj (Set.Iic (r ^ 2)) measurableSet_Iic *
-              (gramSpectralPVM X).proj (Set.Ioi (r ^ 2)) measurableSet_Ioi = 0 := by
-        rw [(gramSpectralPVM X).proj_inter,
-          (gramSpectralPVM X).proj_congr hinter
-            (measurableSet_Iic.inter measurableSet_Ioi) MeasurableSet.empty,
-          (gramSpectralPVM X).proj_empty]
-      have hQP : Q * P = 0 := by
-        simpa only [Q, P] using hQP_raw
-      have hQPx := congrArg (fun T : E0 →L[ℂ] E0 => T x) hQP
-      calc
-        (gramSpectralPVM X).proj (Set.Iic (r ^ 2)) measurableSet_Iic x =
-            (gramSpectralPVM X).proj (Set.Iic (r ^ 2)) measurableSet_Iic (P x) := by
-          rw [hPx]
-        _ = 0 := by
-          simpa only [Q, _root_.mul_apply_eq_comp, zero_apply] using hQPx
+      exact PVM.proj_apply_proj (Set.Ioi (r ^ 2)) measurableSet_Ioi y
+    have hzlow : PVM.proj (Set.Iic (r ^ 2)) measurableSet_Iic x = 0 := by
+      have hQP := PVM.proj_mul_eq_zero_of_disjoint
+        measurableSet_Iic measurableSet_Ioi (Set.Iic_disjoint_Ioi (a := r ^ 2) le_rfl)
+      rw [← hPx, ← mul_apply_eq_comp, hQP, zero_apply]
     have hxDom : x ∈ (gramLinearPMap X).domain := by
       rw [gramLinearPMap_domain]
       exact Submodule.mem_top
     have henergy := LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
-      (gramLinearPMap_isSelfAdjoint X) (⟨x, hxDom⟩ : (gramLinearPMap X).domain) (by
-        rw [← gramSpectralPVM_proj_eq_specProjection X
-          (Set.Iic (r ^ 2)) measurableSet_Iic]
-        exact hzlow)
+      (gramLinearPMap_isSelfAdjoint X) (⟨x, hxDom⟩ : (gramLinearPMap X).domain) hzlow
     have hlowerSq : r ^ 2 * ‖x‖ ^ 2 ≤ ‖X x‖ ^ 2 := by
       calc
         r ^ 2 * ‖x‖ ^ 2 ≤

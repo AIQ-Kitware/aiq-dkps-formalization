@@ -48,7 +48,7 @@ through the accepted real functional calculus consumed by
 `TauCeti/Analysis/InnerProductSpace/Modulus.lean`. It is
 the squaring step `TauCeti.ApproximationNumber.approximationNumber_gramOperator_complex`
 (`aₙ(X⋆X) = aₙ(X)²`), whose whole layer — `ApproximationNumber.gramOperator`, `gramLinearPMap`,
-`gramSpectralPVM` — is defined only for `InnerProductSpace ℂ`, because it runs
+the Gram spectral measure — is defined only for `InnerProductSpace ℂ`, because it runs
 through the bounded projection-valued measure of a self-adjoint operator.  Since
 `RCLike` carries no `ℝ`/`ℂ` discriminator, that cannot be worked around inside a
 `𝕜`-generic proof.  The real-scalar consumers therefore descend from the complex

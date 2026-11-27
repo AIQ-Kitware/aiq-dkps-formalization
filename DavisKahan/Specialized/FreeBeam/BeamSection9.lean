@@ -2087,7 +2087,7 @@ theorem beamSpecProjection_singleton_apply_eq_zero_of_mem_orthogonal {x : BeamL2
       ((LinearMap.mem_range_self ((beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj _
           _).toLinearMap x))
   have hfix : P (P x) = P x :=
-    TauCeti.LinearPMap.specProjection_apply_self beamOperator_isSelfAdjoint _ _ x
+    (beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj_apply_proj _ _ x
   have hadj : (P : BeamL2 →L[ℂ] BeamL2).adjoint = P :=
     ((beamOperator.spectralPVM beamOperator_isSelfAdjoint).isSelfAdjoint_proj _ _).adjoint_eq
   have hzero : ⟪P x, P x⟫_ℂ = 0 := by
@@ -2153,10 +2153,10 @@ genuine operator: the compression to the affine trial subspace has form at most
 theorem beamPerturbed_specProjection_Ioo_eq_zero (ε : ℝ) (hε : 0 ≤ ε) :
     ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
       (Set.Ioo (ritzHigh ε) 500) measurableSet_Ioo = 0 := by
-  refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset
-    (beamPerturbed_isSelfAdjoint ε) (C := Set.Ioo (ritzHigh ε) (1001 / 2))
-    measurableSet_Ioo measurableSet_Ioo
-    (Set.Ioo_subset_Ioo le_rfl (by norm_num)) ?_
+  refine ((beamPerturbed ε).spectralPVM
+    (beamPerturbed_isSelfAdjoint ε)).proj_eq_zero_of_subset
+    (t := Set.Ioo (ritzHigh ε) (1001 / 2))
+    (Set.Ioo_subset_Ioo le_rfl (by norm_num)) measurableSet_Ioo measurableSet_Ioo ?_
   exact TauCeti.LinearPMap.specProjection_Ioo_eq_zero_of_rayleighRitz
     (beamPerturbed_isSelfAdjoint ε) (K := beamTrial)
     (fun _ hy => beamTrial_le_domain hy)

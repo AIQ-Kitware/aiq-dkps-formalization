@@ -75,14 +75,14 @@ This is what makes the spectral cut usable: the band is invariant, so the band b
 applies to `X†Xy` as well as to `y`. -/
 theorem gramOperator_comm_gramProjection (X : E0 →L[ℂ] E1) (B : Set ℝ)
     (hB : MeasurableSet B) (z : E0) :
-    gramOperator X ((gramSpectralPVM X).proj B hB z) =
-      (gramSpectralPVM X).proj B hB (gramOperator X z) := by
+    gramOperator X (((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj B hB z) =
+      ((gramLinearPMap X).spectralPVM
+          (gramLinearPMap_isSelfAdjoint X)).proj B hB (gramOperator X z) := by
   have hdom : z ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
   have h := (((gramLinearPMap_isSelfAdjoint X).intertwines_spectralPVM_proj B hB).apply_eq (⟨z,
       hdom⟩ : (gramLinearPMap X).domain)).symm
-  rw [gramSpectralPVM_proj_eq_specProjection]
   simpa only [gramLinearPMap_apply] using h
 
 /-- **On the low Gram band the operator is bounded by the threshold.**
@@ -92,20 +92,14 @@ in particular none in `[r²,∞)` once `r'² < r²`, and its energy `‖Xz‖²`
 `r²‖z‖²`. -/
 theorem norm_apply_le_of_gramProjection_Ioi_apply_eq_zero (X : E0 →L[ℂ] E1) {r r' : ℝ}
     (hr0 : 0 ≤ r) (hlt : r' ^ 2 < r ^ 2) {z : E0}
-    (hz : (gramSpectralPVM X).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi z = 0) :
+    (hz : ((gramLinearPMap X).spectralPVM
+        (gramLinearPMap_isSelfAdjoint X)).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi z = 0) :
     ‖X z‖ ≤ r * ‖z‖ := by
-  have hIci : (gramSpectralPVM X).proj (Set.Ici (r ^ 2)) measurableSet_Ici z = 0 := by
-    have hsub : Set.Ici (r ^ 2) ∩ Set.Ioi (r' ^ 2) = Set.Ici (r ^ 2) := by
-      ext t
-      simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Ioi, and_iff_left_iff_imp]
-      intro ht
-      linarith
-    have hmul : (gramSpectralPVM X).proj (Set.Ici (r ^ 2)) measurableSet_Ici *
-        (gramSpectralPVM X).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi =
-        (gramSpectralPVM X).proj (Set.Ici (r ^ 2)) measurableSet_Ici := by
-      rw [(gramSpectralPVM X).proj_inter,
-        (gramSpectralPVM X).proj_congr hsub
-          (measurableSet_Ici.inter measurableSet_Ioi) measurableSet_Ici]
+  let PVM := (gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)
+  change PVM.proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi z = 0 at hz
+  have hIci : PVM.proj (Set.Ici (r ^ 2)) measurableSet_Ici z = 0 := by
+    have hsub : Set.Ici (r ^ 2) ⊆ Set.Ioi (r' ^ 2) := fun _ ht => hlt.trans_le ht
+    have hmul := PVM.proj_mul_eq_left_of_subset hsub measurableSet_Ici measurableSet_Ioi
     have happ := congrArg (fun T : E0 →L[ℂ] E0 => T z) hmul
     simp only [_root_.mul_apply_eq_comp, hz, map_zero] at happ
     exact happ.symm
@@ -113,9 +107,7 @@ theorem norm_apply_le_of_gramProjection_Ioi_apply_eq_zero (X : E0 →L[ℂ] E1) 
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
   have henergy := LinearPMap.re_inner_le_of_specProjection_Ici_apply_eq_zero
-    (gramLinearPMap_isSelfAdjoint X) (⟨z, hdom⟩ : (gramLinearPMap X).domain) (by
-      rw [← gramSpectralPVM_proj_eq_specProjection X (Set.Ici (r ^ 2)) measurableSet_Ici]
-      exact hIci)
+    (gramLinearPMap_isSelfAdjoint X) (⟨z, hdom⟩ : (gramLinearPMap X).domain) hIci
   have hsq : ‖X z‖ ^ 2 ≤ r ^ 2 * ‖z‖ ^ 2 := by
     calc
       ‖X z‖ ^ 2 = RCLike.re ⟪gramOperator X z, z⟫_ℂ := (re_inner_gramOperator X z).symm
@@ -193,11 +185,14 @@ theorem approximationNumber_gramOperator_le_sq (X : E0 →L[ℂ] E1) (n : ℕ) :
     have hr'0 : 0 ≤ r' := ha0.trans hr1.le
     have hsqlt : r' ^ 2 < r ^ 2 := by nlinarith
     set P : E0 →L[ℂ] E0 :=
-      (gramSpectralPVM X).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi with hPdef
+      ((gramLinearPMap X).spectralPVM
+          (gramLinearPMap_isSelfAdjoint X)).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi with hPdef
     have hrank : P.rank ≤ (n : Cardinal) :=
       rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt X n hr'0 hr1
-    have hidem : IsIdempotentElem P := (gramSpectralPVM X).proj_idem _ _
-    have hsa : IsSelfAdjoint P := (gramSpectralPVM X).isSelfAdjoint_proj _ _
+    have hidem : IsIdempotentElem P :=
+      ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj_idem _ _
+    have hsa : IsSelfAdjoint P := ((gramLinearPMap X).spectralPVM
+      (gramLinearPMap_isSelfAdjoint X)).isSelfAdjoint_proj _ _
     refine ContinuousLinearMap.approximationNumber_le_of_spectral_band
       (by positivity) hidem hsa hrank ?_
     intro x

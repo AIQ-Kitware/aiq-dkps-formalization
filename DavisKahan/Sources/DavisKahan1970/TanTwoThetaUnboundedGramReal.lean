@@ -31,7 +31,7 @@ its real sibling.
 
 ## Route
 
-The interior of the complex proof runs through `gramSpectralPVM`, whose model
+The interior of the complex proof runs through the Gram spectral measure, whose model
 operator is the Cayley transform `1 - (2 i) • resolvent A`; at `RCLike.I = 0`
 that formula degenerates rather than generalises, so an in-place `RCLike` edit of
 the complex argument is not available.  Instead the *data* is complexified and
@@ -80,7 +80,7 @@ Neither `IsCompressedDoubleAngleEigenbasis` nor any other attainment condition
 occurs in the hypotheses or in the transitive constant closure of any of the
 three (checked by traversing `ConstantInfo.value? (allowOpaque := true)` from the
 three endpoints: 56793 constants, zero hits, while the controls
-`gramSpectralPVM`, `GramSpectralBandModel` and `BoundedCutoff` are all present).
+the Gram spectral measure, `GramSpectralBandModel` and `BoundedCutoff` are all present).
 
 ## References
 

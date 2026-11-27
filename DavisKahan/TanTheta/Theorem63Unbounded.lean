@@ -162,18 +162,6 @@ section SpectralGap
 
 variable (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
 
-/-- A spectral projection of a subset of a null set is null. -/
-theorem specProjection_eq_zero_of_subset {S T : Set ℝ}
-    (hS : MeasurableSet S) (hT : MeasurableSet T) (hST : S ⊆ T)
-    (hzero : (A.spectralPVM hA).proj T hT = 0) :
-    (A.spectralPVM hA).proj S hS = 0 := by
-  have hinter : S ∩ T = S := Set.inter_eq_left.mpr hST
-  have hmul := (A.spectralPVM hA).proj_inter S T hS hT
-  rw [(A.spectralPVM hA).proj_congr hinter (hS.inter hT) hS] at hmul
-  have hzero' : (A.spectralPVM hA).proj T hT = 0 := by
-    exact hzero
-  rw [← hmul, hzero', mul_zero]
-
 /-- **A vector of `Vᗮ` carries no spectral mass below the gap.**
 
 `V` is the spectral subspace of `Set.Iic α`, so `Vᗮ` is the spectral range of
@@ -198,7 +186,7 @@ theorem specProjection_Iic_apply_eq_zero_of_gap
     exact ⟨ht.1, lt_of_le_of_lt ht.2 hc⟩
   have hzero : (A.spectralPVM hA).proj (Set.Ioc α c)
       measurableSet_Ioc = 0 :=
-    specProjection_eq_zero_of_subset A hA measurableSet_Ioc measurableSet_Ioo hsub hgap
+    (A.spectralPVM hA).proj_eq_zero_of_subset hsub measurableSet_Ioc measurableSet_Ioo hgap
   have hcomp : (A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic *
       (A.spectralPVM hA).proj (Set.Iic α)ᶜ measurableSet_Iic.compl = 0 := by
     rw [hmul, (A.spectralPVM hA).proj_congr hset

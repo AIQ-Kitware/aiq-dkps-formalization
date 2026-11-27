@@ -181,7 +181,7 @@ theorem norm_block_ge (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // 
         b.columnOperator W
       rw [hW, blockCLM_apply]
       exact comp_columnOperator_blockFun_left b
-        (TauCeti.LinearPMap.specProjection_comp_self hA _ _) _ _)
+        ((A.spectralPVM hA).proj_idem _ _) _ _)
     (by
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
@@ -190,7 +190,7 @@ theorem norm_block_ge (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // 
         = b.columnOperator W
       rw [hW, blockCLM_apply]
       exact comp_columnOperator_blockFun_right b _
-        (TauCeti.LinearPMap.specProjection_comp_self hB _ _) _)
+        ((Bop.spectralPVM hB).proj_idem _ _) _)
   have hcast : ((((k : ℝ) * ε : ℝ) : ℂ) - (((l : ℝ) * ε : ℝ) : ℂ) - (s : ℂ))
       = (((k : ℝ) * ε - (l : ℝ) * ε - s : ℝ) : ℂ) := by push_cast; ring
   have hscal : ‖((((k : ℝ) * ε : ℝ) : ℂ) - (((l : ℝ) * ε : ℝ) : ℂ) - (s : ℂ)) • W‖
@@ -249,9 +249,17 @@ theorem norm_sub_smul_ge_of_grid (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
   have hsplit : ∀ g : lp (fun _ : ι => E) 2,
       ∑' p : ℤ × ℤ, ‖blockCLM b (gridProj hA ε p.1) (gridProj hB ε p.2) g‖ₑ ^ 2 = ‖g‖ₑ ^ 2 := by
     intro g
-    simpa using tsum_enorm_sq_blockFun b (gridProj hA ε) (gridProj hB ε)
-      (TauCeti.LinearPMap.tsum_enorm_sq_specProjection_gridCell hA hε)
-      (TauCeti.LinearPMap.tsum_enorm_sq_adjoint_specProjection_gridCell hB hε) g
+    have hQ : ∀ v : F, ∑' k : ℤ, ‖(gridProj hB ε k).adjoint v‖ₑ ^ 2 = ‖v‖ₑ ^ 2 := by
+      intro v
+      unfold gridProj
+      simp_rw [fun k : ℤ => ((Bop.spectralPVM hB).isSelfAdjoint_proj
+        (Real.gridCell ε k) (Real.measurableSet_gridCell ε k)).adjoint_eq]
+      exact (Bop.spectralPVM hB).tsum_enorm_sq_proj (Real.gridCell ε)
+        (Real.measurableSet_gridCell ε) (Real.pairwise_disjoint_gridCell ε)
+        (Real.iUnion_gridCell hε) v
+    simpa only [blockCLM_apply] using tsum_enorm_sq_blockFun b (gridProj hA ε) (gridProj hB ε)
+      ((A.spectralPVM hA).tsum_enorm_sq_proj (Real.gridCell ε) (Real.measurableSet_gridCell ε)
+        (Real.pairwise_disjoint_gridCell ε) (Real.iUnion_gridCell hε)) hQ g
   -- the block bounds, in `ℝ≥0∞`
   have hblock : ∀ p : ℤ × ℤ,
       ENNReal.ofReal (δ - |s| - 4 * ε)

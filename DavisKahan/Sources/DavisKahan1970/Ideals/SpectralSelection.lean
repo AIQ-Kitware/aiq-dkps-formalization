@@ -180,7 +180,7 @@ theorem exists_gramSpectralBandModel
       exact hε.trans (hselected i)
     obtain ⟨η, hη0, hηε, hηa, hηsep⟩ :=
       exists_uniform_positive_separation a ha hε
-    let P := gramSpectralPVM X
+    let P := (gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)
     let band : FiniteValueLabel a → Set ℝ := fun label =>
       Set.Icc ((label.1 - η) ^ 2) ((label.1 + η) ^ 2)
     have hbandRank : ∀ label : FiniteValueLabel a,

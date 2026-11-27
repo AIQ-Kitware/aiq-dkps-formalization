@@ -1219,7 +1219,6 @@
   "TauCeti.DavisKahan.Experimental.ExactTanTheta.selfAdjoint_apply_orthogonal_selfAdjointSpectralSubspace_starProjection": "TauCeti.DavisKahan.TanTheta.selfAdjoint_apply_orthogonal_selfAdjointSpectralSubspace_starProjection",
   "TauCeti.DavisKahan.Experimental.ExactTanTheta.sourceDirectedAngle_apply_rightSingularBasis": "TauCeti.DavisKahan.TanTheta.sourceDirectedAngle_apply_rightSingularBasis",
   "TauCeti.DavisKahan.Experimental.ExactTanTheta.specProjection_Iic_apply_eq_zero_of_gap": "TauCeti.DavisKahan.TanTheta.specProjection_Iic_apply_eq_zero_of_gap",
-  "TauCeti.DavisKahan.Experimental.ExactTanTheta.specProjection_eq_zero_of_subset": "TauCeti.DavisKahan.TanTheta.specProjection_eq_zero_of_subset",
   "TauCeti.DavisKahan.Experimental.ExactTanTheta.spectrum_sourceDirectedAngle_lt_pi_div_two": "TauCeti.DavisKahan.TanTheta.spectrum_sourceDirectedAngle_lt_pi_div_two",
   "TauCeti.DavisKahan.Experimental.ExactTanTheta.starProjection_orthogonal_selfAdjointSpectralSubspace": "TauCeti.DavisKahan.TanTheta.starProjection_orthogonal_selfAdjointSpectralSubspace",
   "TauCeti.DavisKahan.Experimental.ExactTanTheta.subtypeL_comp_adjoint_subtypeL": "TauCeti.DavisKahan.TanTheta.subtypeL_comp_adjoint_subtypeL",

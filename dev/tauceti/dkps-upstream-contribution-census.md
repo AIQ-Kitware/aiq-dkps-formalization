@@ -1,5 +1,40 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 Gram spectral measure and projection laws
+
+The Gram rank and band estimates and their paper callers use
+`LinearPMap.spectralPVM` directly on `gramLinearPMap X`. The local
+`gramSpectralPVM` definition and its definitional projection equality
+retire. The rank estimates retain the strict thresholds and their scope
+over rectangular maps between complete complex Hilbert spaces. The
+retired Gram declarations are recorded at
+`b081f639933cd952c8a5d8a710c2afd92a6ccb76` (Jon Crall and OpenAI GPT-5.6
+Thinking, Kitware 2026, Apache-2.0). The native partial-map PVM comes
+from roed-math's separate SA-E01 construction. The local Gram rank and
+spectral selection arguments are DKPS work.
+[#41596](https://github.com/TauCetiProject/TauCeti/pull/41596)
+
+The Rayleigh–Ritz, spectral cutoff, FreeBeam and Sylvester proofs use
+the native intersection, nested-set, idempotence, and null-set laws.
+The abstract projection laws come from Jon Crall's DKPS/Spectra port
+#17527. The pointwise idempotence and null-set monotonicity come from
+his #19145 and #19005, which use that core. The Sylvester grid uses
+the arbitrary-countable squared-norm splitting from the DKPS-derived
+#18895. The retired grid and cutoff wrappers are recorded in DKPS at
+`0efd21085` (Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0).
+The statement that a nonzero spectral block meets the spectrum stays
+in DKPS as a consequence of native spectral support.
+[#17527](https://github.com/TauCetiProject/TauCeti/pull/17527) ·
+[#19145](https://github.com/TauCetiProject/TauCeti/pull/19145) ·
+[#19005](https://github.com/TauCetiProject/TauCeti/pull/19005) ·
+[#18895](https://github.com/TauCetiProject/TauCeti/pull/18895)
+
+The focused build including FreeBeam (10347 jobs), full default build
+(22786 jobs), and combined Challenge and paper semantic-surface build
+(22492 jobs) passed without warnings. All 17 available Davis–Kahan
+comparator signatures matched. The declaration-name check kept the 49
+baseline findings. The migration removes 134 net lines of Lean.
+
 ## November 27 bounded real-line spectral measure
 
 The bounded self-adjoint consumers now take TauCeti's native spectral

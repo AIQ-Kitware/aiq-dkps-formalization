@@ -17,9 +17,8 @@ The elementary real-grid geometry is now maintained in TauCeti (PR #18927):
 `Real.iUnion_gridCell`, and the two endpoint bounds. This module uses those
 accepted definitions directly, without local aliases or duplicate proofs.
 
-The remaining spectral-projection statements are genuinely unmerged donor
-mathematics: the square-summability decomposition, its adjoint form, projection
-idempotence, and existence of spectral points in nonzero measurable blocks.
+A nonzero measurable spectral block meets the spectrum. The proof takes the
+contrapositive of the native spectral support theorem.
 
 ## Provenance
 
@@ -41,37 +40,6 @@ variable {ε : ℝ}
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
-
-/-- **The grid's spectral projections split norms.**  This is the hypothesis the
-reassembly lemmas take, instantiated at the `ε`-grid. -/
-theorem tsum_enorm_sq_specProjection_gridCell (hε : 0 < ε) (v : H) :
-    ∑' k : ℤ, ‖(A.spectralPVM hA).proj (Real.gridCell ε k) (Real.measurableSet_gridCell ε k) v‖ₑ ^ 2
-      = ‖v‖ₑ ^ 2 := by
-  exact (A.spectralPVM hA).tsum_enorm_sq_proj (Real.gridCell ε) (Real.measurableSet_gridCell ε)
-    (Real.pairwise_disjoint_gridCell ε) (Real.iUnion_gridCell hε) v
-
-/-- The same, for the adjoints — which is the form the *right*-hand reassembly
-takes.  Spectral projections are self-adjoint, so it is the same statement. -/
-theorem tsum_enorm_sq_adjoint_specProjection_gridCell (hε : 0 < ε) (v : H) :
-    ∑' k : ℤ,
-        ‖((A.spectralPVM hA).proj (Real.gridCell ε k) (Real.measurableSet_gridCell ε k)).adjoint
-            v‖ₑ ^ 2
-      = ‖v‖ₑ ^ 2 := by
-  have hsa : ∀ k : ℤ,
-      ((A.spectralPVM hA).proj (Real.gridCell ε k) (Real.measurableSet_gridCell ε k)).adjoint
-        = (A.spectralPVM hA).proj (Real.gridCell ε k) (Real.measurableSet_gridCell ε k) := fun k
-            => by
-    exact ((A.spectralPVM hA).isSelfAdjoint_proj _ _).adjoint_eq
-  simp_rw [hsa]
-  exact tsum_enorm_sq_specProjection_gridCell hA hε v
-
-/-- Spectral projections are idempotent, in the composition form the block
-lemmas take. -/
-theorem specProjection_comp_self (Bset : Set ℝ) (hBset : MeasurableSet Bset) :
-    ((A.spectralPVM hA).proj Bset hBset).comp ((A.spectralPVM hA).proj Bset hBset)
-      = (A.spectralPVM hA).proj Bset hBset := by
-  exact (A.spectralPVM hA).proj_idem Bset hBset
-
 
 /-- **A cell carrying a nonzero projection meets the spectrum.**  Contrapositive
 of the native spectral support theorem; it is what lets empty cells

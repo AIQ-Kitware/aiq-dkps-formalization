@@ -60,31 +60,6 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 namespace LinearPMap
 
-section SpectralRange
-
-variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ)
-  (hB : MeasurableSet B)
-
-/-- Spectral projections of nested sets multiply to the inner one. -/
-theorem specProjection_mul_specProjection_of_subset {B₁ B₂ : Set ℝ}
-    (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (h : B₂ ⊆ B₁) :
-    (A.spectralPVM hA).proj B₁ hB₁ * (A.spectralPVM hA).proj B₂ hB₂ =
-      (A.spectralPVM hA).proj B₂ hB₂ := by
-  rw [(A.spectralPVM hA).proj_inter B₁ B₂ hB₁ hB₂]
-  exact (A.spectralPVM hA).proj_congr (Set.inter_eq_right.mpr h) _ _
-
-omit hB in
-/-- Pointwise form of `specProjection_mul_specProjection_of_subset`. -/
-theorem specProjection_apply_specProjection_of_subset {B₁ B₂ : Set ℝ}
-    (hB₁ : MeasurableSet B₁) (hB₂ : MeasurableSet B₂) (h : B₂ ⊆ B₁) (v : H) :
-    (A.spectralPVM hA).proj B₁ hB₁ ((A.spectralPVM hA).proj B₂ hB₂ v) =
-      (A.spectralPVM hA).proj B₂ hB₂ v := by
-  have hmul := congrArg (fun T : H →L[ℂ] H => T v)
-    (specProjection_mul_specProjection_of_subset hA hB₁ hB₂ h)
-  simpa only [_root_.mul_apply_eq_comp] using hmul
-
-end SpectralRange
-
 end LinearPMap
 
 /-! ### The canonical cutoff family -/
@@ -117,8 +92,9 @@ noncomputable def spectralCutoff (hA : IsSelfAdjoint A) (c : ℝ) {T : ℝ}
     (A.spectralPVM hA).proj_idem _ measurableSet_Icc
   mem_subspace := fun v => by
     rw [← Submodule.starProjection_eq_self_iff, ProjValMeasure.starProjection_range_proj]
-    exact LinearPMap.specProjection_apply_specProjection_of_subset hA
-      measurableSet_Iic measurableSet_Icc (Icc_neg_subset_Iic c T) v
+    rw [← _root_.mul_apply_eq_comp,
+      (A.spectralPVM hA).proj_mul_eq_right_of_subset (Icc_neg_subset_Iic c T)
+        measurableSet_Icc measurableSet_Iic]
   mem_domain := fun v =>
     LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc
       (fun _ hs => abs_le_of_mem_Icc_neg hcT hs)
@@ -134,8 +110,7 @@ noncomputable def spectralCutoff (hA : IsSelfAdjoint A) (c : ℝ) {T : ℝ}
         ((LinearMap.mem_range_self ((A.spectralPVM hA).proj _ measurableSet_Icc).toLinearMap v)))
     simpa only [Complex.ofReal_zero, zero_smul, sub_zero, ContinuousLinearMap.coe_coe] using h
   apply_mem_range := fun v => by
-    have hidem := LinearPMap.specProjection_apply_specProjection_of_subset hA
-      measurableSet_Icc measurableSet_Icc (subset_refl (Set.Icc (-T) c)) v
+    have hidem := (A.spectralPVM hA).proj_apply_proj (Set.Icc (-T) c) measurableSet_Icc v
     have hmem : (A.spectralPVM hA).proj (Set.Icc (-T) c) measurableSet_Icc v
         ∈ A.domain :=
       LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc

@@ -275,7 +275,7 @@ theorem beamLowEigenvalue_lt_five_hundred (ε : ℝ) (hε : 0 ≤ ε) (hε100 : 
   have hIci : ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
       (Set.Ici 500) measurableSet_Ici f = 0 := by
     conv_lhs => rw [← hfix]
-    rw [TauCeti.LinearPMap.specProjection_apply_specProjection]
+    rw [← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
     refine TauCeti.LinearPMap.specProjection_apply_eq_zero_of_eq_empty _ _ ?_ _
     ext t
     simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic, Set.mem_empty_iff_false,

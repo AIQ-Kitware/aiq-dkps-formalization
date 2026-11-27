@@ -111,10 +111,12 @@ theorem norm_gramContraction_apply_le_of_gramProjection_apply_eq_zero
     (Y : E0 →L[ℂ] E1) {Q : E0 →L[ℂ] E0}
     (hQ : ∀ y, Q y = gramOperator Y y - gramOperator Y (Q y))
     {r r' : ℝ} (hr0 : 0 ≤ r) (hlt : r' ^ 2 < r ^ 2) {η : E0}
-    (hη : (gramSpectralPVM Y).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi η = 0) :
+    (hη : ((gramLinearPMap Y).spectralPVM
+        (gramLinearPMap_isSelfAdjoint Y)).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi η = 0) :
     ‖Q η‖ ≤ r ^ 2 / (1 + r ^ 2) * ‖η‖ := by
   set P : E0 →L[ℂ] E0 :=
-    (gramSpectralPVM Y).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi with hPdef
+    ((gramLinearPMap Y).spectralPVM
+        (gramLinearPMap_isSelfAdjoint Y)).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi with hPdef
   set T : E0 →L[ℂ] E0 := gramOperator Y with hTdef
   have hcomm : ∀ x : E0, T (P x) = P (T x) := by
     intro x
@@ -216,11 +218,14 @@ theorem approximationNumber_le_of_gramContraction
     have hr'0 : 0 ≤ r' := ha0.trans hr1'.le
     have hsqlt : r' ^ 2 < r ^ 2 := by nlinarith
     set P : E0 →L[ℂ] E0 :=
-      (gramSpectralPVM Y).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi with hPdef
+      ((gramLinearPMap Y).spectralPVM
+          (gramLinearPMap_isSelfAdjoint Y)).proj (Set.Ioi (r' ^ 2)) measurableSet_Ioi with hPdef
     have hrank : P.rank ≤ (n : Cardinal) :=
       rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt Y n hr'0 hr1'
-    have hidem : IsIdempotentElem P := (gramSpectralPVM Y).proj_idem _ _
-    have hsa : IsSelfAdjoint P := (gramSpectralPVM Y).isSelfAdjoint_proj _ _
+    have hidem : IsIdempotentElem P :=
+      ((gramLinearPMap Y).spectralPVM (gramLinearPMap_isSelfAdjoint Y)).proj_idem _ _
+    have hsa : IsSelfAdjoint P := ((gramLinearPMap Y).spectralPVM
+      (gramLinearPMap_isSelfAdjoint Y)).isSelfAdjoint_proj _ _
     refine ContinuousLinearMap.approximationNumber_le_of_spectral_band
       (by positivity) hidem hsa hrank ?_
     intro x

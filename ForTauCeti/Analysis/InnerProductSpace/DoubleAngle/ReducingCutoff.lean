@@ -196,8 +196,7 @@ noncomputable def spectralBandCutoff (hA : IsSelfAdjoint A) {T : ℝ} (hT : 0 �
         ((LinearMap.mem_range_self ((A.spectralPVM hA).proj _ measurableSet_Icc).toLinearMap v)))
     simpa only [Complex.ofReal_zero, zero_smul, sub_zero, ContinuousLinearMap.coe_coe] using h
   apply_mem_range := fun v => by
-    have hidem := LinearPMap.specProjection_apply_specProjection_of_subset hA
-      measurableSet_Icc measurableSet_Icc (subset_refl (Set.Icc (-T) T)) v
+    have hidem := (A.spectralPVM hA).proj_apply_proj (Set.Icc (-T) T) measurableSet_Icc v
     have hmem : (A.spectralPVM hA).proj (Set.Icc (-T) T) measurableSet_Icc v
         ∈ A.domain :=
       LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc

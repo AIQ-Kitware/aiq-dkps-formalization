@@ -52,7 +52,8 @@ belongs to the polar initial space. -/
 theorem mem_polarInitial_of_mem_gramBand
     (X : E0 →L[ℂ] E1) {lo hi : ℝ} (hlo : 0 < lo)
     {x : E0}
-    (hx : x ∈ ((gramSpectralPVM X).proj (Set.Icc lo hi)
+    (hx : x ∈ (((gramLinearPMap X).spectralPVM
+        (gramLinearPMap_isSelfAdjoint X)).proj (Set.Icc lo hi)
       measurableSet_Icc).range) :
     x ∈ (X.ker)ᗮ := by
   rw [Submodule.mem_orthogonal]
@@ -62,7 +63,8 @@ theorem mem_polarInitial_of_mem_gramBand
     unfold gramOperator
     rw [ContinuousLinearMap.comp_apply, hzX, map_zero]
   let P : E0 →L[ℂ] E0 :=
-    (gramSpectralPVM X).proj (Set.Icc lo hi) measurableSet_Icc
+    ((gramLinearPMap X).spectralPVM
+        (gramLinearPMap_isSelfAdjoint X)).proj (Set.Icc lo hi) measurableSet_Icc
   have hzDom : z ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
@@ -73,15 +75,9 @@ theorem mem_polarInitial_of_mem_gramBand
     have hcomm := (((gramLinearPMap_isSelfAdjoint X).intertwines_spectralPVM_proj
         (Set.Icc lo hi) measurableSet_Icc).apply_eq (⟨z, hzDom⟩ : (gramLinearPMap X).domain)).symm
     simp only [gramLinearPMap_apply] at hcomm
-    rw [← gramSpectralPVM_proj_eq_specProjection] at hcomm
     rw [hzGram, map_zero] at hcomm
     exact hcomm
-  have hPzRange : P z ∈ (((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
-      (Set.Icc lo hi) measurableSet_Icc).range := by
-    rw [show P = ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
-        (Set.Icc lo hi) measurableSet_Icc from
-      gramSpectralPVM_proj_eq_specProjection X _ _]
-    exact (LinearMap.mem_range_self ((_root_.LinearPMap.spectralPVM _ _).proj _ _).toLinearMap z)
+  have hPzRange : P z ∈ P.range := LinearMap.mem_range_self P.toLinearMap z
   have hSA := gramLinearPMap_isSelfAdjoint X
   have hform := hSA.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj
     measurableSet_Icc (fun _ hs => hs.1) (β := lo) (x := ⟨P z, hPzDom⟩) hPzRange
@@ -98,7 +94,7 @@ theorem mem_polarInitial_of_mem_gramBand
   have hPz : P z = 0 := norm_eq_zero.mp hnorm
   rcases hx with ⟨x₀, rfl⟩
   have hself : ContinuousLinearMap.adjoint P = P := by
-    have h := (gramSpectralPVM X).isSelfAdjoint_proj
+    have h := ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).isSelfAdjoint_proj
       (Set.Icc lo hi) measurableSet_Icc
     change IsSelfAdjoint P at h
     rwa [ContinuousLinearMap.isSelfAdjoint_iff'] at h
@@ -112,7 +108,7 @@ theorem gram_residual_le_of_mem_band
     (X : E0 →L[ℂ] E1) {lam η ε : ℝ}
     (hη0 : 0 < η) (hηlam : η < lam) (hηε : η < ε / 16)
     {x : E0} (hxnorm : ‖x‖ = 1)
-    (hx : x ∈ ((gramSpectralPVM X).proj
+    (hx : x ∈ (((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
       (Set.Icc ((lam - η) ^ 2) ((lam + η) ^ 2)) measurableSet_Icc).range) :
     ‖gramOperator X x - ((lam ^ 2 : ℝ) : ℂ) • x‖ ≤ ε * lam / 4 := by
   let a : ℝ := (lam - η) ^ 2
@@ -142,14 +138,8 @@ theorem gram_residual_le_of_mem_band
     · have hright : b - c ≤ r := le_max_right _ _
       linarith [hs.2]
   have hxRange : x ∈ (((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
-      (Set.Icc a b) measurableSet_Icc).range := by
-    obtain ⟨y, rfl⟩ := (by simpa only [a, b] using hx :
-      x ∈ ((gramSpectralPVM X).proj (Set.Icc a b) measurableSet_Icc).range)
-    rw [show ((gramSpectralPVM X).proj (Set.Icc a b) measurableSet_Icc)
-        = ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
-          (Set.Icc a b) measurableSet_Icc from
-      gramSpectralPVM_proj_eq_specProjection X _ _]
-    exact (LinearMap.mem_range_self ((_root_.LinearPMap.spectralPVM _ _).proj _ _).toLinearMap y)
+      (Set.Icc a b) measurableSet_Icc).range :=
+    hx
   have hxDom : x ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top

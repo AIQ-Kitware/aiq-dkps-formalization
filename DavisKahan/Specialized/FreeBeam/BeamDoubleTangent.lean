@@ -491,8 +491,8 @@ theorem beamLowReflection_isSelfAdjoint (ε : ℝ) :
 /-- The reflection is an involution. -/
 theorem beamLowReflection_sq (ε : ℝ) :
     beamLowReflection ε * beamLowReflection ε = 1 := by
-  have hQ := TauCeti.LinearPMap.specProjection_apply_self
-    (beamPerturbed_isSelfAdjoint ε) (Set.Iic 500) measurableSet_Iic
+  have hQ := ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj_apply_proj
+    (Set.Iic 500) measurableSet_Iic
   refine ContinuousLinearMap.ext fun x => ?_
   show beamLowReflection ε (beamLowReflection ε x) = x
   have hstep : beamLowProjection ε (beamLowReflection ε x) = beamLowProjection ε x := by

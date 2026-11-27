@@ -90,7 +90,7 @@ last section, are stated over an arbitrary `RCLike` field.  The six printed
 statements of sections 4--6 are complex, and the obstruction is that they
 **name** `canonicalLowBranch`; it is `boundedSelfAdjointSpectralSubspace`, which
 is declared for `E →L[ℂ] E` alone, so the statements are not expressible over a
-general `𝕜` at all.  This is *not* the `gramSpectralPVM` obstruction that keeps
+general `𝕜` at all.  This is *not* the the Gram spectral measure obstruction that keeps
 `approximationNumber_mono_of_form_le` complex; that one is reached only through
 the proofs, never through these statements.  See section 0 below.
 
@@ -121,7 +121,7 @@ scalar field: `Submodule.principalCosines` is `𝕜`-generic, the block algebra
 `approximationNumber = singularValues` in finite dimensions is `𝕜`-generic.
 
 Sections 4--6 are the printed statements, and they are complex.  The obstruction
-is *not* the `ApproximationNumber.gramOperator`/`gramSpectralPVM` layer that holds
+is *not* the `ApproximationNumber.gramOperator`/the Gram spectral measure layer that holds
 `approximationNumber_mono_of_form_le` at `ℂ`; that layer is reached only
 transitively.  It is that the statements **name** `canonicalLowBranch`, which is
 `boundedSelfAdjointSpectralSubspace` and is declared for `E →L[ℂ] E` alone.  The
