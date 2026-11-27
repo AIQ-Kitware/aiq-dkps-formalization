@@ -530,11 +530,6 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
       rankInv S (rankMap S p) = p := by
     filter_upwards [ae_mem_sliceSum_restrict (dominatingMeasure μ) hSmeas] with p hp
     simpa using rankInv_rankMap_of_mem (S := S) (x := p.1) (n := p.2) hp
-  have hfg : ∀ᵐ p ∂(sliceSum fun k => (dominatingMeasure μ).restrict (levelSet S k)),
-      rankMap S (rankInv S p) = p := by
-    filter_upwards [ae_mem_sliceSum_restrict (dominatingMeasure μ)
-      fun k => measurableSet_levelSet hSmeas k] with p hp
-    simpa using rankMap_rankInv_of_mem (S := S) (x := p.1) (k := p.2) hp
   have hpres : MeasurePreserving (rankMap S)
       (sliceSum fun n => (dominatingMeasure μ).restrict (S n))
       (sliceSum fun k => (dominatingMeasure μ).restrict (levelSet S k)) :=
@@ -552,9 +547,15 @@ theorem exists_multiplicityLevels (μ : ℕ → Measure X) [∀ n, IsFiniteMeasu
         (dominatingMeasure μ).restrict (levelSet S k)) (hg.comp measurable_fst) (fun p => hgC p.1)))
         :=
     starOperatorUnitaryEquiv_of_intertwines
-      (compLpEquiv (rankInv S) (rankMap S) hpres' hpres hfg hgf)
-      (fun F => compLp_mulLp hpres' (hg.comp measurable_fst) (fun p => hgC p.1) F)
-      fun F => (star_compLp hpres' F).symm
+      (Lp.compMeasurePreservingₗᵢEquiv ℂ hpres' hpres hgf)
+      (fun F => by
+        simp only [Lp.compMeasurePreservingₗᵢEquiv_apply ℂ hpres' hpres hgf,
+          ← Lp.compMeasurePreservingₗᵢ_apply ℂ hpres']
+        exact compLp_mulLp hpres' (hg.comp measurable_fst) (fun p => hgC p.1) F)
+      fun F => by
+        simp only [Lp.compMeasurePreservingₗᵢEquiv_apply ℂ hpres' hpres hgf,
+          ← Lp.compMeasurePreservingₗᵢ_apply ℂ hpres']
+        exact (star_compLp hpres' F).symm
   exact step1.trans step2
 
 end NormalForm

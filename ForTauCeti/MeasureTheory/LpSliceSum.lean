@@ -39,7 +39,7 @@ Radon--Nikodym unitary and the relabelling unitary, never touching the Hilbert s
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Extraction class: **authored in place** for the Tau Ceti staging layer.
-* Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
+* Spectra influence: **none**.
 -/
 
 public section
@@ -54,29 +54,22 @@ section CongrMeasure
 
 variable {α : Type*} [MeasurableSpace α]
 
-/-- Transporting `L²` along an equality of measures.  Needed because the slice decomposition
-produces `L²` of a *restriction* while the summand is `L²` of a *pushforward*, and the two
-measures are equal but not syntactically so. -/
-noncomputable def lpCongrMeasure {μ ν : Measure α} (h : μ = ν) :
-    Lp ℂ 2 μ ≃ₗᵢ[ℂ] Lp ℂ 2 ν :=
-  h ▸ LinearIsometryEquiv.refl ℂ (Lp ℂ 2 μ)
-
 /-- Transporting along an equality of measures commutes with multiplication -- trivially, once
 the equality is substituted away, but the statement is what call sites need. -/
 theorem lpCongrMeasure_mulLp {μ ν : Measure α} (h : μ = ν) {g : α → ℂ} (hg : Measurable g)
     {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 μ) :
-    lpCongrMeasure h (Lp.multiplicationOperator (boundedSymbolLp μ hg hgC) F) =
-      Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ν hg hgC) (lpCongrMeasure h F) :=
-      by
+    castLpₗᵢ (𝕜 := ℂ) h (Lp.multiplicationOperator (boundedSymbolLp μ hg hgC) F) =
+      Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ν hg hgC)
+        (castLpₗᵢ (𝕜 := ℂ) h F) := by
   subst h
-  rfl
+  simp only [castLpₗᵢ_apply, cast_eq]
 
 /-- **Transport along an equality of measures is `star`-equivariant** -- trivially, once the
 equality is substituted away, but the statement is what the real-part transfer needs. -/
 theorem star_lpCongrMeasure {μ ν : Measure α} (h : μ = ν) (F : Lp ℂ 2 μ) :
-    star (lpCongrMeasure h F) = lpCongrMeasure h (star F) := by
+    star (castLpₗᵢ (𝕜 := ℂ) h F) = castLpₗᵢ (𝕜 := ℂ) h (star F) := by
   subst h
-  rfl
+  simp only [castLpₗᵢ_apply, cast_eq]
 
 end CongrMeasure
 
@@ -285,12 +278,15 @@ theorem ae_sliceSum {μ : ℕ → Measure X} {p : X × ℕ → Prop}
 noncomputable def sliceLpEquiv (μ : ℕ → Measure X) (n : ℕ) :
     Lp ℂ 2 (μ n) ≃ₗᵢ[ℂ] Lp ℂ 2 ((sliceSum μ).restrict (slice n)) :=
   (embLpEquiv (measurableEmbedding_sliceMap n) (μ n)).symm.trans
-    (lpCongrMeasure (restrict_sliceSum μ n).symm)
+    (castLpₗᵢ (𝕜 := ℂ) (restrict_sliceSum μ n).symm)
 
 /-- **The `n`-th summand embedding** `L²(μ n) →ₗᵢ[ℂ] L²(sliceSum μ)`. -/
 noncomputable def sliceLp (μ : ℕ → Measure X) (n : ℕ) :
     Lp ℂ 2 (μ n) →ₗᵢ[ℂ] Lp ℂ 2 (sliceSum μ) :=
-  (extendLp (sliceSum μ) (measurableSet_slice n)).comp (sliceLpEquiv μ n).toLinearIsometry
+  ((castLpₗᵢ (𝕜 := ℂ) Measure.restrict_univ).toLinearIsometry.comp
+    (extendByZeroLpₗᵢ ℂ (sliceSum μ) (measurableSet_slice n).nullMeasurableSet
+      (Set.subset_univ _))).comp
+    (sliceLpEquiv μ n).toLinearIsometry
 
 /-- **`L²` of the slice sum is the Hilbert sum of the `L²` spaces of the members.** -/
 theorem isHilbertSum_sliceLp (μ : ℕ → Measure X) :
@@ -327,7 +323,9 @@ theorem sliceLp_mulLp (μ : ℕ → Measure X) (n : ℕ) {g : X → ℂ} (hg : M
     rw [h1, h2]
   simp only [sliceLp, LinearIsometry.coe_comp, Function.comp_apply,
     LinearIsometryEquiv.coe_toLinearIsometry]
-  rw [hstep, extendLp_mulLp]
+  rw [hstep]
+  exact extendLp_mulLp (sliceSum μ) (measurableSet_slice n) (hg.comp measurable_fst)
+    (fun p => hgC p.1) (sliceLpEquiv μ n F)
 
 /-- **The summand identification is `star`-equivariant**, being built from the pushforward
 unitary and a transport along an equality of measures, both of which are. -/
@@ -344,7 +342,7 @@ theorem star_sliceLp (μ : ℕ → Measure X) (n : ℕ) (F : Lp ℂ 2 (μ n)) :
     star (sliceLp μ n F) = sliceLp μ n (star F) := by
   simp only [sliceLp, LinearIsometry.coe_comp, Function.comp_apply,
     LinearIsometryEquiv.coe_toLinearIsometry]
-  rw [star_extendLp, star_sliceLpEquiv]
+  rw [star_extendLp (sliceSum μ) (measurableSet_slice n), star_sliceLpEquiv]
 
 end SliceSum
 

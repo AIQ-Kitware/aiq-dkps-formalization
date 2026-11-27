@@ -7393,6 +7393,94 @@
       ],
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "November 27: Replace the local off-spectrum estimate with the native maximal-multiplier essential-range formula and total-operator bridge. The downstream bounded spectrum is the support of the pushforward, giving the original almost-everywhere membership at σ-finite scope. No direct proof descent is established."
+    },
+    {
+      "source_module": "ForTauCeti.MeasureTheory.LpComp",
+      "source_declarations": [
+        "TauCeti.compLp",
+        "TauCeti.coeFn_compLp",
+        "TauCeti.compLp_compLp",
+        "TauCeti.compLpEquiv",
+        "TauCeti.compLpEquiv_apply",
+        "TauCeti.measurePreserving_of_measurableEmbedding"
+      ],
+      "original_source_anchor": "667002b37885f9d191b4fa8c997cfc19727a978d:ForTauCeti/MeasureTheory/LpComp.lean",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_modules": [
+        "Mathlib.MeasureTheory.Function.LpSpace.Basic",
+        "TauCeti.MeasureTheory.Function.Lp.CompMeasurePreserving.Equiv"
+      ],
+      "final_declarations": [
+        "MeasureTheory.Lp.compMeasurePreservingₗᵢ",
+        "MeasureTheory.Lp.coeFn_compMeasurePreserving",
+        "Measurable.measurePreserving",
+        "MeasureTheory.Lp.leftInverse_compMeasurePreserving",
+        "MeasureTheory.Lp.compMeasurePreservingₗᵢEquiv",
+        "MeasureTheory.Lp.compMeasurePreservingₗᵢEquiv_apply",
+        "MeasureTheory.Lp.mem_range_compMeasurePreservingₗᵢ_iff"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/1553",
+      "integration": "5eb11cced31a0f2c7088def1c52e9d61af6b7600",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27. The Mathlib pullback isometry replaces the local L² construction. Cadence's pullback equivalence predates the DKPS source anchor. #22591 (bdf22f14679eb5be2fe9dbaade38ec83e01feeb5) only requires one a.e. inverse for two measure-preserving maps; multiplicity relabelling uses it directly. #32264 (d4aa217ecd931c14e95438e5fdfce791ddcc5e5e, accepted head 67ce0ab9d624266d729bd3f29b03a69149d92aa3) supplies the comap range criterion. The retained arbitrary measurable-embedding equivalence derives surjectivity from that criterion and MeasurableEmbedding.comap_eq. The multiplication and conjugation intertwiners remain. Direct DKPS proof descent for the later integrations is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.MeasureTheory.LpRestrict",
+      "source_declarations": [
+        "TauCeti.indicator_ae_eq_of_restrict",
+        "TauCeti.extendLpFun",
+        "TauCeti.coeFn_extendLpFun",
+        "TauCeti.extendLpFun_add",
+        "TauCeti.extendLpFun_smul",
+        "TauCeti.norm_extendLpFun",
+        "TauCeti.extendLp",
+        "TauCeti.coeFn_extendLp",
+        "TauCeti.restrictLp",
+        "TauCeti.coeFn_restrictLp",
+        "TauCeti.coeFn_extendLp_restrictLp",
+        "TauCeti.inner_extendLp_restrictLp_self",
+        "TauCeti.indicator_ae_eq_zero_of_inner_eq_zero"
+      ],
+      "original_source_anchor": "667002b37885f9d191b4fa8c997cfc19727a978d:ForTauCeti/MeasureTheory/LpRestrict.lean",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_modules": [
+        "Mathlib.MeasureTheory.Integral.Bochner.Set",
+        "TauCeti.MeasureTheory.Measure.Restrict",
+        "TauCeti.MeasureTheory.Function.Lp.ExtendByZero",
+        "TauCeti.MeasureTheory.Function.Lp.CastMeasure",
+        "TauCeti.MeasureTheory.Function.L2Space"
+      ],
+      "final_declarations": [
+        "MeasureTheory.LpToLpRestrictCLM",
+        "MeasureTheory.LpToLpRestrictCLM_coeFn",
+        "MeasureTheory.ae_eq_restrict_iff_indicator_ae_eq₀",
+        "TauCeti.extendByZeroLpₗᵢ",
+        "TauCeti.castLpₗᵢ",
+        "TauCeti.coeFn_castLpₗᵢ_extendByZeroLpₗᵢ",
+        "TauCeti.castLpₗᵢ_extendByZeroLpₗᵢ_LpToLpRestrictCLM_of_ae_compl_eq_zero",
+        "MeasureTheory.L2.ae_restrict_eq_zero_of_forall_inner_eq_zero"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/4273",
+      "integration": "0b8ad89aa80d5b308760dc5a69c965b97e472b3f",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27. Mathlib's continuous restriction preserves the original arbitrary-set scope. TauCeti #36225 (69603db32e89bd05808143b1e049316dc786153e) generalizes extension by zero to null-measurable sets. Forgejo #2381 (75e6fb4148ab98e3dd01e1d74750549f81a3a242, accepted head 99a680b61db14ef18db20c39d9cf739017262c5e) supplies the full-space cast and restriction equations. Forgejo #1314 (5c121efb1ceda65fac7f937073429ec454937e2f, accepted head 05532ae9654d4f1c556b43cdecbbc6d794f1bd14) supplies the orthogonality criterion for the density proof. Keep the countable Hilbert decomposition over pairwise disjoint measurable sets covering almost everywhere, as well as disjoint-range orthogonality and the multiplier and conjugation intertwiners. Direct DKPS proof descent is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.MeasureTheory.LpSliceSum",
+      "source_declarations": [
+        "TauCeti.lpCongrMeasure"
+      ],
+      "original_source_anchor": "4c5019e435d28dd80d8f9798458cdf2e0ddb7078:ForTauCeti/MeasureTheory/LpSliceSum.lean",
+      "authors_license": "Jon Crall and Claude Opus 5 at introduction, with Claude Fable 5 credited in the maintained source, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.MeasureTheory.Function.Lp.CastMeasure",
+      "final_declarations": [
+        "TauCeti.castLpₗᵢ",
+        "TauCeti.castLpₗᵢ_apply"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/2071",
+      "integration": "a5d2ff395790a7f0d4a5ba9da64c61cbbb16b293",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27. Kim Morrison's equal-measure isometry predates the DKPS source anchor. #2167 (af8211044881440ec24d7a745a114e1434c5755e) adds the application equation used by the retained multiplier and conjugation laws. The slice-sum assembly uses native casts and extension by zero."
     }
   ],
   "current_consumption_pin": "dde09e0dcec0e44e75739723bb2ba5baae6ae417"

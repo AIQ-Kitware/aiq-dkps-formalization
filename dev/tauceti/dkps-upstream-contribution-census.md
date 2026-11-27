@@ -1,5 +1,48 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native L² measure transport and partition maps
+
+Spectral multiplicity relabelling now uses Mathlib's pullback isometry and
+TauCeti's a.e.-inverse equivalence. Cadence's #1553
+(`5eb11cced31a`) predates the DKPS pullback. #22591
+(`bdf22f14679e`) reduces the equivalence to one a.e. inverse, which
+eliminates the reverse witness in the rank-map relabelling. The unitary for
+an arbitrary measurable embedding keeps its original scope and derives
+surjectivity from the comap range criterion added by #32264
+(`d4aa217ecd93`).
+[PR #1553](https://github.com/TauCetiProject/TauCeti/pull/1553) ·
+[PR #22591](https://github.com/TauCetiProject/TauCeti/pull/22591) ·
+[PR #32264](https://github.com/TauCetiProject/TauCeti/pull/32264)
+
+The countable Hilbert partition uses Mathlib's arbitrary-set restriction
+and the extension-by-zero isometry from #4273 (`0b8ad89aa80d`), generalized
+to null-measurable sets in #36225 (`69603db32e89`). Forgejo #2381
+(`75e6fb4148ab`) identifies its range after casting to the whole space.
+Forgejo #1314 (`5c121efb1ced`) supplies the orthogonality test for the density
+argument. Slice-sum assembly uses Kim Morrison's equal-measure cast from
+#2071 (`a5d2ff395790`), which predates the local cast, and its application
+equation from #2167 (`af8211044881`).
+[PR #4273](https://github.com/TauCetiProject/TauCeti/pull/4273) ·
+[PR #36225](https://github.com/TauCetiProject/TauCeti/pull/36225) ·
+[Forgejo #2381](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2381) ·
+[Forgejo #1314](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1314) ·
+[PR #2071](https://github.com/TauCetiProject/TauCeti/pull/2071) ·
+[PR #2167](https://github.com/TauCetiProject/TauCeti/pull/2167)
+
+The retired DKPS constructions are anchored at `667002b37885`
+(`LpComp`, `LpRestrict`) and `4c5019e435d2` (`LpSliceSum`), credited to
+Jon Crall and Claude Opus 5 at introduction (Kitware 2026, Apache-2.0).
+The later TauCeti integrations have unestablished DKPS proof descent.
+DKPS retains the partition theorem for arbitrary countable measurable
+partitions covering a.e., the slice-sum assembly, and the multiplication
+and conjugation intertwiners over the canonical maps. The TauCeti pin remains
+`dde09e0dce`.
+
+The focused build (7680 jobs), full default build (22676 jobs), and
+combined Challenge and result semantic-surface build (22386 jobs) passed
+without warnings. The declaration-name comparison found the same 49 baseline
+findings.
+
 ## November 27 native bounded symbols throughout spectral multiplicity
 
 All DKPS callers now use `MeasureTheory.Lp.multiplicationOperator` with native
