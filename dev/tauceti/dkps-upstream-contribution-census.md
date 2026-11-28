@@ -1,5 +1,39 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 real spectral projection and reduction
+
+The real spectral projection inherits the native complex PVM's
+star-projection law by complexification. Mathlib's
+`isStarProjection_iff_eq_starProjection_range` now identifies its
+orthogonal projection, and Forgejo #1964's
+`LinearPMap.isReducing_iff_intertwines_starProjection` supplies reduction
+from the descended domain intertwiner. This retains the original
+statements over arbitrary complete real Hilbert spaces and measurable
+spectral sets. The old range-complement formula follows from the real
+projection complement and the general `IsStarProjection.range_one_sub`
+law from #1351. Lean checked that realization at the old scope. Mathlib's
+`star_isometry` supplies continuity of conjugation on the continuous
+symbols used in the Cayley calculus.
+[#1964 integration](https://github.com/TauCetiProject/TauCeti/commit/c8bb063fe6bd7a441b156c5cc6e03b027dd29579) ·
+[#1351 integration](https://github.com/TauCetiProject/TauCeti/commit/bbe82ab541c0f117f704523a2de411b765f1447b)
+
+The conjugation invariance of the complex PVM and its descent to the real
+operator domain remain DKPS results. The retired real range and projection
+proofs are at `4fd67f1eb` in
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Complexification/SpectralDescent.lean`,
+by Jon Crall and OpenAI GPT-5.6 Sol, Kitware, Apache-2.0. The native
+reduction law is a general result used by this proof. DKPS proof descent
+for that law is unverified.
+
+The TauCeti pin advances to `48bd02333f9c`. The 17-commit delta leaves
+TauCeti's Mathlib and toolchain inputs unchanged.
+[TauCeti pin](https://github.com/TauCetiProject/TauCeti/commit/48bd02333f9c6d89c2923a6c247a6771fba4c023)
+
+The focused and default builds, Challenge, and the result semantic-surface
+audit passed with warnings treated as errors. All 1,569 source-census
+references resolved and all 17 available Davis–Kahan comparator
+signatures matched.
+
 ## November 28 bounded spectral truncations and complementary ranges
 
 The bounded Sylvester and tangent truncations use the graph law from

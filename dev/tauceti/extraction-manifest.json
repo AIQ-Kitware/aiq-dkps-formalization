@@ -431,6 +431,46 @@
   ],
   "records": [
     {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification.SpectralDescent",
+      "original_source_anchor": "6f3e1f30df09dab66fc99dd3393348f4e34120c6; immediate source 4fd67f1eb at the donor path.",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Sol, Kitware copyright, Apache-2.0.",
+      "roadmap_target": "SA-E09 reduction for real spectral ranges by descent from the accepted complex PVM",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification.SpectralDescent",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.Reducing",
+      "source_declarations": [
+        "TauCeti.LinearPMap.realSpecProjection_idem",
+        "TauCeti.LinearPMap.realSpecProjection_isSelfAdjoint",
+        "TauCeti.LinearPMap.realSpecProjection_mem_realSpecRange",
+        "TauCeti.LinearPMap.realSpecProjection_eq_self_of_mem",
+        "TauCeti.LinearPMap.mem_realSpecRange_iff",
+        "TauCeti.LinearPMap.realSpecProjection_eq_starProjection",
+        "TauCeti.LinearPMap.realSpecRange_compl",
+        "TauCeti.LinearPMap.realSpecProjection_mem_domain",
+        "TauCeti.LinearPMap.realSpecProjection_apply_domain",
+        "TauCeti.LinearPMap.apply_mem_realSpecRange",
+        "TauCeti.LinearPMap.realSpecRange_reduces"
+      ],
+      "accepted_upstream_declarations": [
+        "ProjValMeasure.isStarProjection_proj",
+        "IsSelfAdjoint.intertwines_spectralPVM_proj",
+        "LinearPMap.isReducing_iff_intertwines_starProjection",
+        "IsStarProjection.range_one_sub",
+        "isStarProjection_iff_eq_starProjection_range",
+        "LinearMap.IsIdempotentElem.mem_range_iff",
+        "star_isometry"
+      ],
+      "maintained_declarations": [
+        "TauCeti.LinearPMap.realSpecProjection_isStarProjection",
+        "TauCeti.LinearPMap.realSpecProjection_intertwines",
+        "TauCeti.LinearPMap.realSpecRange_reduces",
+        "TauCeti.LinearPMap.realSpecProjection_compl",
+        "TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule_realSpecRange"
+      ],
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "Forgejo #1964, #1351, Mathlib",
+      "migration_note": "November 28. The native complex PVM's star projection and full-domain intertwining descend by complexification. The descended real projection is a single star projection and its domain law is a single LinearPMap.Intertwines. Retire separate idempotence, symmetry, fixed-space and range-invariance proofs. Mathlib supplies orthogonal projection of the range and the fixed-point criterion for idempotents. Forgejo #1964 (c8bb063fe6bd7a441b156c5cc6e03b027dd29579) identifies reduction with the orthogonal projection intertwining. The arbitrary measurable real complement-range formula reduces to the descended projection complement and IsStarProjection.range_one_sub from #1351 (bbe82ab541c0f117f704523a2de411b765f1447b). The exact original real scopes were checked. Mathlib's star_isometry supplies continuity of conjugation on the continuous Cayley symbols. The complex PVM's conjugation invariance, real-domain transport and real-to-complex range bridge remain DKPS results. The paper bridge first appears at 12ffc700cf4ebb1902b8a2627b874e6485be357b. DKPS proof descent for the generic native reduction and range laws is unverified."
+    },
+    {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed and DavisKahan.SinTheta.BoundedPerturbation",
       "source_declarations": [
         "TauCeti.LinearPMap.addBounded",
@@ -9280,5 +9320,5 @@
       "migration_note": "The nuclear optimizer proofs identify the Schatten-one gauge by the native trace-class endpoint, with no separate expansion of the singular-value sum. The local optimizer results keep their original scope. This consumes David Roe's accepted family result as an existing dependency."
     }
   ],
-  "current_consumption_pin": "32f43847ab4f7c49dc9b24d445f9a6e42e223e2a"
+  "current_consumption_pin": "48bd02333f9c6d89c2923a6c247a6771fba4c023"
 }
