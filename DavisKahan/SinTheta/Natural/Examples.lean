@@ -168,7 +168,7 @@ example
         (selfAdjointSpectralSubspaceInclusion ((A.toLinearMap.toPMap ⊤))
           (_root_.LinearPMap.isSelfAdjoint_toPMap_top (T := A)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA)) S hS).adjoint) ∘L X‖
-      ≤ ‖generalResidual A X A0‖ := by
+      ≤ ‖A.sylvester A0 X‖ := by
   have : (TauCeti.SymmetricOperatorIdealFamily.opNorm ℂ).toOperatorIdealFamily.IsKyFanDominant := by
     rw [TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily]
     infer_instance

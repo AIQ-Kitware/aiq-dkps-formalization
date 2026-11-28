@@ -54,27 +54,27 @@ theorem complementaryBlock_mem_and_gauge_le
     (hIntertwine : A ∘L F₁ = F₁ ∘L Λ₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
-    (hR : N.Mem (generalResidual A X A₀)) :
+    (hR : N.Mem (A.sylvester A₀ X)) :
     N.Mem (X.adjoint ∘L F₁) ∧
       δ * N.gaugeReal (X.adjoint ∘L F₁)
-        ≤ N.gaugeReal (generalResidual A X A₀) := by
+        ≤ N.gaugeReal (A.sylvester A₀ X) := by
   have hEq := complementary_sylvester_equation
     (X := X) (F₁ := F₁) hA hA₀ hΛ₁ hIntertwine
-  have hAdj : N.Mem (generalResidual A X A₀).adjoint := N.adjoint_mem hR
-  have hComp : N.Mem ((generalResidual A X A₀).adjoint ∘L F₁) :=
+  have hAdj : N.Mem (A.sylvester A₀ X).adjoint := N.adjoint_mem hR
+  have hComp : N.Mem ((A.sylvester A₀ X).adjoint ∘L F₁) :=
     N.comp_right_mem F₁ hAdj
-  have hC : N.Mem (-((generalResidual A X A₀).adjoint ∘L F₁)) :=
+  have hC : N.Mem (-((A.sylvester A₀ X).adjoint ∘L F₁)) :=
     N.neg_mem hComp
   have hRaw := sylvester_mem_and_gauge_le_of_intervalExteriorGap
     N hA₀ hΛ₁ hβα hδ hgap hEq hC
   refine ⟨hRaw.1, hRaw.2.trans ?_⟩
   calc
-    N.gaugeReal (-((generalResidual A X A₀).adjoint ∘L F₁))
-        = N.gaugeReal ((generalResidual A X A₀).adjoint ∘L F₁) :=
+    N.gaugeReal (-((A.sylvester A₀ X).adjoint ∘L F₁))
+        = N.gaugeReal ((A.sylvester A₀ X).adjoint ∘L F₁) :=
           N.gaugeReal_neg hComp
-    _ ≤ N.gaugeReal (generalResidual A X A₀).adjoint :=
+    _ ≤ N.gaugeReal (A.sylvester A₀ X).adjoint :=
       N.gaugeReal_comp_right_le F₁ hAdj (opNorm_le_one_of_isometry hF₁)
-    _ = N.gaugeReal (generalResidual A X A₀) := N.gaugeReal_adjoint hR
+    _ = N.gaugeReal (A.sylvester A₀ X) := N.gaugeReal_adjoint hR
 
 /-- Isometric complementary-block specialization of the bounded theorem. -/
 theorem sinTheta_bounded
@@ -89,10 +89,10 @@ theorem sinTheta_bounded
     (hIntertwine : A ∘L F₁ = F₁ ∘L Λ₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
-    (hR : N.Mem (generalResidual A X A₀)) :
+    (hR : N.Mem (A.sylvester A₀ X)) :
     N.Mem (X.adjoint ∘L F₁) ∧
       δ * N.gaugeReal (X.adjoint ∘L F₁)
-        ≤ N.gaugeReal (generalResidual A X A₀) := by
+        ≤ N.gaugeReal (A.sylvester A₀ X) := by
   exact complementaryBlock_mem_and_gauge_le
     N hA hA₀ hΛ₁ hF₁ hIntertwine hβα hδ hgap hR
 
@@ -125,10 +125,10 @@ theorem generalizedSinTheta_bounded
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
-    (hR : N.Mem (generalResidual A X A₀)) :
+    (hR : N.Mem (A.sylvester A₀ X)) :
     N.Mem (sinThetaBlock X F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock X F₁ hframe hε)
-        ≤ N.gaugeReal (generalResidual A X A₀) := by
+        ≤ N.gaugeReal (A.sylvester A₀ X) := by
   have hRaw := complementaryBlock_mem_and_gauge_le
     N hA hA₀ hΛ₁ hF₁ hIntertwine hβα hδ hgap hR
   have hFrame := lowerFrame_sinThetaBlock_mem_and_gauge_le
@@ -139,7 +139,7 @@ theorem generalizedSinTheta_bounded
         = δ * (ε * N.gaugeReal (sinThetaBlock X F₁ hframe hε)) := by ring
     _ ≤ δ * N.gaugeReal (X.adjoint ∘L F₁) :=
       mul_le_mul_of_nonneg_left hFrame.2 hδ.le
-    _ ≤ N.gaugeReal (generalResidual A X A₀) := hRaw.2
+    _ ≤ N.gaugeReal (A.sylvester A₀ X) := hRaw.2
 
 /-- Exact bounded infinite-dimensional Davis--Kahan Theorem 6.1, expressed in
 terms of the full directed sine operator rather than an arbitrary invariant
@@ -158,10 +158,10 @@ theorem generalizedSinTheta_bounded_exact
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
-    (hR : N.Mem (generalResidual A X A₀)) :
+    (hR : N.Mem (A.sylvester A₀ X)) :
     N.Mem (directedSinThetaOperator X F₀ hframe hε) ∧
       δ * ε * N.gaugeReal (directedSinThetaOperator X F₀ hframe hε)
-        ≤ N.gaugeReal (generalResidual A X A₀) := by
+        ≤ N.gaugeReal (A.sylvester A₀ X) := by
   have hBlock := generalizedSinTheta_bounded
     N hA hA₀ hΛ₁ hdecomp.isometry₁ hIntertwine
       hβα hδ hε hframe hgap hR
@@ -198,11 +198,11 @@ theorem sinTheta_bounded_exact
     (hIntertwine : A ∘L F₁ = F₁ ∘L Λ₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : IntervalExteriorGap A₀ Λ₁ β α δ)
-    (hR : N.Mem (generalResidual A X A₀)) :
+    (hR : N.Mem (A.sylvester A₀ X)) :
     N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X) ∧
       δ * N.gaugeReal
         ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L X)
-        ≤ N.gaugeReal (generalResidual A X A₀) := by
+        ≤ N.gaugeReal (A.sylvester A₀ X) := by
   have hBlock := sinTheta_bounded
     N hA hA₀ hΛ₁ hX hdecomp.isometry₁ hIntertwine
       hβα hδ hgap hR

@@ -138,28 +138,21 @@ theorem directedGap_eq_restrictedBlock_norm
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The directed residual block satisfies the restricted Sylvester equation. -/
 theorem directedResidual_sylvesterEquation
-    {A : E →L[𝕜] E} (hA : A.IsSymmetric)
+    {A : E →L[𝕜] E} (_hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (hU : Submodule.IsReducing U A)
     {X : F →L[𝕜] E} {M : F →L[𝕜] F} :
     ContinuousLinearMap.sylvester (A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem
       _).mp hU.orthogonal_mem_invtSubmodule)) M
       (((Uᗮ.starProjection ∘L X)).codRestrict Uᗮ (fun _x => Uᗮ.starProjection_apply_mem _)) =
-      ((Uᗮ.starProjection ∘L DavisKahan.residual A X M)).codRestrict Uᗮ
+      ((Uᗮ.starProjection ∘L A.sylvester M X)).codRestrict Uᗮ
         (fun _x => Uᗮ.starProjection_apply_mem _) := by
-  rw [ContinuousLinearMap.sylvester_apply]
+  simp only [ContinuousLinearMap.sylvester_apply]
   apply ContinuousLinearMap.ext
   intro x
   apply Subtype.ext
-  have hUperp : Submodule.IsReducing Uᗮ A :=
-    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hA _).mpr
-    hU.orthogonal_mem_invtSubmodule
-  have hcomm := (show ∀ x, Uᗮ.starProjection (A x) = A (Uᗮ.starProjection x) from
-      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := Uᗮ)
-        (A := A)).mp hUperp).eq x) (X x)
-  change A (Uᗮ.starProjection (X x)) - Uᗮ.starProjection (X (M x)) =
-    Uᗮ.starProjection (A (X x) - X (M x))
-  rw [map_sub, hcomm]
+  exact LinearMap.congr_fun
+    (hU.sylvester_starProjection_orthogonal_comp X.toLinearMap M.toLinearMap) x
 
 omit [CompleteSpace E] in
 /-- The directed perturbation block satisfies its restricted Sylvester

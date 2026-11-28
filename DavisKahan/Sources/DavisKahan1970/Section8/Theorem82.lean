@@ -317,7 +317,7 @@ theorem theorem8_2_sinTwoTheta_residual_complex
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (_hPred : Submodule.IsReducing P A) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
-      2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
+      2 * ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ := by
   classical
   have hA0 : (A + K).IsSymmetric := hA.add hK
   have hQred : Submodule.IsReducing Q (A + K) :=
@@ -493,7 +493,7 @@ theorem theorem8_2_sinTwoTheta_residual_all_kyFan
     (_hPred : Submodule.IsReducing P A) :
     ∀ k : ℕ,
       delta * ((TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P).kyFanGauge k : ℝ) ≤
-        2 * ((residual (A + K) P.subtypeL (compressOperator P A)).kyFanGauge k : ℝ) := by
+        2 * (((A + K).sylvester (compressOperator P A) P.subtypeL).kyFanGauge k : ℝ) := by
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   have hKsa : IsSelfAdjoint K :=
@@ -527,10 +527,10 @@ theorem theorem8_2_sinTwoTheta_residual_symmetricNorming
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (_hPred : Submodule.IsReducing P A)
-    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    (hRmem : N.Mem ((A + K).sylvester (compressOperator P A) P.subtypeL)) :
     N.Mem (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ∧
       delta * N.gauge (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
-        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+        2 * N.gauge ((A + K).sylvester (compressOperator P A) P.subtypeL) := by
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   have hKsa : IsSelfAdjoint K :=
@@ -572,10 +572,10 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Submodule.IsReducing P A)
-    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    (hRmem : N.Mem ((A + K).sylvester (compressOperator P A) P.subtypeL)) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
-        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+        2 * N.gauge ((A + K).sylvester (compressOperator P A) P.subtypeL) := by
   obtain ⟨hmem, hle⟩ :=
     theorem8_2_sinTwoTheta_residual_symmetricNorming N hA hK hdelta hab hQ hQperp hPred hRmem
   refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
@@ -618,10 +618,10 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_sourceExact
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Submodule.IsReducing P A)
-    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    (hRmem : N.Mem ((A + K).sylvester (compressOperator P A) P.subtypeL)) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
-        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) :=
+        2 * N.gauge ((A + K).sylvester (compressOperator P A) P.subtypeL) :=
   TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul N hdelta two_pos
     hRmem fun M hM =>
       theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming M hA hK hdelta hab
@@ -658,7 +658,7 @@ theorem theorem8_2_residualHalfGap_maximalAngle_lt [FiniteDimensional ℂ H]
     (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
-    (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    (hRsmall : ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     maximalAngle P Q < Real.pi / 4 :=
   maximalAngle_lt_pi_div_four_of_directedGap_lt hrank
     (theorem8_2_residualHalfGap_complex hA hK hdelta hab hQ hQperp hPred hP hRsmall)
@@ -674,7 +674,7 @@ theorem theorem8_2_branch_maximalAngle_lt [FiniteDimensional ℂ H]
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     maximalAngle P Q < Real.pi / 4 :=
   maximalAngle_lt_pi_div_four_of_directedGap_lt hrank
     (theorem8_2_branch hA hK hdelta hab hQ hQperp hPred hP hsmall)
@@ -698,7 +698,7 @@ theorem theorem8_2_branch_maximalAngle_lt_of_crossedDefects
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hcross : CrossedDefectsEquivalent P Q)
     (hsmall : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     maximalAngle P Q < Real.pi / 4 :=
   maximalAngle_lt_pi_div_four_of_crossedDefects hcross
     (theorem8_2_branch hA hK hdelta hab hQ hQperp hPred hP hsmall)
@@ -717,7 +717,7 @@ theorem theorem8_2_branch_sourceFullAngle_lt [FiniteDimensional ℂ H]
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     sourceFullAngleLtC P Q (Real.pi / 4) := by
   apply (sourceFullAngleLtC_iff_maximalAngle_lt P Q (by positivity)).2
   exact theorem8_2_branch_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred hP
@@ -735,7 +735,7 @@ theorem theorem8_2_branch_sourceFullAngle_lt_of_crossedDefects
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hcross : CrossedDefectsEquivalent P Q)
     (hsmall : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     sourceFullAngleLtC P Q (Real.pi / 4) := by
   apply (sourceFullAngleLtC_iff_maximalAngle_lt P Q (by positivity)).2
   exact theorem8_2_branch_maximalAngle_lt_of_crossedDefects hA hK hdelta hab hQ hQperp
@@ -768,10 +768,10 @@ theorem theorem8_2_complex [FiniteDimensional ℂ H]
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : finrank ℂ P = finrank ℂ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ ∧
       delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
-        2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ ∧
+        2 * ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ ∧
       sourceFullAngleLtC P Q (Real.pi / 4) :=
   ⟨theorem8_2_sinTwoTheta_perturbation_complex hA hK hdelta hab hQ hQperp hPred,
     theorem8_2_sinTwoTheta_residual_complex hA hK hdelta hab hQ hQperp hPred,

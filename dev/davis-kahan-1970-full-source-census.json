@@ -62,7 +62,6 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan.residual",
         "TauCeti.DavisKahan1970.Equation1_8",
         "TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp",
         "TauCeti.DavisKahan.BoundedOperator.residual_eq_comp_subtypeL",

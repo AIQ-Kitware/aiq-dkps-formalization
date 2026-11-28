@@ -62,7 +62,7 @@ structure BoundedGeneralSinThetaProblem
     ((A₀.toLinearMap.toPMap ⊤))
     ((Λ₁.toLinearMap.toPMap ⊤)) gap
   residual_mem : N.Mem
-    (generalResidual A X A₀)
+    (A.sylvester A₀ X)
 
 namespace BoundedGeneralSinThetaProblem
 
@@ -81,14 +81,14 @@ noncomputable def toGeneral
     Λ₁ := (P.Λ₁.toLinearMap.toPMap ⊤)
     X := P.X
     F₁ := P.F₁
-    residual := generalResidual P.A P.X P.A₀
+    residual := P.A.sylvester P.A₀ P.X
     X_maps_domain := by intro x; simp
     F₁_maps_domain := by intro y; simp
     residual_eq := by
       intro x
       change P.A (P.X (x : F)) - P.X (P.A₀ (x : F)) =
-        (generalResidual P.A P.X P.A₀) (x : F)
-      simp only [generalResidual, ContinuousLinearMap.comp_apply, sub_apply]
+        (P.A.sylvester P.A₀ P.X) (x : F)
+      simp only [ContinuousLinearMap.sylvester_apply, ContinuousLinearMap.comp_apply, sub_apply]
     intertwines := by
       intro y
       have hy := congrArg (fun T : G →L[ℂ] E => T (y : G)) P.intertwines
@@ -131,7 +131,7 @@ theorem result
             (directedSinThetaOperator P.X P.F₀ P.lowerFrame
               P.frameLowerBound_pos)
         ≤ N.gaugeReal
-            (generalResidual P.A P.X P.A₀) :=
+            (P.A.sylvester P.A₀ P.X) :=
   FormBoundedGeneralSinThetaProblem.result N (P.toGeneral N)
 
 end BoundedGeneralSinThetaProblem

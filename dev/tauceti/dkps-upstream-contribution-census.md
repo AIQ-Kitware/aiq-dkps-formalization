@@ -1,5 +1,40 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 bounded trial residuals on the Sylvester operator
+
+The bounded invariant-pair residual and the general bounded trial residual
+now use `ContinuousLinearMap.sylvester A M X` directly. The Section 1
+declaration `Equation1_8` keeps its printed argument order, and the
+Section 8 estimates keep their real and complex scopes. The native
+Sylvester application gives the same formula without completeness or
+isometry assumptions. #14951 introduced the operator for SSP-B01 and
+reports independent development with no vendored formalization.
+[#14951 integration](https://github.com/TauCetiProject/TauCeti/commit/6ea8c5318607c3697111955208764e9146ce0a52)
+
+The exact-range cross-block proof now uses the two native Rayleigh–Ritz
+projection identities from #16661. The redundant projection wrapper
+retires. The Section 1 block-column identity still applies to invariant
+orthogonally complemented subspaces in incomplete ambient spaces. The
+bounded donor declarations before retirement are anchored at
+`035e85d0f` in `BoundedOperator/Problem.lean`,
+`SinTheta/Bounded/Core.lean`, and `BoundedOperator/TrialResidual.lean`.
+The headers credit Jon Crall with GPT 5.6 High or OpenAI GPT-5.6 Thinking
+under Apache-2.0, Kitware 2026.
+[#16661 integration](https://github.com/TauCetiProject/TauCeti/commit/c5920d8f1e7cad46b0c0d79052124180557ea6d2)
+
+The directed residual equation now uses
+`Submodule.IsReducing.sylvester_starProjection_orthogonal_comp`. #36835
+generalized the earlier DKPS-credited result from symmetric operators to
+reducing subspaces. DKPS still expresses the equation in the restricted
+codomain needed by its Sylvester estimates.
+[#36835](https://github.com/TauCetiProject/TauCeti/pull/36835)
+
+The focused build (10,325 jobs), full default build (22,804 jobs), and
+Challenge with the Section 8 and semantic-surface audits (22,516 jobs)
+passed without warnings. A Lean probe checked the original Equation
+(1.8) formula at its full scope. The source census resolved all 1,572
+registered declarations.
+
 ## November 27 Ritz residuals and finite tangent bounds
 
 DKPS now uses the accepted SSP-C28/C29 tangent estimate from its own

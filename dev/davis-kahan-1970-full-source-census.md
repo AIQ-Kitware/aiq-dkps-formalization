@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1573
+**Unique cited Lean declarations:** 1572
 
 ## How to use this census
 
@@ -119,7 +119,6 @@ The `importance` field is an external-review priority, not a proof-status axis. 
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan.residual`
 - `TauCeti.DavisKahan1970.Equation1_8`
 - `TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp`
 - `TauCeti.DavisKahan.BoundedOperator.residual_eq_comp_subtypeL`

@@ -388,13 +388,13 @@ theorem theorem8_2_residualHalfGap_complex
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Submodule.IsReducing P A)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
-    (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    (hRsmall : ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   classical
   let : CompleteSpace P :=
     (P.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   -- the printed residual is the first block column of the perturbation
-  have hRcol : residual (A + K) P.subtypeL (compressOperator P A) = K ∘L P.subtypeL :=
+  have hRcol : (A + K).sylvester (compressOperator P A) P.subtypeL = K ∘L P.subtypeL :=
     BoundedOperator.residual_eq_comp_subtypeL A K P
       hPred.mem_invtSubmodule
   rw [hRcol, TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection] at hRsmall
@@ -456,7 +456,7 @@ theorem theorem8_2_residualHalfGap_angle_lt
     (hQperp : SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Submodule.IsReducing P A)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
-    (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    (hRsmall : ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     Real.arcsin (P.directedProjectionGap Q) < Real.pi / 4 := by
   have h := theorem8_2_residualHalfGap_complex hA hK hdelta hab hQ hQperp hPred hP
     hRsmall
@@ -480,7 +480,7 @@ theorem theorem8_2_branch
     (hPred : Submodule.IsReducing P A)
     (hP : SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hsmall : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   rcases hsmall with h | h
   · exact theorem8_2_perturbationHalfGap_complex hA hK hdelta hab hQ hQperp hPred hP h

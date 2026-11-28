@@ -40,13 +40,6 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
-/-- Residual of the trial map and trial block. -/
-@[expose]
-def generalResidual
-    (A : E →L[𝕜] E) (X : F →L[𝕜] E)
-    (A₀ : F →L[𝕜] F) : F →L[𝕜] E :=
-  A ∘L X - X ∘L A₀
-
 omit [CompleteSpace G] in
 
 /-- Adjoint residual block identity used by the generalized theorem. -/
@@ -57,40 +50,13 @@ theorem adjoint_residual_block_identity
     (hA : A.IsSymmetric) (hA₀ : A₀.IsSymmetric)
     (_hΛ₁ : Λ₁.IsSymmetric)
     (hIntertwine : A ∘L F₁ = F₁ ∘L Λ₁) :
-    (generalResidual A X A₀).adjoint ∘L F₁ =
+    (A.sylvester A₀ X).adjoint ∘L F₁ =
       (X.adjoint ∘L F₁) ∘L Λ₁ -
         A₀ ∘L (X.adjoint ∘L F₁) := by
-  ext y
-  refine ext_inner_right 𝕜 fun x => ?_
-  have hInt : A (F₁ y) = F₁ (Λ₁ y) := by
-    have h := congrArg (fun T : G →L[𝕜] E => T y) hIntertwine
-    simpa only [ContinuousLinearMap.comp_apply] using h
-  calc
-    ⟪((generalResidual A X A₀).adjoint ∘L F₁) y, x⟫_𝕜
-        = ⟪F₁ y, generalResidual A X A₀ x⟫_𝕜 := by
-            rw [ContinuousLinearMap.comp_apply,
-              (generalResidual A X A₀).adjoint_inner_left x (F₁ y)]
-    _ = ⟪F₁ y, A (X x)⟫_𝕜 - ⟪F₁ y, X (A₀ x)⟫_𝕜 := by
-          simp only [generalResidual, ContinuousLinearMap.comp_apply, sub_apply,
-            inner_sub_right]
-    _ = ⟪A (F₁ y), X x⟫_𝕜 - ⟪F₁ y, X (A₀ x)⟫_𝕜 := by
-          exact congrArg
-            (fun z : 𝕜 => z - ⟪F₁ y, X (A₀ x)⟫_𝕜)
-            (hA (F₁ y) (X x)).symm
-    _ = ⟪F₁ (Λ₁ y), X x⟫_𝕜 - ⟪F₁ y, X (A₀ x)⟫_𝕜 := by
-          rw [hInt]
-    _ = ⟪X.adjoint (F₁ (Λ₁ y)), x⟫_𝕜 -
-          ⟪X.adjoint (F₁ y), A₀ x⟫_𝕜 := by
-          rw [← X.adjoint_inner_left x (F₁ (Λ₁ y)),
-            ← X.adjoint_inner_left (A₀ x) (F₁ y)]
-    _ = ⟪X.adjoint (F₁ (Λ₁ y)), x⟫_𝕜 -
-          ⟪A₀ (X.adjoint (F₁ y)), x⟫_𝕜 := by
-          exact congrArg
-            (fun z : 𝕜 => ⟪X.adjoint (F₁ (Λ₁ y)), x⟫_𝕜 - z)
-            (hA₀ (X.adjoint (F₁ y)) x).symm
-    _ = ⟪(((X.adjoint ∘L F₁) ∘L Λ₁ -
-          A₀ ∘L (X.adjoint ∘L F₁)) y), x⟫_𝕜 := by
-          simp only [ContinuousLinearMap.comp_apply, sub_apply, inner_sub_left]
+  have hA' : A.adjoint = A := hA.isSelfAdjoint.adjoint_eq
+  have hA₀' : A₀.adjoint = A₀ := hA₀.isSelfAdjoint.adjoint_eq
+  simp only [ContinuousLinearMap.sylvester_apply, map_sub, ContinuousLinearMap.adjoint_comp,
+    hA', hA₀', ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_assoc, hIntertwine]
 
 omit [CompleteSpace G] in
 
@@ -105,7 +71,7 @@ theorem complementary_sylvester_equation
     (hIntertwine : A ∘L F₁ = F₁ ∘L Λ₁) :
     A₀ ∘L (X.adjoint ∘L F₁) -
       (X.adjoint ∘L F₁) ∘L Λ₁ =
-        -((generalResidual A X A₀).adjoint ∘L F₁) := by
+        -((A.sylvester A₀ X).adjoint ∘L F₁) := by
   rw [adjoint_residual_block_identity hA hA₀ hΛ₁ hIntertwine]
   abel
 

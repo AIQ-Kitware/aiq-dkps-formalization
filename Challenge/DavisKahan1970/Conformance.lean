@@ -417,10 +417,10 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
       x ≤ a - d ∨ b + d ≤ x)
     (M : V →L[ℂ] V)
-    (hMem : N.Mem (DavisKahan.residual A V.subtypeL M)) :
+    (hMem : N.Mem (A.sylvester M V.subtypeL)) :
     N.Mem (sinTwoThetaIdealBlock U V) ∧
       d * N.gauge (sinTwoThetaIdealBlock U V) ≤
-        2 * N.gauge (DavisKahan.residual A V.subtypeL M) := by
+        2 * N.gauge (A.sylvester M V.subtypeL) := by
   sorry
 
 section SinTwoThetaWholeSpace

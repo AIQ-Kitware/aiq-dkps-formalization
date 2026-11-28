@@ -45,7 +45,7 @@ theorem SymmetricOperatorIdealFamily.reflectionDefect_isometricRange_mem
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (hA : IsSelfAdjoint A)
     (X : F →L[ℂ] H) (M : F →L[ℂ] F)
-    (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
+    (hX : IsometricEmbedding X) (hR : N.Mem (A.sylvester M X)) :
     letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
       (AddMonoidHomClass.isometry_of_norm X hX)
     let V : Submodule ℂ H := LinearMap.range X.toLinearMap
@@ -74,23 +74,23 @@ theorem SymmetricOperatorIdealFamily.gauge_reflectionDefect_isometricRange_le_fo
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (hA : IsSelfAdjoint A)
     (X : F →L[ℂ] H) (M : F →L[ℂ] F)
-    (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
+    (hX : IsometricEmbedding X) (hR : N.Mem (A.sylvester M X)) :
     letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
       (AddMonoidHomClass.isometry_of_norm X hX)
     let V : Submodule ℂ H := LinearMap.range X.toLinearMap
-    N.gaugeReal (reflectionDefect V A) ≤ 4 * N.gaugeReal (residual A X M) := by
+    N.gaugeReal (reflectionDefect V A) ≤ 4 * N.gaugeReal (A.sylvester M X) := by
   let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
     (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   change N.gaugeReal (reflectionDefect V A) ≤
-    4 * N.gaugeReal (residual A X M)
+    4 * N.gaugeReal (A.sylvester M X)
   let T : H →L[ℂ] H := Vᗮ.starProjection ∘L A ∘L V.starProjection
   have hT : N.Mem T := by
     simpa [T, isometricRangeCrossBlock] using
       isometricRangeCrossBlock_mem
         N A X M hX hR
   have hTa : N.Mem T.adjoint := N.adjoint_mem hT
-  have hTg : N.gaugeReal T ≤ N.gaugeReal (residual A X M) := by
+  have hTg : N.gaugeReal T ≤ N.gaugeReal (A.sylvester M X) := by
     simpa [T, isometricRangeCrossBlock] using
       gauge_isometricRangeCrossBlock_le
         N A X M hX hR
@@ -108,7 +108,7 @@ theorem SymmetricOperatorIdealFamily.gauge_reflectionDefect_isometricRange_le_fo
           norm_num
           gcongr
     _ = 4 * N.gaugeReal T := by rw [hadj]; ring
-    _ ≤ 4 * N.gaugeReal (residual A X M) := by gcongr
+    _ ≤ 4 * N.gaugeReal (A.sylvester M X) := by gcongr
 
 end Residual
 end SharedFoundations

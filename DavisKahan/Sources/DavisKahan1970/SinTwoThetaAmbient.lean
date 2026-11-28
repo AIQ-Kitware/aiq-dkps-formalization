@@ -441,7 +441,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
     (M : V →L[ℂ] V) :
     ∀ k : ℕ,
       d * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ) ≤
-        2 * ((residual A V.subtypeL M).kyFanGauge k : ℝ) := by
+        2 * ((A.sylvester M V.subtypeL).kyFanGauge k : ℝ) := by
   intro k
   let W := U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)
   let D := conjByIsometryEquiv V.reflection A - A
@@ -504,55 +504,43 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
     rw [Submodule.starProjection_orthogonal_apply,
       V.starProjection_eq_self_iff.mpr v.property, sub_self]
   have hfactor : Vᗮ.starProjection ∘L A ∘L V.starProjection =
-      (Vᗮ.starProjection ∘L residual A V.subtypeL M) ∘L
+      (Vᗮ.starProjection ∘L A.sylvester M V.subtypeL) ∘L
         V.subtypeL.adjoint := by
-    rw [← hP]
-    apply ContinuousLinearMap.ext
-    intro x
-    have hzero :
-        Vᗮ.starProjection (V.subtypeL (M (V.subtypeL.adjoint x))) = 0 := by
-      have hz := congrArg
-        (fun T : V →L[ℂ] E => T (M (V.subtypeL.adjoint x))) hQV
-      simpa only [ContinuousLinearMap.comp_apply, zero_apply]
-        using hz
-    change
-      Vᗮ.starProjection (A (V.subtypeL (V.subtypeL.adjoint x))) =
-        Vᗮ.starProjection
-          ((A ∘L V.subtypeL - V.subtypeL ∘L M) (V.subtypeL.adjoint x))
-    rw [sub_apply, ContinuousLinearMap.comp_apply,
-      ContinuousLinearMap.comp_apply, map_sub, hzero, sub_zero]
+    rw [← hP, ContinuousLinearMap.sylvester_apply, ContinuousLinearMap.comp_sub,
+      ← ContinuousLinearMap.comp_assoc _ _ M, hQV, ContinuousLinearMap.zero_comp, sub_zero]
+    simp only [ContinuousLinearMap.comp_assoc]
   have hcrossKyFan : ((Vᗮ.starProjection ∘L A ∘L V.starProjection).kyFanGauge k : ℝ) ≤
-      ((residual A V.subtypeL M).kyFanGauge k : ℝ) := by
+      ((A.sylvester M V.subtypeL).kyFanGauge k : ℝ) := by
     have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le
-        Vᗮ.starProjection (residual A V.subtypeL M) V.subtypeL.adjoint k))
+        Vᗮ.starProjection (A.sylvester M V.subtypeL) V.subtypeL.adjoint k))
     calc
       ((Vᗮ.starProjection ∘L A ∘L V.starProjection).kyFanGauge k : ℝ) =
-          (((Vᗮ.starProjection ∘L residual A V.subtypeL M) ∘L
+          (((Vᗮ.starProjection ∘L A.sylvester M V.subtypeL) ∘L
               V.subtypeL.adjoint).kyFanGauge k : ℝ) := congrArg ((fun gaugeMap =>
                 (ContinuousLinearMap.kyFanGauge gaugeMap k : ℝ))) hfactor
       _ ≤ ‖Vᗮ.starProjection‖ *
-          ((residual A V.subtypeL M).kyFanGauge k : ℝ) *
+          ((A.sylvester M V.subtypeL).kyFanGauge k : ℝ) *
           ‖V.subtypeL.adjoint‖ := hcomp
-      _ ≤ 1 * ((residual A V.subtypeL M).kyFanGauge k : ℝ) * 1 := by
+      _ ≤ 1 * ((A.sylvester M V.subtypeL).kyFanGauge k : ℝ) * 1 := by
         have hproj : ‖(Vᗮ.starProjection : E →L[ℂ] E)‖ ≤ 1 :=
           Vᗮ.starProjection_norm_le
         have hadj : ‖V.subtypeL.adjoint‖ ≤ 1 := by
           rw [ContinuousLinearMap.adjoint.norm_map]
           exact ExactSinTheta.opNorm_le_one_of_isometry hX
-        have hnonneg : 0 ≤ ((residual A V.subtypeL M).kyFanGauge k : ℝ) :=
-          (NNReal.coe_nonneg ((residual A V.subtypeL M).kyFanGauge k))
+        have hnonneg : 0 ≤ ((A.sylvester M V.subtypeL).kyFanGauge k : ℝ) :=
+          (NNReal.coe_nonneg ((A.sylvester M V.subtypeL).kyFanGauge k))
         have hleft :
             ‖(Vᗮ.starProjection : E →L[ℂ] E)‖ *
-                ((residual A V.subtypeL M).kyFanGauge k : ℝ) ≤
-              1 * ((residual A V.subtypeL M).kyFanGauge k : ℝ) :=
+                ((A.sylvester M V.subtypeL).kyFanGauge k : ℝ) ≤
+              1 * ((A.sylvester M V.subtypeL).kyFanGauge k : ℝ) :=
           mul_le_mul_of_nonneg_right hproj hnonneg
         exact mul_le_mul hleft hadj (norm_nonneg _) (by simp)
-      _ = ((residual A V.subtypeL M).kyFanGauge k : ℝ) := by simp
+      _ = ((A.sylvester M V.subtypeL).kyFanGauge k : ℝ) := by simp
   calc
     d * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ)
         ≤ ((projectionBlock Wᗮ U D).kyFanGauge k : ℝ) := hraw
     _ ≤ 2 * ((Vᗮ.starProjection ∘L A ∘L V.starProjection).kyFanGauge k : ℝ) := hblockDefect
-    _ ≤ 2 * ((residual A V.subtypeL M).kyFanGauge k : ℝ) := by
+    _ ≤ 2 * ((A.sylvester M V.subtypeL).kyFanGauge k : ℝ) := by
       gcongr
 
 /-- **The directed residual `sin 2Θ₀` theorem for every source unitarily
@@ -576,11 +564,11 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
       x ≤ a - d ∨ b + d ≤ x)
     (M : V →L[ℂ] V)
-    (hMem : N.Mem (residual A V.subtypeL M)) :
+    (hMem : N.Mem (A.sylvester M V.subtypeL)) :
     N.Mem (sinTwoThetaIdealBlock U V) ∧
       d * N.gauge (sinTwoThetaIdealBlock U V) ≤
-        2 * N.gauge (residual A V.subtypeL M) := by
-  let R : V →L[ℂ] E := residual A V.subtypeL M
+        2 * N.gauge (A.sylvester M V.subtypeL) := by
+  let R : V →L[ℂ] E := A.sylvester M V.subtypeL
   let R0 : E →L[ℂ] E := R ∘L V.subtypeL.adjoint
   have hsameR : ContinuousLinearMap.SameSingularValues R0 R := by
     exact ContinuousLinearMap.sameSingularValues_extendDomainByZero V R

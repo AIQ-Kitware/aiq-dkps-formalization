@@ -8493,6 +8493,42 @@
       "integration": "c5920d8f1e7cad46b0c0d79052124180557ea6d2; b7158a7a74a5e16704f49fc52aef1adb7b39071d",
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "The canonical range instance and adjoint formula now supply the trial-residual and reflection-defect proofs. The same operator hypotheses are retained using AddMonoidHomClass.isometry_of_norm on the original norm-preserving condition. The complementary projection vanishes directly on range vectors, and the adjoint contraction follows from Mathlib's adjoint norm equality. #16661 states independent development and acknowledges DKPS roadmap implementation. #42936 generalizes the range API and has unestablished DKPS proof descent."
+    },
+    {
+      "source_module": "DavisKahan.BoundedOperator.Problem; DavisKahan.SinTheta.Bounded.Core; DavisKahan.BoundedOperator.TrialResidual",
+      "source_declarations": [
+        "TauCeti.DavisKahan.residual",
+        "TauCeti.DavisKahan.ExactSinTheta.generalResidual",
+        "TauCeti.DavisKahan.BoundedOperator.isometricRangeProjection",
+        "TauCeti.DavisKahan.BoundedOperator.isometricRangeProjection_eq_comp_adjoint"
+      ],
+      "original_source_anchor": "035e85d0faa54abdccfb4953b8d606d51c62e353 at the source modules above",
+      "authors_license": "Jon Crall and GPT 5.6 High for BoundedOperator.Problem, Jon Crall and OpenAI GPT-5.6 Thinking for the other two modules. Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Basic; TauCeti.Analysis.InnerProductSpace.RangeProjection; TauCeti.Analysis.InnerProductSpace.RayleighRitz",
+      "final_declarations": [
+        "ContinuousLinearMap.sylvester",
+        "ContinuousLinearMap.sylvester_apply",
+        "ContinuousLinearMap.comp_adjoint_eq_starProjection_range",
+        "ContinuousLinearMap.sylvester_compression",
+        "ContinuousLinearMap.starProjection_orthogonal_range_comp_sylvester"
+      ],
+      "roadmap_targets": ["SSP-B01", "SSP-C01–C08 (supporting API)"],
+      "upstream_pr": "#14951; #16661; #42936",
+      "integration": "6ea8c5318607c3697111955208764e9146ce0a52; c5920d8f1e7cad46b0c0d79052124180557ea6d2; b7158a7a74a5e16704f49fc52aef1adb7b39071d",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "Bounded residual applications use the native Sylvester operator. Section 1 Equation1_8 retains its source argument order, and the retained invariant-compression and Rayleigh-quotient identities require no ambient completeness. The exact-range cross block uses the native projected-residual formula. Both #14951 and #16661 report independent development, with #16661 acknowledging the DKPS roadmap implementation. #42936 generalizes the accepted range API."
+    },
+    {
+      "source_module": "DavisKahan.InfiniteDimensional.SinTheta.Restriction",
+      "source_declarations": ["TauCeti.DavisKahanExt.directedResidual_sylvesterEquation"],
+      "original_source_anchor": "035e85d0faa54abdccfb4953b8d606d51c62e353:DavisKahan/InfiniteDimensional/SinTheta/Restriction.lean",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.InvariantSubspace",
+      "final_declarations": ["Submodule.IsReducing.sylvester_starProjection_orthogonal_comp"],
+      "upstream_pr": "#26822; #36835",
+      "integration": "3dd25fa2147bc1998858ca867f2c2b3381c58d26; 7d18dcc1e85f003204a98b0a5756583c7446d03d",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The restricted codomain needed by the DKPS Sylvester estimates is retained. Its pointwise identity follows from the native projected residual on a reducing subspace. #36835 preserves the credit to the finite DKPS statement originally recorded in Residual/AngleEmbedding.lean."
     }
   ],
   "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"

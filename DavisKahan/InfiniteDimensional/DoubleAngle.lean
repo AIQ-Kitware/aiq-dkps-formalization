@@ -834,7 +834,7 @@ theorem reflectionDefect_range_le_residual
     [(LinearMap.range X.toLinearMap).HasOrthogonalProjection]
     {M : F →L[𝕜] F} (_hM : M.IsSymmetric) :
     ‖reflectionDefect (LinearMap.range X.toLinearMap) A‖ ≤
-      2 * ‖residual A X M‖ := by
+      2 * ‖A.sylvester M X‖ := by
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   set V := LinearMap.range X.toLinearMap with hV
@@ -844,9 +844,8 @@ theorem reflectionDefect_range_le_residual
   calc ‖reflectionDefect V A‖
       ≤ 2 * ‖Vᗮ.starProjection ∘L A ∘L V.starProjection‖ :=
         norm_reflectionDefect_le_two_mul_norm_cross V hAsa
-    _ ≤ 2 * ‖residual A X M‖ := by
-        have hres : residual A X M = A ∘L X - X ∘L M := rfl
-        rw [hres]
+    _ ≤ 2 * ‖A.sylvester M X‖ := by
+        rw [ContinuousLinearMap.sylvester_apply]
         linarith
 
 /-- Reflection-defect `sin 2Θ` theorem.
@@ -908,7 +907,7 @@ Lean proof route for a weaker agent:
 2. Show that self-adjointness of `M` makes `X ∘ M ∘ X⁻¹` reduce the trial
    range.
 3. Express the reflection defect of `A` through the trial range in terms of
-   `residual A X M` and its adjoint block.
+   `A.sylvester M X` and its adjoint block.
 4. Bound that defect by twice the residual norm and invoke the
    reflection-defect theorem.
 -/
@@ -919,7 +918,7 @@ theorem sinTwoTheta_residual
     [(LinearMap.range X.toLinearMap).HasOrthogonalProjection]
     {M : F →L[𝕜] F} (hM : M.IsSymmetric)
     {d : ℝ} (hd : 0 < d) (hfinite : FiniteGapConfiguration A U d) :
-    d * ‖sinTwoThetaEmbedding U X‖ ≤ 2 * ‖residual A X M‖ := by
+    d * ‖sinTwoThetaEmbedding U X‖ ≤ 2 * ‖A.sylvester M X‖ := by
   let V := LinearMap.range X.toLinearMap
   have hangle : sinTwoThetaEmbedding U X = sinTwoAngleOperator U V :=
     sinTwoThetaEmbedding_eq_rangeAngle U X hX
@@ -928,7 +927,7 @@ theorem sinTwoTheta_residual
         = d * ‖sinTwoAngleOperator U V‖ := by rw [hangle]
     _ ≤ ‖reflectionDefect V A‖ :=
       sinTwoTheta_reflectionDefect hA hU hd hfinite
-    _ ≤ 2 * ‖residual A X M‖ :=
+    _ ≤ 2 * ‖A.sylvester M X‖ :=
       reflectionDefect_range_le_residual hA X hX hM
 
 /-- Perturbation form of the `sin 2Θ` theorem.

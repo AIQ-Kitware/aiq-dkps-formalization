@@ -44,7 +44,7 @@ theorem norm_reflectionDefect_isometricRange_le_two_mul_residual
     letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
       (AddMonoidHomClass.isometry_of_norm X hX)
     let V : Submodule ℂ H := LinearMap.range X.toLinearMap
-    ‖reflectionDefect V A‖ ≤ 2 * ‖residual A X M‖ := by
+    ‖reflectionDefect V A‖ ≤ 2 * ‖A.sylvester M X‖ := by
   let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
     (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
@@ -53,7 +53,7 @@ theorem norm_reflectionDefect_isometricRange_le_two_mul_residual
         ≤ 2 * ‖Vᗮ.starProjection ∘L A ∘L V.starProjection‖ :=
       norm_reflectionDefect_le_two_mul_norm_cross V hA
     _ = 2 * ‖isometricRangeCrossBlock A X hX‖ := by rfl
-    _ ≤ 2 * ‖residual A X M‖ := by
+    _ ≤ 2 * ‖A.sylvester M X‖ := by
       gcongr
       exact norm_isometricRangeCrossBlock_le_residual A X M hX
 

@@ -142,9 +142,10 @@ projection is the complexification of the projection
 theorem norm_residual_complexify
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     (hPinv : ∀ x ∈ P, A x ∈ P) :
-    ‖residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
-        (compressOperator (complexifySubmodule P) (complexify A))‖ =
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
+    ‖(complexify A + complexify K).sylvester
+        (compressOperator (complexifySubmodule P) (complexify A))
+        (complexifySubmodule P).subtypeL‖ =
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ := by
   classical
   have : CompleteSpace P :=
     (P.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
@@ -170,10 +171,11 @@ change the two residuals are equal as bounded operators. -/
 theorem residual_complexify_equiv
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     (hPinv : ∀ x ∈ P, A x ∈ P) :
-    (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
-        (compressOperator (complexifySubmodule P) (complexify A))) ∘L
+    ((complexify A + complexify K).sylvester
+        (compressOperator (complexifySubmodule P) (complexify A))
+        (complexifySubmodule P).subtypeL) ∘L
           (complexifySubmoduleEquiv P).toContinuousLinearEquiv.toContinuousLinearMap =
-      complexify (residual (A + K) P.subtypeL (compressOperator P A)) := by
+      complexify ((A + K).sylvester (compressOperator P A) P.subtypeL) := by
   have hPinvC : ∀ z ∈ complexifySubmodule P,
       complexify A z ∈ complexifySubmodule P :=
     fun _ hz => mapsTo_complexifySubmodule hPinv hz
@@ -203,17 +205,19 @@ theorem sameApproximationSingularSequence_residual_complexify
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     (hPinv : ∀ x ∈ P, A x ∈ P) :
     ContinuousLinearMap.SameSingularValues
-      (complexify (residual (A + K) P.subtypeL (compressOperator P A)))
-      (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
-        (compressOperator (complexifySubmodule P) (complexify A))) := by
+      (complexify ((A + K).sylvester (compressOperator P A) P.subtypeL))
+      ((complexify A + complexify K).sylvester
+        (compressOperator (complexifySubmodule P) (complexify A))
+        (complexifySubmodule P).subtypeL) := by
   let U := LinearIsometryEquiv.refl Complex (RealComplexification E)
   let W := complexifySubmoduleEquiv P
   have hcoord :
       U.toContinuousLinearEquiv.toContinuousLinearMap ∘L
-          complexify (residual (A + K) P.subtypeL (compressOperator P A)) ∘L
+          complexify ((A + K).sylvester (compressOperator P A) P.subtypeL) ∘L
           W.symm.toContinuousLinearEquiv.toContinuousLinearMap =
-        residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
-          (compressOperator (complexifySubmodule P) (complexify A)) := by
+        (complexify A + complexify K).sylvester
+        (compressOperator (complexifySubmodule P) (complexify A))
+        (complexifySubmodule P).subtypeL := by
     apply ContinuousLinearMap.ext
     intro z
     let w := W.symm z
@@ -307,11 +311,11 @@ theorem theorem8_2_residualHalfGap_real
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
-    (hRsmall : ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+    (hRsmall : ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
-  have hRsmallc : ‖residual (complexify A + complexify K)
-      (complexifySubmodule P).subtypeL
-      (compressOperator (complexifySubmodule P) (complexify A))‖ < delta / 2 := by
+  have hRsmallc : ‖(complexify A + complexify K).sylvester
+        (compressOperator (complexifySubmodule P) (complexify A))
+        (complexifySubmodule P).subtypeL‖ < delta / 2 := by
     rw [norm_residual_complexify A K P hPred.mem_invtSubmodule]
     exact hRsmall
   have hmain := theorem8_2_residualHalfGap_complex
@@ -333,7 +337,7 @@ theorem theorem8_2_branch_directed_real
     (hPred : Submodule.IsReducing P A)
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (halt : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     P.directedProjectionGap Q < Real.sqrt 2 / 2 := by
   rcases halt with hsmall | hRsmall
   · exact theorem8_2_perturbationHalfGap_real hA hK hdelta hab hQ hQperp
@@ -395,7 +399,7 @@ theorem theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hcross : CrossedDefectsEquivalent P Q)
     (halt : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     maximalAngle P Q < Real.pi / 4 :=
   maximalAngle_lt_pi_div_four_of_crossedDefects hcross
     (theorem8_2_branch_directed_real hA hK hdelta hab hQ hQperp hPred hP halt)
@@ -415,7 +419,7 @@ theorem theorem8_2_branch_real_maximalAngle_lt [FiniteDimensional ℝ E]
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
     (halt : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     maximalAngle P Q < Real.pi / 4 :=
   maximalAngle_lt_pi_div_four_of_directedGap_lt hrank
     (theorem8_2_branch_directed_real hA hK hdelta hab hQ hQperp hPred hP halt)
@@ -501,7 +505,7 @@ theorem theorem8_2_sinTwoTheta_residual_real
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Submodule.IsReducing P A) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
-      2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
+      2 * ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ := by
   have hmain := theorem8_2_sinTwoTheta_residual_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
     hdelta hab (spectrumIn_complexify_add hQ)
@@ -624,20 +628,21 @@ theorem theorem8_2_sinTwoTheta_residual_real_symmetricNorming
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Submodule.IsReducing P A)
-    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    (hRmem : N.Mem ((A + K).sylvester (compressOperator P A) P.subtypeL)) :
     N.Mem (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ∧
       delta * N.gauge (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
-        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+        2 * N.gauge ((A + K).sylvester (compressOperator P A) P.subtypeL) := by
   have hseq := sameApproximationSingularSequence_residual_complexify A K P
     hPred.mem_invtSubmodule
   have htransport := SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N hseq
   have hRmemComplexified :
-      N.Mem (complexify (residual (A + K) P.subtypeL (compressOperator P A))) :=
+      N.Mem (complexify ((A + K).sylvester (compressOperator P A) P.subtypeL)) :=
     (ExactSinTheta.SymmetricNormingFunction.mem_complexify_iff N _).2 hRmem
   have hRmemC :
       N.Mem
-        (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
-          (compressOperator (complexifySubmodule P) (complexify A))) :=
+        ((complexify A + complexify K).sylvester
+        (compressOperator (complexifySubmodule P) (complexify A))
+        (complexifySubmodule P).subtypeL) :=
     htransport.1.mp hRmemComplexified
   obtain ⟨hBlockMemC, hboundC⟩ :=
     theorem8_2_sinTwoTheta_residual_symmetricNorming N
@@ -654,17 +659,19 @@ theorem theorem8_2_sinTwoTheta_residual_real_symmetricNorming
   refine ⟨hBlockMem, ?_⟩
   have hResidualGauge :
       N.gauge
-          (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
-            (compressOperator (complexifySubmodule P) (complexify A))) =
-        N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+          ((complexify A + complexify K).sylvester
+        (compressOperator (complexifySubmodule P) (complexify A))
+        (complexifySubmodule P).subtypeL) =
+        N.gauge ((A + K).sylvester (compressOperator P A) P.subtypeL) := by
     calc
       N.gauge
-          (residual (complexify A + complexify K) (complexifySubmodule P).subtypeL
-            (compressOperator (complexifySubmodule P) (complexify A))) =
+          ((complexify A + complexify K).sylvester
+        (compressOperator (complexifySubmodule P) (complexify A))
+        (complexifySubmodule P).subtypeL) =
           N.gauge
-            (complexify (residual (A + K) P.subtypeL (compressOperator P A))) :=
+            (complexify ((A + K).sylvester (compressOperator P A) P.subtypeL)) :=
         htransport.2.symm
-      _ = N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) :=
+      _ = N.gauge ((A + K).sylvester (compressOperator P A) P.subtypeL) :=
         ExactSinTheta.SymmetricNormingFunction.gauge_complexify N _
   rw [ExactSinTheta.SymmetricNormingFunction.gauge_complexify, hResidualGauge] at hboundC
   exact hboundC
@@ -685,10 +692,10 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Submodule.IsReducing P A)
-    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    (hRmem : N.Mem ((A + K).sylvester (compressOperator P A) P.subtypeL)) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
-        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
+        2 * N.gauge ((A + K).sylvester (compressOperator P A) P.subtypeL) := by
   obtain ⟨hmem, hle⟩ :=
     theorem8_2_sinTwoTheta_residual_real_symmetricNorming N hA hK hdelta hab hQ hQperp hPred hRmem
   refine ⟨(Angle.mem_directedSinTwoAngleOperator_trialSide_iff _ _ N).mpr hmem, ?_⟩
@@ -706,7 +713,7 @@ theorem theorem8_2_branch_real_sourceFullAngle_lt [FiniteDimensional ℝ E]
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     sourceFullAngleLtR P Q (Real.pi / 4) := by
   apply (sourceFullAngleLtR_iff_maximalAngle_lt P Q (by positivity)).2
   exact theorem8_2_branch_real_maximalAngle_lt hA hK hdelta hab hQ hQperp hPred hP
@@ -723,7 +730,7 @@ theorem theorem8_2_branch_real_sourceFullAngle_lt_of_crossedDefects
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hcross : CrossedDefectsEquivalent P Q)
     (hsmall : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     sourceFullAngleLtR P Q (Real.pi / 4) := by
   apply (sourceFullAngleLtR_iff_maximalAngle_lt P Q (by positivity)).2
   exact theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects hA hK hdelta hab hQ hQperp
@@ -756,10 +763,10 @@ theorem theorem8_2_real [FiniteDimensional ℝ E]
     (hP : Foundation.SpectrumIn A P (Set.Icc (beta - delta / 2) (alpha + delta / 2)))
     (hrank : Module.finrank ℝ P = Module.finrank ℝ Q)
     (hsmall : ‖K‖ < delta / 2 ∨
-      ‖residual (A + K) P.subtypeL (compressOperator P A)‖ < delta / 2) :
+      ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ < delta / 2) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ ∧
       delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
-        2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ ∧
+        2 * ‖(A + K).sylvester (compressOperator P A) P.subtypeL‖ ∧
       sourceFullAngleLtR P Q (Real.pi / 4) :=
   ⟨theorem8_2_sinTwoTheta_perturbation_real hA hK hdelta hab hQ hQperp hPred,
     theorem8_2_sinTwoTheta_residual_real hA hK hdelta hab hQ hQperp hPred,
@@ -798,10 +805,10 @@ theorem theorem8_2_sinTwoTheta_residual_directedAngle_real_sourceExact
     (hQ : Foundation.SpectrumIn (A + K) Q (Set.Icc beta alpha))
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : Submodule.IsReducing P A)
-    (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
+    (hRmem : N.Mem ((A + K).sylvester (compressOperator P A) P.subtypeL)) :
     N.Mem (Angle.directedSinTwoAngleOperator P Q) ∧
       delta * N.gauge (Angle.directedSinTwoAngleOperator P Q) ≤
-        2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) :=
+        2 * N.gauge ((A + K).sylvester (compressOperator P A) P.subtypeL) :=
   TauCeti.DavisKahan1970.normalizedUnitaryInvariant_of_symmetricNorming_mul N hdelta two_pos
     hRmem fun M hM =>
       theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming M hA hK hdelta

@@ -22,7 +22,7 @@ compression and the residual.
 
 Section 1 does make three claims, and this file gives them the paper's numbering:
 
-* (1.8) itself, `R = (A + H)E₀ - E₀A₀`, which is `DavisKahan.residual`;
+* (1.8) itself, `R = (A + H)E₀ - E₀A₀`, given by `ContinuousLinearMap.sylvester_apply`;
 * the Section 1 remark that `R` is the first block *column* of the perturbation, `R = HE₀`;
 * the identity `R⋆R = H₀² + B⋆B` and the conclusion the paper draws from it -- that among
   all choices of `A₀` the residual is smallest when `H₀ = 0`, which is the Rayleigh-quotient
@@ -60,7 +60,10 @@ respect: `E₀` is an arbitrary bounded map rather than an isometry, and `A₀` 
 operator on its source space rather than one whose eigenvalues approximate the `λⱼ`.  Every
 source-facing consumer instantiates `E₀` at `P.subtypeL` and `A₀` at `compressOperator P A`,
 which is the printed configuration. -/
-alias Equation1_8 := DavisKahan.residual
+@[expose]
+noncomputable def Equation1_8 {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
+    (A : H →L[𝕜] H) (X : F →L[𝕜] H) (M : F →L[𝕜] F) : F →L[𝕜] H :=
+  A.sylvester M X
 
 /-- **Davis--Kahan 1970, Section 1: the residual is the first block column of the
 perturbation**, `R = HE₀`.
@@ -85,13 +88,11 @@ accordingly an arbitrary bounded operator. -/
 theorem equation1_8_norm_sq_eq_diagonal_add_offDiagonal
     (A K : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
     (hPinv : ∀ x ∈ P, A x ∈ P) (u : P) :
-    ‖DavisKahan.residual (A + K) P.subtypeL
-        (DavisKahan.Sylvester.compressOperator P A) u‖ ^ 2 =
+    ‖(A + K).sylvester (compressOperator P A) P.subtypeL u‖ ^ 2 =
       ‖P.starProjection (K (u : H))‖ ^ 2 + ‖Pᗮ.starProjection (K (u : H))‖ ^ 2 := by
   have hR := congrArg (fun T : P →L[𝕜] H => T u)
     (DavisKahan.BoundedOperator.residual_eq_comp_subtypeL A K P hPinv)
-  have hRu : DavisKahan.residual (A + K) P.subtypeL
-      (DavisKahan.Sylvester.compressOperator P A) u = K (u : H) := hR
+  have hRu : (A + K).sylvester (compressOperator P A) P.subtypeL u = K (u : H) := hR
   rw [hRu]
   exact Submodule.norm_sq_eq_add_norm_sq_starProjection (K (u : H)) P
 
@@ -104,14 +105,11 @@ theorem equation1_8_norm_offDiagonal_le
     (A K : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
     (hPinv : ∀ x ∈ P, A x ∈ P) (u : P) :
     ‖Pᗮ.starProjection (K (u : H))‖ ≤
-        ‖DavisKahan.residual (A + K) P.subtypeL
-          (DavisKahan.Sylvester.compressOperator P A) u‖ ∧
+        ‖(A + K).sylvester (compressOperator P A) P.subtypeL u‖ ∧
       (‖Pᗮ.starProjection (K (u : H))‖ =
-          ‖DavisKahan.residual (A + K) P.subtypeL
-            (DavisKahan.Sylvester.compressOperator P A) u‖ ↔
+          ‖(A + K).sylvester (compressOperator P A) P.subtypeL u‖ ↔
         P.starProjection (K (u : H)) = 0) := by
-  set R := DavisKahan.residual (A + K) P.subtypeL
-    (DavisKahan.Sylvester.compressOperator P A) u with hRdef
+  set R := (A + K).sylvester (compressOperator P A) P.subtypeL u
   have hsplit := equation1_8_norm_sq_eq_diagonal_add_offDiagonal A K P hPinv u
   have hle : ‖Pᗮ.starProjection (K (u : H))‖ ≤ ‖R‖ := by
     have hsq : ‖Pᗮ.starProjection (K (u : H))‖ ^ 2 ≤ ‖R‖ ^ 2 := by
@@ -143,12 +141,13 @@ from `R⋆R = H₀² + B⋆B`: choosing `H₀ = 0`, equivalently
 theorem equation1_8_residual_norm_minimized_by_rayleighQuotient
     (T : H →L[𝕜] H) (P : Submodule 𝕜 H) [P.HasOrthogonalProjection]
     (A₀ : P →L[𝕜] P) :
-    ‖DavisKahan.residual T P.subtypeL (DavisKahan.Sylvester.compressOperator P T)‖ ≤
-      ‖DavisKahan.residual T P.subtypeL A₀‖ := by
-  let R := DavisKahan.residual T P.subtypeL A₀
+    ‖T.sylvester (compressOperator P T) P.subtypeL‖ ≤
+      ‖T.sylvester A₀ P.subtypeL‖ := by
+  let R := T.sylvester A₀ P.subtypeL
   have hfactor :
-      DavisKahan.residual T P.subtypeL (DavisKahan.Sylvester.compressOperator P T) =
+      T.sylvester (compressOperator P T) P.subtypeL =
         Pᗮ.starProjection ∘L R := by
+    simp only [R, ContinuousLinearMap.sylvester_apply]
     apply ContinuousLinearMap.ext
     intro u
     change T (u : H) - P.starProjection (T (u : H)) =

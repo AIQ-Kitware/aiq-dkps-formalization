@@ -6,13 +6,14 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 
 /-!
 # Bounded invariant-pair problems
 
-The residual and sine block belong to an approximate invariant pair. Projection,
-reducing-subspace, symmetry, and norm estimates are used directly from their
-canonical `Submodule` and `ContinuousLinearMap` APIs.
+The sine block belongs to an approximate invariant pair. The residual is
+`A.sylvester M X`. Projection, reducing-subspace, symmetry, and norm estimates
+use the canonical `Submodule` and `ContinuousLinearMap` APIs.
 -/
 
 public section
@@ -43,11 +44,6 @@ def IsQuarterAcute (U V : Submodule 𝕜 E)
 /-- An isometric bounded embedding. -/
 @[expose]
 def IsometricEmbedding (X : F →L[𝕜] E) : Prop := ∀ x, ‖X x‖ = ‖x‖
-
-/-- Residual of an approximate invariant pair. -/
-@[expose]
-def residual (A : E →L[𝕜] E) (X : F →L[𝕜] E)
-    (M : F →L[𝕜] F) : F →L[𝕜] E := A ∘L X - X ∘L M
 
 /-- Directed sine block for an approximate subspace embedding. -/
 @[expose]

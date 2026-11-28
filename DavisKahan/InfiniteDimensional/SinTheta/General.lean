@@ -237,7 +237,7 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
 
 Lean proof route for a weaker agent:
 
-1. Set `Y=(I-P_U)X` and derive `A|_{Uᗮ} Y - Y M = (I-P_U) residual A X M`.
+1. Set `Y=(I-P_U)X` and derive `A|_{Uᗮ} Y - Y M = (I-P_U) A.sylvester M X`.
 2. Apply the ordered constant-one Sylvester theorem using `hsep`.
 3. Bound the projected residual by the full residual norm.
 4. Identify `Y` with `sinThetaEmbedding U X`.
@@ -259,11 +259,11 @@ theorem sinTheta_residual
     {M : F →L[𝕜] F} (hM : M.IsSymmetric)
     {d : ℝ} (hd : 0 < d)
     (hsep : OrderedSpectraSeparated M ⊤ A Uᗮ d) :
-    d * ‖sinThetaEmbedding U X‖ ≤ ‖residual A X M‖ := by
+    d * ‖sinThetaEmbedding U X‖ ≤ ‖A.sylvester M X‖ := by
   let Y : F →L[𝕜] Uᗮ :=
     (((Uᗮ).starProjection ∘L X)).codRestrict Uᗮ (fun x => Uᗮ.starProjection_apply_mem _)
   let C : F →L[𝕜] Uᗮ :=
-    (((Uᗮ).starProjection ∘L residual A X M)).codRestrict Uᗮ
+    (((Uᗮ).starProjection ∘L A.sylvester M X)).codRestrict Uᗮ
       (fun x => Uᗮ.starProjection_apply_mem _)
   have hEq : ContinuousLinearMap.sylvester (A.restrict
     ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp hU.orthogonal_mem_invtSubmodule)) M
@@ -297,11 +297,11 @@ theorem sinTheta_residual
       hM hd hsep' hEq
   have hY : ‖Y‖ = ‖sinThetaEmbedding U X‖ :=
     ContinuousLinearMap.opNorm_codRestrict_eq _ _ _
-  have hC : ‖C‖ ≤ ‖residual A X M‖ := by
+  have hC : ‖C‖ ≤ ‖A.sylvester M X‖ := by
     calc
-      ‖C‖ = ‖(Uᗮ).starProjection ∘L residual A X M‖ :=
+      ‖C‖ = ‖(Uᗮ).starProjection ∘L A.sylvester M X‖ :=
         ContinuousLinearMap.opNorm_codRestrict_eq _ _ _
-      _ ≤ ‖residual A X M‖ :=
+      _ ≤ ‖A.sylvester M X‖ :=
         projection_comp_opNorm_le Uᗮ _
   simpa [hY] using hbound.trans hC
 

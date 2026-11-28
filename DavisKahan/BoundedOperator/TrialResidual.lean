@@ -11,6 +11,7 @@ public import DavisKahan.SinTheta.FrameFactorization
 public import DavisKahan.Sylvester.Spectrum
 public import TauCeti.Analysis.InnerProductSpace.RangeProjection
 public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
+import TauCeti.Analysis.InnerProductSpace.RayleighRitz
 
 public section
 
@@ -62,7 +63,8 @@ theorem trialResidualCore_eq_ritzDifference
     (T : H →L[ℂ] H) (Z : Submodule ℂ H)
     [Z.HasOrthogonalProjection] [CompleteSpace Z] :
     trialResidualCore T Z =
-      T ∘L Z.subtypeL - Z.subtypeL ∘L compressOperator Z T := by
+      T.sylvester (compressOperator Z T) Z.subtypeL := by
+  rw [ContinuousLinearMap.sylvester_apply]
   apply ContinuousLinearMap.ext
   intro z
   change Zᗮ.starProjection (T (z : H)) =
@@ -95,23 +97,10 @@ theorem residual_eq_comp_subtypeL {𝕜 : Type*} [RCLike 𝕜] {G : Type*}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     (A K : G →L[𝕜] G) (P : Submodule 𝕜 G)
     [P.HasOrthogonalProjection] (hPinv : ∀ x ∈ P, A x ∈ P) :
-    residual (A + K) P.subtypeL (compressOperator P A) = K ∘L P.subtypeL := by
+    (A + K).sylvester (compressOperator P A) P.subtypeL = K ∘L P.subtypeL := by
+  rw [ContinuousLinearMap.sylvester_apply, compressOperator_eq_restrict_of_invariant A P hPinv]
   ext u
-  have hAu : A (u : G) ∈ P := hPinv (u : G) u.2
-  have hco : ((compressOperator P A u : P) : G) = A (u : G) := by
-    change P.starProjection (A (u : G)) = A (u : G)
-    exact Submodule.starProjection_eq_self_iff.mpr hAu
-  show (A + K) (u : G) - ((compressOperator P A u : P) : G) = K (u : G)
-  rw [hco]
-  show A (u : G) + K (u : G) - A (u : G) = K (u : G)
-  abel
-
-/-- Ambient projection onto the range of an isometric trial map. -/
-noncomputable def isometricRangeProjection
-    (X : F →L[ℂ] H) (hX : IsometricEmbedding X) : H →L[ℂ] H := by
-  letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
-    (AddMonoidHomClass.isometry_of_norm X hX)
-  exact (LinearMap.range X.toLinearMap).starProjection
+  simp [add_sub_cancel_left]
 
 /-- The ambient complementary cross block of `A` relative to the range of an
 isometric trial map. -/
@@ -124,13 +113,6 @@ noncomputable def isometricRangeCrossBlock
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   exact Vᗮ.starProjection ∘L A ∘L V.starProjection
 
-/-- The range projection has the expected explicit factorization. -/
-theorem isometricRangeProjection_eq_comp_adjoint
-    (X : F →L[ℂ] H) (hX : IsometricEmbedding X) :
-    isometricRangeProjection X hX = X ∘L X.adjoint :=
-  (ContinuousLinearMap.comp_adjoint_eq_starProjection_range
-    (AddMonoidHomClass.isometry_of_norm X hX)).symm
-
 /-- The cross block factors exactly through any residual `A X - X M`.
 The term involving `M` disappears because the complementary range projection
 annihilates `X`. -/
@@ -142,48 +124,43 @@ theorem isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint
         letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
           (AddMonoidHomClass.isometry_of_norm X hX)
         let V : Submodule ℂ H := LinearMap.range X.toLinearMap
-        exact Vᗮ.starProjection ∘L residual A X M) : F →L[ℂ] H) ∘L X.adjoint := by
+        exact Vᗮ.starProjection ∘L A.sylvester M X) : F →L[ℂ] H) ∘L X.adjoint := by
   have hIso : Isometry X := AddMonoidHomClass.isometry_of_norm X hX
   let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry hIso
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   have hP : V.starProjection = X ∘L X.adjoint :=
     (ContinuousLinearMap.comp_adjoint_eq_starProjection_range hIso).symm
-  unfold isometricRangeCrossBlock
-  dsimp only
-  rw [hP, ← ContinuousLinearMap.comp_assoc]
-  apply ContinuousLinearMap.ext
-  intro y
-  simp only [ContinuousLinearMap.comp_apply, residual, sub_apply]
-  have hzero : Vᗮ.starProjection (X (M (X.adjoint y))) = 0 := by
-    exact V.starProjection_orthogonal_apply_eq_zero
-      (LinearMap.mem_range_self X.toLinearMap _)
-  rw [map_sub, hzero, sub_zero]
+  change Vᗮ.starProjection ∘L A ∘L V.starProjection =
+    (Vᗮ.starProjection ∘L A.sylvester M X) ∘L X.adjoint
+  rw [hP, ContinuousLinearMap.starProjection_orthogonal_range_comp_sylvester A hIso M,
+    ContinuousLinearMap.sylvester_compression A hIso]
+  simp only [V, ContinuousLinearMap.comp_assoc]
 
 /-- The exact-range cross block is bounded by the residual norm. -/
 theorem norm_isometricRangeCrossBlock_le_residual
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) :
-    ‖isometricRangeCrossBlock A X hX‖ ≤ ‖residual A X M‖ := by
+    ‖isometricRangeCrossBlock A X hX‖ ≤ ‖A.sylvester M X‖ := by
   let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
     (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   rw [isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint A X M hX]
   calc
-    ‖(Vᗮ.starProjection ∘L residual A X M) ∘L X.adjoint‖
-        ≤ ‖Vᗮ.starProjection‖ * ‖residual A X M‖ * ‖X.adjoint‖ := by
+    ‖(Vᗮ.starProjection ∘L A.sylvester M X) ∘L X.adjoint‖
+        ≤ ‖Vᗮ.starProjection‖ * ‖A.sylvester M X‖ * ‖X.adjoint‖ := by
       calc
-        ‖(Vᗮ.starProjection ∘L residual A X M) ∘L X.adjoint‖
-            ≤ ‖Vᗮ.starProjection ∘L residual A X M‖ * ‖X.adjoint‖ :=
+        ‖(Vᗮ.starProjection ∘L A.sylvester M X) ∘L X.adjoint‖
+            ≤ ‖Vᗮ.starProjection ∘L A.sylvester M X‖ * ‖X.adjoint‖ :=
           ContinuousLinearMap.opNorm_comp_le _ _
-        _ ≤ (‖Vᗮ.starProjection‖ * ‖residual A X M‖) * ‖X.adjoint‖ := by
+        _ ≤ (‖Vᗮ.starProjection‖ * ‖A.sylvester M X‖) * ‖X.adjoint‖ := by
           gcongr
           exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ 1 * ‖residual A X M‖ * 1 := by
+    _ ≤ 1 * ‖A.sylvester M X‖ * 1 := by
       gcongr
       · exact Vᗮ.starProjection_norm_le
       · rw [ContinuousLinearMap.adjoint.norm_map]
         exact opNorm_le_one_of_isometry hX
-    _ = ‖residual A X M‖ := by ring
+    _ = ‖A.sylvester M X‖ := by ring
 
 /-- Rectangular ideal membership of a residual implies membership of the exact
 range cross block. -/
@@ -191,7 +168,7 @@ theorem isometricRangeCrossBlock_mem
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
-    (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
+    (hX : IsometricEmbedding X) (hR : N.Mem (A.sylvester M X)) :
     N.Mem (isometricRangeCrossBlock A X hX) := by
   let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
     (AddMonoidHomClass.isometry_of_norm X hX)
@@ -212,9 +189,9 @@ theorem gauge_isometricRangeCrossBlock_le
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
-    (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
+    (hX : IsometricEmbedding X) (hR : N.Mem (A.sylvester M X)) :
     N.gaugeReal (isometricRangeCrossBlock A X hX) ≤
-      N.gaugeReal (residual A X M) := by
+      N.gaugeReal (A.sylvester M X) := by
   let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
     (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
