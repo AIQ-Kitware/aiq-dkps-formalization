@@ -26,11 +26,9 @@ that.
 a family, extending the gauge by `∞` off the ideal.  The extension argument is
 proved once here rather than once per concrete ideal.
 
-`Core` is not a second representation of an operator ideal.  Nothing consumes a
-`Core`, no theorem is stated about one, and the two ideals built through it --
-`hilbertSchmidtComplex` and the real descent under
-`Sources/DavisKahan1970/Ideals/` -- are `SymmetricOperatorIdealFamily`s from the
-moment they are defined.
+The Hilbert–Schmidt examples now use TauCeti's complete family. The
+constructor applies to any family specified by a membership predicate and
+norm on its members.
 
 This module is the successor of `RectangularSymmetricIdealFamily`, which was the
 same free data used as a family in its own right, with its own gauge theory and

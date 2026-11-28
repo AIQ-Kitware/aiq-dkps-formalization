@@ -89,7 +89,7 @@ theorem sq_hilbertSchmidtNorm
   exact ENNReal.toReal_nonneg
 
 /-- **The Hilbert--Schmidt norm dominates the operator norm**, because the
-operator norm is the first term of the square-summable singular sequence. -/
+operator has finite square energy. -/
 theorem opNorm_le_hilbertSchmidtNorm
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type vE} {F : Type vF}
@@ -97,17 +97,9 @@ theorem opNorm_le_hilbertSchmidtNorm
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     {A : E →L[𝕜] F} (hA : approximationNumberEnergy A ≠ ⊤) :
     ‖A‖ ≤ A.hilbertSchmidtNorm := by
-  have hterm : ENNReal.ofReal (‖A‖ ^ 2) ≤ approximationNumberEnergy A := by
-    unfold approximationNumberEnergy
-    simpa using (le_tsum
-      (f := fun n : ℕ => ENNReal.ofReal (((A.singularValue n : ℝ)) ^ 2)) 0 :
-      ENNReal.ofReal (((A.singularValue 0 : ℝ)) ^ 2) ≤
-        ∑' n : ℕ, ENNReal.ofReal (((A.singularValue n : ℝ)) ^ 2))
-  have hreal : ‖A‖ ^ 2 ≤ (approximationNumberEnergy A).toReal := by
-    have := ENNReal.toReal_mono hA hterm
-    simpa [ENNReal.toReal_ofReal (sq_nonneg ‖A‖)] using this
-  rw [← sq_hilbertSchmidtNorm hA] at hreal
-  nlinarith [norm_nonneg A, ContinuousLinearMap.hilbertSchmidtNorm_nonneg A]
+  obtain ⟨_, b, -⟩ := exists_hilbertBasis 𝕜 E
+  exact A.norm_le_hilbertSchmidtNorm b
+    (approximationNumberEnergy_eq_hilbertSchmidtEnergy b A ▸ hA)
 
 /-- A rank-`r` operator has Hilbert--Schmidt norm at most `√r` times its
 operator norm. -/

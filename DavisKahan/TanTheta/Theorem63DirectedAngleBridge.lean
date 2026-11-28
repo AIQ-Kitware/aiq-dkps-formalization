@@ -226,11 +226,15 @@ private theorem norm_directedSine_lt_one_of_all_singular_lt_one
     rw [hi0, ContinuousLinearMap.singularValue_zero, coe_nnNorm] at happrox
     rw [happrox]
     exact h0
-  · have hzero : finrank ℂ Z ≤ 0 := Nat.le_zero.mpr (Nat.eq_zero_of_not_pos hpos)
-    have happrox := approximationSingularValue_eq_zero_of_finrank_le_complex
-      Z (directedSine Z V) hzero
-    rw [ContinuousLinearMap.singularValue_zero, coe_nnNorm] at happrox
-    rw [happrox]
+  · have hzero : Module.rank ℂ Z ≤ (0 : ℕ) := by
+      rw [← Module.finrank_eq_rank ℂ Z]
+      exact_mod_cast Nat.le_of_not_lt hpos
+    have happrox := (directedSine Z V).singularValue_eq_zero_of_rank_domain_le hzero
+    rw [ContinuousLinearMap.singularValue_zero] at happrox
+    have hnorm : ‖directedSine Z V‖ = 0 := by
+      simpa only [coe_nnNorm, NNReal.coe_zero] using
+        congrArg (fun x : NNReal => (x : ℝ)) happrox
+    rw [hnorm]
     norm_num
 
 /-- The same pole exclusion holds for the positive coordinate sine modulus. -/

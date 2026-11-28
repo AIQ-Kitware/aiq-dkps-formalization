@@ -347,19 +347,6 @@ noncomputable def theorem63DirectedTangentReal
         (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonalReal Z V)) i :
         _)))).toContinuousLinearMap
 
-omit [CompleteSpace E] in
-/-- Above the dimension of a finite-dimensional real trial space every
-approximation singular value of a map out of it vanishes. -/
-theorem approximationSingularValue_eq_zero_of_finrank_le_real
-    (Z : Submodule ℝ E) [FiniteDimensional ℝ Z]
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
-    [CompleteSpace Z] (A : Z →L[ℝ] G) {k : Nat} (hk : Module.finrank ℝ Z ≤ k) :
-    (A.singularValue k : ℝ) = 0 := by
-  refine approximationSingularValue_eq_zero_of_rank_le_nat
-    (r := Module.finrank ℝ Z) ?_ hk
-  calc (A : Z →ₗ[ℝ] G).rank ≤ Module.rank ℝ Z := LinearMap.rank_le_domain _
-    _ = ((Module.finrank ℝ Z : Nat) : Cardinal) := (Module.finrank_eq_rank ℝ Z).symm
-
 /-- The finite-dimensional real representative has exactly the approximation
 numbers the paper's directed tangent prescribes. -/
 theorem hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63DirectedTangentReal
@@ -402,12 +389,10 @@ theorem hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63Dir
             Matrix.singularValues_toLin_diagonal (stdOrthonormalBasis ℝ Z)
               (theorem63DirectedTangentDiagonalReal Z V) (Equiv.refl _) ha ⟨k, hk⟩
       _ = Real.tan (Real.arcsin (((theorem63DirectedSineBlockReal Z V).singularValue k : ℝ))) := rfl
-  · have hkge : Module.finrank ℝ Z ≤ k := Nat.le_of_not_lt hk
-    rw [approximationSingularValue_eq_zero_of_finrank_le_real Z
-        (theorem63DirectedTangentReal Z V) hkge,
-      approximationSingularValue_eq_zero_of_finrank_le_real Z
-        (theorem63DirectedSineBlockReal Z V) hkge]
-    simp
+  · have hrank : Module.rank ℝ Z ≤ (k : Cardinal) := by
+      rw [← Module.finrank_eq_rank ℝ Z]
+      exact_mod_cast Nat.le_of_not_lt hk
+    simp [ContinuousLinearMap.singularValue_eq_zero_of_rank_domain_le _ hrank]
 
 /-- **The real directed tangent representative exists on every real trial
 subspace**, of finite or infinite dimension. -/

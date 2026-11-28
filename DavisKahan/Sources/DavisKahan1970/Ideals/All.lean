@@ -8,7 +8,6 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidt
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtApproximationNorm
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
-public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFrobenius
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtRealDescent

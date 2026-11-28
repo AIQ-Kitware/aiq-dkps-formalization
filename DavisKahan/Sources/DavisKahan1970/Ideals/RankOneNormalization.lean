@@ -73,8 +73,9 @@ theorem approximationSingularValue_rankOne
   rcases n with _ | n
   · simp [hVnorm]
   · rw [ite_eq_right (Nat.succ_ne_zero n)]
-    exact approximationSingularValue_eq_zero_of_rank_le_nat hVrank
-      (Nat.succ_le_succ (Nat.zero_le n))
+    have hrank : V.rank ≤ ((n + 1 : ℕ) : Cardinal) :=
+      hVrank.trans (by exact_mod_cast Nat.succ_le_succ (Nat.zero_le n))
+    exact_mod_cast ContinuousLinearMap.singularValue_eq_zero_of_rank_le hrank
 
 /-- Every positive prefix of a normalized rank-one operator has source gauge
 one. -/

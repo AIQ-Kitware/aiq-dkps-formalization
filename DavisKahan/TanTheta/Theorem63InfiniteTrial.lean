@@ -183,10 +183,10 @@ theorem approximationSingularValue_sineBlock_lt_one_of_finite
     have hb := approximationSingularValue_eq_finiteSourceSingularValue
       (theorem63DirectedSineBlock F V) ⟨n, hn⟩
     exact hb.trans_lt hlt
-  · have h0 := approximationSingularValue_eq_zero_of_finrank_le_complex
-      (Z := F) (theorem63DirectedSineBlock F V) (le_of_not_gt hn)
-    rw [h0]
-    exact one_pos
+  · have hrank : Module.rank ℂ F ≤ (n : Cardinal) := by
+      rw [← Module.finrank_eq_rank ℂ F]
+      exact_mod_cast Nat.le_of_not_lt hn
+    simp [(theorem63DirectedSineBlock F V).singularValue_eq_zero_of_rank_domain_le hrank]
 
 omit [CompleteSpace H] in
 /-- The Ritz residual of a subspace `F ≤ Z` is the restriction of the residual of `Z` plus

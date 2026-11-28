@@ -78,56 +78,16 @@
       "notes": ""
     },
     {
-      "id": "hs-completeness",
-      "title": "Completeness of the paper Hilbert--Schmidt gauge",
-      "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
-      "file": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
-      "declaration": "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_complete_complex",
-      "kind": "proof_candidate",
-      "dependencies": [],
-      "frontier_nodes": [],
-      "confidence": "low",
-      "notes": ""
-    },
-    {
-      "id": "hs-complex-family",
-      "title": "Complex rectangular Hilbert--Schmidt family",
-      "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
-      "file": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
-      "declaration": "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtComplex",
-      "kind": "construction",
-      "dependencies": [
-        "hs-completeness"
-      ],
-      "frontier_nodes": [],
-      "confidence": "low",
-      "notes": ""
-    },
-    {
-      "id": "schatten-foundation",
-      "title": "Approximation-number Schatten infrastructure",
-      "module": "TauCeti.Analysis.OperatorIdeal.Family.Schatten",
-      "file": null,
-      "declaration": "TauCeti.OperatorIdealFamily.schatten",
-      "kind": "proof_candidate",
-      "dependencies": [],
-      "frontier_nodes": [],
-      "confidence": "high",
-      "notes": "The duplicate DKPS Schatten gauge and family were removed after verification against the pinned Tau Ceti APIs. TauCeti.OperatorIdealFamily.schatten and SymmetricGauge.lpGauge now own the implementation and completeness result."
-    },
-    {
       "id": "schatten-family",
       "title": "The Schatten triangle inequality",
       "module": "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
       "file": "ForTauCeti/Analysis/OperatorIdeal/Family/Schatten.lean",
       "declaration": "ContinuousLinearMap.schattenENorm_add_le",
       "kind": "proof_candidate",
-      "dependencies": [
-        "schatten-foundation"
-      ],
+      "dependencies": [],
       "frontier_nodes": [],
       "confidence": "high",
-      "notes": "The approximation-number power-sum laws remain here, including homogeneity, the ideal estimate, and lower semicontinuity for 0 < p < 1, outside the accepted normed-family exponent scope. The canonical normed family and completeness instance are provided by TauCeti.Analysis.OperatorIdeal.Family.Schatten. The local exponent-one and exponent-two wrappers have been removed; maintained Gram consumers use the accepted nuclear and Hilbert-Schmidt energy APIs directly."
+      "notes": "The approximation-number power-sum laws remain here, including homogeneity, the ideal estimate, and lower semicontinuity for 0 < p < 1, outside the accepted normed-family exponent scope. TauCeti.Analysis.OperatorIdeal.Family.Schatten provides the canonical normed family and completeness. TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt provides the complete Hilbert–Schmidt family over real and complex Hilbert spaces (#18952). The native families discharge the former local foundation entries. The local exponent-one and exponent-two wrappers have been removed; maintained Gram consumers use the accepted nuclear and Hilbert-Schmidt energy APIs directly."
     },
     {
       "id": "free-beam-mode-ode",
@@ -311,9 +271,6 @@
       "id": "sylvester-real-ideals",
       "title": "Hilbert--Schmidt and Schatten ideal families",
       "nodes": [
-        "hs-completeness",
-        "hs-complex-family",
-        "schatten-foundation",
         "schatten-family"
       ]
     },

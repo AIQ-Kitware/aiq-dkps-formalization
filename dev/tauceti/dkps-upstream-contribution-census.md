@@ -1,5 +1,38 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 complete Hilbert–Schmidt families and rank cutoffs
+
+David Roe's #18952 supplies the complete Hilbert–Schmidt family for
+real and complex rectangular operators (OI-B22, OI-B41, OI-B84).
+Its gauge and finite carrier cover the two local families assembled
+through `SymmetricOperatorIdealFamily.ofCore`. Those families and
+their separate completeness proofs retire. The tensor representation
+still serves the paper's Sylvester proof, and the independent lemmas
+about preserving the real copy remain available. The paper's
+finite-square-energy operator-norm comparison applies TauCeti's
+`ContinuousLinearMap.norm_le_hilbertSchmidtNorm` from independent
+#16010. #18952 cites Reed–Simon and Simon and reports no vendored
+formalization.
+[#18952 integration](https://github.com/TauCetiProject/TauCeti/commit/500c1c63dd36ad91b1b0955738b749ee0f39109e) ·
+[#16010 integration](https://github.com/TauCetiProject/TauCeti/commit/0a4ee4102c6ab9af0285c16cf172b60f0dbac162)
+
+Finite-rank square energy, rank-one normalization, and the real and
+complex directed tangent proofs now apply the native rank and
+domain-dimension zero laws for singular values. The native laws
+return a nonnegative real equality, which is coerced at real-valued
+callers. Four scalar forwarding declarations retire. #14589
+explicitly reports independent development from the DKPS bulk port
+#13866.
+[#14589 integration](https://github.com/TauCetiProject/TauCeti/commit/c83058a3d5ab008a376e25d7330650b5bcec8179)
+
+The focused build (10,141 jobs), default build (22,812 jobs), and
+Challenge with the semantic-surface audit (22,522 jobs) passed without
+warnings at TauCeti `007b3a1150`. All 1,569 source-census references
+resolved and all 17 available Davis–Kahan comparator signatures matched.
+The foundation register passed its Lean probe. The aggregate generator
+comparison against the prior commit found only the removed import
+and no new findings.
+
 ## November 28 finite Hilbert-basis cutoffs
 
 The Hilbert–Schmidt cutoff results now use `HilbertBasis.projection`

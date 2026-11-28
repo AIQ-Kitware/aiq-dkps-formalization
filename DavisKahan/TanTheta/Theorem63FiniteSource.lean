@@ -796,7 +796,8 @@ theorem kyFanApproximationGauge_eq_finrank_of_finrank_le
   apply Finset.sum_eq_zero
   intro n hn
   have hdn : d ≤ n := Finset.mem_Ico.mp hn |>.1
-  exact approximationSingularValue_eq_zero_of_rank_le_nat hrank hdn
+  exact_mod_cast ContinuousLinearMap.singularValue_eq_zero_of_rank_le
+    (hrank.trans (by exact_mod_cast hdn) : A.rank ≤ (n : Cardinal))
 
 /-- The source Ky Fan inequalities for all prefixes. -/
 theorem theorem6_3_all_kyFan_core
@@ -999,17 +1000,6 @@ theorem approximationSingularValue_subtypeL_comp_complex
           Z (Z.subtypeL ∘L A) hmem k)).symm
     _ = (A.singularValue k : ℝ) := by rw [hcomp]
 
-omit [Z.HasOrthogonalProjection] in
-/-- Above the dimension of the trial space every approximation singular value of
-a map out of it vanishes. -/
-theorem approximationSingularValue_eq_zero_of_finrank_le_complex
-    (A : Z →L[ℂ] H) {k : ℕ} (hk : finrank ℂ Z ≤ k) :
-    (A.singularValue k : ℝ) = 0 := by
-  refine approximationSingularValue_eq_zero_of_rank_le_nat
-    (r := finrank ℂ Z) ?_ hk
-  calc (A : Z →ₗ[ℂ] H).rank ≤ Module.rank ℂ Z := LinearMap.rank_le_domain _
-    _ = ((finrank ℂ Z : ℕ) : Cardinal) := (Module.finrank_eq_rank ℂ Z).symm
-
 /-- **The directed tangent has the approximation numbers Theorem 6.3 asks
 for.**
 
@@ -1088,12 +1078,10 @@ theorem hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
           Matrix.singularValues_toLin_diagonal
             (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V))
             (fun j => (theorem63DirectedTangentDiagonal Z V j : ℂ)) (Equiv.refl _) ha ⟨k, hk⟩
-  · have hkge : finrank ℂ Z ≤ k := Nat.le_of_not_lt hk
-    rw [approximationSingularValue_eq_zero_of_finrank_le_complex Z
-      (theorem63DirectedTangent Z V) hkge,
-      approximationSingularValue_eq_zero_of_finrank_le_complex Z
-        (theorem63DirectedSineBlock Z V) hkge]
-    simp
+  · have hrank : Module.rank ℂ Z ≤ (k : Cardinal) := by
+      rw [← Module.finrank_eq_rank ℂ Z]
+      exact_mod_cast Nat.le_of_not_lt hk
+    simp [ContinuousLinearMap.singularValue_eq_zero_of_rank_domain_le _ hrank]
 
 /-- **Theorem 6.3, unconditionally.**
 

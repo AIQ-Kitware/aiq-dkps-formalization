@@ -218,10 +218,10 @@ theorem approximationSingularValue_sineBlock_lt_one_of_finiteData
     have hb := approximationSingularValue_eq_finiteSourceSingularValue
       (theorem63DirectedSineBlock Z V) ⟨n, hn⟩
     exact hb.trans_lt hlt
-  · have h0 := approximationSingularValue_eq_zero_of_finrank_le_complex
-      (Z := Z) (theorem63DirectedSineBlock Z V) (le_of_not_gt hn)
-    rw [h0]
-    exact one_pos
+  · have hrank : Module.rank ℂ Z ≤ (n : Cardinal) := by
+      rw [← Module.finrank_eq_rank ℂ Z]
+      exact_mod_cast Nat.le_of_not_lt hn
+    simp [(theorem63DirectedSineBlock Z V).singularValue_eq_zero_of_rank_domain_le hrank]
 
 section InfiniteCore
 

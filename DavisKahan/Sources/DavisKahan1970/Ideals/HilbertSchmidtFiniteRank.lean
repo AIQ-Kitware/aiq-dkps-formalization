@@ -37,34 +37,6 @@ noncomputable section
 
 universe u v vF
 
-/-- Approximation singular values vanish once the admissible approximation
-rank reaches the rank of the operator itself. -/
-theorem approximationSingularValue_eq_zero_of_rank_le
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E : Type v} {F : Type vF}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    {A : E →L[𝕜] F} {n : ℕ}
-    (hA : A.rank ≤ (n : Cardinal)) :
-    (A.singularValue n : ℝ) = 0 := by
-  have h : (A.singularValue n : ℝ) ≤ ‖A - A‖ :=
-    (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub A (R := A) hA))
-  rw [sub_self, norm_zero] at h
-  exact le_antisymm h ((A.singularValue n).coe_nonneg)
-
-/-- If `A` has rank at most `r`, every term after the first `r` terms of its
-approximation singular-value sequence vanishes. -/
-theorem approximationSingularValue_eq_zero_of_rank_le_nat
-    {𝕜 : Type u} [RCLike 𝕜]
-    {E : Type v} {F : Type vF}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    {A : E →L[𝕜] F} {r n : ℕ}
-    (hA : A.rank ≤ (r : Cardinal)) (hrn : r ≤ n) :
-    (A.singularValue n : ℝ) = 0 := by
-  apply approximationSingularValue_eq_zero_of_rank_le
-  exact hA.trans (by exact_mod_cast hrn)
-
 /-- The extended square energy of a rank-at-most-`r` operator is a finite sum. -/
 theorem approximationNumberEnergy_eq_sum_range_of_rank_le
     {𝕜 : Type u} [RCLike 𝕜]
@@ -80,8 +52,9 @@ theorem approximationNumberEnergy_eq_sum_range_of_rank_le
   rw [tsum_eq_sum (s := Finset.range r)]
   intro n hn
   have hrn : r ≤ n := Nat.le_of_not_gt (by simpa using hn)
-  rw [approximationSingularValue_eq_zero_of_rank_le_nat hA hrn]
-  simp
+  have hzero := ContinuousLinearMap.singularValue_eq_zero_of_rank_le
+    (T := A) (hA.trans (by exact_mod_cast hrn))
+  simp [hzero]
 
 /-- A finite-rank operator belongs to the canonical square ideal. -/
 theorem approximationNumberEnergy_ne_top_of_rank_le

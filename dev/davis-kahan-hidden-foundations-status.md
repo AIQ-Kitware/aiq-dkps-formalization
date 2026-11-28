@@ -4,8 +4,8 @@ Recursive hidden-foundation map for the Davis--Kahan 1970 formalization. Each no
 
 ## Summary
 
-- Tracked nodes: **19**
-- Textually present declarations: **19/19**
+- Tracked nodes: **16**
+- Textually present declarations: **16/16**
 - Campaigns: **4**
 - Findings: **0 errors**, **0 warnings**
 
@@ -28,7 +28,7 @@ Recursive hidden-foundation map for the Davis--Kahan 1970 formalization. Each no
 
 ### Hilbert--Schmidt and Schatten ideal families
 
-`sylvester-real-ideals` · construction=1, proof_candidate=3
+`sylvester-real-ideals` · proof_candidate=1
 
 ### Free-beam ODE, Sobolev realization, and spectral gap
 
@@ -42,9 +42,6 @@ Recursive hidden-foundation map for the Davis--Kahan 1970 formalization. Each no
 | `two-projection-equivalence-data` | construction | high | yes | - | `TauCeti.DavisKahan.TwoProjectionOperatorEquivalence` |
 | `two-projection-ambient-unitary` | proof_candidate | medium | yes | - | `TauCeti.DavisKahan.TwoProjectionOperatorEquivalence.ambient` |
 | `two-projection-classification` | proof_candidate | medium | yes | - | `TauCeti.DavisKahan.twoProjection_operator_classification` |
-| `hs-completeness` | proof_candidate | low | yes | - | `TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_complete_complex` |
-| `hs-complex-family` | construction | low | yes | - | `TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtComplex` |
-| `schatten-foundation` | proof_candidate | high | yes | - | `TauCeti.schattenFamily` |
 | `schatten-family` | proof_candidate | high | yes | - | `ContinuousLinearMap.schattenENorm_add_le` |
 | `free-beam-mode-ode` | proof_candidate | medium | yes | - | `TauCeti.DavisKahan.FreeBeam.mode_fourth_derivative` |
 | `free-beam-boundary-determinant` | proof_candidate | medium | yes | - | `TauCeti.DavisKahan.FreeBeam.boundaryDet_eq` |
@@ -64,10 +61,7 @@ Recursive hidden-foundation map for the Davis--Kahan 1970 formalization. Each no
 - `two-projection-equivalence-data` <- (root)
 - `two-projection-ambient-unitary` <- `two-projection-equivalence-data`, `orthogonal-sum-equivalence`
 - `two-projection-classification` <- `two-projection-ambient-unitary`
-- `hs-completeness` <- (root)
-- `hs-complex-family` <- `hs-completeness`
-- `schatten-foundation` <- (root)
-- `schatten-family` <- `schatten-foundation`
+- `schatten-family` <- (root)
 - `free-beam-mode-ode` <- (root)
 - `free-beam-boundary-determinant` <- `free-beam-mode-ode`
 - `free-beam-characteristic` <- `free-beam-boundary-determinant`
