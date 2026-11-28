@@ -1366,6 +1366,45 @@
       "migration_note": "The shared RCLike proof uses ContinuousLinearMap.modulus from #16606 (cba89f5f3f73db38aa148246fac841cfbead5e99) and its Ring.inverse, with polarFactor_eq_comp_inverse, norm_polarFactor_apply_of_injective, polarFactor_comp_modulus and range_polarFactor from #16936 (3266a7a2637755febeecd0484d578678a508d44e). Closed range follows from the positive lower frame bound. Mathlib supplies the coercivity-to-unit criterion and the isometry/Gram identity. The paper package retains the Gram inverse, inverse norm estimate and identity on isometric inputs. The separate power-calculus and complexification existence proofs retire."
     },
     {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion",
+      "source_declarations": [
+        "TauCeti.l2Inl",
+        "TauCeti.norm_l2Inl_apply",
+        "TauCeti.norm_l2Inl_le",
+        "TauCeti.norm_l2Column_apply_sq",
+        "TauCeti.l2Block_id",
+        "TauCeti.norm_l2Block_le_one_of_diag",
+        "TauCeti.l2Column_gram_le_id_of_norm_le_one",
+        "TauCeti.exists_selfAdjoint_contraction_extension_of_column_gram_le",
+        "TauCeti.exists_selfAdjoint_completion_eq_norm_restriction"
+      ],
+      "original_source_anchor": "18b05ce57fb6d49523c9e32d3a700a13f4523e88:ForTauCeti/Analysis/InnerProductSpace/Polar/SelfAdjointCompletion.lean; pre-migration snapshot 8b40bd0fb at the same path.",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Lp.ProdLp; TauCeti.Analysis.InnerProductSpace.Positive.Basic",
+      "final_declarations": [
+        "ContinuousLinearMap.withLpProdMap",
+        "ContinuousLinearMap.withLpProdMap_id",
+        "ContinuousLinearMap.norm_withLpProdMap",
+        "WithLp.norm_prodContinuousLinearEquiv_symm_comp_inl_le_one",
+        "ContinuousLinearMap.self_comp_adjoint_le_one_iff",
+        "ContinuousLinearMap.opNorm_linearIsometryEquiv_comp",
+        "ContinuousLinearMap.opNorm_comp_linearIsometryEquiv",
+        "IsSelfAdjoint.adjoint_conj",
+        "IsSelfAdjoint.conj_adjoint",
+        "Submodule.orthogonalProjectionOnto_norm_le",
+        "Submodule.norm_subtypeL_le"
+      ],
+      "roadmap_targets": [
+        "OI-B89 and OI-B91 (block-sum supporting API)",
+        "OI-B92–B94 (contractive inclusion supporting API)",
+        "SpectralFlow #630 and BanachSpaceTheory #36625 (supporting API)"
+      ],
+      "upstream_pr": "#16591; #19911; #630; #36625",
+      "integration": "9f4f16e736b8076136ac7ad1939a0849e7afc915; 3d6be50c3e1bb7de06755bd878a27a736c2e4817; 40822675c0a7f156b9534f0f95edf0087bed8475; 45560b5ffe4f5329f936acc98c3cf16574e1a982",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The rectangular damping operator is the native block-diagonal sum and its norm is the maximum of the two block norms. The Julia involution uses the native diagonal identity. The original first-column notation now uses the native inclusion; its contractivity uses the native Lp estimate. The column Gram identity reduces to the native Loewner criterion for a contraction by taking the adjoint. Mathlib supplies the norm and self-adjoint transport facts and the contractive inclusion and projection for the Section 8 restriction norm identity. The full off-diagonal Julia and rectangular adjoint calculation, one-sided Douglas reduction and ambient Krein completion stay local at their original scopes. DKPS proof descent for the consumed TauCeti facts is unverified."
+    },
+    {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.GramMatrix",
       "source_declarations": [
         "TauCeti.exists_rigidMotion_of_dist_eq",

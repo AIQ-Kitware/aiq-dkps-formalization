@@ -1,5 +1,38 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 self-adjoint completion and block-diagonal operators
+
+The damping step in the self-adjoint column completion uses the rectangular
+block sum and its operator-norm formula from #16591. The Julia involution
+uses the diagonal identity from SpectralFlow #630. The first-coordinate
+inclusion uses the `WithLp` product inclusion and the norm bound from #19911.
+DKPS proof descent for these supporting results is unverified.
+[#16591 integration](https://github.com/TauCetiProject/TauCeti/commit/9f4f16e736b8076136ac7ad1939a0849e7afc915) ·
+[#630 integration](https://github.com/TauCetiProject/TauCeti/commit/40822675c0a7f156b9534f0f95edf0087bed8475) ·
+[#19911 integration](https://github.com/TauCetiProject/TauCeti/commit/3d6be50c3e1bb7de06755bd878a27a736c2e4817)
+
+For the Gramians of the column, the contraction criterion from
+BanachSpaceTheory #36625 replaces the separate positivity and squared-norm
+argument. Mathlib supplies norm invariance and self-adjointness under
+isometric transport, and the two contractive maps used to identify the
+Section 8 restriction norm. The local completion theorem still supplies the
+off-diagonal Julia construction and the extension with exactly the
+restriction norm on a complemented subspace. The theorem hypotheses,
+including the incomplete-ambient scope of the restriction norm identity,
+stay at their original scope.
+[#36625 integration](https://github.com/TauCetiProject/TauCeti/commit/45560b5ffe4f5329f936acc98c3cf16574e1a982)
+
+The retired lemmas and proofs are preserved at DKPS `8b40bd0fb` under
+`ForTauCeti/Analysis/InnerProductSpace/Polar/SelfAdjointCompletion.lean`,
+originally introduced in `18b05ce57`. Jon Crall and Claude Opus 5,
+Kitware copyright, Apache-2.0.
+
+The focused Section 8 build, default build (22,800 jobs), and Challenge
+with the semantic-surface audit (22,514 jobs) passed without warnings.
+All 1,569 source-census references resolved, and all 17 available
+comparator signatures matched. The static name checker reported the
+same 28 findings as the baseline.
+
 ## November 28 trial-map polar factorization
 
 The finite trial-map proofs consume `LinearMap.polarIsometry`,

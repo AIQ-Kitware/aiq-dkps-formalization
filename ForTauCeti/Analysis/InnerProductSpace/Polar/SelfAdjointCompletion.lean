@@ -8,6 +8,8 @@ Staged for Tau Ceti: the normalised self-adjoint Krein/Julia column completion.
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.Positive.Basic
+public import TauCeti.Analysis.Normed.Lp.ProdLp
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Domination
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
@@ -81,7 +83,7 @@ L    =  [       ] : E ⊕₂ E →L E ⊕₂ F
         [ 0   Γ ]
 ```
 
-gives the completion
+uses TauCeti’s `ContinuousLinearMap.withLpProdMap` and its norm law. The completion is
 
 ```
 K := L J_A L⋆,
@@ -96,7 +98,7 @@ coordinate.
 * `TauCeti.l2Column`: the column `x ↦ (a x, b x)` into an `L²` product;
 * `TauCeti.l2Inl`: the first-coordinate inclusion `x ↦ (x, 0)`;
 * `TauCeti.l2Block`: the `2 × 2` block operator between `L²` products, with its
-  application, composition, adjoint and block-diagonal norm lemmas;
+  application, composition and adjoint laws for arbitrary blocks;
 * `TauCeti.exists_selfAdjoint_contraction_extension_of_column_gram_le`: the
   capstone;
 * `TauCeti.exists_selfAdjoint_norm_one_extension_of_column`: the normalised
@@ -146,13 +148,6 @@ noncomputable def l2Column (a : E →L[𝕜] F) (b : E →L[𝕜] G) :
 theorem l2Column_apply (a : E →L[𝕜] F) (b : E →L[𝕜] G) (z : E) :
     l2Column a b z = WithLp.toLp 2 (a z, b z) := (rfl)
 
-/-- **Pointwise Pythagoras for a column.**  The `L²` norm of a column value is
-the quadratic sum of its two coordinates. -/
-theorem norm_l2Column_apply_sq (a : E →L[𝕜] F) (b : E →L[𝕜] G) (z : E) :
-    ‖l2Column a b z‖ ^ 2 = ‖a z‖ ^ 2 + ‖b z‖ ^ 2 := by
-  rw [l2Column_apply]
-  exact WithLp.prod_norm_sq_eq_of_L2 _
-
 end Column
 
 /-! ### The Gram inequality of a contractive column -/
@@ -174,49 +169,19 @@ theorem l2Column_gram_le_id_of_norm_le_one (a : E →L[ℂ] F) (b : E →L[ℂ] 
     (h : ‖l2Column a b‖ ≤ 1) :
     ContinuousLinearMap.adjoint a ∘L a + ContinuousLinearMap.adjoint b ∘L b ≤
       ContinuousLinearMap.id ℂ E := by
-  have hida : IsSelfAdjoint (ContinuousLinearMap.adjoint a ∘L a) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-      (ContinuousLinearMap.isPositive_adjoint_comp_self a).1
-  have hidb : IsSelfAdjoint (ContinuousLinearMap.adjoint b ∘L b) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-      (ContinuousLinearMap.isPositive_adjoint_comp_self b).1
-  have hidid : IsSelfAdjoint (ContinuousLinearMap.id ℂ E) := by
-    rw [ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric]
-    intro x y
-    rfl
-  have hsa : IsSelfAdjoint (ContinuousLinearMap.id ℂ E -
-      (ContinuousLinearMap.adjoint a ∘L a + ContinuousLinearMap.adjoint b ∘L b)) :=
-    hidid.sub (hida.add hidb)
-  rw [← sub_nonneg, ContinuousLinearMap.nonneg_iff_isPositive]
-  refine ⟨ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hsa, fun x => ?_⟩
-  have hform : RCLike.re ⟪x, (ContinuousLinearMap.id ℂ E -
-      (ContinuousLinearMap.adjoint a ∘L a +
-        ContinuousLinearMap.adjoint b ∘L b)) x⟫_ℂ =
-      ‖x‖ ^ 2 - (‖a x‖ ^ 2 + ‖b x‖ ^ 2) := by
-    have ha : ⟪x, (ContinuousLinearMap.adjoint a) (a x)⟫_ℂ = ⟪a x, a x⟫_ℂ :=
-      ContinuousLinearMap.adjoint_inner_right a x (a x)
-    have hb : ⟪x, (ContinuousLinearMap.adjoint b) (b x)⟫_ℂ = ⟪b x, b x⟫_ℂ :=
-      ContinuousLinearMap.adjoint_inner_right b x (b x)
-    change RCLike.re ⟪x, x - ((ContinuousLinearMap.adjoint a) (a x) +
-      (ContinuousLinearMap.adjoint b) (b x))⟫_ℂ = _
-    rw [inner_sub_right, inner_add_right, ha, hb, map_sub, map_add,
-      inner_self_eq_norm_sq (𝕜 := ℂ) x, inner_self_eq_norm_sq (𝕜 := ℂ) (a x),
-      inner_self_eq_norm_sq (𝕜 := ℂ) (b x)]
-  have hcol : ‖a x‖ ^ 2 + ‖b x‖ ^ 2 ≤ ‖x‖ ^ 2 := by
-    rw [← norm_l2Column_apply_sq]
-    have hle : ‖l2Column a b x‖ ≤ ‖x‖ := by
-      calc ‖l2Column a b x‖ ≤ ‖l2Column a b‖ * ‖x‖ :=
-          ContinuousLinearMap.le_opNorm _ _
-        _ ≤ 1 * ‖x‖ := by
-            have := norm_nonneg x
-            nlinarith
-        _ = ‖x‖ := one_mul _
-    nlinarith [norm_nonneg (l2Column a b x), norm_nonneg x]
-  change 0 ≤ RCLike.re ⟪(ContinuousLinearMap.id ℂ E -
-    (ContinuousLinearMap.adjoint a ∘L a +
-      ContinuousLinearMap.adjoint b ∘L b)) x, x⟫_ℂ
-  rw [inner_re_symm, hform]
-  linarith
+  have hgram : (l2Column a b).adjoint ∘L l2Column a b =
+      a.adjoint ∘L a + b.adjoint ∘L b := by
+    ext x
+    apply ext_inner_right ℂ
+    intro y
+    simp only [ContinuousLinearMap.comp_apply, add_apply,
+      ContinuousLinearMap.adjoint_inner_left, l2Column_apply, WithLp.prod_inner_apply,
+      inner_add_left]
+  rw [← hgram]
+  simpa only [ContinuousLinearMap.adjoint_adjoint, LinearIsometryEquiv.norm_map,
+    ContinuousLinearMap.one_def] using
+    (ContinuousLinearMap.self_comp_adjoint_le_one_iff (l2Column a b).adjoint).2
+      ((LinearIsometryEquiv.norm_map ContinuousLinearMap.adjoint (l2Column a b)).trans_le h)
 
 end ColumnGram
 
@@ -228,9 +193,10 @@ variable {E : Type u} {F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 /-- The **first-coordinate inclusion** `x ↦ (x, 0)` into the Hilbert `L²`
-product.  It is the column of the identity and the zero map. -/
+product. It is the native product inclusion transported to `WithLp 2`. -/
 noncomputable def l2Inl : E →L[𝕜] WithLp 2 (E × F) :=
-  l2Column (ContinuousLinearMap.id 𝕜 E) (0 : E →L[𝕜] F)
+  (WithLp.prodContinuousLinearEquiv 2 𝕜 E F).symm.toContinuousLinearMap ∘L
+    ContinuousLinearMap.inl 𝕜 E F
 
 /-- `l2Inl` unfolded as a column; the defining equation, kept as a lemma so that
 consumers rewrite rather than unfold. -/
@@ -242,17 +208,6 @@ theorem l2Inl_eq_l2Column :
 @[simp]
 theorem l2Inl_apply (z : E) :
     (l2Inl : E →L[𝕜] WithLp 2 (E × F)) z = WithLp.toLp 2 (z, (0 : F)) := (rfl)
-
-/-- The first-coordinate inclusion is isometric. -/
-@[simp]
-theorem norm_l2Inl_apply (z : E) :
-    ‖(l2Inl : E →L[𝕜] WithLp 2 (E × F)) z‖ = ‖z‖ :=
-  WithLp.norm_toLp_fst 2 E F z
-
-/-- The first-coordinate inclusion is a contraction. -/
-theorem norm_l2Inl_le : ‖(l2Inl : E →L[𝕜] WithLp 2 (E × F))‖ ≤ 1 :=
-  ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => by
-    rw [norm_l2Inl_apply, one_mul]
 
 end Inl
 
@@ -295,37 +250,12 @@ theorem l2Block_apply (a : E →L[𝕜] G) (b : F →L[𝕜] G)
     (c : E →L[𝕜] H) (d : F →L[𝕜] H) (z : WithLp 2 (E × F)) :
     l2Block a b c d z = WithLp.toLp 2 (a z.fst + b z.snd, c z.fst + d z.snd) := (rfl)
 
-/-- The identity is the block operator with identity diagonal and zero
-off-diagonal. -/
-theorem l2Block_id :
-    l2Block (ContinuousLinearMap.id 𝕜 E) (0 : F →L[𝕜] E) (0 : E →L[𝕜] F)
-        (ContinuousLinearMap.id 𝕜 F)
-      = ContinuousLinearMap.id 𝕜 (WithLp 2 (E × F)) := by
+/-- A diagonal block operator is the orthogonal sum of its two diagonal maps. -/
+private theorem l2Block_diagonal (a : E →L[𝕜] G) (d : F →L[𝕜] H) :
+    l2Block a (0 : F →L[𝕜] G) (0 : E →L[𝕜] H) d = a.withLpProdMap 2 d := by
   ext z
-  refine l2_ext ?_ ?_ <;> simp
-
-/-- A block-diagonal operator built from two contractions is a contraction: the
-`L²` norm splits over the two coordinates, and each block shrinks its own. -/
-theorem norm_l2Block_le_one_of_diag (a : E →L[𝕜] G) (d : F →L[𝕜] H)
-    (ha : ‖a‖ ≤ 1) (hd : ‖d‖ ≤ 1) :
-    ‖l2Block a (0 : F →L[𝕜] G) (0 : E →L[𝕜] H) d‖ ≤ 1 := by
-  refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => ?_
-  rw [one_mul]
-  have ha' : ‖a z.fst‖ ≤ ‖z.fst‖ :=
-    (a.le_opNorm z.fst).trans (by nlinarith [norm_nonneg z.fst])
-  have hd' : ‖d z.snd‖ ≤ ‖z.snd‖ :=
-    (d.le_opNorm z.snd).trans (by nlinarith [norm_nonneg z.snd])
-  have h₁ : ‖l2Block a (0 : F →L[𝕜] G) (0 : E →L[𝕜] H) d z‖ ^ 2
-      = ‖a z.fst‖ ^ 2 + ‖d z.snd‖ ^ 2 := by
-    rw [WithLp.prod_norm_sq_eq_of_L2]
-    simp
-  have h₂ : ‖z‖ ^ 2 = ‖z.fst‖ ^ 2 + ‖z.snd‖ ^ 2 := WithLp.prod_norm_sq_eq_of_L2 z
-  have k₁ : ‖a z.fst‖ * ‖a z.fst‖ ≤ ‖z.fst‖ * ‖z.fst‖ :=
-    mul_self_le_mul_self (norm_nonneg _) ha'
-  have k₂ : ‖d z.snd‖ * ‖d z.snd‖ ≤ ‖z.snd‖ * ‖z.snd‖ :=
-    mul_self_le_mul_self (norm_nonneg _) hd'
-  refine nonneg_le_nonneg_of_sq_le_sq (norm_nonneg _) ?_
-  nlinarith [h₁, h₂, k₁, k₂]
+  rw [l2Block_apply, ContinuousLinearMap.withLpProdMap_apply]
+  simp
 
 end Block
 
@@ -481,7 +411,8 @@ theorem exists_selfAdjoint_contraction_extension_of_column_gram_le
     have e₄ : D ∘L D + (-A) ∘L (-A) = ContinuousLinearMap.id ℂ E := by
       simp only [← ContinuousLinearMap.mul_def, ← ContinuousLinearMap.one_def, neg_mul_neg, hDsq]
       abel
-    rw [hJdef, l2Block_comp, e₁, e₂, e₃, e₄, l2Block_id]
+    rw [hJdef, l2Block_comp, e₁, e₂, e₃, e₄, l2Block_diagonal,
+      ContinuousLinearMap.withLpProdMap_id]
   have hJnorm : ‖J‖ ≤ 1 := by
     have h := ContinuousLinearMap.norm_adjoint_comp_self J
     rw [hJadj, hJinvol] at h
@@ -490,22 +421,15 @@ theorem exists_selfAdjoint_contraction_extension_of_column_gram_le
     nlinarith [norm_nonneg J]
   -- Step 9: the block-diagonal damping.
   set L : WithLp 2 (E × E) →L[ℂ] WithLp 2 (E × F) :=
-    l2Block (ContinuousLinearMap.id ℂ E) (0 : E →L[ℂ] E) (0 : E →L[ℂ] F) Γ with hLdef
+    (ContinuousLinearMap.id ℂ E).withLpProdMap 2 Γ with hLdef
   have hLnorm : ‖L‖ ≤ 1 := by
-    rw [hLdef]
-    exact norm_l2Block_le_one_of_diag _ _ ContinuousLinearMap.norm_id_le hΓnorm
+    rw [hLdef, ContinuousLinearMap.norm_withLpProdMap]
+    exact max_le ContinuousLinearMap.norm_id_le hΓnorm
   have hLadjnorm : ‖ContinuousLinearMap.adjoint L‖ ≤ 1 :=
     (LinearIsometryEquiv.norm_map _ _).trans_le hLnorm
-  have hLadj : ContinuousLinearMap.adjoint L
-      = l2Block (ContinuousLinearMap.id ℂ E) (0 : F →L[ℂ] E) (0 : E →L[ℂ] E)
-          (ContinuousLinearMap.adjoint Γ) := by
-    rw [hLdef, adjoint_l2Block, ContinuousLinearMap.adjoint_id, map_zero, map_zero]
   -- Steps 10 to 13: the completion `K = L J L⋆`.
   refine ⟨L ∘L J ∘L ContinuousLinearMap.adjoint L, ?_, ?_, ?_⟩
-  · change star (L ∘L J ∘L ContinuousLinearMap.adjoint L) = _
-    rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
-      ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint, hJadj,
-      ContinuousLinearMap.comp_assoc]
+  · exact hJself.conj_adjoint L
   · have h₁ : ‖J ∘L ContinuousLinearMap.adjoint L‖ ≤ 1 := by
       calc ‖J ∘L ContinuousLinearMap.adjoint L‖
           ≤ ‖J‖ * ‖ContinuousLinearMap.adjoint L‖ := ContinuousLinearMap.opNorm_comp_le _ _
@@ -515,20 +439,19 @@ theorem exists_selfAdjoint_contraction_extension_of_column_gram_le
         ≤ ‖L‖ * ‖J ∘L ContinuousLinearMap.adjoint L‖ := ContinuousLinearMap.opNorm_comp_le _ _
       _ ≤ 1 * 1 := mul_le_mul hLnorm h₁ (ContinuousLinearMap.opNorm_nonneg _) zero_le_one
       _ = 1 := one_mul 1
-  · have hInlF : (l2Inl : E →L[ℂ] WithLp 2 (E × F))
-        = l2Column (ContinuousLinearMap.id ℂ E) (0 : E →L[ℂ] F) := l2Inl_eq_l2Column
-    have hInlE : (l2Inl : E →L[ℂ] WithLp 2 (E × E))
-        = l2Column (ContinuousLinearMap.id ℂ E) (0 : E →L[ℂ] E) := l2Inl_eq_l2Column
-    have hLI : ContinuousLinearMap.adjoint L ∘L (l2Inl : E →L[ℂ] WithLp 2 (E × F))
+  · have hLI : ContinuousLinearMap.adjoint L ∘L (l2Inl : E →L[ℂ] WithLp 2 (E × F))
         = (l2Inl : E →L[ℂ] WithLp 2 (E × E)) := by
-      rw [hLadj, hInlF, l2Block_comp_l2Column, hInlE]
-      simp
+      ext x
+      apply ext_inner_right ℂ
+      intro y
+      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_left]
+      simp [l2Inl_apply, hLdef, ContinuousLinearMap.withLpProdMap_apply, WithLp.prod_inner_apply]
     have hJI : J ∘L (l2Inl : E →L[ℂ] WithLp 2 (E × E)) = l2Column A D := by
-      rw [hJdef, hInlE, l2Block_comp_l2Column]
+      rw [hJdef, l2Inl_eq_l2Column, l2Block_comp_l2Column]
       simp
     have hLC : L ∘L l2Column A D = l2Column A B := by
-      rw [hLdef, l2Block_comp_l2Column]
-      simp [hΓD]
+      ext x
+      simp [hLdef, ContinuousLinearMap.withLpProdMap_apply, ← hΓD]
     calc (L ∘L J ∘L ContinuousLinearMap.adjoint L)
           ∘L (l2Inl : E →L[ℂ] WithLp 2 (E × F))
         = L ∘L (J ∘L (ContinuousLinearMap.adjoint L ∘L l2Inl)) := by
@@ -558,7 +481,8 @@ theorem exists_selfAdjoint_norm_one_extension_of_column
   calc (1 : ℝ) = ‖l2Column A B‖ := hcolumn.symm
     _ = ‖K ∘L (l2Inl : E →L[ℂ] WithLp 2 (E × F))‖ := by rw [hKcol]
     _ ≤ ‖K‖ * ‖(l2Inl : E →L[ℂ] WithLp 2 (E × F))‖ := ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖K‖ * 1 := mul_le_mul_of_nonneg_left norm_l2Inl_le (ContinuousLinearMap.opNorm_nonneg _)
+    _ ≤ ‖K‖ * 1 := mul_le_mul_of_nonneg_left
+      (WithLp.norm_prodContinuousLinearEquiv_symm_comp_inl_le_one 2 ℂ E F) (norm_nonneg _)
     _ = ‖K‖ := mul_one _
 
 /-! ## The ambient form
@@ -595,94 +519,18 @@ theorem norm_comp_subtypeL_eq_norm_comp_starProjection
     (T : Z →L[𝕜] Z) (P : Submodule 𝕜 Z) [P.HasOrthogonalProjection]
     [CompleteSpace P] :
     ‖T ∘L P.subtypeL‖ = ‖T ∘L P.starProjection‖ := by
+  have hsubtype : (T ∘L P.starProjection) ∘L P.subtypeL = T ∘L P.subtypeL := by
+    ext u
+    exact congrArg (fun x => T x) (P.starProjection_eq_self_iff.mpr u.property)
+  have hprojection : (T ∘L P.subtypeL) ∘L P.orthogonalProjectionOnto = T ∘L P.starProjection :=
+    ContinuousLinearMap.comp_assoc _ _ _
   refine le_antisymm ?_ ?_
-  · refine ContinuousLinearMap.opNorm_le_bound _
-      (ContinuousLinearMap.opNorm_nonneg _) fun u => ?_
-    have hfix : P.starProjection (u : Z) = (u : Z) :=
-      Submodule.starProjection_eq_self_iff.mpr u.property
-    have : (T ∘L P.subtypeL) u = (T ∘L P.starProjection) (u : Z) := by
-      change T (u : Z) = T (P.starProjection (u : Z))
-      rw [hfix]
-    rw [this]
-    calc ‖(T ∘L P.starProjection) (u : Z)‖ ≤ ‖T ∘L P.starProjection‖ * ‖(u : Z)‖ :=
-        ContinuousLinearMap.le_opNorm _ _
-      _ = ‖T ∘L P.starProjection‖ * ‖u‖ := rfl
-  · refine ContinuousLinearMap.opNorm_le_bound _
-      (ContinuousLinearMap.opNorm_nonneg _) fun x => ?_
-    set w : P := ⟨P.starProjection x, P.starProjection_apply_mem x⟩ with hw
-    have hval : (T ∘L P.starProjection) x = (T ∘L P.subtypeL) w := rfl
-    have hwn : ‖w‖ = ‖P.starProjection x‖ := rfl
-    rw [hval]
-    calc ‖(T ∘L P.subtypeL) w‖ ≤ ‖T ∘L P.subtypeL‖ * ‖w‖ :=
-        ContinuousLinearMap.le_opNorm _ _
-      _ ≤ ‖T ∘L P.subtypeL‖ * ‖x‖ := by
-          rw [hwn]
-          exact mul_le_mul_of_nonneg_left (P.norm_starProjection_apply_le x)
-            (ContinuousLinearMap.opNorm_nonneg _)
-
-variable {Y : Type u} [NormedAddCommGroup Y] [InnerProductSpace ℂ Y]
-
-omit [CompleteSpace X] in
-/-- Precomposition by an isometric equivalence does not change the norm. -/
-private theorem norm_isometryEquiv_comp {Z : Type u} [NormedAddCommGroup Z]
-    [InnerProductSpace ℂ Z] (U : X ≃ₗᵢ[ℂ] Y) (S : Z →L[ℂ] X) :
-    ‖(U : X →L[ℂ] Y) ∘L S‖ = ‖S‖ := by
-  refine le_antisymm ?_ ?_
-  · refine ContinuousLinearMap.opNorm_le_bound _
-      (ContinuousLinearMap.opNorm_nonneg _) fun z => ?_
-    change ‖U (S z)‖ ≤ ‖S‖ * ‖z‖
-    rw [U.norm_map]
-    exact S.le_opNorm z
-  · refine ContinuousLinearMap.opNorm_le_bound _
-      (ContinuousLinearMap.opNorm_nonneg _) fun z => ?_
-    have h : ‖S z‖ = ‖((U : X →L[ℂ] Y) ∘L S) z‖ := by
-      change ‖S z‖ = ‖U (S z)‖
-      rw [U.norm_map]
-    rw [h]
-    exact ((U : X →L[ℂ] Y) ∘L S).le_opNorm z
-
-omit [CompleteSpace X] in
-/-- **Unitary transport preserves symmetry**, across two Hilbert spaces: the
-isometric equivalence preserves the inner product. -/
-private theorem isSymmetric_transport (U : X ≃ₗᵢ[ℂ] Y) (K : Y →L[ℂ] Y)
-    (hK : K.IsSymmetric) :
-    ((U.symm : Y →L[ℂ] X) ∘L K ∘L (U : X →L[ℂ] Y)).IsSymmetric := by
-  intro x y
-  change ⟪U.symm (K (U x)), y⟫_ℂ = ⟪x, U.symm (K (U y))⟫_ℂ
-  rw [← U.inner_map_map (U.symm (K (U x))) y,
-    ← U.inner_map_map x (U.symm (K (U y))),
-    U.apply_symm_apply, U.apply_symm_apply]
-  exact hK (U x) (U y)
-
-omit [CompleteSpace X] in
-/-- **Unitary transport preserves the operator norm**, across two Hilbert
-spaces. -/
-private theorem norm_transport (U : X ≃ₗᵢ[ℂ] Y) (K : Y →L[ℂ] Y) :
-    ‖(U.symm : Y →L[ℂ] X) ∘L K ∘L (U : X →L[ℂ] Y)‖ = ‖K‖ := by
-  set M : X →L[ℂ] X := (U.symm : Y →L[ℂ] X) ∘L K ∘L (U : X →L[ℂ] Y) with hM
-  have hMapply : ∀ x : X, M x = U.symm (K (U x)) := fun _ => rfl
-  refine le_antisymm ?_ ?_
-  · refine ContinuousLinearMap.opNorm_le_bound _
-      (ContinuousLinearMap.opNorm_nonneg _) fun x => ?_
-    rw [hMapply, U.symm.norm_map, ← U.norm_map x]
-    exact K.le_opNorm _
-  · refine ContinuousLinearMap.opNorm_le_bound _
-      (ContinuousLinearMap.opNorm_nonneg _) fun y => ?_
-    have hy : ‖K y‖ = ‖M (U.symm y)‖ := by
-      rw [hMapply, U.apply_symm_apply, U.symm.norm_map]
-    rw [hy, ← U.symm.norm_map y]
-    exact M.le_opNorm _
-
-/-- Compressing a self-adjoint operator to an orthogonally complemented
-subspace keeps it self-adjoint. -/
-private theorem isSelfAdjoint_compress {T : X →L[ℂ] X} (hT : IsSelfAdjoint T)
-    (P : Submodule ℂ X) [P.HasOrthogonalProjection] [CompleteSpace P] :
-    IsSelfAdjoint (P.orthogonalProjectionOnto ∘L T ∘L P.subtypeL) := by
-  rw [ContinuousLinearMap.isSelfAdjoint_iff', ContinuousLinearMap.adjoint_comp,
-    ContinuousLinearMap.adjoint_comp, Submodule.adjoint_subtypeL,
-    Submodule.adjoint_orthogonalProjectionOnto,
-    ← ContinuousLinearMap.star_eq_adjoint, hT.star_eq,
-    ContinuousLinearMap.comp_assoc]
+  · rw [← hsubtype]
+    exact (ContinuousLinearMap.opNorm_comp_le _ _).trans
+      (mul_le_of_le_one_right (norm_nonneg _) P.norm_subtypeL_le)
+  · rw [← hprojection]
+    exact (ContinuousLinearMap.opNorm_comp_le _ _).trans
+      (mul_le_of_le_one_right (norm_nonneg _) P.orthogonalProjectionOnto_norm_le)
 
 /-- **Krein's completion theorem, ambient form.**
 
@@ -733,7 +581,9 @@ theorem exists_selfAdjoint_completion_eq_norm_restriction
   set Acol : P →L[ℂ] P := P.orthogonalProjectionOnto ∘L T₀ ∘L P.subtypeL with hAdef
   set Bcol : (P : Submodule ℂ X) →L[ℂ] (Pᗮ : Submodule ℂ X) :=
     Pᗮ.orthogonalProjectionOnto ∘L T₀ ∘L P.subtypeL with hBdef
-  have hAsa : IsSelfAdjoint Acol := isSelfAdjoint_compress hT₀sa P
+  have hAsa : IsSelfAdjoint Acol := by
+    rw [hAdef, ← Submodule.adjoint_subtypeL]
+    exact hT₀sa.adjoint_conj P.subtypeL
   set C : P →L[ℂ] WithLp 2 (P × Pᗮ) := l2Column Acol Bcol with hCdef
   have hCeq : C = (U : X →L[ℂ] WithLp 2 (P × Pᗮ)) ∘L T₀ ∘L P.subtypeL := by
     rw [hCdef, hUdef]
@@ -742,7 +592,7 @@ theorem exists_selfAdjoint_completion_eq_norm_restriction
     rw [l2Column_apply, Submodule.orthogonalDecomposition_apply]
     rfl
   have hCnorm : ‖C‖ = 1 := by
-    rw [hCeq, hUdef, norm_isometryEquiv_comp,
+    rw [hCeq, ContinuousLinearMap.opNorm_linearIsometryEquiv_comp,
       norm_comp_subtypeL_eq_norm_comp_starProjection, hT₀res, norm_smul,
       Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg (by positivity : (0 : ℝ) ≤ r⁻¹), ← hrdef,
@@ -756,11 +606,11 @@ theorem exists_selfAdjoint_completion_eq_norm_restriction
   set T₁ : X →L[ℂ] X := (U.symm : WithLp 2 (P × Pᗮ) →L[ℂ] X) ∘L K0 ∘L
     (U : X →L[ℂ] WithLp 2 (P × Pᗮ)) with hT₁def
   have hT₁sa : IsSelfAdjoint T₁ := by
-    rw [hT₁def]
-    exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-      (isSymmetric_transport U K0
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hK0sa))
-  have hT₁norm : ‖T₁‖ = 1 := by rw [hT₁def, norm_transport, hK0norm]
+    rw [hT₁def, ← U.adjoint_eq_symm]
+    exact hK0sa.adjoint_conj (U : X →L[ℂ] WithLp 2 (P × Pᗮ))
+  have hT₁norm : ‖T₁‖ = 1 := by
+    rw [hT₁def, ContinuousLinearMap.opNorm_linearIsometryEquiv_comp,
+      ContinuousLinearMap.opNorm_comp_linearIsometryEquiv, hK0norm]
   have hT₁res : T₁ ∘L P.starProjection = T₀ ∘L P.starProjection := by
     ext x
     change U.symm (K0 (U (P.starProjection x))) = T₀ (P.starProjection x)
