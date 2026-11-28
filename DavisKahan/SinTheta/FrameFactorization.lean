@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
+public import TauCeti.Analysis.InnerProductSpace.Polar.Bounded
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
@@ -27,29 +28,12 @@ The generalized theorem permits a non-isometric trial map with a positive lower
 frame bound.  This module exposes the closed-range, Gram inverse, polar factor,
 and ideal-norm transport seams separately.
 
-## The three frame-factorization modules, and how they relate
-
-Documented 2026-07-30 (lane DK-FRAME) because none of the three said anything
-about the other two, and the third is named `Generic`, which reads as *the
-general existence theorem* when it is in fact *the layer that needs no field*.
-
-* **`DavisKahan/SinTheta/FrameFactorization.lean`** (this file) declares
-  `structure LowerFramePolarData` and proves it **inhabited over `ℂ`**
-  (`lowerFramePolarData_nonempty`): the Gram operator `X⋆X` is strictly positive
-  by the lower-frame estimate, and its real powers under the continuous
-  functional calculus supply the square root and inverse square root.
-* **`DavisKahan/SinTheta/Real/FrameFactorization.lean`** proves the same package
-  **inhabited over `ℝ`** (`lowerFramePolarData_real_nonempty`), by complexifying
-  the trial map and descending: the square root and inverse square root of the
-  complex Gram operator are fixed by the canonical conjugation, so they are real.
-* **`DavisKahan/SinTheta/FrameFactorizationGeneric.lean`** consumes a package and
-  proves **nothing about existence**. Factorization, ideal transport and the
-  exact-angle arguments are pure Hilbert-space algebra once the data is in hand,
-  so they are stated `𝕜`-generically there.
-
-**The separating hypothesis is the scalar field, and it separates only the two
-existence proofs.** `Generic` is downstream of both and independent of the field;
-it is not a strengthening of either.
+The modulus and polar factor are TauCeti's native bounded-operator constructions.
+A positive lower frame bound makes the Gram operator and its modulus invertible.
+The paper-facing package collects the two-sided inverse, range, and norm facts
+used by the generalized sine estimates. Both scalar branches use the same
+construction. The former separate power-calculus proofs are archived at DKPS
+commit `8c1a82e68`.
 
 -/
 
@@ -120,17 +104,8 @@ theorem opNorm_le_one_of_isometry
 /-- The Gram operator of an isometric embedding is the identity. -/
 theorem adjoint_comp_self_eq_id_of_isometry
     {X : F →L[𝕜] E} (hX : IsometricEmbedding X) :
-    X.adjoint ∘L X = ContinuousLinearMap.id 𝕜 F := by
-  let U : F →ₗᵢ[𝕜] E :=
-    { toLinearMap := X.toLinearMap
-      norm_map' := hX }
-  ext x
-  exact ext_inner_right 𝕜 fun y => by
-    calc
-      ⟪(X.adjoint ∘L X) x, y⟫_𝕜 = ⟪X x, X y⟫_𝕜 := by
-        rw [ContinuousLinearMap.comp_apply, X.adjoint_inner_left]
-      _ = ⟪x, y⟫_𝕜 := U.inner_map_map x y
-      _ = ⟪(ContinuousLinearMap.id 𝕜 F) x, y⟫_𝕜 := by simp
+    X.adjoint ∘L X = ContinuousLinearMap.id 𝕜 F :=
+  X.isometry_iff_adjoint_comp_self.mp (AddMonoidHomClass.isometry_of_norm X hX)
 
 omit [CompleteSpace E] in
 /-- A positive lower frame bound implies closed range. -/
@@ -216,6 +191,54 @@ def lowerFramePolarDataOfIsometry
   · intro _
     rfl
 
+/-- The polar data of a bounded-below trial map, assembled from the native modulus
+and polar factor over real or complex Hilbert spaces. -/
+noncomputable def lowerFramePolarData
+    (X : F →L[𝕜] E) {ε : ℝ}
+    (hX : LowerFrameBound X ε) (hε : 0 < ε) :
+    LowerFramePolarData X ε hX hε := by
+  let gram := X.adjoint ∘L X
+  have hgram : IsUnit gram :=
+    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map gram
+      (c := ⟨ε ^ 2, sq_nonneg _⟩) (sq_pos_of_pos hε)
+      (fun z => (mul_comm _ _).le.trans ((gram_coercive hX hε.le z).trans (RCLike.re_le_norm _)))
+  have hmod_sq : X.modulus * X.modulus = gram := X.modulus_comp_modulus
+  have hmod : IsUnit X.modulus :=
+    ((Commute.refl X.modulus).isUnit_mul_iff.mp (hmod_sq.symm ▸ hgram)).1
+  have hpolar := X.polarFactor_eq_comp_inverse hmod
+  have hisometry : IsometricEmbedding (X ∘L Ring.inverse X.modulus) := by
+    rw [← hpolar]
+    exact X.norm_polarFactor_apply_of_injective (hX.injective hε)
+  refine {
+    sqrt := X.modulus
+    invSqrt := Ring.inverse X.modulus
+    gramInverse := ⟨Ring.inverse gram, Ring.inverse_mul_cancel gram hgram,
+      Ring.mul_inverse_cancel gram hgram⟩
+    invSqrt_sqrt := Ring.inverse_mul_cancel _ hmod
+    sqrt_invSqrt := Ring.mul_inverse_cancel _ hmod
+    sqrt_sq := X.modulus_comp_modulus
+    normalized_isometry := hisometry
+    factorization := ?_
+    invSqrt_norm_le := ?_
+    range_normalized := ?_
+    invSqrt_eq_id_of_isometry := ?_
+  }
+  · rw [← hpolar]
+    exact X.polarFactor_comp_modulus.symm
+  · refine (Ring.inverse X.modulus).opNorm_le_bound (inv_nonneg.mpr hε.le) fun y => ?_
+    rw [le_inv_mul_iff₀ hε]
+    exact (hX (Ring.inverse X.modulus y)).trans_eq (hisometry y)
+  · rw [← hpolar, X.range_polarFactor]
+    exact (hX.closedRange hε).submodule_topologicalClosure_eq
+  · intro hIso
+    have hid : (1 : F →L[𝕜] F) = X.modulus := ContinuousLinearMap.eq_modulus_iff.2
+      ⟨ContinuousLinearMap.isPositive_one, by
+        change ContinuousLinearMap.id 𝕜 F ∘L ContinuousLinearMap.id 𝕜 F = _
+        rw [ContinuousLinearMap.comp_id]
+        exact (adjoint_comp_self_eq_id_of_isometry hIso).symm⟩
+    change Ring.inverse X.modulus = (1 : F →L[𝕜] F)
+    rw [← hid, Ring.inverse_one]
+
 end Generic
 
 section Complex
@@ -227,147 +250,12 @@ variable {E F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
 
-/-- Existence of the bounded-below polar package over a complex Hilbert
-space.  The Gram operator is strictly positive by the lower-frame estimate;
-its real powers supply the square root and inverse square root. -/
+/-- Existence of the bounded-below polar package over a complex Hilbert space. -/
 theorem lowerFramePolarData_nonempty
     (X : F →L[ℂ] E) {ε : ℝ}
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
-    Nonempty (LowerFramePolarData X ε hX hε) := by
-  let gram : F →L[ℂ] F := X.adjoint ∘L X
-  have hgram_nonneg : 0 ≤ gram := by
-    exact (ContinuousLinearMap.nonneg_iff_isPositive).2
-      (ContinuousLinearMap.isPositive_adjoint_comp_self X)
-  have hgram_unit : IsUnit gram := by
-    have hcoer : ∀ z, ε ^ 2 * ‖z‖ ^ 2 ≤ RCLike.re ⟪gram z, z⟫_ℂ := by
-      simpa [gram] using gram_coercive hX hε.le
-    exact _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
-      (c := ⟨ε ^ 2, sq_nonneg _⟩) (sq_pos_of_pos hε)
-      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
-  let sqrt : F →L[ℂ] F := gram ^ (1 / 2 : ℝ)
-  let invSqrt : F →L[ℂ] F := gram ^ (-1 / 2 : ℝ)
-  let gramInv : F →L[ℂ] F := Ring.inverse gram
-  -- The three compositions below are one `rpow_add` each, differing only in the exponents;
-  -- naming that step keeps the difference visible instead of repeating the calc three times.
-  have hrpow : ∀ s t : ℝ, gram ^ s * gram ^ t = gram ^ (s + t) :=
-    fun _ _ => (CFC.rpow_add hgram_unit).symm
-  have hinvSqrt_sqrt : invSqrt ∘L sqrt = ContinuousLinearMap.id ℂ F := by
-    change invSqrt * sqrt = 1
-    calc
-      invSqrt * sqrt = gram ^ ((-1 / 2 : ℝ) + (1 / 2 : ℝ)) := hrpow _ _
-      _ = gram ^ (0 : ℝ) := by norm_num
-      _ = 1 := CFC.rpow_zero gram hgram_nonneg
-  have hsqrt_invSqrt : sqrt ∘L invSqrt = ContinuousLinearMap.id ℂ F := by
-    change sqrt * invSqrt = 1
-    calc
-      sqrt * invSqrt = gram ^ ((1 / 2 : ℝ) + (-1 / 2 : ℝ)) := hrpow _ _
-      _ = gram ^ (0 : ℝ) := by norm_num
-      _ = 1 := CFC.rpow_zero gram hgram_nonneg
-  have hsqrt_sq : sqrt ∘L sqrt = X.adjoint ∘L X := by
-    change sqrt * sqrt = gram
-    calc
-      sqrt * sqrt = gram ^ ((1 / 2 : ℝ) + (1 / 2 : ℝ)) := hrpow _ _
-      _ = gram ^ (1 : ℝ) := by norm_num
-      _ = gram := CFC.rpow_one gram hgram_nonneg
-  have hinvSqrt_adjoint : invSqrt.adjoint = invSqrt := by
-    simpa only [ContinuousLinearMap.star_eq_adjoint] using
-      (CFC.rpow_nonneg (a := gram) (y := (-1 / 2 : ℝ))).isSelfAdjoint.star_eq
-  have hinvSqrt_gram : invSqrt ∘L gram = sqrt := by
-    change invSqrt * gram = sqrt
-    calc
-      invSqrt * gram = gram ^ (-1 / 2 : ℝ) * gram ^ (1 : ℝ) := by
-        rw [CFC.rpow_one gram hgram_nonneg]
-      _ = gram ^ ((-1 / 2 : ℝ) + (1 : ℝ)) :=
-        (CFC.rpow_add hgram_unit).symm
-      _ = gram ^ (1 / 2 : ℝ) := by norm_num
-      _ = sqrt := rfl
-  have hnormalized_gram :
-      (X ∘L invSqrt).adjoint ∘L (X ∘L invSqrt) =
-        ContinuousLinearMap.id ℂ F := by
-    rw [ContinuousLinearMap.adjoint_comp, hinvSqrt_adjoint]
-    calc
-      (invSqrt ∘L X.adjoint) ∘L (X ∘L invSqrt) =
-          invSqrt ∘L ((X.adjoint ∘L X) ∘L invSqrt) := by
-        simp only [ContinuousLinearMap.comp_assoc]
-      _ = (invSqrt ∘L gram) ∘L invSqrt := by
-        simp only [gram, ContinuousLinearMap.comp_assoc]
-      _ = sqrt ∘L invSqrt := by rw [hinvSqrt_gram]
-      _ = ContinuousLinearMap.id ℂ F := hsqrt_invSqrt
-  have hnormalized : IsometricEmbedding (X ∘L invSqrt) := by
-    intro x
-    have hinner :
-        ⟪(X ∘L invSqrt) x, (X ∘L invSqrt) x⟫_ℂ = ⟪x, x⟫_ℂ := by
-      calc
-        ⟪(X ∘L invSqrt) x, (X ∘L invSqrt) x⟫_ℂ =
-            ⟪((X ∘L invSqrt).adjoint ∘L (X ∘L invSqrt)) x, x⟫_ℂ := by
-          simpa only [ContinuousLinearMap.comp_apply] using
-            ((X ∘L invSqrt).adjoint_inner_left x ((X ∘L invSqrt) x)).symm
-        _ = ⟪x, x⟫_ℂ := by rw [hnormalized_gram]; simp
-    have hsquare : ‖(X ∘L invSqrt) x‖ ^ 2 = ‖x‖ ^ 2 := by
-      rw [norm_sq_eq_re_inner (𝕜 := ℂ),
-        norm_sq_eq_re_inner (𝕜 := ℂ), hinner]
-    nlinarith [norm_nonneg ((X ∘L invSqrt) x), norm_nonneg x]
-  have hfactorization : X = (X ∘L invSqrt) ∘L sqrt := by
-    symm
-    calc
-      (X ∘L invSqrt) ∘L sqrt = X ∘L (invSqrt ∘L sqrt) :=
-        ContinuousLinearMap.comp_assoc _ _ _
-      _ = X := by rw [hinvSqrt_sqrt]; simp
-  have hinvSqrt_norm : ‖invSqrt‖ ≤ ε⁻¹ := by
-    refine invSqrt.opNorm_le_bound (inv_nonneg.mpr hε.le) ?_
-    intro x
-    rw [le_inv_mul_iff₀ hε]
-    calc
-      ε * ‖invSqrt x‖ ≤ ‖X (invSqrt x)‖ := hX (invSqrt x)
-      _ = ‖x‖ := hnormalized x
-  have hrange :
-      LinearMap.range (X ∘L invSqrt).toLinearMap =
-        LinearMap.range X.toLinearMap := by
-    apply le_antisymm
-    · rintro y ⟨x, rfl⟩
-      exact ⟨invSqrt x, rfl⟩
-    · rintro y ⟨x, rfl⟩
-      refine ⟨sqrt x, ?_⟩
-      have hx := DFunLike.congr_fun hfactorization x
-      exact hx.symm
-  have hgramInv_left :
-      gramInv ∘L gram = ContinuousLinearMap.id ℂ F := by
-    change gramInv * gram = 1
-    exact Ring.inverse_mul_cancel gram hgram_unit
-  have hgramInv_right :
-      gram ∘L gramInv = ContinuousLinearMap.id ℂ F := by
-    change gram * gramInv = 1
-    exact Ring.mul_inverse_cancel gram hgram_unit
-  refine ⟨{
-    sqrt := sqrt
-    invSqrt := invSqrt
-    gramInverse := {
-      inv := gramInv
-      left_inv := by simpa [gram] using hgramInv_left
-      right_inv := by simpa [gram] using hgramInv_right
-    }
-    invSqrt_sqrt := hinvSqrt_sqrt
-    sqrt_invSqrt := hsqrt_invSqrt
-    sqrt_sq := hsqrt_sq
-    normalized_isometry := hnormalized
-    factorization := hfactorization
-    invSqrt_norm_le := hinvSqrt_norm
-    range_normalized := hrange
-    invSqrt_eq_id_of_isometry := ?_
-  }⟩
-  intro hIso
-  have hgram_id : gram = ContinuousLinearMap.id ℂ F := by
-    simpa [gram] using adjoint_comp_self_eq_id_of_isometry hIso
-  change gram ^ (-1 / 2 : ℝ) = ContinuousLinearMap.id ℂ F
-  rw [hgram_id]
-  exact CFC.one_rpow
-
-/-- The selected proof-carrying lower-frame polar package. -/
-noncomputable def lowerFramePolarData
-    (X : F →L[ℂ] E) {ε : ℝ}
-    (hX : LowerFrameBound X ε) (hε : 0 < ε) :
-    LowerFramePolarData X ε hX hε :=
-  Classical.choice (lowerFramePolarData_nonempty X hX hε)
+    Nonempty (LowerFramePolarData X ε hX hε) :=
+  ⟨lowerFramePolarData X hX hε⟩
 
 /-- Bounded inverse of the positive Gram operator. -/
 noncomputable def gramInverseData

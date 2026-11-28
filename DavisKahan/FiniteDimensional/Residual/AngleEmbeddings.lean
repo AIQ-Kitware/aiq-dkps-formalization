@@ -8,6 +8,7 @@ module
 public import TauCeti.Analysis.InnerProductSpace.SingularValues
 
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
+public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
@@ -181,8 +182,8 @@ private theorem cosThetaMagnitude_apply_rightSingularBasis
   have hsq' : C (C v) = (((c : ℝ) : 𝕜) * ((c : ℝ) : 𝕜)) • v := by
     rw [hsq, ← RCLike.ofReal_mul, hcSq]
   have hpos : C.IsPositive := by
-    simpa [C, cosThetaMagnitude, trialGramSqrt] using
-      (cosThetaEmbedding U X).isPositive_adjoint_comp_self.sqrt_isPositive
+    simpa [C, cosThetaMagnitude] using
+      (cosThetaEmbedding U X).isPositive_operatorAbs
   simpa [C, v, c, S, σ] using
     hpos.apply_eq_smul_of_apply_apply_eq_smul hc0 hsq'
 
@@ -531,7 +532,7 @@ theorem tanTheta_vector_le
       _ ≤ ρ * ‖cosThetaMagnitude U X y‖ :=
         mul_le_mul_of_nonneg_right hTbound (norm_nonneg _)
       _ = ρ * ‖cosThetaEmbedding U X y‖ := by
-        rw [cosThetaMagnitude, norm_trialGramSqrt_apply]
+        rw [cosThetaMagnitude, LinearMap.norm_operatorAbs_apply]
 
 end DavisKahan.FiniteDimensional
 end TauCeti

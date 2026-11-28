@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
-public import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
+public import TauCeti.Analysis.InnerProductSpace.Polar.Isometry
 
 /-!
 # Principal-angle embeddings for trial subspaces
@@ -129,13 +129,13 @@ it is the denominator used by the coordinate tangent map. -/
 @[expose]
 noncomputable def cosThetaMagnitude (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] F :=
-  trialGramSqrt (cosThetaEmbedding U X)
+  (cosThetaEmbedding U X).operatorAbs
 
 /-- The positive source cosine is pointwise contractive. -/
 theorem cosThetaMagnitude_apply_norm_le (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) (x : F) :
     ‖cosThetaMagnitude U X x‖ ≤ ‖x‖ := by
-  rw [cosThetaMagnitude, norm_trialGramSqrt_apply]
+  rw [cosThetaMagnitude, LinearMap.norm_operatorAbs_apply]
   exact cosThetaEmbedding_apply_norm_le U X x
 
 /-- The operator norm of the positive source cosine is at most one. -/
@@ -176,15 +176,15 @@ theorem cosThetaGram_add_sinThetaGram_eq_id (U : Submodule 𝕜 E)
 theorem cosThetaMagnitude_sq (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
     cosThetaMagnitude U X ∘ₗ cosThetaMagnitude U X = cosThetaGram U X := by
-  simp [cosThetaMagnitude, cosThetaGram, trialGramSqrt]
+  simp [cosThetaMagnitude, cosThetaGram]
 
 /-- The positive coordinate cosine has exactly the kernel of the rectangular
 cosine block. -/
 theorem ker_cosThetaMagnitude (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
     LinearMap.ker (cosThetaMagnitude U X) =
-      LinearMap.ker (cosThetaEmbedding U X) := by
-  simpa [cosThetaMagnitude] using ker_trialGramSqrt (cosThetaEmbedding U X)
+      LinearMap.ker (cosThetaEmbedding U X) :=
+  (cosThetaEmbedding U X).ker_operatorAbs
 
 /-- Transversality of the rectangular cosine block transfers to its positive
 source-coordinate factor. -/
@@ -192,9 +192,8 @@ theorem cosThetaMagnitude_injective
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E)
     (hC : Function.Injective (cosThetaEmbedding U X)) :
-    Function.Injective (cosThetaMagnitude U X) := by
-  simpa [cosThetaMagnitude] using
-    trialGramSqrt_injective (X := cosThetaEmbedding U X) hC
+    Function.Injective (cosThetaMagnitude U X) :=
+  LinearMap.operatorAbs_injective_iff.2 hC
 
 /-- Passing from the rectangular cosine block to its positive source factor
 preserves the full zero-padded singular-value sequence. -/
@@ -202,13 +201,8 @@ theorem singularValues_cosThetaMagnitude_eq_embedding
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E) :
     (cosThetaMagnitude U X).singularValues =
-      (cosThetaEmbedding U X).singularValues := by
-  apply singularValues_eq_of_gram_eq
-  have hpos : (cosThetaMagnitude U X).IsPositive := by
-    simpa [cosThetaMagnitude, trialGramSqrt] using
-      (cosThetaEmbedding U X).isPositive_adjoint_comp_self.sqrt_isPositive
-  rw [hpos.adjoint_eq, cosThetaMagnitude_sq U X]
-  rfl
+      (cosThetaEmbedding U X).singularValues :=
+  (cosThetaEmbedding U X).singularValues_operatorAbs
 
 /-- Source-side double-angle cosine
 `cos(2Θ) = C⋆C - S⋆S` on trial coordinates. -/

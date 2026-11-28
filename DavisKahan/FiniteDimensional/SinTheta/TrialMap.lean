@@ -6,7 +6,8 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
-public import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
+public import TauCeti.Analysis.InnerProductSpace.Polar.Isometry
+public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
@@ -34,14 +35,15 @@ so their conditioning losses are visible in theorem statements.
 
 /-! ## Construction status
 
-The shared injective-trial-map coordinate layer now lives in
-`DavisKahan.FiniteDimensional.FrameFactorization`.  It provides the canonical rectangular
-polar factorization `X = Q T`, proves that `Q` is isometric with
-`range Q = range X`, and packages the positive Gram square root `T` as a
-linear equivalence.  It also proves `‖T⁻¹‖ ≤ ε⁻¹`, the corresponding
-right-ideal estimate for every rectangular UI norm, and the assembled
-frame-to-sine transport inequality
+TauCeti's finite polar factorization writes an injective rectangular trial map
+as `X = Q T`, with `Q = X.polarIsometry hX` and `T = X.operatorAbsEquiv hX`.
+The lower frame bound controls the inverse coordinate and its composition
+cost in a unitarily invariant seminorm. The assembled sine estimate is
 `ε * N (P_{Vᗮ} Q) ≤ N (P_{Vᗮ} X)`.
+
+The paper's frame and Gram lower-bound predicates were moved here from
+`ForTauCeti.Analysis.InnerProductSpace.FrameFactorization` (DKPS `b806b36`,
+Jon Crall and GPT 5.6 High, Kitware copyright, Apache-2.0).
 
 Theorem 6.1 is assembled below from this coordinate layer and the raw
 projected Sylvester identity.  The source-complete endpoints accept either
@@ -55,7 +57,6 @@ singular-value sequence.
 public section
 
 namespace TauCeti
-namespace DavisKahan.FiniteDimensional
 
 open scoped InnerProductSpace BigOperators Topology
 open Module (finrank)
@@ -66,16 +67,92 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
+/-- A quantitative lower frame bound for a not-necessarily-isometric trial
+map.  Davis--Kahan's parameter `e` is this lower singular-value bound. -/
+@[expose]
+def LowerFrameBound (X : F →ₗ[𝕜] E) (ε : ℝ) : Prop :=
+  ∀ y, ε * ‖y‖ ≤ ‖X y‖
+
+/-- Davis--Kahan's Gram-operator lower bound
+`X⋆ X ≥ ε² I`, written as its quadratic-form inequality.
+
+The real part makes the definition uniform over `ℝ` and `ℂ`; for the positive
+Gram operator the quadratic form is real and equals `‖X y‖²`. -/
+def GramLowerBound (X : F →ₗ[𝕜] E) (ε : ℝ) : Prop :=
+  ∀ y, ε ^ 2 * ‖y‖ ^ 2 ≤
+    RCLike.re ⟪(X.adjoint ∘ₗ X) y, y⟫_𝕜
+
+/-- A nonnegative lower frame bound implies the corresponding Gram-operator
+quadratic-form bound. -/
+theorem LowerFrameBound.gramLowerBound {X : F →ₗ[𝕜] E} {ε : ℝ}
+    (hframe : LowerFrameBound X ε) (hε : 0 ≤ ε) :
+    GramLowerBound X ε := by
+  intro y
+  rw [re_inner_adjointCompSelf_self, ← mul_pow]
+  exact (sq_le_sq₀ (mul_nonneg hε (norm_nonneg y)) (norm_nonneg _)).2 (hframe y)
+
+/-- A Gram lower bound implies a norm lower bound for any sign of `ε`. -/
+theorem GramLowerBound.lowerFrameBound {X : F →ₗ[𝕜] E} {ε : ℝ}
+    (hgram : GramLowerBound X ε) :
+    LowerFrameBound X ε := by
+  intro y
+  by_cases hnonneg : 0 ≤ ε * ‖y‖
+  · have hy := hgram y
+    rw [re_inner_adjointCompSelf_self, ← mul_pow] at hy
+    exact (sq_le_sq₀ hnonneg (norm_nonneg _)).1 hy
+  · exact (le_of_not_ge hnonneg).trans (norm_nonneg _)
+
+/-- For a nonnegative parameter, the paper's Gram lower bound and the norm-form
+lower frame bound are equivalent. -/
+theorem lowerFrameBound_iff_gramLowerBound (X : F →ₗ[𝕜] E) {ε : ℝ}
+    (hε : 0 ≤ ε) :
+    LowerFrameBound X ε ↔ GramLowerBound X ε := by
+  constructor
+  · intro hframe
+    exact hframe.gramLowerBound hε
+  · intro hgram
+    exact hgram.lowerFrameBound
+
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- A positive lower frame bound implies injectivity. -/
+theorem LowerFrameBound.injective {X : F →ₗ[𝕜] E} {ε : ℝ}
+    (hframe : LowerFrameBound X ε) (hε : 0 < ε) :
+    Function.Injective X := by
+  intro x y hxy
+  have hmul : ε * ‖x - y‖ ≤ 0 := by
+    simpa [map_sub, hxy] using hframe (x - y)
+  have hnorm : ‖x - y‖ ≤ 0 := by
+    nlinarith [norm_nonneg (x - y)]
+  apply sub_eq_zero.mp
+  exact norm_eq_zero.mp (le_antisymm hnorm (norm_nonneg _))
+
+/-- A positive Gram lower bound implies injectivity. -/
+theorem GramLowerBound.injective {X : F →ₗ[𝕜] E} {ε : ℝ}
+    (hgram : GramLowerBound X ε) (hε : 0 < ε) :
+    Function.Injective X :=
+  (hgram.lowerFrameBound).injective hε
+
+omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
+/-- Put the positive frame bound in the form used by the inverse-modulus estimate. -/
+theorem LowerFrameBound.norm_le_inv_mul {X : F →ₗ[𝕜] E} {ε : ℝ}
+    (hframe : LowerFrameBound X ε) (hε : 0 < ε) (x : F) :
+    ‖x‖ ≤ ε⁻¹ * ‖X x‖ :=
+  (le_inv_mul_iff₀ hε).2 (hframe x)
+
+namespace DavisKahan.FiniteDimensional
+
 /-- The geometric sine block is the raw complementary trial block followed by
 the inverse frame coordinate. -/
-theorem complementaryTrialBlock_comp_trialGramSqrtEquiv_symm
+theorem complementaryTrialBlock_comp_operatorAbsEquiv_symm
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X) :
     complementaryTrialBlock U X ∘ₗ
-        (trialGramSqrtEquiv X hX).symm.toLinearMap =
-      sinThetaEmbedding U (orthonormalizedEmbedding X hX) := by
-  rw [complementaryTrialBlock, sinThetaEmbedding, LinearMap.comp_assoc,
-    trialMap_comp_trialGramSqrtEquiv_symm X hX]
+        (X.operatorAbsEquiv hX).symm.toLinearMap =
+      sinThetaEmbedding U (X.polarIsometry hX) := by
+  ext y
+  change Uᗮ.starProjection (X ((X.operatorAbsEquiv hX).symm y)) =
+    Uᗮ.starProjection (X.polarIsometry hX y)
+  rw [X.polarIsometry_apply hX]
 
 /-- Lower-frame transport from the raw complementary block to the canonical
 sine-angle map in every rectangular unitarily invariant norm. -/
@@ -84,14 +161,14 @@ theorem lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     {ε : ℝ} (hframe : LowerFrameBound X ε) (hε : 0 < ε) :
-    ε * N (sinThetaEmbedding U (orthonormalizedEmbedding X hX)) ≤
+    ε * N (sinThetaEmbedding U (X.polarIsometry hX)) ≤
       N (complementaryTrialBlock U X) := by
-  have hideal := uiNorm_comp_trialGramSqrtEquiv_symm_le
-    N X hX hframe hε (complementaryTrialBlock U X)
-  rw [complementaryTrialBlock_comp_trialGramSqrtEquiv_symm U X hX] at hideal
+  have hideal := N.map_comp_operatorAbsEquiv_symm_le (complementaryTrialBlock U X) hX
+    (hframe.norm_le_inv_mul hε)
+  rw [complementaryTrialBlock_comp_operatorAbsEquiv_symm U X hX] at hideal
   calc
-    ε * N (sinThetaEmbedding U (orthonormalizedEmbedding X hX)) ≤
-        ε * (N (complementaryTrialBlock U X) * ε⁻¹) :=
+    ε * N (sinThetaEmbedding U (X.polarIsometry hX)) ≤
+        ε * (ε⁻¹ * N (complementaryTrialBlock U X)) :=
       mul_le_mul_of_nonneg_left hideal hε.le
     _ = N (complementaryTrialBlock U X) := by
       field_simp [hε.ne']
@@ -103,7 +180,7 @@ The coordinate Rayleigh quotient `(X⋆X)⁻¹ X⋆ A X` is similar to this oper
 but is generally only self-adjoint for the Gram inner product. -/
 @[expose] noncomputable def generalizedCompression (A : E →ₗ[𝕜] E)
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X) : F →ₗ[𝕜] F :=
-  compression A (orthonormalizedEmbedding X hX)
+  compression A (X.polarIsometry hX)
 
 /-- The whitened generalized compression is symmetric for a symmetric
 ambient operator.
@@ -114,7 +191,7 @@ ordinary-self-adjoint operator.
 theorem isSymmetric_generalizedCompression {A : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (X : F →ₗ[𝕜] E) (hX : Function.Injective X) :
     (generalizedCompression A X hX).IsSymmetric := by
-  exact hA.adjoint_conj (orthonormalizedEmbedding X hX).toLinearMap
+  exact hA.adjoint_conj (X.polarIsometry hX).toLinearMap
 
 /-- The interval/exterior spectral hypothesis for a generalized trial pair,
 in either orientation.
@@ -180,7 +257,7 @@ theorem generalizedSinTheta_residual_le_of_intervalGap
     (hframe : LowerFrameBound X ε)
     (hgap : TrialComplementIntervalGap M A V a b δ) :
     δ * ε * N (sinThetaEmbedding V
-      (orthonormalizedEmbedding X (hframe.injective hε))) ≤
+      (X.polarIsometry (hframe.injective hε))) ≤
       N (generalResidual A X M) := by
   have htransport := lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock
     N V X (hframe.injective hε) hframe hε
@@ -188,9 +265,9 @@ theorem generalizedSinTheta_residual_le_of_intervalGap
     N hA hV X hM hδ hgap
   calc
     δ * ε * N (sinThetaEmbedding V
-        (orthonormalizedEmbedding X (hframe.injective hε))) =
+        (X.polarIsometry (hframe.injective hε))) =
         δ * (ε * N (sinThetaEmbedding V
-          (orthonormalizedEmbedding X (hframe.injective hε)))) := by ring
+          (X.polarIsometry (hframe.injective hε)))) := by ring
     _ ≤ δ * N (complementaryTrialBlock V X) :=
       mul_le_mul_of_nonneg_left htransport hδ.le
     _ ≤ N (generalResidual A X M) := hraw
@@ -210,7 +287,7 @@ theorem generalizedSinTheta_residual_le_of_gramLowerBound
     (hgram : GramLowerBound X ε)
     (hgap : TrialComplementIntervalGap M A V a b δ) :
     δ * ε * N (sinThetaEmbedding V
-      (orthonormalizedEmbedding X (hgram.injective hε))) ≤
+      (X.polarIsometry (hgram.injective hε))) ≤
       N (generalResidual A X M) := by
   exact generalizedSinTheta_residual_le_of_intervalGap
     N hA hV X hM hδ hε (hgram.lowerFrameBound) hgap
@@ -233,12 +310,12 @@ theorem generalizedSinTheta0_residual_le_of_gramLowerBound
     (sinTheta0 : F →ₗ[𝕜] E)
     (hsin : sinTheta0.singularValues =
       (sinThetaEmbedding V
-        (orthonormalizedEmbedding X (hgram.injective hε))).singularValues) :
+        (X.polarIsometry (hgram.injective hε))).singularValues) :
     δ * ε * N sinTheta0 ≤ N (generalResidual A X M) := by
   have hcanonical := generalizedSinTheta_residual_le_of_gramLowerBound
     N hA hV X hM hδ hε hgram hgap
   have hnorm : N sinTheta0 = N (sinThetaEmbedding V
-      (orthonormalizedEmbedding X (hgram.injective hε))) :=
+      (X.polarIsometry (hgram.injective hε))) :=
     N.map_eq_of_singularValues_eq hsin
   rw [hnorm]
   exact hcanonical
@@ -259,15 +336,15 @@ theorem generalizedSinTheta_residual_le
     (hframe : LowerFrameBound X ε)
     (hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b))
     (hAspec : Module.End.PointSpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * ε * N (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
+    δ * ε * N (sinThetaEmbedding V (X.polarIsometry hX)) ≤
       N (generalResidual A X M) := by
   have htransport := lowerFrame_mul_uiNorm_sinTheta_le_complementaryTrialBlock
     N V X hX hframe hε
   have hraw := complementaryTrialBlock_residual_le_of_intervalGap
     N hA hV X hM hδ (Or.inl ⟨hMspec, hAspec⟩)
   calc
-    δ * ε * N (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) =
-        δ * (ε * N (sinThetaEmbedding V (orthonormalizedEmbedding X hX))) := by ring
+    δ * ε * N (sinThetaEmbedding V (X.polarIsometry hX)) =
+        δ * (ε * N (sinThetaEmbedding V (X.polarIsometry hX))) := by ring
     _ ≤ δ * N (complementaryTrialBlock V X) :=
       mul_le_mul_of_nonneg_left htransport hδ.le
     _ ≤ N (generalResidual A X M) := hraw

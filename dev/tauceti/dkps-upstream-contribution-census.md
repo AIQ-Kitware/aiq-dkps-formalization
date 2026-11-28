@@ -1,5 +1,43 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 trial-map polar factorization
+
+The finite trial-map proofs consume `LinearMap.polarIsometry`,
+`operatorAbsEquiv`, and the inverse-coordinate composition bound from
+#16080 (PA-B18 and PA-B36–B39). The coordinate cosine uses the native
+finite modulus and its singular-value identity. The source-facing norm
+and Gram lower bounds move into the Davis–Kahan trial-map module, and
+the duplicate factorization module retires. The trial-map estimates
+keep their original rectangular `RCLike` scope and conditioning constant.
+#16080 cites Horn and Johnson and reports no vendoring. DKPS proof
+descent is unverified.
+[#16080 integration](https://github.com/TauCetiProject/TauCeti/commit/18681919170b67de8799d152b7a29a9a6a315889)
+
+The bounded real and complex cases now share a construction from
+`ContinuousLinearMap.modulus` (#16606, PD-A36–A45 and A48), its ring
+inverse, and `ContinuousLinearMap.polarFactor` (#16936). The positive
+lower frame bound gives a closed range and the original inverse norm
+estimate. The paper-facing package keeps the Gram inverse and the
+identity case for an isometric trial map. #16936 uses the native Gram
+factor construction and has transitive DKPS ancestry through its
+partial-isometry dependency.
+[#16606 integration](https://github.com/TauCetiProject/TauCeti/commit/cba89f5f3f73db38aa148246fac841cfbead5e99) ·
+[#16936 integration](https://github.com/TauCetiProject/TauCeti/commit/3266a7a2637755febeecd0484d578678a508d44e)
+
+The extraction manifest records the retired finite declarations and
+the original bounded real and complex proofs at DKPS `8c1a82e68`.
+The 19 new TauCeti commits through `b4f07355dff5` were checked for
+relevant additions. The summing-operator and Euclidean truncation
+results in #42991 have no matching maintained DKPS proof in this slice.
+[TauCeti comparison](https://github.com/TauCetiProject/TauCeti/compare/1a9b19322ec2d40d4988681b5d23f778d240e6b8...b4f07355dff5247676a8ca6f3ba39d26e14385fb)
+
+The focused build, default build (22,800 jobs), and Challenge with
+the semantic-surface audit (22,514 jobs) passed without warnings.
+Lean checked pointwise agreement of the old and new finite factors.
+All 1,569 source-census references resolved, and all 17 available
+comparator signatures matched. The static name checker reported the
+same 28 findings on the baseline and the migrated tree.
+
 ## November 28 finite frames, rectangular Gram spectra, and modulus symmetry
 
 Perfect Quench now uses TauCeti's finite-family Gram operator, its matrix

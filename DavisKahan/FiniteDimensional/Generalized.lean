@@ -39,31 +39,24 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 noncomputable def whitenedCoordinateOperator
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X) (M : F →ₗ[𝕜] F) :
     F →ₗ[𝕜] F :=
-  (trialGramSqrtEquiv X hX).toLinearMap ∘ₗ M ∘ₗ
-    (trialGramSqrtEquiv X hX).symm.toLinearMap
+  (X.operatorAbsEquiv hX).toLinearMap ∘ₗ M ∘ₗ
+    (X.operatorAbsEquiv hX).symm.toLinearMap
 
 /-- The normalized residual is the original residual followed by the inverse
 Gram coordinate.  This is the algebraic identity that was missing from the
 historical generalized square-norm proof. -/
-theorem residual_orthonormalizedEmbedding_whitenedCoordinateOperator
+theorem residual_polarIsometry_whitenedCoordinateOperator
     (A : E →ₗ[𝕜] E) (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     (M : F →ₗ[𝕜] F) :
-    residual A (orthonormalizedEmbedding X hX)
+    residual A (X.polarIsometry hX)
         (whitenedCoordinateOperator X hX M) =
       generalResidual A X M ∘ₗ
-        (trialGramSqrtEquiv X hX).symm.toLinearMap := by
+        (X.operatorAbsEquiv hX).symm.toLinearMap := by
   ext y
-  simp only [residual, generalResidual, whitenedCoordinateOperator,
-    LinearMap.sub_apply, LinearMap.comp_apply]
-  -- the goal carries `.toLinearMap`, not the isometry's function coercion,
-  -- and both occurrences have to be unfolded before the inverse cancels
-  simp only [show ∀ z : F, (orthonormalizedEmbedding X hX).toLinearMap z =
-    X ((trialGramSqrtEquiv X hX).symm z) from fun _ => rfl]
-  -- the inner application arrives through the linear-map coercion, so the
-  -- equiv cancellation lemma needs `simp` rather than a bare rewrite
-  simp
-  congr 1
-  exact (trialGramSqrtEquiv X hX).symm_apply_apply _
+  let T := X.operatorAbsEquiv hX
+  change A (X.polarIsometry hX y) - X.polarIsometry hX (T (M (T.symm y))) =
+    A (X (T.symm y)) - X (M (T.symm y))
+  rw [X.polarIsometry_apply hX, X.polarIsometry_apply hX, T.symm_apply_apply]
 
 /-- Davis--Kahan Theorem 6.2 for an injective nonorthonormal trial map.
 
@@ -80,24 +73,20 @@ theorem generalizedSinTheta_frobenius_le_of_spectralDistance
     (hframe : LowerFrameBound X ε)
     (hgap : Module.End.PointSpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
     δ * ε * UnitarilyInvariantSeminorm.frobenius 𝕜 F E
-        (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
+        (sinThetaEmbedding V (X.polarIsometry hX)) ≤
       UnitarilyInvariantSeminorm.frobenius 𝕜 F E
         (generalResidual A X M) := by
-  let Q := orthonormalizedEmbedding X hX
+  let Q := X.polarIsometry hX
   let Mhat := whitenedCoordinateOperator X hX M
   have hnormalized := frobenius_sinTheta_residual_le_of_spectralDistance
     hA hV Q hM hδ hgap
   have hfactor : residual A Q Mhat = generalResidual A X M ∘ₗ
-      (trialGramSqrtEquiv X hX).symm.toLinearMap := by
+      (X.operatorAbsEquiv hX).symm.toLinearMap := by
     simpa [Q, Mhat] using
-      residual_orthonormalizedEmbedding_whitenedCoordinateOperator A X hX M
-  have hright := uiNorm_comp_trialGramSqrtEquiv_symm_le
-    (UnitarilyInvariantSeminorm.frobenius 𝕜 F E)
-    X hX hframe hε (generalResidual A X M)
+      residual_polarIsometry_whitenedCoordinateOperator A X hX M
+  have hright := (UnitarilyInvariantSeminorm.frobenius 𝕜 F E).map_comp_operatorAbsEquiv_symm_le
+    (generalResidual A X M) hX (hframe.norm_le_inv_mul hε)
   rw [← hfactor] at hright
-  have hres : UnitarilyInvariantSeminorm.frobenius 𝕜 F E (residual A Q Mhat) ≤
-      UnitarilyInvariantSeminorm.frobenius 𝕜 F E (generalResidual A X M) * ε⁻¹ := by
-    simpa [← hfactor] using hright
   calc
     δ * ε * UnitarilyInvariantSeminorm.frobenius 𝕜 F E
         (sinThetaEmbedding V Q) =
@@ -105,9 +94,9 @@ theorem generalizedSinTheta_frobenius_le_of_spectralDistance
         (sinThetaEmbedding V Q)) := by ring
     _ ≤ ε * UnitarilyInvariantSeminorm.frobenius 𝕜 F E
         (residual A Q Mhat) := mul_le_mul_of_nonneg_left hnormalized hε.le
-    _ ≤ ε * (UnitarilyInvariantSeminorm.frobenius 𝕜 F E
-        (generalResidual A X M) * ε⁻¹) :=
-      mul_le_mul_of_nonneg_left hres hε.le
+    _ ≤ ε * (ε⁻¹ * UnitarilyInvariantSeminorm.frobenius 𝕜 F E
+        (generalResidual A X M)) :=
+      mul_le_mul_of_nonneg_left hright hε.le
     _ = UnitarilyInvariantSeminorm.frobenius 𝕜 F E
         (generalResidual A X M) := by field_simp [hε.ne']
 
@@ -122,11 +111,11 @@ theorem generalizedSinTheta_nuclear_le_of_spectralDistance
     (hframe : LowerFrameBound X ε)
     (hgap : Module.End.PointSpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
     δ * ε * UnitarilyInvariantSeminorm.nuclear 𝕜 F E
-        (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
+        (sinThetaEmbedding V (X.polarIsometry hX)) ≤
       Real.sqrt (finrank 𝕜 F) *
         UnitarilyInvariantSeminorm.frobenius 𝕜 F E
           (generalResidual A X M) := by
-  let S := sinThetaEmbedding V (orthonormalizedEmbedding X hX)
+  let S := sinThetaEmbedding V (X.polarIsometry hX)
   have hHS := generalizedSinTheta_frobenius_le_of_spectralDistance
     hA hV X hX hM hδ hε hframe hgap
   have hnuc := UnitarilyInvariantSeminorm.nuclear_apply_le_sqrt_finrank_range_mul_frobenius_apply S
@@ -162,13 +151,13 @@ theorem generalizedTanTheta_residual_le
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     (_hdim : finrank 𝕜 F ≤ finrank 𝕜 V)
     (_htrans : Disjoint
-      (orthonormalizedEmbedding X hX).toLinearMap.range Vᗮ)
+      (X.polarIsometry hX).toLinearMap.range Vᗮ)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : Module.End.PointOrderedGap (generalizedCompression A X hX) ⊤ A Vᗮ δ) :
-    δ * N (tanThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
-      N (residual A (orthonormalizedEmbedding X hX)
+    δ * N (tanThetaEmbedding V (X.polarIsometry hX)) ≤
+      N (residual A (X.polarIsometry hX)
         (generalizedCompression A X hX)) :=
-  tanTheta_residual_le N hA hV (orthonormalizedEmbedding X hX)
+  tanTheta_residual_le N hA hV (X.polarIsometry hX)
     (isSymmetric_generalizedCompression hA X hX) rfl hδ hgap
 
 /-- Unequal-dimensional ordered-gap `sin 2Θ` residual extension. -/

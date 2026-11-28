@@ -106,7 +106,6 @@
         "ForTauCeti.Analysis.Convex.Majorization",
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
@@ -353,7 +352,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
@@ -1282,22 +1280,90 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.FrameFactorization",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.LowerFrameBound",
+        "TauCeti.GramLowerBound",
+        "TauCeti.gramQuadraticForm_eq_norm_sq",
+        "TauCeti.LowerFrameBound.gramLowerBound",
+        "TauCeti.GramLowerBound.lowerFrameBound",
+        "TauCeti.lowerFrameBound_iff_gramLowerBound",
+        "TauCeti.LowerFrameBound.injective",
+        "TauCeti.GramLowerBound.injective",
+        "TauCeti.trialGramSqrt",
+        "TauCeti.norm_trialGramSqrt_apply",
+        "TauCeti.ker_trialGramSqrt",
+        "TauCeti.trialGramSqrt_injective",
+        "TauCeti.trialGramSqrtEquiv",
+        "TauCeti.trialGramSqrtEquiv_toLinearMap",
+        "TauCeti.norm_trialGramSqrtEquiv_apply",
+        "TauCeti.orthonormalizedEmbedding",
+        "TauCeti.orthonormalizedEmbedding_comp_trialGramSqrtEquiv",
+        "TauCeti.range_orthonormalizedEmbedding",
+        "TauCeti.TrialMapFrameFactorization",
+        "TauCeti.trialMapFrameFactorization",
+        "TauCeti.trialMapFrameFactorization_isometry",
+        "TauCeti.trialMapFrameFactorization_coordinate",
+        "TauCeti.norm_trialGramSqrtEquiv_symm_apply_le",
+        "TauCeti.opNorm_trialGramSqrtEquiv_symm_le",
+        "TauCeti.uiNorm_comp_trialGramSqrtEquiv_symm_le",
+        "TauCeti.trialMap_comp_trialGramSqrtEquiv_symm"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.FrameFactorization",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Polar.Isometry",
       "ownership_class": "tauceti",
-      "roadmap_target": "unitarily-invariant-norm",
+      "roadmap_target": "PA-B18 and PA-B36–B39",
       "provenance_class": "moved; introduced at Davis--Kahan commit b806b36; authors Jon Crall, GPT 5.6 High; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
+        "TauCeti.Analysis.InnerProductSpace.Polar.Isometry"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "DavisKahan.FiniteDimensional.SinTheta.TrialMap",
+        "DavisKahan.FiniteDimensional.Generalized",
+        "ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding"
+      ],
+      "status": "partially-upstreamed",
+      "upstream_pr": "#16080",
+      "migration_note": "Donor snapshot 8c1a82e68:ForTauCeti/Analysis/InnerProductSpace/FrameFactorization.lean. #16080 (18681919170b67de8799d152b7a29a9a6a315889) supplies operatorAbsEquiv, polarIsometry, polarIsometry_apply, range_polarIsometry, norm_operatorAbsEquiv_symm_apply_le and UnitarilyInvariantSeminorm.map_comp_operatorAbsEquiv_symm_le at finite rectangular RCLike scope. The duplicate bundled factorization and its derived coordinate estimates retire. The paper-facing norm and Gram lower bounds and their conversion keep their names and move to DavisKahan.FiniteDimensional.SinTheta.TrialMap. The frame-to-sine proof applies the native composition bound with c = ε⁻¹. The integration cites Horn and Johnson and reports no vendoring. DKPS proof descent is unverified.",
+      "maintained_declarations": [
+        "TauCeti.LowerFrameBound",
+        "TauCeti.GramLowerBound",
+        "TauCeti.LowerFrameBound.gramLowerBound",
+        "TauCeti.GramLowerBound.lowerFrameBound",
+        "TauCeti.lowerFrameBound_iff_gramLowerBound",
+        "TauCeti.LowerFrameBound.injective",
+        "TauCeti.GramLowerBound.injective"
+      ]
+    },
+    {
+      "source_module": "DavisKahan.SinTheta.FrameFactorization",
+      "source_declarations": [
+        "TauCeti.DavisKahan.ExactSinTheta.lowerFramePolarData_nonempty",
+        "TauCeti.DavisKahan.ExactSinTheta.lowerFramePolarData",
+        "TauCeti.DavisKahan.ExactSinTheta.lowerFramePolarData_real_nonempty",
+        "TauCeti.DavisKahan.ExactSinTheta.lowerFramePolarDataReal",
+        "TauCeti.DavisKahan.ExactSinTheta.adjoint_comp_self_eq_id_of_isometry"
+      ],
+      "current_namespace": "TauCeti.DavisKahan.ExactSinTheta",
+      "staging_module": "DavisKahan.SinTheta.FrameFactorization",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Polar.Bounded",
+      "ownership_class": "davis-kahan",
+      "roadmap_target": "PD-B24, PD-B26, PD-B32/B33 and PD-B37–B39",
+      "provenance_class": "DKPS source snapshots 8c1a82e68:DavisKahan/SinTheta/FrameFactorization.lean and 8c1a82e68:DavisKahan/SinTheta/Real/FrameFactorization.lean. Jon Crall and OpenAI GPT-5.6 Thinking, Copyright (c) 2026 Kitware, Inc., Apache-2.0. The native bounded polar factor is constructed through the Gram factor. Its partial-isometry dependency has transitive DKPS ancestry.",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Modulus",
+        "TauCeti.Analysis.InnerProductSpace.Polar.Bounded",
+        "Mathlib.Analysis.InnerProductSpace.Positive"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.SinTheta.FrameFactorizationGeneric",
+        "DavisKahan.SinTheta.Real.FrameFactorization"
+      ],
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "#16606; #16936",
+      "migration_note": "The shared RCLike proof uses ContinuousLinearMap.modulus from #16606 (cba89f5f3f73db38aa148246fac841cfbead5e99) and its Ring.inverse, with polarFactor_eq_comp_inverse, norm_polarFactor_apply_of_injective, polarFactor_comp_modulus and range_polarFactor from #16936 (3266a7a2637755febeecd0484d578678a508d44e). Closed range follows from the positive lower frame bound. Mathlib supplies the coercivity-to-unit criterion and the isometry/Gram identity. The paper package retains the Gram inverse, inverse norm estimate and identity on isometric inputs. The separate power-calculus and complexification existence proofs retire."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.GramMatrix",
@@ -1669,7 +1735,6 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "DavisKahan.Geometry.Angle.Proposition35Infinite"
       ],
@@ -2098,7 +2163,6 @@
         "DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm",
         "DavisKahan.Sources.DavisKahan1970.SineTheta.Sharpness",
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
-        "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
         "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
@@ -5106,8 +5170,8 @@
       "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
-        "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
-        "ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap"
+        "ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap",
+        "TauCeti.Analysis.InnerProductSpace.Polar.Isometry"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -5115,7 +5179,7 @@
       ],
       "status": "partially-upstreamed",
       "upstream_pr": "#26822; #16661",
-      "migration_note": "November 1: redundant AvoidsQuarterTurnEmbedding alias, its defining iff and proof-only zero-angle witness retired after native Submodule.AvoidsQuarterTurn consumption. They have no maintained consumers and only exercised the retired alias; native avoidsQuarterTurn_iff_principalAngles and avoidsQuarterTurn_self expose the general condition and its diagonal witness. Actual trial-coordinate tanThetaEmbedding, its domain/failure branches and Ritz-residual identities remain: S |C|^+ is not identified with the native Submodule.tanThetaMap. The native principal-sine/cosine dictionaries replace retired root aliases via explicit native projection equations. Historical e4637c3919ae donor source and original source_declarations are preserved. November 1 acuteness slice: tanThetaEmbedding_defined_iff is now stated with native Disjoint (approximateSubspace X) U orthogonal. Its proof uses Submodule.injOn_starProjection_iff_disjoint and LinearMap.ker_eq_bot directly. It still omits both finite-dimensional assumptions, requiring no projection instance on range X. The original arbitrary trial-coordinate tangent, totalized failure behavior and Ritz-residual identities remain unchanged. Native Submodule.tanThetaMap has not been identified with S |C|^+. November 27: replace projection_approximateSubspace_eq_comp_adjoint, singularValues_sinThetaEmbedding and singularValues_cosThetaEmbedding with the accepted ContinuousLinearMap.comp_adjoint_eq_starProjection_range and Submodule.principalSines_range_eq_singularValues / principalCosines_range_eq_singularValues from independently developed #16661 (c5920d8f1e7cad46b0c0d79052124180557ea6d2). The positive coordinate cosine still uses its separate modulus identity. Source 161446e6ba598f777c5804de0c8fa0a5fd12b575:ForTauCeti/Analysis/InnerProductSpace/Residual/AngleEmbedding.lean, Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0."
+      "migration_note": "November 1: redundant AvoidsQuarterTurnEmbedding alias, its defining iff and proof-only zero-angle witness retired after native Submodule.AvoidsQuarterTurn consumption. They have no maintained consumers and only exercised the retired alias; native avoidsQuarterTurn_iff_principalAngles and avoidsQuarterTurn_self expose the general condition and its diagonal witness. Actual trial-coordinate tanThetaEmbedding, its domain/failure branches and Ritz-residual identities remain: S |C|^+ is not identified with the native Submodule.tanThetaMap. The native principal-sine/cosine dictionaries replace retired root aliases via explicit native projection equations. Historical e4637c3919ae donor source and original source_declarations are preserved. November 1 acuteness slice: tanThetaEmbedding_defined_iff is now stated with native Disjoint (approximateSubspace X) U orthogonal. Its proof uses Submodule.injOn_starProjection_iff_disjoint and LinearMap.ker_eq_bot directly. It still omits both finite-dimensional assumptions, requiring no projection instance on range X. The original arbitrary trial-coordinate tangent, totalized failure behavior and Ritz-residual identities remain unchanged. Native Submodule.tanThetaMap has not been identified with S |C|^+. November 27: replace projection_approximateSubspace_eq_comp_adjoint, singularValues_sinThetaEmbedding and singularValues_cosThetaEmbedding with the accepted ContinuousLinearMap.comp_adjoint_eq_starProjection_range and Submodule.principalSines_range_eq_singularValues / principalCosines_range_eq_singularValues from independently developed #16661 (c5920d8f1e7cad46b0c0d79052124180557ea6d2). The positive coordinate cosine still uses its separate modulus identity. Source 161446e6ba598f777c5804de0c8fa0a5fd12b575:ForTauCeti/Analysis/InnerProductSpace/Residual/AngleEmbedding.lean, Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0. November 28: the coordinate cosine now uses LinearMap.operatorAbs of the rectangular cosine block. Its norm, square, kernel, injectivity and singular-value facts invoke the accepted modulus laws at the same finite rectangular scope."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Residual/Ritz.lean",
