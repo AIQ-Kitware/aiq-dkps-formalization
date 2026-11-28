@@ -29,6 +29,7 @@ public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
 public import TauCeti.Analysis.InnerProductSpace.SchurHorn
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Basic
 
 
 /-! # Gram-operator perturbation
@@ -70,20 +71,6 @@ variable {𝕜 E F : Type*} [RCLike 𝕜]
 local instance instCompleteSpaceE : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
 local instance instCompleteSpaceF : CompleteSpace F := FiniteDimensional.completeSpace 𝕜 F
 
-omit [FiniteDimensional 𝕜 E] in
-/-- **The quadratic form of a real dilation at a unit vector is the dilation factor**:
-`re ⟪(c : 𝕜) • v, v⟫ = c` when `‖v‖ = 1`.
-
-Stated because four proofs in this file each spelled it out as the same seven-lemma
-rewrite -- `inner_smul_left`, `RCLike.conj_ofReal`, `RCLike.re_ofReal_mul`,
-`inner_self_eq_norm_sq`, the unit-norm fact, `one_pow`, `mul_one`. Every use of it here
-follows an eigenvector step that produces exactly this shape, so naming it removes the
-repetition rather than hiding it. -/
-private theorem re_inner_real_smul_self_of_norm_one {c : ℝ} {v : E} (hv : ‖v‖ = 1) :
-    RCLike.re ⟪(c : 𝕜) • v, v⟫_𝕜 = c := by
-  rw [inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq, hv]
-  simp
-
 /-- **Trace of the modulus = sum of singular values.** For an endomorphism
 `A : E →ₗ[𝕜] E`, `∑ₖ re⟪|A| bₖ, bₖ⟫ = ∑ᵢ σᵢ(A)` in any orthonormal basis `b`.
 The modulus `|A| = √(A⋆A)` is diagonal in the `A⋆A`-eigenbasis with entries
@@ -92,21 +79,10 @@ theorem sum_re_inner_abs_self_eq_sum_singularValues (A : E →ₗ[𝕜] E)
     {n : ℕ} (hn : finrank 𝕜 E = n) (b : OrthonormalBasis (Fin n) 𝕜 E) :
     ∑ k, RCLike.re ⟪A.operatorAbs (b k), b k⟫_𝕜 = ∑ i : Fin n, A.singularValues (i : ℕ) := by
   subst hn
-  have hP := LinearMap.isPositive_adjoint_comp_self A
-  have hsym : (A.operatorAbs).IsSymmetric := (A.isPositive_operatorAbs).isSymmetric
-  -- Basis independence: the trace of `|A|` is the same in any basis.
-  have key : ∀ b' : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E,
-      ∑ k, RCLike.re ⟪A.operatorAbs (b' k), b' k⟫_𝕜
-        = ∑ i : Fin (finrank 𝕜 E), hsym.eigenvalues rfl i :=
-    fun b' => hsym.sum_re_inner_apply_self_eq_sum_eigenvalues rfl b'
-  rw [key b, ← key (hP.isSymmetric.eigenvectorBasis rfl)]
-  refine Finset.sum_congr rfl fun k _ => ?_
-  set w := hP.isSymmetric.eigenvectorBasis rfl with hw
-  rw [show A.operatorAbs = hP.sqrt from
-      hP.sqrt_unique A.isPositive_operatorAbs A.operatorAbs_sq,
-    hP.sqrt_apply_eigenvectorBasis rfl k,
-    re_inner_real_smul_self_of_norm_one (w.orthonormal.norm_eq_one k)]
-  exact (A.singularValues_fin rfl k).symm
+  have h := A.re_trace_operatorAbs
+  rw [LinearMap.trace_eq_sum_inner _ b, map_sum,
+    UnitarilyInvariantSeminorm.nuclear_apply, ← A.sum_fin_singularValues (fun s => s) rfl] at h
+  simpa only [inner_re_symm] using h
 
 /-- **Frobenius² ≤ trace of the modulus, for a contraction.** If `A : E →ₗ[𝕜] E`
 is a contraction, then `∑ₖ ‖A bₖ‖² ≤ ∑ₖ re⟪|A| bₖ, bₖ⟫`, i.e. `∑ σᵢ² ≤ ∑ σᵢ`

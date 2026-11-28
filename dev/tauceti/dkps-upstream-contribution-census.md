@@ -1,5 +1,34 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 projector trace-norm and modulus trace
+
+The projector-difference modulus now splits through
+`Submodule.sinAngleOperator_mul_starProjection` from David Roe's #17050
+integration (PA-B10/B11). Applying the same theorem to the complements
+identifies the second block as the modulus of the adjoint of the reverse
+sine. Our #20358 (PD-A47) converts the bounded moduli to finite moduli.
+The trace-norm formula still covers unequal subspace dimensions and
+right angles. #17050 reports no external formalization was vendored.
+[#17050 integration](https://github.com/TauCetiProject/TauCeti/commit/e36963f4148ed374ed24fcac1fe1953e93b69982) ·
+[#20358 integration](https://github.com/TauCetiProject/TauCeti/commit/f4a3266bdf016c565840d069c5db06eb5352ddd1)
+
+In the finite basis formula, `LinearMap.re_trace_operatorAbs` replaces
+the separate Gram-eigenbasis proof of the modulus trace. This API came
+from jizhi-de-jichi's SpectralSteepestDescent #46215 and also serves
+DKPS's aligned-basis and block-trace arguments. Its integration records
+reuse of an existing TauCeti calculation. DKPS proof descent is
+unverified. The positive Ky Fan trace proof uses
+`LinearMap.IsPositive.eq_operatorAbs` from #16450 directly. #16450
+explicitly reports independent development and credits the DKPS roadmap.
+[#46215 integration](https://github.com/TauCetiProject/TauCeti/commit/d81b59c694a9155b934108465cc1c824cf458226) ·
+[#16450 integration](https://github.com/TauCetiProject/TauCeti/commit/7d1da9ada3041f5e1e5d10884964da59fc89e5b9)
+
+The focused build (9,179 jobs), default build (22,810 jobs), and
+Challenge with the result semantic-surface audit (22,520 jobs)
+passed without warnings at TauCeti `007b3a1150`. All 1,572
+source-census references resolved and all 17 available comparator
+signatures matched.
+
 ## November 27 native principal-angle embedding and basis energy
 
 The finite cosine energy formula uses #16661's

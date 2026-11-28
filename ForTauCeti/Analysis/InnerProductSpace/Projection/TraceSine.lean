@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.PositiveTrace
+import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
 
 /-!
 # Trace norm of two projection differences and their directed sine maps
@@ -20,10 +21,9 @@ ranks or choosing principal planes:
 
 `‖P_U-P_V‖₁ = ‖P_{Vᗮ}P_U‖₁ + ‖P_{Uᗮ}P_V‖₁`.
 
-The proof splits `(P_U-P_V)²` into two orthogonally supported Gram operators,
-uses uniqueness of the positive square root to split the modulus, and then
-uses additivity of the trace on positive operators.  The two directed terms
-need not be equal when the subspaces have different dimensions.
+The two compressions of TauCeti's symmetric sine operator to `U` and `Uᗮ`
+are the directed moduli. Additivity of the trace on positive operators
+then gives the formula for any two subspace dimensions.
 -/
 
 public section
@@ -112,54 +112,7 @@ theorem projectionDifference_sq_eq_directed_gram_sum
       rw [hfirst, hsecond]
       noncomm_ring
 
-/-- The initial-space modulus of the reverse adjoint sine maps into `Uᗮ`. -/
-private theorem operatorAbs_adjoint_reverse_sine_mem_complement
-    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (x : E) :
-    LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x ∈ Uᗮ := by
-  have hmem : LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x ∈
-      (LinearMap.ker (((V.sinThetaMap U).toLinearMap).adjoint))ᗮ := by
-    rw [← LinearMap.range_operatorAbs]
-    exact LinearMap.mem_range_self _ x
-  -- `U` is in the kernel of the reversed sine adjoint. Orthogonality
-  -- reverses inclusions, so the modulus image belongs to `Uᗮ`.
-  have hUker : U ≤ LinearMap.ker (((V.sinThetaMap U).toLinearMap).adjoint) := by
-    intro y hy
-    change ((V.sinThetaMap U).toLinearMap).adjoint y = 0
-    rw [Submodule.sinThetaMap_def]
-    change (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap).adjoint y = 0
-    rw [LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq,
-      (Submodule.starProjection_isSymmetric _).adjoint_eq]
-    change V.starProjection (Uᗮ.starProjection y) = 0
-    have hzero : Uᗮ.starProjection y = 0 :=
-      (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr (by
-        simpa only [Submodule.orthogonal_orthogonal] using hy)
-    rw [hzero, map_zero]
-  exact (Submodule.orthogonal_le hUker) hmem
-
-/-- The positive moduli of the two directed Gram blocks have disjoint
-support. This is the operative orthogonality in the square-root splitting. -/
-private theorem operatorAbs_directed_mul_operatorAbs_reverse_adjoint_eq_zero
-    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] :
-    LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) ∘ₗ
-        LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) = 0 := by
-  apply LinearMap.ext
-  intro x
-  change LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap)
-    (LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x) = 0
-  have hperp := operatorAbs_adjoint_reverse_sine_mem_complement U V x
-  have hker : LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x ∈
-      LinearMap.ker ((U.sinThetaMap V).toLinearMap) := by
-    change (U.sinThetaMap V).toLinearMap
-      (LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x) = 0
-    rw [Submodule.sinThetaMap_def]
-    change Vᗮ.starProjection
-      (U.starProjection (LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x)) = 0
-    rw [(Submodule.starProjection_apply_eq_zero_iff U).mpr hperp, map_zero]
-  rw [← LinearMap.ker_operatorAbs ((U.sinThetaMap V).toLinearMap)] at hker
-  exact LinearMap.mem_ker.mp hker
-
+open ContinuousLinearMap in
 /-- **Positive sine-modulus splitting of the projector difference.**
 
 `|P_U-P_V| = |P_{Vᗮ}P_U| + |(P_{Uᗮ}P_V)⋆|`.
@@ -172,41 +125,26 @@ theorem operatorAbs_projectionDifference_eq_directed_sine_sum
     LinearMap.operatorAbs (U.starProjection.toLinearMap - V.starProjection.toLinearMap) =
       LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) +
         LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) := by
-  let D : E →ₗ[𝕜] E := U.starProjection.toLinearMap - V.starProjection.toLinearMap
-  let A : E →ₗ[𝕜] E := LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap)
-  let B : E →ₗ[𝕜] E := LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint)
-  have hA : A.IsPositive := LinearMap.isPositive_operatorAbs _
-  have hB : B.IsPositive := LinearMap.isPositive_operatorAbs _
-  have hAB : A * B = 0 :=
-    operatorAbs_directed_mul_operatorAbs_reverse_adjoint_eq_zero U V
-  have hBA : B * A = 0 := by
-    have h := congrArg LinearMap.adjoint hAB
-    change LinearMap.adjoint (A ∘ₗ B) =
-      LinearMap.adjoint (0 : E →ₗ[𝕜] E) at h
-    rw [LinearMap.adjoint_comp, map_zero, hA.adjoint_eq, hB.adjoint_eq] at h
-    exact h
-  have hDstar : D.adjoint = D := by
-    dsimp [D]
-    rw [map_sub, (Submodule.starProjection_isSymmetric _).adjoint_eq,
-        (Submodule.starProjection_isSymmetric _).adjoint_eq]
-  have hgram : A * A + B * B = D.adjoint * D := by
-    change LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) ∘ₗ
-      LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) +
-        LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) ∘ₗ
-          LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) =
-        D.adjoint ∘ₗ D
-    rw [LinearMap.operatorAbs_sq, LinearMap.operatorAbs_sq,
-      LinearMap.adjoint_adjoint, hDstar]
-    exact (projectionDifference_sq_eq_directed_gram_sum U V).symm
-  have hsq : (A + B) * (A + B) = D.adjoint * D := by
-    calc
-      (A + B) * (A + B) = A * A + B * B := by
-        noncomm_ring [hAB, hBA]
-      _ = D.adjoint * D := hgram
-  have hsqrt : D.operatorAbs = A + B := by
-    symm
-    exact (hA.add hB).eq_operatorAbs hsq
-  exact hsqrt
+  let := FiniteDimensional.completeSpace 𝕜 E
+  have hreverse : Uᗮ.sinThetaMap Vᗮ = (V.sinThetaMap U).adjoint := by
+    simp only [Submodule.sinThetaMap_def, adjoint_comp, Submodule.orthogonal_orthogonal,
+      (isSelfAdjoint_starProjection V).adjoint_eq,
+      (isSelfAdjoint_starProjection Uᗮ).adjoint_eq]
+  have hcomplement :
+      U.sinAngleOperator V * Uᗮ.starProjection = ((V.sinThetaMap U).adjoint).modulus := by
+    rw [← U.sinAngleOperator_orthogonal V, Uᗮ.sinAngleOperator_mul_starProjection Vᗮ, hreverse]
+  have hsplit :
+      U.sinAngleOperator V = (U.sinThetaMap V).modulus + ((V.sinThetaMap U).adjoint).modulus := by
+    rw [← U.sinAngleOperator_mul_starProjection V, ← hcomplement, ← mul_add,
+      ← U.id_eq_sum_starProjection_self_orthogonalComplement,
+      ← ContinuousLinearMap.one_def, mul_one]
+  rw [ContinuousLinearMap.adjoint_toLinearMap]
+  apply LinearMap.toContinuousLinearMap.injective
+  rw [map_add, LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus,
+    LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus,
+    LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus]
+  rw [Submodule.sinAngleOperator_def] at hsplit
+  exact hsplit
 
 /-- **Trace-norm decomposition for any two projections.**
 
