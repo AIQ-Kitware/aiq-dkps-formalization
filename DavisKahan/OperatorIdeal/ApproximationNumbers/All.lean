@@ -5,12 +5,10 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real.All
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.BlockSum
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
-public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 

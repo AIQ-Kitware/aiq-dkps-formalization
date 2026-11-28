@@ -21,8 +21,6 @@ cutoff proofs.
 
 public section
 
-open ContinuousLinearMap (toPointwiseConvergenceCLM)
-
 open scoped InnerProductSpace Topology
 open TauCeti.DavisKahan.ExactSinTheta
 open Filter
@@ -220,10 +218,7 @@ theorem interfaceFilledTruncation_upperBound
     hre, hTinner, hQinner]
   rw [← hproj.2]
   linarith
-
-section ApproximationNumberEndpointAssumptions
-
-variable [HasApproximationNumberStrongCutoff.{0, v, 0} ℂ]
+omit [CompleteSpace E] in
 /-- Right interface-cutoff inequalities pass to the uncut operators. -/
 theorem kyFan_le_of_interfaceRightCutoff_le
     {B : F →ₗ.[ℂ] F}
@@ -234,9 +229,9 @@ theorem kyFan_le_of_interfaceRightCutoff_le
       δ * ((X ∘L P.cutoff τ).kyFanGauge k : ℝ) ≤
         ((C ∘L P.cutoff τ).kyFanGauge k : ℝ)) :
     δ * (X.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ) := by
-  have hX := kyFanApproximationGauge_comp_strongProjection_tendsto
+  have hX := ApproximationNumber.kyFanApproximationGauge_comp_strongProjection_tendsto
     P.isOrthogonalProjection P.tendsto_identity k X
-  have hC := kyFanApproximationGauge_comp_strongProjection_tendsto
+  have hC := ApproximationNumber.kyFanApproximationGauge_comp_strongProjection_tendsto
     P.isOrthogonalProjection P.tendsto_identity k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * ((X ∘L P.cutoff τ).kyFanGauge k : ℝ) ≤
@@ -245,29 +240,6 @@ theorem kyFan_le_of_interfaceRightCutoff_le
     exact hcut τ hτ
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
-
-/-- Finite Ky Fan gauges converge under strong orthogonal cutoffs on the target
-side. -/
-theorem kyFan_left_comp_interfaceCutoff_tendsto
-    {ι : Type} {P : ι → E →L[ℂ] E} {l : Filter ι}
-    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
-    (hP : Tendsto
-      (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E E ∘ P) l
-      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E E (ContinuousLinearMap.id ℂ E))))
-    (k : ℕ) (K : F →L[ℂ] E) :
-    Tendsto (fun i => ((P i ∘L K).kyFanGauge k : ℝ)) l
-      (𝓝 ((K.kyFanGauge k : ℝ))) := by
-  have hright := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hP k K.adjoint
-  have hpoint : ∀ i,
-      ((P i ∘L K).kyFanGauge k : ℝ) =
-        ((K.adjoint ∘L P i).kyFanGauge k : ℝ) :=
-    fun i => kyFanApproximationGauge_proj_comp_eq_adjoint_comp (hPproj i) K
-  have hlimit : (K.kyFanGauge k : ℝ) =
-      (K.adjoint.kyFanGauge k : ℝ) := by
-    symm
-    exact (congrArg NNReal.toReal (ContinuousLinearMap.kyFanGauge_adjoint K k))
-  simpa only [hpoint, hlimit] using hright
 
 /-- Left interface-cutoff inequalities pass to the uncut operators. -/
 theorem kyFan_le_of_interfaceLeftCutoff_le
@@ -279,8 +251,10 @@ theorem kyFan_le_of_interfaceLeftCutoff_le
       δ * ((P.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
         ((P.cutoff τ ∘L C).kyFanGauge k : ℝ)) :
     δ * (X.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ) := by
-  have hX := kyFan_left_comp_interfaceCutoff_tendsto P.isOrthogonalProjection P.tendsto_identity k X
-  have hC := kyFan_left_comp_interfaceCutoff_tendsto P.isOrthogonalProjection P.tendsto_identity k C
+  have hX := ApproximationNumber.kyFanApproximationGauge_left_comp_strongProjection_tendsto
+    P.isOrthogonalProjection P.tendsto_identity k X
+  have hC := ApproximationNumber.kyFanApproximationGauge_left_comp_strongProjection_tendsto
+    P.isOrthogonalProjection P.tendsto_identity k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * ((P.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
         ((P.cutoff τ ∘L C).kyFanGauge k : ℝ) := by
@@ -289,7 +263,6 @@ theorem kyFan_le_of_interfaceLeftCutoff_le
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
-omit [HasApproximationNumberStrongCutoff ℂ] in
 /-- Double interface cutoff turns a domain-aware equation into a bounded
 Sylvester equation between the filled truncations. -/
 theorem interfaceDoubleCutoff_sylvester_equation
@@ -361,8 +334,6 @@ theorem interfaceDoubleCutoff_sylvester_equation
     simpa only [TB, PB] using hTBcut]
   simp only [map_sub] at heqPA
   exact heqPA
-
-end ApproximationNumberEndpointAssumptions
 
 end Sylvester
 end DavisKahan

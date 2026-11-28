@@ -6,20 +6,14 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
-public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Dominance
 public import TauCeti.Analysis.OperatorIdeal.Family.Modulus
 
 /-!
-# Scalar-generic approximation-number endpoints and ideal families
+# Scalar-generic ideal estimates from Ky Fan gauges
 
-This public module assembles the lower approximation-number foundation with
-its complex and real analytic endpoints. The scalar-generic endpoint wrappers
-and the downstream Ky Fan dominant ideal families live here, above both
-scalar-specific implementations, avoiding the former real-proof import cycle.
-
-The strong-cutoff capability is scalar-generic. Ideal comparisons use accepted
+Ideal comparisons use accepted
 `SymmetricOperatorIdealFamily` carriers with the native
 `OperatorIdealFamily.IsKyFanDominant` property. Analytic kernels request ideal
 completeness separately. Real estimates use `SymmetricOperatorIdealFamily.gaugeReal`.
@@ -27,125 +21,18 @@ completeness separately. Real estimates use `SymmetricOperatorIdealFamily.gaugeR
 
 public section
 
-open ContinuousLinearMap (toPointwiseConvergenceCLM)
-
 namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-open scoped InnerProductSpace
-open scoped Topology
 open scoped ENNReal
-open Filter
 
-universe u v w
+universe u v
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
-/-- Analytic capability asserting strong-cutoff convergence for approximation
-numbers over a scalar field.  This is separated from `RCLike`: the latter is
-an open algebraic typeclass, while this property is currently established for
-the standard real and complex scalar fields. -/
-class HasApproximationNumberStrongCutoff
-    (𝕜 : Type u) [RCLike 𝕜] : Prop where
-  tendsto_comp_strongProjection :
-    ∀ {E F : Type v}
-      [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-      [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-      {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι},
-      (∀ i, (P i).toLinearMap.IsSymmetricProjection) →
-      Tendsto
-        (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E ∘ P) l
-        (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E (ContinuousLinearMap.id 𝕜 E))) →
-      ∀ (n : ℕ) (K : E →L[𝕜] F),
-        Tendsto
-          (fun i => ((K ∘L P i).singularValue n : ℝ))
-          l (𝓝 ((K.singularValue n : ℝ)))
-
-/-- The strong-cutoff convergence holds over `ℝ`.  Supplied as an instance so
-the field-generic development can be used at `ℝ` without naming the real proof. -/
-instance realHasApproximationNumberStrongCutoff :
-    HasApproximationNumberStrongCutoff.{0, v, w} ℝ where
-  tendsto_comp_strongProjection :=
-    ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real
-
-/-- The strong-cutoff convergence holds over `ℂ`. -/
-instance complexHasApproximationNumberStrongCutoff :
-    HasApproximationNumberStrongCutoff.{0, v, w} ℂ where
-  tendsto_comp_strongProjection :=
-    approximationSingularValue_comp_strongProjection_tendsto_complex
-
-/-- Real-Hilbert-space continuity of approximation numbers under strongly
-convergent orthogonal cutoffs. -/
-theorem approximationSingularValue_comp_strongProjection_tendsto_real
-    {ER FR : Type v}
-    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [CompleteSpace ER]
-    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [CompleteSpace FR]
-    {ι : Type w} {P : ι → ER →L[ℝ] ER} {l : Filter ι}
-    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
-    (hP : Tendsto
-      (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) ER ER ∘ P) l
-      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) ER ER (ContinuousLinearMap.id ℝ ER))))
-    (n : ℕ) (K : ER →L[ℝ] FR) :
-    Tendsto
-      (fun i => ((K ∘L P i).singularValue n : ℝ))
-      l (𝓝 ((K.singularValue n : ℝ))) :=
-  ApproximationNumbersReal.approximationSingularValue_comp_strongProjection_tendsto_real
-    hPproj hP n K
-
-/-- Real-Hilbert-space finite Ky Fan convergence under strongly convergent
-orthogonal cutoffs. -/
-theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
-    {ER FR : Type v}
-    [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [CompleteSpace ER]
-    [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [CompleteSpace FR]
-    {ι : Type w} {P : ι → ER →L[ℝ] ER} {l : Filter ι}
-    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
-    (hP : Tendsto
-      (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) ER ER ∘ P) l
-      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) ER ER (ContinuousLinearMap.id ℝ ER))))
-    (k : ℕ) (K : ER →L[ℝ] FR) :
-    Tendsto
-      (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
-      l (𝓝 ((K.kyFanGauge k : ℝ))) :=
-  ApproximationNumbersReal.kyFanApproximationGauge_comp_strongProjection_tendsto_real
-    hPproj hP k K
-
-/-- Continuity of each approximation number under strongly convergent
-orthogonal cutoffs. -/
-theorem approximationSingularValue_comp_strongProjection_tendsto
-    [HasApproximationNumberStrongCutoff.{u, v, w} 𝕜]
-    {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
-    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
-    (hP : Tendsto
-      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E ∘ P) l
-      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E (ContinuousLinearMap.id 𝕜 E))))
-    (n : ℕ) (K : E →L[𝕜] F) :
-    Tendsto
-      (fun i => ((K ∘L P i).singularValue n : ℝ))
-      l (𝓝 ((K.singularValue n : ℝ))) :=
-  HasApproximationNumberStrongCutoff.tendsto_comp_strongProjection
-    (𝕜 := 𝕜) hPproj hP n K
-
-/-- Ky Fan gauges converge under strong orthogonal cutoffs. -/
-theorem kyFanApproximationGauge_comp_strongProjection_tendsto
-    [HasApproximationNumberStrongCutoff.{u, v, w} 𝕜]
-    {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
-    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
-    (hP : Tendsto
-      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E ∘ P) l
-      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E (ContinuousLinearMap.id 𝕜 E))))
-    (k : ℕ) (K : E →L[𝕜] F) :
-    Tendsto
-      (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
-      l (𝓝 ((K.kyFanGauge k : ℝ))) := by
-  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
-  exact tendsto_finsetSum (Finset.range k)
-    (fun n hn => approximationSingularValue_comp_strongProjection_tendsto
-      hPproj hP n K)
 
 /-- Finite Ky Fan majorization transfers finite ideal membership and the real gauge bound. -/
 theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le
@@ -198,20 +85,6 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     N.gaugeReal_smul d hA
   rw [hdnorm] at hhom
   linarith
-
-/-- **A Ky Fan gauge is unchanged by moving an orthogonal projection across the
-adjoint.**
-
-`‖P K‖_(k) = ‖K⋆ P‖_(k)` for an orthogonal projection `P`.  Derived identically
-in `Sylvester/Unbounded/OrderedCutoff.lean` and
-`Sylvester/Unbounded/OrderedFromCutoffs.lean`, which share no import edge. -/
-theorem kyFanApproximationGauge_proj_comp_eq_adjoint_comp
-    {k : ℕ} {P : F →L[𝕜] F} (hP : P.toLinearMap.IsSymmetricProjection) (K : E →L[𝕜] F) :
-    ((P ∘L K).kyFanGauge k : ℝ) =
-      ((K.adjoint ∘L P).kyFanGauge k : ℝ) := by
-  rw [← ContinuousLinearMap.kyFanGauge_adjoint (P ∘L K) k]
-  simp only [ContinuousLinearMap.adjoint_comp]
-  rw [hP.isSymmetric.clm_adjoint_eq]
 
 end ExactSinTheta
 end DavisKahan

@@ -762,7 +762,7 @@ theorem tendsto_sum_tanArcsin_approximationNumber_reflectionSineCorner_comp
     lt_of_le_of_lt ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ n)))
       (lt_of_le_of_lt norm_reflectionSineCorner_le hS1)
   exact (TanArcsin.continuousAt_tanArcsin h0 h1).tendsto.comp
-    (TauCeti.ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto_complex
+    (TauCeti.ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto
       hPproj hP n (reflectionSineCorner U Z))
 
 end

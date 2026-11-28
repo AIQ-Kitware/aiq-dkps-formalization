@@ -1,5 +1,34 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 finite compressions in strong-cutoff convergence
+
+Strong convergence of orthogonal cutoffs now gives convergence of
+each approximation number by compressing first to a finite source.
+TauCeti’s #15423 supplies a compression approximating the chosen
+singular value and bounds every compressed singular value by its
+ambient counterpart. On that fixed source, Mathlib’s
+`Module.Basis.exists_opNorm_le` turns pointwise convergence into
+norm convergence. Native singular-value continuity from #14501
+then gives the required lower bound. The explicit min–max
+hypothesis still permits incomplete sources and targets.
+[#15423 integration](https://github.com/TauCetiProject/TauCeti/commit/abc7ac35a2fa3a5e87ddcac3b6e3209aa7e6cd6d) ·
+[#14501 integration](https://github.com/TauCetiProject/TauCeti/commit/0095123bf736b0ed2b5df5986ee34f1b6640f0ea) ·
+[Mathlib basis bound](https://github.com/leanprover-community/mathlib4/blob/31ce06eaadf4a200c0e1407c5f10953cf606b8f8/Mathlib/Analysis/Normed/Module/FiniteDimension.lean)
+
+For complete sources, the accepted converse min–max theorem
+supplies the input over every `RCLike` field. This retires
+`HasApproximationNumberStrongCutoff` and the real and complex
+cutoff wrappers. Lemma 5.1 retains its paper-numbered witnesses
+over both fields. The ordered Sylvester arguments share one
+target-side Ky Fan limit proof via adjoint invariance. DKPS retains
+the strong-cutoff convergence argument. Proof descent from DKPS
+for #15423 remains unverified.
+
+The focused build (10,200 jobs), default build (22,808 jobs), and
+Challenge with the semantic-surface audit (22,518 jobs) passed
+without warnings. All 1,569 source-census references resolved and
+all 17 available Davis–Kahan comparator signatures matched.
+
 ## November 28 strong operator cutoffs and projection geometry
 
 The approximation-number cutoffs use Mathlib's pointwise operator

@@ -34,13 +34,10 @@ namespace DavisKahan1970
 strongly to the identity, then each approximation singular value of `K ∘ P i` converges to
 the corresponding one of `K`.
 
-Stronger than the printed lemma in two ways, both deliberate: the index is an arbitrary
-filtered net rather than a sequence, and the scalar field is generic rather than complex
-(the strong-cutoff hypothesis is carried as the class
-`HasApproximationNumberStrongCutoff`).  The paper's statement is the specialization to a
-sequence over `ℂ`. -/
+The index is an arbitrary filtered net and the scalar field is any `RCLike` field.
+The paper uses a sequence over `ℂ`. -/
 alias lemma5_1 :=
-  DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto
+  ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto
 
 section Lemma51
 
@@ -54,12 +51,7 @@ universe v w
 complex Hilbert space converges strongly to the identity, then for each index `n` the
 `n`-th approximation singular value of `K ∘ P i` converges to that of `K`.
 
-This is the printed lemma's own scalar field, with **no capability class in the
-signature**.  `lemma5_1` above is generic over `RCLike 𝕜` and carries
-`HasApproximationNumberStrongCutoff 𝕜`, whose single field *is* this lemma; a reviewer
-comparing the printed statement with a Lean type is entitled to see the lemma proved
-rather than assumed, which is what this declaration and its real sibling do.  The index is
-still an arbitrary filtered net rather than a sequence, which is a strengthening. -/
+The index generalizes the paper's sequence to an arbitrary filtered net. -/
 theorem lemma5_1_complex
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -72,11 +64,10 @@ theorem lemma5_1_complex
     (n : ℕ) (K : E →L[ℂ] F) :
     Tendsto (fun i => ((K ∘L P i).singularValue n : ℝ))
       l (𝓝 ((K.singularValue n : ℝ))) :=
-  DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto_complex
+  ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto
     hPproj hP n K
 
-/-- **Davis--Kahan 1970, Lemma 5.1, over `ℝ`.**  The real sibling of `lemma5_1_complex`,
-likewise with no capability class in the signature. -/
+/-- **Davis--Kahan 1970, Lemma 5.1, over `ℝ`.**  The real sibling of `lemma5_1_complex`. -/
 theorem lemma5_1_real
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
@@ -89,7 +80,7 @@ theorem lemma5_1_real
     (n : ℕ) (K : E →L[ℝ] F) :
     Tendsto (fun i => ((K ∘L P i).singularValue n : ℝ))
       l (𝓝 ((K.singularValue n : ℝ))) :=
-  DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto_real
+  ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto
     hPproj hP n K
 
 end Lemma51

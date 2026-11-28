@@ -19,8 +19,6 @@ passages and Fan dominance endpoint.
 
 public section
 
-open ContinuousLinearMap (toPointwiseConvergenceCLM)
-
 namespace TauCeti
 namespace DavisKahan
 namespace Sylvester
@@ -36,10 +34,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-
-section ApproximationNumberEndpointAssumptions
-
-variable [HasApproximationNumberStrongCutoff.{u, v, 0} 𝕜]
+omit [CompleteSpace E] in
 /-- Finite Ky Fan inequalities for all right spectral cutoffs pass to the
 original operators.  This is the topological limit step in the two-unbounded
 ordered Sylvester argument; the remaining analytic input is the corresponding
@@ -54,9 +49,9 @@ theorem kyFanApproximationGauge_le_of_cutoff_le
         ((C ∘L PCB.cutoff τ).kyFanGauge k : ℝ)) :
     δ * (X.kyFanGauge k : ℝ) ≤
       (C.kyFanGauge k : ℝ) := by
-  have hX := kyFanApproximationGauge_comp_strongProjection_tendsto
+  have hX := ApproximationNumber.kyFanApproximationGauge_comp_strongProjection_tendsto
     PCB.isOrthogonalProjection PCB.tendsto_identity k X
-  have hC := kyFanApproximationGauge_comp_strongProjection_tendsto
+  have hC := ApproximationNumber.kyFanApproximationGauge_comp_strongProjection_tendsto
     PCB.isOrthogonalProjection PCB.tendsto_identity k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * ((X ∘L PCB.cutoff τ).kyFanGauge k : ℝ) ≤
@@ -65,30 +60,6 @@ theorem kyFanApproximationGauge_le_of_cutoff_le
     exact hcut τ hτ
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
-
-/-- Finite Ky Fan gauges also converge under strong orthogonal cutoffs on
-the target side. -/
-theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
-    {ι : Type} {P : ι → E →L[𝕜] E} {l : Filter ι}
-    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
-    (hP : Tendsto
-      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E ∘ P) l
-      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E (ContinuousLinearMap.id 𝕜 E))))
-    (k : ℕ) (K : F →L[𝕜] E) :
-    Tendsto
-      (fun i => ((P i ∘L K).kyFanGauge k : ℝ))
-      l (𝓝 ((K.kyFanGauge k : ℝ))) := by
-  have hright := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hP k K.adjoint
-  have hpoint : ∀ i,
-      ((P i ∘L K).kyFanGauge k : ℝ) =
-        ((K.adjoint ∘L P i).kyFanGauge k : ℝ) :=
-    fun i => kyFanApproximationGauge_proj_comp_eq_adjoint_comp (hPproj i) K
-  have hlimit : (K.kyFanGauge k : ℝ) =
-      (K.adjoint.kyFanGauge k : ℝ) := by
-    symm
-    exact (congrArg NNReal.toReal (ContinuousLinearMap.kyFanGauge_adjoint K k))
-  simpa only [hpoint, hlimit] using hright
 
 /-- Left-cutoff finite Ky Fan inequalities pass to the original operators. -/
 theorem kyFanApproximationGauge_le_of_leftCutoff_le
@@ -101,9 +72,9 @@ theorem kyFanApproximationGauge_le_of_leftCutoff_le
         ((PCA.cutoff τ ∘L C).kyFanGauge k : ℝ)) :
     δ * (X.kyFanGauge k : ℝ) ≤
       (C.kyFanGauge k : ℝ) := by
-  have hX := kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
+  have hX := ApproximationNumber.kyFanApproximationGauge_left_comp_strongProjection_tendsto
     PCA.isOrthogonalProjection PCA.tendsto_identity k X
-  have hC := kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
+  have hC := ApproximationNumber.kyFanApproximationGauge_left_comp_strongProjection_tendsto
     PCA.isOrthogonalProjection PCA.tendsto_identity k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * ((PCA.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
@@ -113,7 +84,6 @@ theorem kyFanApproximationGauge_le_of_leftCutoff_le
   exact le_of_tendsto_of_tendsto
     (tendsto_const_nhds.mul hX) hC hcutEventually
 
-omit [HasApproximationNumberStrongCutoff 𝕜] in
 /-- Double spectral cutoff turns a domain-aware equation into an ordinary
 bounded equation between the filled truncations, parametrically in the cutoff
 and truncation interfaces.
@@ -191,6 +161,7 @@ theorem doubleCutoff_filled_sylvester_equation
   simp only [map_sub] at heqPA
   exact heqPA
 
+omit [CompleteSpace E] in
 /-- Pointwise cutoff estimates for every finite Ky Fan gauge imply the full
 family of Ky Fan inequalities used by Fan dominance. -/
 theorem all_kyFanApproximationGauge_le_of_cutoff_le
@@ -207,8 +178,7 @@ theorem all_kyFanApproximationGauge_le_of_cutoff_le
   exact kyFanApproximationGauge_le_of_cutoff_le hB PCB k
     (fun τ hτ => hcut τ hτ k)
 
-omit [CompleteSpace E] [CompleteSpace F]
-  [HasApproximationNumberStrongCutoff 𝕜] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- **Shifting both blocks of a Sylvester equation by the same scalar leaves it
 unchanged.**
 
@@ -505,8 +475,6 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct_swapped
       (kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
         hA hB PCA TCA PCB TCB hδ hAc hBc hEq)
 
-
-end ApproximationNumberEndpointAssumptions
 
 end Sylvester
 end DavisKahan

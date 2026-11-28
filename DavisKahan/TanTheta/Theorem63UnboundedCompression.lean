@@ -68,7 +68,7 @@ The fixed-cutoff conclusion contains no `τ`-dependent right-hand side — it is
 `kyFanApproximationGauge k D.residual` for every `τ` — which is what makes the release
 legitimate.  The cutoffs converge strongly to the identity, so the sine approximation
 numbers of `Z(τ)` converge to those of `Z`
-(`approximationSingularValue_comp_strongProjection_tendsto_complex`), and the levels
+(`approximationSingularValue_comp_strongProjection_tendsto`), and the levels
 `τ → ∞` are unbounded, so the statement is not vacuous for a genuinely unbounded `A₀`.
 -/
 
@@ -650,7 +650,7 @@ level grows without bound. -/
 theorem tendsto_approximationSingularValue_truncSineBlock (n : ℕ) :
     Filter.Tendsto (fun τ : ℝ => ((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ)) Filter.atTop
       (nhds (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
-  have h := ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto_complex
+  have h := ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto
     (P := fun τ : ℝ => D.cutoff τ) (l := Filter.atTop)
     (fun τ => D.isOrthogonalProjectionMap_cutoff τ) D.stronglyTendsto_cutoff n
     (theorem63DirectedSineBlock Z V)

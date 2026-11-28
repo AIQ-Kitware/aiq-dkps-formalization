@@ -5665,7 +5665,7 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
-        "TauCeti.DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto",
+        "TauCeti.ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto",
         "TauCeti.DavisKahan1970.lemma5_1",
         "TauCeti.DavisKahan1970.lemma5_1_complex",
         "TauCeti.DavisKahan1970.lemma5_1_real"

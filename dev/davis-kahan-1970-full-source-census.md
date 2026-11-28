@@ -3597,7 +3597,7 @@ SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printe
 
 **Lean declarations:**
 
-- `TauCeti.DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto`
+- `TauCeti.ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto`
 - `TauCeti.DavisKahan1970.lemma5_1`
 - `TauCeti.DavisKahan1970.lemma5_1_complex`
 - `TauCeti.DavisKahan1970.lemma5_1_real`

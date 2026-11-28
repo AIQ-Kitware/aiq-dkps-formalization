@@ -4902,7 +4902,7 @@
         "TauCeti.DavisKahan1970.lemma5_1_complex",
         "TauCeti.DavisKahan1970.lemma5_1_real"
       ],
-      "review_note": "Accepted by the hostile audit at the stated-result level.\n\n**RE-REGISTERED 2026-09-05**, closing finding F4 of the 2026-09-04 hostile review.  The canonical witness was `lemma5_1`, generic over `RCLike` and carrying `HasApproximationNumberStrongCutoff`, a class whose single field is Lemma 5.1 itself -- so the registered evidence for the printed lemma assumed the printed lemma.  The mathematics was never in doubt: the class is discharged unconditionally at `ℝ` and at `ℂ`, the paper's two fields, by instances proved in `OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean`.  What was wrong was the registration.  `lemma5_1_complex` and `lemma5_1_real` state the lemma at those two fields with no class in the signature and are the canonical evidence; `lemma5_1` remains a `scalar_generic_facade`.",
+      "review_note": "Accepted by the hostile audit at the stated-result level.\n\n**RE-REGISTERED 2026-09-05**, closing finding F4 of the 2026-09-04 hostile review.  The canonical witness was `lemma5_1`, generic over `RCLike` and carrying `HasApproximationNumberStrongCutoff`, a class whose single field is Lemma 5.1 itself -- so the registered evidence for the printed lemma assumed the printed lemma.  The mathematics was never in doubt: the class is discharged unconditionally at `ℝ` and at `ℂ`, the paper's two fields, by instances proved in `OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean`.  What was wrong was the registration.  `lemma5_1_complex` and `lemma5_1_real` state the lemma at those two fields with no class in the signature and are the canonical evidence; `lemma5_1` remains a `scalar_generic_facade`.\n\n2026-11-28: the generic lemma now applies TauCeti’s converse min–max theorem to a complete source over arbitrary RCLike scalars. The capability class and its instances have been retired. Both fixed-field declarations still provide the canonical evidence.",
       "parent_claim_id": "DK-5.1-lem",
       "boundary_review": {
         "status": "accepted",
@@ -4945,7 +4945,7 @@
         {
           "declaration": "TauCeti.DavisKahan1970.lemma5_1",
           "role": "scalar_generic_facade",
-          "note": "The `RCLike`-generic form.  It carries `HasApproximationNumberStrongCutoff 𝕜`, a capability class whose single field IS Lemma 5.1, so as a registered witness it would assume the lemma it is meant to establish -- finding F4 of the 2026-09-04 hostile review. The class is discharged unconditionally at both of the paper's fields by `realHasApproximationNumberStrongCutoff` and `complexHasApproximationNumberStrongCutoff`, which is why the generic form is sound; it is a facade, not the evidence."
+          "note": "The `RCLike`-generic form uses the same proof as the fixed-field witnesses. TauCeti’s converse min–max theorem supplies the localization under source completeness."
         }
       ],
       "result_wide_scope_atoms": [

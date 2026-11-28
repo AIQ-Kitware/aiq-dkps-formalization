@@ -6,23 +6,23 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
-public import Mathlib.Topology.Algebra.Module.FiniteDimension
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
 public import Mathlib.Topology.Algebra.Module.Spaces.PointwiseConvergenceCLM
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
 /-!
-# Approximation-number foundation and scalar-specific analytic endpoints
+# Approximation numbers and strong cutoffs
 
 Approximation-number formulas use native `ContinuousLinearMap.singularValue`
 with explicit real coercions; the former `approximationSingularValue` data alias
 is retired. Shared scalar laws and finite-dimensional identification are consumed directly
 from Tau Ceti. This module retains incomplete-space projection facts, strong-cutoff
-convergence and the approximate orthonormal variational theorem. It intentionally does
-not import the real localization module, so the real proof can depend on this
-foundation without creating an import cycle.
+convergence and the approximate orthonormal variational theorem. The cutoff proof
+uses TauCeti’s finite compression and converse min–max theorems.
 
 The downstream ideal-family construction is `ForTauCeti.Analysis.OperatorIdeal.Family`;
 the paper library's own aggregate is `DavisKahan/OperatorIdeal/ApproximationNumbers/`,
@@ -58,37 +58,6 @@ variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-/-- **A finite-dimensional operator norm is controlled by the values on a basis.**  With
-`e` the coordinate isomorphism of `b`, `‖T‖ ≤ ‖e‖ * ∑ⱼ ‖T (b j)‖`.
-
-Extracted from `tendsto_opNorm_zero_of_finiteDimensional`, whose whole content is that
-this bound tends to zero: the estimate is a statement about one operator and does not
-mention the net, so keeping it inside the limit argument hid a reusable fact behind a
-thirty-line `calc`. -/
-private theorem opNorm_le_norm_equivFun_mul_sum_basis
-    {V : Type vG} {G : Type vH}
-    [NormedAddCommGroup V] [NormedSpace 𝕜 V] [FiniteDimensional 𝕜 V]
-    [NormedAddCommGroup G] [NormedSpace 𝕜 G]
-    (b : Module.Basis (Module.Basis.ofVectorSpaceIndex 𝕜 V) 𝕜 V)
-    (T : V →L[𝕜] G) :
-    ‖T‖ ≤ ‖b.equivFunL.toContinuousLinearMap‖ * ∑ j, ‖T (b j)‖ := by
-  set e := b.equivFunL.toContinuousLinearMap with he
-  refine T.opNorm_le_bound
-    (mul_nonneg (norm_nonneg _) (Finset.sum_nonneg fun _ _ => norm_nonneg _)) fun x => ?_
-  calc
-    ‖T x‖ = ‖T (∑ j, b.repr x j • b j)‖ := by rw [b.sum_repr]
-    _ = ‖∑ j, b.repr x j • T (b j)‖ := by rw [map_sum]; simp only [map_smul]
-    _ ≤ ∑ j, ‖b.repr x j • T (b j)‖ := norm_sum_le _ _
-    _ = ∑ j, ‖b.repr x j‖ * ‖T (b j)‖ :=
-      Finset.sum_congr rfl fun j _ => norm_smul _ _
-    _ ≤ ∑ j, (‖e‖ * ‖x‖) * ‖T (b j)‖ := by
-      refine Finset.sum_le_sum fun j _ => mul_le_mul_of_nonneg_right ?_ (norm_nonneg _)
-      calc ‖b.repr x j‖ = ‖e x j‖ := by rfl
-        _ ≤ ‖e x‖ := norm_le_pi_norm (e x) j
-        _ ≤ ‖e‖ * ‖x‖ := e.le_opNorm x
-    _ = (‖e‖ * ‖x‖) * ∑ j, ‖T (b j)‖ := by rw [Finset.mul_sum]
-    _ = (‖e‖ * ∑ j, ‖T (b j)‖) * ‖x‖ := by ring
-
 /-- On a finite-dimensional source, pointwise convergence of bounded linear
 maps to zero upgrades to convergence in operator norm. -/
 theorem tendsto_opNorm_zero_of_finiteDimensional
@@ -101,17 +70,16 @@ theorem tendsto_opNorm_zero_of_finiteDimensional
     (hT : ∀ x, Tendsto (fun i => T i x) l (𝓝 0)) :
     Tendsto (fun i => ‖T i‖) l (𝓝 0) := by
   let b := Module.Basis.ofVectorSpace 𝕜 V
-  let e := b.equivFunL.toContinuousLinearMap
-  let C : ι → ℝ := fun i =>
-    ‖e‖ * ∑ j, ‖T i (b j)‖
+  obtain ⟨C, _, hC⟩ := b.exists_opNorm_le (F := G)
   have hsum : Tendsto (fun i => ∑ j, ‖T i (b j)‖) l (𝓝 0) := by
-    have hsum' := tendsto_finsetSum Finset.univ
-      (fun j _ => (hT (b j)).norm)
-    simpa only [norm_zero, Finset.sum_const_zero] using hsum'
-  have hC : Tendsto C l (𝓝 0) := by
-    simpa only [C, mul_zero] using tendsto_const_nhds.mul hsum
-  have hbound : ∀ i, ‖T i‖ ≤ C i := fun i => opNorm_le_norm_equivFun_mul_sum_basis b (T i)
-  exact squeeze_zero (fun i => norm_nonneg (T i)) hbound hC
+    simpa only [norm_zero, Finset.sum_const_zero] using
+      tendsto_finsetSum Finset.univ (fun j _ => (hT (b j)).norm)
+  have hbound (i : ι) : ‖T i‖ ≤ C * ∑ j, ‖T i (b j)‖ :=
+    hC (Finset.sum_nonneg fun _ _ => norm_nonneg _)
+      (fun j => Finset.single_le_sum (f := fun j => ‖T i (b j)‖)
+        (fun _ _ => norm_nonneg _) (Finset.mem_univ j))
+  refine squeeze_zero (fun i => norm_nonneg (T i)) hbound ?_
+  simpa only [mul_zero] using tendsto_const_nhds.mul hsum
 
 section StrongCutoff
 
@@ -164,100 +132,55 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
     Tendsto
       (fun i => ((K ∘L P i).singularValue n : ℝ))
       l (𝓝 ((K.singularValue n : ℝ))) := by
-  -- Two halves, and they are not symmetric.  `hUpper` is the ideal inequality and is now a
-  -- lemma of its own; `hLower` is the whole content: pick a coercive subspace `V` witnessing
-  -- `r < aₙ(K)`, note `K ∘ P i` agrees with `K` on `V` in the limit because `V` is
-  -- finite-dimensional (`tendsto_opNorm_zero_of_finiteDimensional`), and transport the
-  -- coercivity.  The min--max hypothesis enters only in producing `V`.
-  have hUpper : ∀ i,
-      ((K ∘L P i).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) :=
-    fun i => approximationSingularValue_comp_le_of_isOrthogonalProjection (hPproj i) n K
-  have hLower : ∀ r : ℝ,
-      r < (K.singularValue n : ℝ) →
-      ∀ᶠ i in l, r < ((K ∘L P i).singularValue n : ℝ) := by
-    intro r hr
-    by_cases hr0 : 0 ≤ r
-    · obtain ⟨s, hrs, v, hv, hV⟩ := TauCeti.hasMinMaxLowerBound_iff.mp hlb K n hr0
-        (by exact hr)
-      let c : ℝ := (r + s) / 2
-      have hrc : r < c := by dsimp only [c]; linarith
-      have hcs : c < s := by dsimp only [c]; linarith
-      have hc0 : 0 ≤ c := hr0.trans hrc.le
-      let V : Submodule 𝕜 E₀ := Submodule.span 𝕜 (Set.range v)
-      let b : Module.Basis (Fin (n + 1)) 𝕜 V := Module.Basis.span hv
-      let : FiniteDimensional 𝕜 V := b.finiteDimensional_of_finite
-      let D : ι → V →L[𝕜] F₀ := fun i =>
-        (K ∘L P i ∘L V.subtypeL) - (K ∘L V.subtypeL)
-      have hDpoint : ∀ x : V, Tendsto (fun i => D i x) l (𝓝 0) := by
-        intro x
-        have hKP : Tendsto (fun i => K (P i (V.subtypeL x))) l
-            (𝓝 (K (V.subtypeL x))) :=
-          (K.continuous.tendsto (V.subtypeL x)).comp
-            (PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mp hP (V.subtypeL x))
-        have hconst : Tendsto (fun _ : ι => K (V.subtypeL x)) l
-            (𝓝 (K (V.subtypeL x))) := tendsto_const_nhds
-        change Tendsto
-          (fun i => K (P i (V.subtypeL x)) - K (V.subtypeL x))
-          l (𝓝 0)
-        simpa only [sub_self] using hKP.sub hconst
-      have hDnorm : Tendsto (fun i => ‖D i‖) l (𝓝 0) :=
-        tendsto_opNorm_zero_of_finiteDimensional D hDpoint
-      have hsmall : ∀ᶠ i in l, ‖D i‖ < s - c :=
-        hDnorm.eventually (Iio_mem_nhds (sub_pos.mpr hcs))
-      filter_upwards [hsmall] with i hi
-      have hcNN : c ≤ ((K ∘L P i).singularValue n : ℝ) := by
-        apply (K ∘L P i).le_singularValue_of_linearIndependent hv
-        intro x hxV
-        have hDx : ‖D i ⟨x, hxV⟩‖ ≤ ‖D i‖ * ‖x‖ := (D i).le_opNorm ⟨x, hxV⟩
-        have hDapply : D i ⟨x, hxV⟩ = K (P i x) - K x := rfl
-        have htri : ‖K x‖ ≤ ‖K (P i x)‖ + ‖D i ⟨x, hxV⟩‖ := by
-          rw [hDapply]
-          have h := norm_sub_le (K (P i x)) (K (P i x) - K x)
-          (convert h using 1; abel_nf)
-        have hsx := hV x hxV
-        change c * ‖x‖ ≤ ‖K (P i x)‖
-        nlinarith [mul_le_mul_of_nonneg_right hi.le (norm_nonneg x)]
-      have hcReal : c ≤ ((K ∘L P i).singularValue n : ℝ) := hcNN
-      exact hrc.trans_le hcReal
-    · have hrneg : r < 0 := lt_of_not_ge hr0
-      filter_upwards [] with i
-      exact hrneg.trans_le
-        (((K ∘L P i).singularValue n).coe_nonneg)
   rw [Metric.tendsto_nhds]
   intro ε hε
-  have hlower := hLower
-    ((K.singularValue n : ℝ) - ε) (by linarith)
-  filter_upwards [hlower] with i hi
+  obtain ⟨V, hV, hcomp⟩ := hlb.exists_singularValue_le_compression K (n + 1) (half_pos hε)
+  let W := V.map K.toLinearMap
+  let : FiniteDimensional 𝕜 W := by
+    dsimp [W]
+    infer_instance
+  let S := W.orthogonalProjectionOnto.comp (K.comp V.subtypeL)
+  let T (i : ι) := W.orthogonalProjectionOnto.comp ((K.comp (P i)).comp V.subtypeL)
+  have hT : Tendsto T l (𝓝 S) := by
+    rw [tendsto_iff_norm_sub_tendsto_zero]
+    apply tendsto_opNorm_zero_of_finiteDimensional
+    intro x
+    let L := W.orthogonalProjectionOnto.comp K
+    have hPx : Tendsto (fun i => P i (x : E₀)) l (𝓝 (x : E₀)) :=
+      PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mp hP x
+    have hL : Tendsto (fun i => L (P i x)) l (𝓝 (L x)) :=
+      (L.continuous.tendsto (x : E₀)).comp hPx
+    change Tendsto (fun i => L (P i x) - L x) l (𝓝 0)
+    simpa only [sub_self] using hL.sub (tendsto_const_nhds (x := L x))
+  have hSV := ((NNReal.continuous_coe.comp
+    (ContinuousLinearMap.continuous_singularValue (E := V) (F := W) n)).tendsto S).comp hT
+  have hp : (S.singularValue n : ℝ) - ε / 2 < (S.singularValue n : ℝ) :=
+    sub_lt_self _ (half_pos hε)
+  filter_upwards [hSV.eventually (Ioi_mem_nhds hp)] with i hi
+  have hlo : (K.singularValue n : ℝ) ≤ (S.singularValue n : ℝ) + ε / 2 :=
+    hcomp n n.lt_succ_self
+  have hle : ((T i).singularValue n : ℝ) ≤ ((K ∘L P i).singularValue n : ℝ) :=
+    NNReal.coe_le_coe.mpr
+      (ContinuousLinearMap.singularValue_orthogonalProjectionOnto_comp_comp_subtypeL_le
+        W V (K ∘L P i) n)
+  have hhi := approximationSingularValue_comp_le_of_isOrthogonalProjection (hPproj i) n K
+  have hεi : (S.singularValue n : ℝ) - ε / 2 < ((T i).singularValue n : ℝ) := hi
   rw [Real.dist_eq, abs_lt]
-  constructor
-  · linarith
-  · have := hUpper i
-    linarith
+  constructor <;> linarith
 
-/-- Cutoff convergence over `ℂ`. -/
-theorem approximationSingularValue_comp_strongProjection_tendsto_complex
-    {E₀ : Type vE0} {F₀ : Type vF0}
-    [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
-    [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-    {ι : Type w} {P : ι → E₀ →L[ℂ] E₀} {l : Filter ι}
+omit [CompleteSpace F₀] in
+/-- Strong orthogonal cutoffs preserve approximation numbers in the limit when
+the source is complete. -/
+theorem approximationSingularValue_comp_strongProjection_tendsto
+    {ι : Type w} {P : ι → E₀ →L[𝕜] E₀} {l : Filter ι}
     (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
     (hP : Tendsto
-      (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E₀ E₀ ∘ P) l
-      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E₀ E₀ (ContinuousLinearMap.id ℂ E₀))))
-    (n : ℕ) (K : E₀ →L[ℂ] F₀) :
-    Tendsto
-      (fun i => ((K ∘L P i).singularValue n : ℝ))
-      l (𝓝 ((K.singularValue n : ℝ))) :=
+      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ (ContinuousLinearMap.id 𝕜 E₀))))
+    (n : ℕ) (K : E₀ →L[𝕜] F₀) :
+    Tendsto (fun i => ((K ∘L P i).singularValue n : ℝ)) l (𝓝 (K.singularValue n : ℝ)) :=
   approximationSingularValue_comp_strongProjection_tendsto_of_minMax
     TauCeti.HasMinMaxLowerBound.of_completeSpace hPproj hP n K
-
-end StrongCutoff
-
-section KyFanStrongCutoff
-
-variable {E₀ : Type vE0} {F₀ : Type vF0}
-  [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀] [CompleteSpace E₀]
-  [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
 
 omit [CompleteSpace F₀] [CompleteSpace E₀] in
 /-- Finite Ky Fan approximation gauges converge under strong orthogonal cutoffs: the
@@ -278,25 +201,38 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto_of_minMax
       hlb hPproj hP n K)
 
-/-- Finite Ky Fan approximation gauges converge under complex strong
-orthogonal cutoffs. -/
-theorem kyFanApproximationGauge_comp_strongProjection_tendsto_complex
-    {E₁ : Type vE0} {F₁ : Type vF0}
-    [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
-    [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
-    {ι : Type w} {P : ι → E₁ →L[ℂ] E₁} {l : Filter ι}
+omit [CompleteSpace F₀] in
+/-- Strong orthogonal cutoffs preserve finite Ky Fan gauges in the limit when
+the source is complete. -/
+theorem kyFanApproximationGauge_comp_strongProjection_tendsto
+    {ι : Type w} {P : ι → E₀ →L[𝕜] E₀} {l : Filter ι}
     (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
     (hP : Tendsto
-      (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E₁ E₁ ∘ P) l
-      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E₁ E₁ (ContinuousLinearMap.id ℂ E₁))))
-    (k : ℕ) (K : E₁ →L[ℂ] F₁) :
-    Tendsto
-      (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
-      l (𝓝 ((K.kyFanGauge k : ℝ))) :=
+      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ (ContinuousLinearMap.id 𝕜 E₀))))
+    (k : ℕ) (K : E₀ →L[𝕜] F₀) :
+    Tendsto (fun i => ((K ∘L P i).kyFanGauge k : ℝ)) l (𝓝 (K.kyFanGauge k : ℝ)) :=
   kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
     TauCeti.HasMinMaxLowerBound.of_completeSpace hPproj hP k K
 
-end KyFanStrongCutoff
+/-- Strong orthogonal cutoffs on the target preserve finite Ky Fan gauges
+in the limit. This follows by applying the source-cutoff theorem to the adjoint. -/
+theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto
+    {ι : Type w} {P : ι → E₀ →L[𝕜] E₀} {l : Filter ι}
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ (ContinuousLinearMap.id 𝕜 E₀))))
+    (k : ℕ) (K : F₀ →L[𝕜] E₀) :
+    Tendsto (fun i => ((P i ∘L K).kyFanGauge k : ℝ)) l (𝓝 (K.kyFanGauge k : ℝ)) := by
+  have hright := kyFanApproximationGauge_comp_strongProjection_tendsto hPproj hP k K.adjoint
+  have hpoint (i : ι) :
+      ((K.adjoint ∘L P i).kyFanGauge k : ℝ) = ((P i ∘L K).kyFanGauge k : ℝ) := by
+    rw [← ContinuousLinearMap.kyFanGauge_adjoint (P i ∘L K) k,
+      ContinuousLinearMap.adjoint_comp, (hPproj i).isSymmetric.clm_adjoint_eq]
+  simpa only [hpoint, ContinuousLinearMap.kyFanGauge_adjoint] using hright
+
+end StrongCutoff
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The Ky Fan gauge is approached by orthonormal pairings.**

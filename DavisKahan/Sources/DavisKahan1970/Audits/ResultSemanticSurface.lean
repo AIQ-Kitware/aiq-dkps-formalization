@@ -760,11 +760,9 @@ Status: **TERMINAL EXACT**.
 
 Status: **TERMINAL EXACT**.
 
-The canonical witnesses are the two fixed-field statements.  `lemma5_1` is generic
-over `RCLike 𝕜` and carries `HasApproximationNumberStrongCutoff 𝕜`, a capability
-class whose single field is Lemma 5.1 itself; it is a facade over the two proofs
-below and is kept as supporting evidence so the generic development can cite one
-name.  A registered witness for a printed lemma should not assume that lemma.
+The two fixed-field statements are the canonical registered witnesses.
+`lemma5_1` uses the same proof for arbitrary `RCLike` scalars. TauCeti's converse
+min–max theorem supplies the localization from source completeness.
 -/
 
 #check @TauCeti.DavisKahan1970.lemma5_1_complex
