@@ -55,7 +55,7 @@ noncomputable def quarterAcuteAngularOperator
 theorem quarterAcuteAngularOperator_isAngularOperator
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hquarter : IsQuarterAcute U V) :
-    IsAngularOperator U (quarterAcuteAngularOperator U V hquarter) :=
+    U.IsAngularOperator (quarterAcuteAngularOperator U V hquarter) :=
   (Classical.choose_spec
     (existsUnique_contractiveAngularOperator_of_isQuarterAcute U V hquarter)).1.1
 
@@ -63,7 +63,7 @@ theorem quarterAcuteAngularOperator_isAngularOperator
 theorem graphSubspace_quarterAcuteAngularOperator
     (U V : Submodule ℂ E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hquarter : IsQuarterAcute U V) :
-    graphSubspace U (quarterAcuteAngularOperator U V hquarter) = V :=
+    U.graphSubspace (quarterAcuteAngularOperator U V hquarter) = V :=
   (Classical.choose_spec
     (existsUnique_contractiveAngularOperator_of_isQuarterAcute U V hquarter)).1.2.1
 
@@ -138,7 +138,7 @@ theorem quarterAcuteAngularCoordinate_solvesRiccati
   have hAH : (A + H).IsSymmetric := by
     have h := hA.add hH
     rwa [← ContinuousLinearMap.toLinearMap_add] at h
-  have hgraphReduces : Submodule.IsReducing (graphSubspace U (quarterAcuteAngularOperator U V
+  have hgraphReduces : Submodule.IsReducing (U.graphSubspace (quarterAcuteAngularOperator U V
     hquarter)) (A + H) := by
     rw [graphSubspace_quarterAcuteAngularOperator U V hquarter]
     exact hV

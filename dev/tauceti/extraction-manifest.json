@@ -439,6 +439,47 @@
   ],
   "records": [
     {
+      "source_module": "DavisKahan.SpectralTheory.GraphSubspace",
+      "source_declarations": [
+        "TauCeti.DavisKahanExt.IsAngularOperator",
+        "TauCeti.DavisKahanExt.graphSubspace",
+        "TauCeti.DavisKahanExt.graphSubspace_hasOrthogonalProjection",
+        "TauCeti.DavisKahanExt.graphSubspace_eq_range",
+        "TauCeti.DavisKahanExt.graphProjectionFormula",
+        "TauCeti.DavisKahanExt.projection_graphSubspace_formula",
+        "TauCeti.DavisKahanExt.norm_projection_sub_projection_graphSubspace",
+        "TauCeti.DavisKahanExt.subspaceGap_graphSubspace",
+        "TauCeti.DavisKahanExt.starProjection_orthogonal_eq_of_mem_graphSubspace",
+        "TauCeti.DavisKahanExt.star_mul_projection_of_isAngularOperator",
+        "TauCeti.DavisKahanExt.projection_mul_star_of_isAngularOperator",
+        "TauCeti.DavisKahanExt.projection_commute_one_add_star_mul_self_of_isAngularOperator",
+        "TauCeti.DavisKahanExt.star_mul_self_of_isAngularOperator"
+      ],
+      "original_source_anchor": "37bf630caae3b61fec4a344c4b307a621a2c9d56:DavisKahan/SpectralTheory/{OperatorAngle,GraphSubspace}.lean; 37bf630caae3b61fec4a344c4b307a621a2c9d56:DavisKahan/InfiniteDimensional/SinTheta/Continuation/WitnessRiccati.lean",
+      "authors_license": "Jon Crall and GPT 5.6 High (GraphSubspace), Jon Crall and OpenAI GPT-5.6 Thinking (OperatorAngle and WitnessRiccati), Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Projection.GraphSubspace",
+      "final_declarations": [
+        "Submodule.IsAngularOperator",
+        "Submodule.graphSubspace",
+        "Submodule.add_apply_mem_graphSubspace",
+        "Submodule.IsAngularOperator.mem_graphSubspace_iff",
+        "Submodule.IsAngularOperator.completeSpace_graphSubspace",
+        "Submodule.IsAngularOperator.starProjection_graphSubspace",
+        "Submodule.IsAngularOperator.projectionGap_graphSubspace",
+        "Submodule.IsAngularOperator.projectionGap_graphSubspace_lt_one"
+      ],
+      "roadmap_targets": [
+        "SSP-C11",
+        "SSP-C12",
+        "SSP-C13",
+        "SSP-C14"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16152",
+      "integration": "01b57bf91e9f91a7aa114647a3e3a7ece5f8b0e0",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "tauceti-ai-for-science reports independent formalization and acknowledges the DKPS roadmap. For angular operators the native image has the same carrier as the old closed range. The maintained callers have angularity evidence. Completeness of the base supplies the projection on the native graph when needed. The acute-to-graph construction, uniqueness, the rectangular and partial-map comparisons, and the scalar angle formulas remain DKPS work."
+    },
+    {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumber",
       "source_declarations": [
         "Cardinal.le_natCast_of_lift_le",

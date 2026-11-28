@@ -81,7 +81,7 @@ theorem maximalAngle_selectedSpectralSubspaces_lt_pi_div_four
     maximalAngle C.sourceSelectedSpectralSubspace
       C.targetSelectedSpectralSubspace < Real.pi / 4 := by
   let X : H →L[ℂ] H := C.selectedEndpointAngularOperator hsmall
-  have hX : IsAngularOperator C.sourceSelectedSpectralSubspace X := by
+  have hX : C.sourceSelectedSpectralSubspace.IsAngularOperator X := by
     simpa only [X] using C.selectedEndpointAngularOperator_isAngularOperator hsmall
   have hnorm : ‖X‖ < 1 := by
     simpa only [X] using C.norm_selectedEndpointAngularOperator_lt_one hsmall

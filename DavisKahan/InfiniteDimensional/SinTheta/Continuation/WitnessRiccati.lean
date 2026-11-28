@@ -101,38 +101,10 @@ omit [CompleteSpace H] in
 @[simp]
 theorem coe_subspaceAngularCoordinate_apply
     (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (X : H →L[ℂ] H) (hX : IsAngularOperator U X) (u : U) :
+    (X : H →L[ℂ] H) (hX : U.IsAngularOperator X) (u : U) :
     (((subspaceAngularCoordinate U X) u : Uᗮ) : H) = X (u : H) := by
-  have hPX : U.starProjection (X (u : H)) = 0 := by
-    simpa only [ContinuousLinearMap.comp_apply, zero_apply] using
-      ContinuousLinearMap.ext_iff.mp hX.2 (u : H)
-  have hmem : X (u : H) ∈ Uᗮ :=
-    (Submodule.starProjection_apply_eq_zero_iff U).mp hPX
   change Uᗮ.starProjection (X (u : H)) = X (u : H)
-  exact Submodule.starProjection_eq_self_iff.mpr hmem
-
-omit [CompleteSpace H] in
-/-- Membership in an angular graph is equivalent to the complementary
-coordinate being the angular operator applied to the base coordinate. -/
-theorem starProjection_orthogonal_eq_of_mem_graphSubspace
-    (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (X : H →L[ℂ] H) (hX : IsAngularOperator U X)
-    {z : H} (hz : z ∈ graphSubspace U X) :
-    Uᗮ.starProjection z = X (U.starProjection z) := by
-  rw [graphSubspace_eq_range U hX] at hz
-  obtain ⟨w, hw⟩ := LinearMap.mem_range.mp hz
-  change U.starProjection w + X (U.starProjection w) = z at hw
-  have hPidem : U.starProjection (U.starProjection w) = U.starProjection w :=
-    Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem w)
-  have hPX : U.starProjection (X (U.starProjection w)) = 0 := by
-    simpa only [ContinuousLinearMap.comp_apply, zero_apply] using
-      ContinuousLinearMap.ext_iff.mp hX.2 (U.starProjection w)
-  have hQPw : Uᗮ.starProjection (U.starProjection w) = 0 := by
-    rw [Submodule.starProjection_orthogonal_apply, hPidem, sub_self]
-  have hQX : Uᗮ.starProjection (X (U.starProjection w)) =
-      X (U.starProjection w) := by
-    rw [Submodule.starProjection_orthogonal_apply, hPX, sub_zero]
-  rw [← hw, map_add, map_add, hQPw, hQX, hPidem, hPX, zero_add, add_zero]
+  exact Submodule.starProjection_eq_self_iff.mpr (hX.apply_mem_orthogonal u)
 
 /-- If an ambient angular graph reduces a bounded self-adjoint operator, then
 its compressed coordinate operator solves the bounded Riccati equation for the
@@ -140,8 +112,8 @@ corresponding subspace block data. -/
 theorem subspaceAngularCoordinate_solvesRiccati_of_graph_reduces
     (T : H →L[ℂ] H) (U : Submodule ℂ H) [U.HasOrthogonalProjection]
     (hT : T.IsSymmetric)
-    (X : H →L[ℂ] H) (hX : IsAngularOperator U X)
-    (hred : Submodule.IsReducing (graphSubspace U X) T) :
+    (X : H →L[ℂ] H) (hX : U.IsAngularOperator X)
+    (hred : Submodule.IsReducing (U.graphSubspace X) T) :
     SolvesRiccati (subspaceBlockOperatorData T U hT)
       (subspaceAngularCoordinate U X) := by
   let : CompleteSpace U :=
@@ -152,17 +124,12 @@ theorem subspaceAngularCoordinate_solvesRiccati_of_graph_reduces
     (subspaceBlockOperatorData T U hT)
     (subspaceAngularCoordinate U X)).2 ?_
   intro u
-  have hgraph : (u : H) + X (u : H) ∈ graphSubspace U X := by
-    rw [graphSubspace_eq_range U hX]
-    apply LinearMap.mem_range.mpr
-    refine ⟨(u : H), ?_⟩
-    change U.starProjection (u : H) + X (U.starProjection (u : H)) =
-      (u : H) + X (u : H)
-    rw [Submodule.starProjection_eq_self_iff.mpr u.property]
-  have hout : T ((u : H) + X (u : H)) ∈ graphSubspace U X :=
+  have hgraph : (u : H) + X (u : H) ∈ U.graphSubspace X :=
+    Submodule.add_apply_mem_graphSubspace u.property
+  have hout : T ((u : H) + X (u : H)) ∈ U.graphSubspace X :=
     hred.mem_invtSubmodule hgraph
-  have hcoord := starProjection_orthogonal_eq_of_mem_graphSubspace
-    U X hX hout
+  have hcoord := (hX.mem_graphSubspace_iff.mp hout).trans
+    (hX.apply_starProjection _).symm
   apply Subtype.ext
   simp only [subspaceBlockOperatorData, compressOperator,
     ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply, Submodule.coe_add,

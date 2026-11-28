@@ -108,17 +108,10 @@ private theorem subtypeL_comp_adjoint_subtypeL
 
 private theorem ambientAngularOperator_eq_extendCoordinate
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
-    (Y : E →L[ℂ] E) (hY : IsAngularOperator U Y) :
+    (Y : E →L[ℂ] E) (hY : U.IsAngularOperator Y) :
     Y = Uᗮ.subtypeL ∘L subspaceAngularCoordinate U Y ∘L U.subtypeL.adjoint := by
   apply ContinuousLinearMap.ext
   intro x
-  have hYP : Y (U.starProjection x) = Y x := by
-    have h := DFunLike.congr_fun hY.1 x
-    -- `h : (Y ∘ P) x = Y x` is already the right way round -- the `.symm` was
-    -- backwards -- and `IsAngularOperator` states its field with
-    -- `DavisKahan.projection`, so that abbreviation has to be unfolded for the
-    -- goal's `U.starProjection` to match.
-    simpa only [ContinuousLinearMap.comp_apply] using h
   -- Rewrite the ambient right-hand side instead of `change`-ing the goal.  The
   -- adjoint of `subtypeL` is the orthogonal projection *into* the subspace
   -- (`Submodule.adjoint_subtypeL`) and its coercion back to `E` is
@@ -127,7 +120,7 @@ private theorem ambientAngularOperator_eq_extendCoordinate
   rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply,
     Submodule.subtypeL_apply,
     coe_subspaceAngularCoordinate_apply U Y hY (U.subtypeL.adjoint x),
-    Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply, hYP]
+    Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply, hY.apply_starProjection]
 
 /-- The ambient graph tangent `2 Y (1 − Y⋆Y)⁻¹` is the zero-extension of the
 rectangular coordinate tangent `2 X (1 − X⋆X)⁻¹`.  Made public because the
@@ -136,7 +129,7 @@ representative with the ambient graph tangent and then transports the sharp
 Ky Fan estimate, which is stated for the coordinate operator. -/
 theorem ambient_doubleAngleTangent_eq_extendCoordinate
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
-    (Y : E →L[ℂ] E) (hY : IsAngularOperator U Y)
+    (Y : E →L[ℂ] E) (hY : U.IsAngularOperator Y)
     (hcontractive : ‖Y‖ < 1) :
     doubleAngleTangentOperator Y hcontractive =
       Uᗮ.subtypeL ∘L
@@ -147,20 +140,8 @@ theorem ambient_doubleAngleTangent_eq_extendCoordinate
   let P : E →L[ℂ] E := U.starProjection
   have hYext : Y = Uᗮ.subtypeL ∘L X ∘L U.subtypeL.adjoint :=
     ambientAngularOperator_eq_extendCoordinate U Y hY
-  have hYP : Y ∘L P = Y := hY.1
-  have hPY : P ∘L Y = 0 := hY.2
-  -- `star_mul` cannot fire on `P ∘L Y`: for endomorphisms `∘L` is *defeq* to `*`
-  -- but not syntactically equal, so `simp only` never matches.  Go through
-  -- `adjoint_comp`, which is stated for `∘L` directly.
-  have hPadj : ContinuousLinearMap.adjoint P = P := by
-    simpa only [ContinuousLinearMap.star_eq_adjoint] using
-      (isSelfAdjoint_starProjection U).star_eq
-  have hYstarP : Y.adjoint ∘L P = 0 := by
-    have h := congrArg ContinuousLinearMap.adjoint hPY
-    rwa [ContinuousLinearMap.adjoint_comp, hPadj, map_zero] at h
-  have hPYstar : P ∘L Y.adjoint = Y.adjoint := by
-    have h := congrArg ContinuousLinearMap.adjoint hYP
-    rwa [ContinuousLinearMap.adjoint_comp, hPadj] at h
+  have hYP : Y ∘L P = Y := hY.comp_starProjection
+  have hPYstar : P ∘L Y.adjoint = Y.adjoint := hY.starProjection_comp_adjoint
   let G : E →L[ℂ] E := Y.adjoint ∘L Y
   let D : E →L[ℂ] E := doubleAngleDenominator Y
   let DX : U →L[ℂ] U := doubleAngleDenominator X
@@ -332,56 +313,19 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
   let M : E →L[ℂ] E := ContinuousLinearMap.modulus
     (doubleAngleTangentOperator Y
       (norm_quarterAcuteAngularOperator_lt_one U V hquarter))
-  have hY : IsAngularOperator U Y :=
+  have hY : U.IsAngularOperator Y :=
     quarterAcuteAngularOperator_isAngularOperator U V hquarter
-  have hYP : Y ∘L P = Y := hY.1
-  have hPY : P ∘L Y = 0 := hY.2
-  -- See the note on the same pair in `ambientAngularOperator_eq_extendCoordinate`:
-  -- `star_mul` does not match `P ∘L Y`, so route through `adjoint_comp`.
-  have hPadj : ContinuousLinearMap.adjoint P = P := by
-    simpa only [ContinuousLinearMap.star_eq_adjoint] using
-      (isSelfAdjoint_starProjection U).star_eq
-  have hYstarP : Y.adjoint ∘L P = 0 := by
-    have h := congrArg ContinuousLinearMap.adjoint hPY
-    rwa [ContinuousLinearMap.adjoint_comp, hPadj, map_zero] at h
-  have hPYstar : P ∘L Y.adjoint = Y.adjoint := by
-    have h := congrArg ContinuousLinearMap.adjoint hYP
-    rwa [ContinuousLinearMap.adjoint_comp, hPadj] at h
-  have hGnonneg : (0 : E →L[ℂ] E) ≤ G := by
-    dsimp [G]
-    exact (ContinuousLinearMap.nonneg_iff_isPositive).2
-      (ContinuousLinearMap.isPositive_adjoint_comp_self Y)
+  have hYP : Y ∘L P = Y := hY.comp_starProjection
+  have hPY : P ∘L Y = 0 := hY.starProjection_comp
+  have hYstarP : Y.adjoint ∘L P = 0 := hY.adjoint_comp_starProjection
+  have hPYstar : P ∘L Y.adjoint = Y.adjoint := hY.starProjection_comp_adjoint
   have hGP : G ∘L P = G := by
     dsimp [G]
     rw [ContinuousLinearMap.comp_assoc, hYP]
   have hPG : P ∘L G = G := by
     dsimp [G]
     rw [← ContinuousLinearMap.comp_assoc, hPYstar]
-  have hNunit : IsUnit N := by
-    refine _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
-      (c := 1) one_pos ?_
-    intro x
-    apply le_trans ?_ (RCLike.re_le_norm _)
-    change ‖x‖ ^ 2 * 1 ≤ _
-    rw [mul_comm]
-    -- Compute the form value first, then conclude numerically.  Doing it with a
-    -- `rw` chain does not work: the real-part bound is stated with
-    -- `RCLike.re`, `dsimp` collapses that to `Complex.re`, and after the collapse
-    -- neither `map_add` (which wants a bundled additive map) nor
-    -- `inner_self_eq_norm_sq` (which is stated for `RCLike.re`) can match.
-    have hval : RCLike.re ⟪N x, x⟫_ℂ = ‖x‖ ^ 2 + ‖Y x‖ ^ 2 := by
-      have hN : N x = x + Y.adjoint (Y x) := by
-        show (ContinuousLinearMap.id ℂ E + Y.adjoint ∘L Y) x
-            = x + Y.adjoint (Y x)
-        rw [add_apply, ContinuousLinearMap.id_apply,
-          ContinuousLinearMap.comp_apply]
-      rw [hN]
-      -- `← ofReal_pow` pulls `(↑‖x‖) ^ 2` back to `↑(‖x‖ ^ 2)` so that
-      -- `Complex.ofReal_re` can strip the coercion.
-      simp [ContinuousLinearMap.adjoint_inner_left,
-        ← Complex.ofReal_pow]
-    rw [hval]
-    nlinarith [sq_nonneg ‖Y x‖, norm_nonneg x]
+  have hNunit : IsUnit N := Y.isPositive_adjoint_comp_self.isUnit_one_add
   have hNR : N ∘L R = ContinuousLinearMap.id ℂ E :=
     Ring.mul_inverse_cancel N hNunit
   have hRN : R ∘L N = ContinuousLinearMap.id ℂ E :=
@@ -409,41 +353,14 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
       _ = (R ∘L G) ∘L (N ∘L R) := by simp only [ContinuousLinearMap.comp_assoc]
       _ = R ∘L G := by rw [hNR, ContinuousLinearMap.comp_id]
   have hQformula : Q = (P + Y) ∘L R ∘L (P + Y.adjoint) := by
-    -- Transporting `projection (graphSubspace U Y)` to `projection V` needs care:
-    -- `rw` fails with "motive is not type correct" because `projection` carries a
-    -- `HasOrthogonalProjection` instance *for the submodule being rewritten*, and
-    -- `simp only [lemma]` fails to match because `Y` is a `let`-bound fvar while
-    -- the lemma's LHS mentions `quarterAcuteAngularOperator` explicitly.  Naming
-    -- the equation as a local hypothesis fixes both: simp rewrites with an fvar
-    -- equation directly, and `HasOrthogonalProjection` is a `Prop` class, so the
-    -- instance argument is proof-irrelevant and congruence goes through.
-    have hV : graphSubspace U Y = V :=
+    have hV : U.graphSubspace Y = V :=
       graphSubspace_quarterAcuteAngularOperator U V hquarter
-    have hgraph : V.starProjection = graphProjectionFormula U Y := by
-      simpa only [hV] using projection_graphSubspace_formula U Y hY
-    -- `graphProjectionFormula` produces every factor decorated with `P`:
-    --   (P + Y P) · (1 + P Y⋆ (Y P))⁻¹ · (P + P Y⋆)
-    -- and the decorations collapse by `Y P = Y` and `P Y⋆ = Y⋆`, which are
-    -- exactly the two angular-operator identities.  `1` and `id` are the same
-    -- element of the endomorphism algebra, so the tail is `rfl`.
-    have hcollapse :
-        graphProjectionFormula U Y = (P + Y) ∘L R ∘L (P + Y.adjoint) := by
-      -- A literal `show` cannot state the expansion: it mixes two spellings of
-      -- the same operator (`DavisKahan.projection U` in some factors,
-      -- `U.starProjection` in others), so no single hand-written pattern matches.
-      -- Let `simp only` do the unfolding and the two collapses together.
-      show (P + Y * P) *
-            (Ring.inverse (1 + star (Y * P) * (Y * P)) * star (P + Y * P))
-          = (P + Y) ∘L R ∘L (P + Y.adjoint)
-      rw [show Y * P = Y from hYP, star_add,
-        ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.star_eq_adjoint,
-        hPadj]
-      -- `R`, `N`, `G` are `let`-bound, and `1`/`id` and `*`/`∘SL` differ only up
-      -- to unfolding, so finish by definitional equality.
-      show (P + Y) * (Ring.inverse (1 + Y.adjoint * Y) * (P + Y.adjoint))
-          = (P + Y) * (Ring.inverse (1 + Y.adjoint * Y) * (P + Y.adjoint))
-      rfl
-    exact hgraph.trans hcollapse
+    have : (U.graphSubspace Y).HasOrthogonalProjection :=
+      hV.symm ▸ inferInstanceAs V.HasOrthogonalProjection
+    change V.starProjection = (U.starProjection + Y) ∘L
+      Ring.inverse (1 + Y.adjoint ∘L Y) ∘L (U.starProjection + Y.adjoint)
+    simpa only [hV, map_add, (isSelfAdjoint_starProjection U).adjoint_eq]
+      using hY.starProjection_graphSubspace
   -- Done as a ring computation rather than by `simp` normalisation.  No
   -- associativity convention works here: right-association hides `P ∘ P` from
   -- `hPP`, left-association hides `Y⋆ ∘ P` from `hYstarP`.  Collapsing the two

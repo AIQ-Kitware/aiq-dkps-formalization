@@ -65,11 +65,14 @@ theorem isUniformlyAcute_of_isQuarterAcute
 operator has norm strictly below one. -/
 theorem norm_angularOperator_lt_one_of_isQuarterAcute
     (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (X : H →L[ℂ] H) (hX : IsAngularOperator U X)
-    (hquarter : IsQuarterAcute U (graphSubspace U X)) :
+    (X : H →L[ℂ] H) (hX : U.IsAngularOperator X)
+    (hquarter :
+      have := hasOrthogonalProjection_graphSubspace hX
+      IsQuarterAcute U (U.graphSubspace X)) :
     ‖X‖ < 1 := by
-  change U.projectionGap (graphSubspace U X) < Real.sqrt 2 / 2 at hquarter
-  rw [subspaceGap_graphSubspace U X hX] at hquarter
+  have := hasOrthogonalProjection_graphSubspace hX
+  change U.projectionGap (U.graphSubspace X) < Real.sqrt 2 / 2 at hquarter
+  rw [hX.projectionGap_graphSubspace] at hquarter
   have hpos : (0 : ℝ) < 1 + ‖X‖ ^ 2 := by positivity
   have hs0 : (0 : ℝ) < Real.sqrt (1 + ‖X‖ ^ 2) :=
     Real.sqrt_pos.mpr hpos
@@ -97,11 +100,13 @@ theorem existsUnique_contractiveAngularOperator_of_isQuarterAcute
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hquarter : IsQuarterAcute U V) :
     ∃! X : H →L[ℂ] H,
-      IsAngularOperator U X ∧ graphSubspace U X = V ∧ ‖X‖ < 1 := by
+      U.IsAngularOperator X ∧ U.graphSubspace X = V ∧ ‖X‖ < 1 := by
   obtain ⟨X, hX, hunique⟩ :=
     existsUnique_angularOperator U V
       (isUniformlyAcute_of_isQuarterAcute U V hquarter)
-  have hquarterGraph : IsQuarterAcute U (graphSubspace U X) := by
+  have : (U.graphSubspace X).HasOrthogonalProjection :=
+    hX.2.symm ▸ inferInstanceAs V.HasOrthogonalProjection
+  have hquarterGraph : IsQuarterAcute U (U.graphSubspace X) := by
     simpa only [hX.2] using hquarter
   have hcontractive : ‖X‖ < 1 :=
     norm_angularOperator_lt_one_of_isQuarterAcute U X hX.1 hquarterGraph
@@ -136,8 +141,8 @@ theorem existsUnique_selectedEndpointAngularOperator_of_contour_bound
     (hsmall : selectedBranchProjectionLipschitzConstant Γ K delta <
       Real.sqrt 2 / 2) :
     ∃! X : H →L[ℂ] H,
-      IsAngularOperator (boundedSelfAdjointSpectralSubspace A hA s hs) X ∧
-      graphSubspace (boundedSelfAdjointSpectralSubspace A hA s hs) X =
+      Submodule.IsAngularOperator (boundedSelfAdjointSpectralSubspace A hA s hs) X ∧
+      Submodule.graphSubspace (boundedSelfAdjointSpectralSubspace A hA s hs) X =
         boundedSelfAdjointSpectralSubspace (A + K) hAK s hs ∧
       ‖X‖ < 1 := by
   have hquarter :=
@@ -190,7 +195,7 @@ theorem selectedEndpointAngularOperator_isAngularOperator
           (hself t ht) s hs)
     (hsmall : selectedBranchProjectionLipschitzConstant Γ K delta <
       Real.sqrt 2 / 2) :
-    IsAngularOperator (boundedSelfAdjointSpectralSubspace A hA s hs)
+    Submodule.IsAngularOperator (boundedSelfAdjointSpectralSubspace A hA s hs)
       (selectedEndpointAngularOperator Γ A K delta hdelta s hs hA hAK
         hself hsep hidentify hsmall) :=
   (Classical.choose_spec
@@ -216,7 +221,7 @@ theorem graphSubspace_selectedEndpointAngularOperator
           (hself t ht) s hs)
     (hsmall : selectedBranchProjectionLipschitzConstant Γ K delta <
       Real.sqrt 2 / 2) :
-    graphSubspace (boundedSelfAdjointSpectralSubspace A hA s hs)
+    Submodule.graphSubspace (boundedSelfAdjointSpectralSubspace A hA s hs)
         (selectedEndpointAngularOperator Γ A K delta hdelta s hs hA hAK
           hself hsep hidentify hsmall) =
       boundedSelfAdjointSpectralSubspace (A + K) hAK s hs :=

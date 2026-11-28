@@ -19,14 +19,10 @@ open TauCeti.DavisKahan.Angle
 
 
 /-!
-# Canonical operator-angle compatibility surface
+# Maximal angle from the projection gap
 
-Literal positive angle operators require a complete complex Hilbert space, or
-real complexification followed by the established descent bridges.  The former
-scalar-generic facade attempted to hide those hypotheses and consequently had
-no construction in the pinned foundations.  This module now exposes only the
-scalar-generic graph predicates; the actual operators live in the canonical
-complex and real-complexified modules imported above.
+The scalar maximal angle is defined over real and complex inner product spaces.
+The imported complex and real-complexified modules construct the operator angles.
 -/
 
 namespace TauCeti
@@ -39,12 +35,6 @@ open scoped InnerProductSpace
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
-
-/-- An ambient angular operator maps the selected subspace into its orthogonal
-complement and vanishes on that complement. -/
-@[expose] def IsAngularOperator (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : E →L[𝕜] E) : Prop :=
-  X ∘L U.starProjection = X ∧ U.starProjection ∘L X = 0
 
 /-- Maximal angle represented by the projection gap.  This scalar definition
 is valid over every `RCLike` field and needs no operator functional calculus. -/

@@ -52,7 +52,7 @@ omit [CompleteSpace H] in
 norm. -/
 theorem norm_subspaceAngularCoordinate_eq
     (U : Submodule ℂ H) [U.HasOrthogonalProjection]
-    (X : H →L[ℂ] H) (hX : IsAngularOperator U X) :
+    (X : H →L[ℂ] H) (hX : U.IsAngularOperator X) :
     ‖subspaceAngularCoordinate U X‖ = ‖X‖ := by
   let Y : U →L[ℂ] Uᗮ := subspaceAngularCoordinate U X
   apply le_antisymm
@@ -150,7 +150,7 @@ theorem selectedEndpointAngularOperator_sharp_riccati_bound
     (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  have hXang : IsAngularOperator U X := by
+  have hXang : U.IsAngularOperator X := by
     simpa only [U, X] using
       C.selectedEndpointAngularOperator_isAngularOperator hsmall
   have hnorm : ‖Y‖ = ‖X‖ := by
@@ -242,10 +242,12 @@ theorem tan_maximalAngle_selectedSpectralSubspaces_le_div
         (maximalAngle C.sourceSelectedSpectralSubspace
           C.targetSelectedSpectralSubspace) ≤
       ‖V‖ / d := by
+  have := hasOrthogonalProjection_graphSubspace
+    (C.selectedEndpointAngularOperator_isAngularOperator hsmall)
   have hgraphBound :
       Real.tan
           (maximalAngle C.sourceSelectedSpectralSubspace
-            (graphSubspace C.sourceSelectedSpectralSubspace
+            (C.sourceSelectedSpectralSubspace.graphSubspace
               (C.selectedEndpointAngularOperator hsmall))) ≤
         ‖V‖ / d := by
     rw [tan_maximalAngle_eq_norm_angularOperator

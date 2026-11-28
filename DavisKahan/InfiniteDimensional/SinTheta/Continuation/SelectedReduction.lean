@@ -105,7 +105,7 @@ theorem selectedEndpointAngularOperator_graph_reduces_of_contour_bound
           (hself t ht) s hs)
     (hsmall : selectedBranchProjectionLipschitzConstant Γ K delta <
       Real.sqrt 2 / 2) :
-    Submodule.IsReducing (graphSubspace (boundedSelfAdjointSpectralSubspace A hA s hs)
+    Submodule.IsReducing (Submodule.graphSubspace (boundedSelfAdjointSpectralSubspace A hA s hs)
         (selectedEndpointAngularOperator Γ A K delta hdelta s hs hA hAK
           hself hsep hidentify hsmall)) (A + K) := by
   rw [graphSubspace_selectedEndpointAngularOperator Γ A K delta hdelta

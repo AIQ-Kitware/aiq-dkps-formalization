@@ -1,5 +1,36 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 angular graphs and the exact graph gap
+
+TauCeti #16152 covers SSP-C11 through SSP-C14. Its integration
+`01b57bf91e9f91a7aa114647a3e3a7ece5f8b0e0` is by tauceti-ai-for-science.
+The PR reports independent formalization and credits the DKPS roadmap.
+[#16152](https://github.com/TauCetiProject/TauCeti/pull/16152)
+
+The Riccati and angle proofs use `Submodule.IsAngularOperator`,
+`Submodule.graphSubspace`, and the native membership, projection, and gap
+theorems. For the angular operators in these proofs, the native graph
+image agrees with the previous closed range. Where a projection is
+needed, completeness of the base gives completeness of the native graph.
+The acute-to-graph construction, its uniqueness and angle consequences,
+and the comparison with rectangular and partial-map graphs remain here.
+The range comparison works for arbitrary bounded operators without
+ambient completeness.
+
+The declarations and their source notices before retirement are recorded
+at `37bf630caae3b61fec4a344c4b307a621a2c9d56` in
+`DavisKahan/SpectralTheory/GraphSubspace.lean`, `OperatorAngle.lean`,
+and `DavisKahan/InfiniteDimensional/SinTheta/Continuation/WitnessRiccati.lean`
+(Jon Crall and GPT 5.6 High for the graph proofs, Jon Crall and OpenAI
+GPT-5.6 Thinking for the angular predicate and Riccati coordinate proof,
+Kitware 2026, Apache-2.0).
+
+The focused build (10,005 jobs), default build (22,788 jobs), and combined
+Challenge and paper semantic-surface build (22,494 jobs) passed without
+warnings. All 17 available comparator signatures matched. The 49 baseline
+name-drift findings stayed the same. The backport removes 666 net lines of
+Lean.
+
 ## November 27 Lyapunov positivity and positive-operator estimates
 
 The unbounded quarter-angle positivity proof uses

@@ -96,8 +96,8 @@ theorem existsUnique_selectedEndpointAngularOperator
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2) :
     ∃! X : H →L[ℂ] H,
-      IsAngularOperator C.sourceSelectedSpectralSubspace X ∧
-      graphSubspace C.sourceSelectedSpectralSubspace X =
+      C.sourceSelectedSpectralSubspace.IsAngularOperator X ∧
+      C.sourceSelectedSpectralSubspace.graphSubspace X =
         C.targetSelectedSpectralSubspace ∧
       ‖X‖ < 1 := by
   exact existsUnique_contractiveAngularOperator_of_isQuarterAcute
@@ -118,7 +118,7 @@ theorem selectedEndpointAngularOperator_isAngularOperator
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2) :
-    IsAngularOperator C.sourceSelectedSpectralSubspace
+    C.sourceSelectedSpectralSubspace.IsAngularOperator
       (C.selectedEndpointAngularOperator hsmall) :=
   (Classical.choose_spec
     (C.existsUnique_selectedEndpointAngularOperator hsmall)).1.1
@@ -129,7 +129,7 @@ theorem graphSubspace_selectedEndpointAngularOperator
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2) :
-    graphSubspace C.sourceSelectedSpectralSubspace
+    C.sourceSelectedSpectralSubspace.graphSubspace
         (C.selectedEndpointAngularOperator hsmall) =
       C.targetSelectedSpectralSubspace :=
   (Classical.choose_spec
@@ -151,8 +151,8 @@ theorem eq_selectedEndpointAngularOperator
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2)
     (X : H →L[ℂ] H)
-    (hX : IsAngularOperator C.sourceSelectedSpectralSubspace X)
-    (hgraph : graphSubspace C.sourceSelectedSpectralSubspace X =
+    (hX : C.sourceSelectedSpectralSubspace.IsAngularOperator X)
+    (hgraph : C.sourceSelectedSpectralSubspace.graphSubspace X =
       C.targetSelectedSpectralSubspace)
     (hcontractive : ‖X‖ < 1) :
     X = C.selectedEndpointAngularOperator hsmall :=
@@ -166,7 +166,7 @@ theorem selectedEndpointAngularOperator_graph_reduces
     (C : SpectralContinuationWitness A V s)
     (hsmall : selectedBranchProjectionLipschitzConstant
       C.contour V C.margin < Real.sqrt 2 / 2) :
-    Submodule.IsReducing (graphSubspace C.sourceSelectedSpectralSubspace
+    Submodule.IsReducing (C.sourceSelectedSpectralSubspace.graphSubspace
         (C.selectedEndpointAngularOperator hsmall)) (A + V) := by
   rw [C.graphSubspace_selectedEndpointAngularOperator hsmall]
   unfold targetSelectedSpectralSubspace

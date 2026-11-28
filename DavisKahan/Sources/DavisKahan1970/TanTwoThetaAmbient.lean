@@ -1079,7 +1079,7 @@ theorem tanTwoBlockRepresentative_lowerBlock (hq : IsQuarterAcute U V) :
         (norm_quarterAcuteAngularOperator_lt_one U V hq) := by
   have htr := norm_sinAngleOperatorC_lt_of_isQuarterAcute hq
   have hinv := isUnit_one_sub_two_mul_projectorDifference_sq htr
-  have hang : IsAngularOperator U (quarterAcuteAngularOperator U V hq) :=
+  have hang : U.IsAngularOperator (quarterAcuteAngularOperator U V hq) :=
     quarterAcuteAngularOperator_isAngularOperator U V hq
   have hYc : ‖quarterAcuteAngularOperator U V hq‖ < 1 :=
     norm_quarterAcuteAngularOperator_lt_one U V hq
@@ -1156,13 +1156,12 @@ theorem tanTwoBlockRepresentative_lowerBlock (hq : IsQuarterAcute U V) :
         Ring.inverse (1 + star (quarterAcuteAngularOperator U V hq) *
           quarterAcuteAngularOperator U V hq) *
         (U.starProjection + star (quarterAcuteAngularOperator U V hq)) := by
-    have h := projection_graphSubspace_formula U (quarterAcuteAngularOperator U V hq)
-      hang
-    simp only [graphSubspace_quarterAcuteAngularOperator U V hq] at h
-    rw [show (V.starProjection : E →L[ℂ] E) = V.starProjection from rfl, h,
-      graphProjectionFormula,
-      show (U.starProjection : E →L[ℂ] E) = U.starProjection from rfl, hYp,
-      star_add, hpsa]
+    have hgraph := graphSubspace_quarterAcuteAngularOperator U V hq
+    have : (U.graphSubspace (quarterAcuteAngularOperator U V hq)).HasOrthogonalProjection :=
+      hgraph.symm ▸ inferInstanceAs V.HasOrthogonalProjection
+    simpa only [hgraph, map_add, ← ContinuousLinearMap.star_eq_adjoint, hpsa,
+      ContinuousLinearMap.mul_def, ContinuousLinearMap.comp_assoc]
+      using hang.starProjection_graphSubspace
   have hcorner := graph_corner (p := U.starProjection)
     (Y := quarterAcuteAngularOperator U V hq)
     (R := Ring.inverse (1 + star (quarterAcuteAngularOperator U V hq) *

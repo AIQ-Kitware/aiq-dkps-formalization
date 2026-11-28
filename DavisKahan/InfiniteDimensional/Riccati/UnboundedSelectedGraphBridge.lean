@@ -63,10 +63,10 @@ theorem unboundedBlockGraph_eq_blockGraph (X : E0 →L[ℂ] E1) :
 ambient block angular operator induced by its rectangular part. -/
 theorem ambientAngular_eq_blockAngularOperator
     (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1))
-    (hY : IsAngularOperator
+    (hY : Submodule.IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y) :
     Y = blockAngularOperator (rectangularAngularPart Y) := by
-  change IsAngularOperator (blockGraph (0 : E0 →L[ℂ] E1)) Y at hY
+  change Submodule.IsAngularOperator (blockGraph (0 : E0 →L[ℂ] E1)) Y at hY
   ext z
   have hYP :
       Y ((blockGraph (0 : E0 →L[ℂ] E1)).starProjection z) = Y z := by
@@ -105,15 +105,13 @@ theorem ambientAngular_eq_blockAngularOperator
 exactly the rectangular block graph extracted from that operator. -/
 theorem graphSubspace_eq_unboundedBlockGraph_rectangularAngularPart
     (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1))
-    (hY : IsAngularOperator
+    (hY : Submodule.IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y) :
-    graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y =
+    Submodule.graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y =
       unboundedBlockGraph (rectangularAngularPart Y) := by
-  change graphSubspace (blockGraph (0 : E0 →L[ℂ] E1)) Y =
+  change Submodule.graphSubspace (blockGraph (0 : E0 →L[ℂ] E1)) Y =
     blockGraph (rectangularAngularPart Y)
-  have hY' : IsAngularOperator (blockGraph (0 : E0 →L[ℂ] E1)) Y := hY
-  rw [graphSubspace_eq_range _ hY']
-  rw [ambientAngular_eq_blockAngularOperator Y hY]
+  rw [graphSubspace_eq_range_starProjection, ambientAngular_eq_blockAngularOperator Y hY]
   exact (blockGraph_eq_range_zeroGraph_angularParam
     (rectangularAngularPart Y)).symm
 
@@ -124,13 +122,14 @@ bundles. -/
 noncomputable def ContractiveReducingGraphSelection.ofAmbientAngularGraph
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1))
-    (hY : IsAngularOperator
+    (hY : Submodule.IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
     (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))
     (hnorm : ‖rectangularAngularPart Y‖ < 1)
-    (hred : _root_.LinearPMap.IsReducing
-      (unboundedBlockOperatorCore H)
-      (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
+    (hred :
+      have := hasOrthogonalProjection_graphSubspace hY
+      _root_.LinearPMap.IsReducing (unboundedBlockOperatorCore H)
+        (Submodule.graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
     ContractiveReducingGraphSelection H where
   X := rectangularAngularPart Y
   preservesDomains := hdom
@@ -144,13 +143,14 @@ its domain-aware partial-map reduction data. -/
 theorem exists_strongRiccati_solution_of_ambientAngularGraph
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (Y : WithLp 2 (E0 × E1) →L[ℂ] WithLp 2 (E0 × E1))
-    (hY : IsAngularOperator
+    (hY : Submodule.IsAngularOperator
       (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)
     (hdom : PreservesRiccatiDomains H (rectangularAngularPart Y))
     (hnorm : ‖rectangularAngularPart Y‖ < 1)
-    (hred : _root_.LinearPMap.IsReducing
-      (unboundedBlockOperatorCore H)
-      (graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
+    (hred :
+      have := hasOrthogonalProjection_graphSubspace hY
+      _root_.LinearPMap.IsReducing (unboundedBlockOperatorCore H)
+        (Submodule.graphSubspace (unboundedBlockGraph (0 : E0 →L[ℂ] E1)) Y)) :
     ∃ X : E0 →L[ℂ] E1,
       StrongSolvesRiccati H X ∧ ‖X‖ < 1 ∧
       _root_.LinearPMap.IsReducing (unboundedBlockOperatorCore H)

@@ -87,7 +87,7 @@ theorem zeroGraph_starProjection_apply
 
 /-- The ambient block angular operator is angular over the zero graph. -/
 theorem blockAngularOperator_isAngularOperator (X : E0 →L[𝕜] E1) :
-    IsAngularOperator (blockGraph (0 : E0 →L[𝕜] E1))
+    Submodule.IsAngularOperator (blockGraph (0 : E0 →L[𝕜] E1))
       (blockAngularOperator X) := by
   constructor
   · ext z
