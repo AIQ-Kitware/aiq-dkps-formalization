@@ -142,17 +142,6 @@ theorem selfAdjointFunctionalCalculus_orthogonalBlockSum
         simp [J₁, J₂, LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply,
           WithLp.ofLp_fst, WithLp.ofLp_snd]
 
-/-- The projector onto an orthogonal block sum of subspaces is the block sum of the
-projectors, in the canonical `projection` spelling used by finite angle geometry. -/
-theorem projection_orthogonalBlockSumSubmodule
-    {E₁ E₂ : Type*}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
-    (U₁ : Submodule 𝕜 E₁) (U₂ : Submodule 𝕜 E₂) :
-    ((UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)).starProjection.toLinearMap =
-      ((U₁.starProjection.toLinearMap).prodMap (U₂.starProjection.toLinearMap)).withLpMap 2 :=
-  UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule U₁ U₂
-
 /-- **The sine-angle operator of an orthogonal sum of subspace pairs is block-diagonal.** -/
 theorem sinAngleOperator_orthogonalBlockSumSubmodule
     {E₁ E₂ : Type*}
@@ -187,8 +176,8 @@ theorem sinAngleOperator_orthogonalBlockSumSubmodule
     rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]
     congr 1
   rw [h₃, h₁, h₂,
-    projection_orthogonalBlockSumSubmodule U₁ U₂,
-    projection_orthogonalBlockSumSubmodule V₁ V₂]
+    UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule U₁ U₂,
+    UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule V₁ V₂]
   change (((U₁.starProjection.toLinearMap - V₁.starProjection.toLinearMap).prodMap
     (U₂.starProjection.toLinearMap - V₂.starProjection.toLinearMap)).withLpMap 2).operatorAbs = _
   exact UnitarilyInvariantSeminorm.operatorAbs_orthogonalBlockSum _ _

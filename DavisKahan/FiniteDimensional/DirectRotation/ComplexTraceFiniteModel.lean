@@ -82,8 +82,8 @@ theorem attainsProjectionTraceBound_orthogonalBlockSum
           ((orthogonalBlockSumSubmodule V₁ V₂)).starProjection.toLinearMap =
         ((U₁.starProjection.toLinearMap - V₁.starProjection.toLinearMap).prodMap
             (U₂.starProjection.toLinearMap - V₂.starProjection.toLinearMap)).withLpMap 2 := by
-    rw [projection_orthogonalBlockSumSubmodule U₁ U₂,
-      projection_orthogonalBlockSumSubmodule V₁ V₂]
+    rw [UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule U₁ U₂,
+      UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule V₁ V₂]
     rfl
   constructor
   · exact TauCeti.map_orthogonalBlockSumSubmodule
@@ -391,8 +391,8 @@ theorem phasePlaneModel_projection_trace_formula (n : ℕ)
             n))).starProjection.toLinearMap -
             ((orthogonalBlockSumSubmodule (targetLine (theta 0))
                 (phasePlaneModelTarget n (fun i => theta i.succ)))).starProjection.toLinearMap = _
-        rw [projection_orthogonalBlockSumSubmodule,
-          projection_orthogonalBlockSumSubmodule]
+        rw [UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule,
+          UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule]
         rfl
       rw [hproj, kyFanSum_orthogonalBlockSum_full]
       have hdim : finrank ℂ E2 = 2 := finrank_euclideanSpace_fin
@@ -490,8 +490,8 @@ theorem phasePlaneModel_with_fixed_projection_trace_formula
             C)).starProjection.toLinearMap).kyFanSum
           (finrank ℂ (WithLp 2 (phasePlaneModel n × G))) =
         ∑ i : Fin (n + 1), 2 * Real.sin (theta i) := by
-  rw [projection_orthogonalBlockSumSubmodule,
-    projection_orthogonalBlockSumSubmodule]
+  rw [UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule,
+    UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule]
   change (((((phasePlaneModelSource n)).starProjection.toLinearMap -
     ((phasePlaneModelTarget n theta)).starProjection.toLinearMap).prodMap
       (C.starProjection.toLinearMap - C.starProjection.toLinearMap)).withLpMap 2).kyFanSum _ = _

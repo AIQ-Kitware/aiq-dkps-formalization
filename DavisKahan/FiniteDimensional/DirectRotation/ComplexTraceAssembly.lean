@@ -252,8 +252,8 @@ theorem twoPlanePhaseUnitary_global_trace_minimizer
           (sourceLine.starProjection.toLinearMap - ((targetLine
               phi)).starProjection.toLinearMap)).withLpMap 2 := by
     rw [twoPlaneSource, twoPlaneTarget,
-      projection_orthogonalBlockSumSubmodule,
-      projection_orthogonalBlockSumSubmodule]
+      UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule,
+      UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule]
     rfl
   have heq := twoPlanePhaseUnitary_trace_eq_projectionDifference
     theta phi h0theta hpiTheta h0phi hpiPhi

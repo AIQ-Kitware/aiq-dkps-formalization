@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
 
 /-!
 # Full trace norm of an orthogonal block sum
@@ -16,9 +17,8 @@ additive across orthogonal direct sums.  This is stronger than the triangle
 inequality for Ky Fan sums and is the bookkeeping needed to assemble
 complex principal-plane trace minimizers with no loss in the constant.
 
-We use the established trace-of-modulus identity and the existing block
-modulus theorem.  In particular, there is no sorting of two singular-value
-lists and no separate matrix diagonalization.
+The full trace norm uses the sum of the singular-value lists of the blocks.
+The underlying multiplicity formula is TauCeti's block-spectrum theorem.
 -/
 
 public section
@@ -40,54 +40,8 @@ theorem kyFanSum_orthogonalBlockSum_full
     (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂) :
     ((A.prodMap B).withLpMap 2).kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) =
       A.kyFanSum (finrank 𝕜 E₁) + B.kyFanSum (finrank 𝕜 E₂) := by
-  classical
-  let n₁ := finrank 𝕜 E₁
-  let n₂ := finrank 𝕜 E₂
-  let b₁ : OrthonormalBasis (Fin n₁) 𝕜 E₁ := stdOrthonormalBasis 𝕜 E₁
-  let b₂ : OrthonormalBasis (Fin n₂) 𝕜 E₂ := stdOrthonormalBasis 𝕜 E₂
-  let e : (Fin n₁ ⊕ Fin n₂) ≃ Fin (n₁ + n₂) := finSumFinEquiv
-  let b : OrthonormalBasis (Fin (n₁ + n₂)) 𝕜 (WithLp 2 (E₁ × E₂)) :=
-    (b₁.prod b₂).reindex e
-  have hn : finrank 𝕜 (WithLp 2 (E₁ × E₂)) = n₁ + n₂ := by
-    calc
-      finrank 𝕜 (WithLp 2 (E₁ × E₂)) = finrank 𝕜 (E₁ × E₂) :=
-        (WithLp.linearEquiv 2 𝕜 (E₁ × E₂)).finrank_eq
-      _ = n₁ + n₂ := by simp [n₁, n₂, Module.finrank_prod]
-  have hleft (i : Fin n₁) :
-      RCLike.re ⟪LinearMap.operatorAbs ((A.prodMap B).withLpMap 2) (b (e (.inl i))),
-          b (e (.inl i))⟫_𝕜 =
-        RCLike.re ⟪A.operatorAbs (b₁ i), b₁ i⟫_𝕜 := by
-    rw [operatorAbs_orthogonalBlockSum]
-    simp [b, OrthonormalBasis.reindex_apply]
-  have hright (i : Fin n₂) :
-      RCLike.re ⟪LinearMap.operatorAbs ((A.prodMap B).withLpMap 2) (b (e (.inr i))),
-          b (e (.inr i))⟫_𝕜 =
-        RCLike.re ⟪B.operatorAbs (b₂ i), b₂ i⟫_𝕜 := by
-    rw [operatorAbs_orthogonalBlockSum]
-    simp [b, OrthonormalBasis.reindex_apply]
-  calc
-    ((A.prodMap B).withLpMap 2).kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) =
-        ∑ k : Fin (n₁ + n₂),
-          RCLike.re ⟪LinearMap.operatorAbs ((A.prodMap B).withLpMap 2) (b k), b k⟫_𝕜 := by
-      rw [hn, LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
-      exact (sum_re_inner_abs_self_eq_sum_singularValues
-        ((A.prodMap B).withLpMap 2) hn b).symm
-    _ = ∑ k : Fin n₁ ⊕ Fin n₂,
-          RCLike.re ⟪LinearMap.operatorAbs ((A.prodMap B).withLpMap 2) (b (e k)), b (e k)⟫_𝕜 :=
-      (e.sum_comp _).symm
-    _ = (∑ i : Fin n₁, RCLike.re ⟪A.operatorAbs (b₁ i), b₁ i⟫_𝕜) +
-        (∑ i : Fin n₂, RCLike.re ⟪B.operatorAbs (b₂ i), b₂ i⟫_𝕜) := by
-      rw [Fintype.sum_sum_type]
-      exact congrArg₂ (· + ·)
-        (Finset.sum_congr rfl (fun i _ => hleft i))
-        (Finset.sum_congr rfl (fun i _ => hright i))
-    _ = A.kyFanSum (finrank 𝕜 E₁) + B.kyFanSum (finrank 𝕜 E₂) := by
-      congr 1
-      · exact (sum_re_inner_abs_self_eq_sum_singularValues A rfl b₁).trans
-          (((LinearMap.kyFanSum_def A _).trans (Fin.sum_univ_eq_sum_range _ _).symm)).symm
-      · exact (sum_re_inner_abs_self_eq_sum_singularValues B rfl b₂).trans
-          (((LinearMap.kyFanSum_def B _).trans (Fin.sum_univ_eq_sum_range _ _).symm)).symm
-
+  simp only [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
+  exact sum_singularValues_prodMap_withLpMap A B id
 
 /-- An orthogonal product of two unitary transports carries a block-sum
 subspace onto the block-sum target subspace. -/

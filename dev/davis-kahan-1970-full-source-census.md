@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1572
+**Unique cited Lean declarations:** 1570
 
 ## How to use this census
 
@@ -1353,7 +1353,6 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_model_equality_of_admissiblePair`
 - `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_model_isAdmissiblePair`
 - `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_perturbation_le_model_equality`
-- `TauCeti.DavisKahan.FiniteDimensional.projection_orthogonalBlockSumSubmodule`
 - `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule`
 - `TauCeti.UnitarilyInvariantSeminorm.mem_orthogonalBlockSumSubmodule`
 - `TauCeti.UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule`
@@ -1364,7 +1363,6 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_isPositive`
 - `TauCeti.UnitarilyInvariantSeminorm.operatorAbs_orthogonalBlockSum`
 - `TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum`
-- `TauCeti.projection_orthogonalBlockSumSubmodule`
 - `TauCeti.sinAngleOperator_orthogonalBlockSumSubmodule`
 - `TauCeti.DavisKahan.FiniteDimensional.angleOperator_orthogonalBlockSumSubmodule`
 - `TauCeti.DavisKahan.FiniteDimensional.tanAngleOperator_orthogonalBlockSumSubmodule`

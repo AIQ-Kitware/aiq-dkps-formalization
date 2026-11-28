@@ -2515,29 +2515,6 @@ theorem tanTwoTheta_model_sourceSharpness
     modelTanTwoThetaPerturbedResidual_offDiagonal a b θ,
     tanTwoTheta_perturbation_le_model_equality N hab hθ0 hθ1⟩
 
-/-! ### The block-sum angle operator at the subspace level
-
-The direct-sum equalities above are stated on the native product-map sum of the *plane* angle
-operators.  The missing bookkeeping is the identification of the block sum of two projectors
-with the projector of an actual subspace of `WithLp 2 (E₁ × E₂)`; with it, those statements
-become statements about a pair of subspaces.  Iteration to `m` blocks composes the two-block
-lemma and is left to the consumer. -/
-
-/-- **The projector onto a block sum of subspaces is the block sum of the projectors**, in the
-`projection` spelling used by the angle operators.
-
-The reusable `projection` form lives in `ForTauCeti` as
-`TauCeti.projection_orthogonalBlockSumSubmodule`; it is derived there from the underlying
-`starProjection_orthogonalBlockSumSubmodule` identity. -/
-theorem projection_orthogonalBlockSumSubmodule
-    {E₁ E₂ : Type*}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
-    (U₁ : Submodule 𝕜 E₁) (U₂ : Submodule 𝕜 E₂) :
-    ((UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)).starProjection.toLinearMap =
-      ((U₁.starProjection.toLinearMap).prodMap (U₂.starProjection.toLinearMap)).withLpMap 2 :=
-  TauCeti.projection_orthogonalBlockSumSubmodule U₁ U₂
-
 /-! ### Actual direct-sum subspace pairs and their angle operators -/
 
 /-- The unperturbed subspace in the orthogonal direct sum of two planar sharpness models. -/

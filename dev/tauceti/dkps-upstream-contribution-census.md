@@ -1,5 +1,35 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 product projections and block singular-value sums
+
+The projector onto a product subspace now uses
+`WithLp.starProjection_comap_prod`, contributed by tauceti-ai-for-science
+as a supporting result for the TaubesGromov §7.20 Sobolev trace PR on
+Forgejo #7619. The native proof requires orthogonal projections of the
+two factors. DKPS retains the bundled linear-map equality for the
+direct-rotation and trace assemblers and retires its two forwarding
+theorems. The integration records reuse of the product-subspace
+expression from `ZLattice.orthSum`. DKPS proof descent is unverified.
+[Forgejo #7619](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/7619) ·
+[Integration](https://github.com/TauCetiProject/TauCeti/commit/e05f2514af29ec24ff98757802a0a9ac9facf4dd)
+
+The finite block Schatten and trace-norm identities now use
+`LinearMap.ncard_ofPred_singularValues_prodMap_withLpMap` from #14456
+(Majorization B4), in its #35650 form. The nonzero multiplicities
+identify the finite multiset away from zero. Source dimension adds
+across the blocks, which recovers the zero multiplicities and allows
+arbitrary penalties with a value at zero. This retires the local
+polar-decomposition and eigenbasis calculation. #14456 reports that
+no external formalization was vendored.
+[#14456 integration](https://github.com/TauCetiProject/TauCeti/commit/13f061f3f1b1dfce3a28c5af2629c16b08b97584) ·
+[#35650 integration](https://github.com/TauCetiProject/TauCeti/commit/5eeeaf3f759c9cea1e90419989d43b7c6150f16e)
+
+The focused build (8,929 jobs), default build (22,816 jobs), and
+Challenge with the result semantic-surface audit (22,526 jobs)
+passed without warnings at TauCeti `007b3a1150`. All 1,570
+source-census references resolved and all 17 available comparator
+signatures matched.
+
 ## November 27 finite nuclear trace support and equality
 
 The unitary trace support bound uses chrisflav's #43341 contraction

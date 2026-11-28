@@ -10,14 +10,16 @@ public import TauCeti.Analysis.Normed.Lp.ProdLp
 public import Mathlib.Analysis.InnerProductSpace.ProdL2
 public import TauCeti.Analysis.InnerProductSpace.Polar.Unitary
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
+import TauCeti.Analysis.InnerProductSpace.BlockSum
+import Mathlib.Data.Multiset.Filter
 
 /-!
 # Finite singular-value penalties on orthogonal blocks
 
 Every finite sum of an arbitrary singular-value penalty is additive under
-orthogonal block sums. The accepted unitary polar decomposition and
-eigenbases of the two positive moduli combine the sums without sorting
-another singular-value list. Finite Schatten powers are a specialization.
+orthogonal block sums. TauCeti counts the nonzero singular values of
+the two blocks. The source dimensions determine the number of zero
+singular values in the finite lists. Finite Schatten powers are a specialization.
 -/
 
 public section
@@ -27,39 +29,12 @@ noncomputable section
 namespace TauCeti
 
 open scoped ENNReal
+open Module (finrank)
 open UnitarilyInvariantSeminorm
 
 variable {𝕜 E₁ E₂ : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
   [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
-
-private theorem sum_singularValues_prodMap_withLpMap_of_eigenbases
-    {ι₁ ι₂ : Type*} [Fintype ι₁] [Fintype ι₂]
-    (b₁ : OrthonormalBasis ι₁ 𝕜 E₁) (b₂ : OrthonormalBasis ι₂ 𝕜 E₂)
-    (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂)
-    (mu₁ : ι₁ → 𝕜) (mu₂ : ι₂ → 𝕜)
-    (hA : ∀ i, A (b₁ i) = mu₁ i • b₁ i) (hB : ∀ i, B (b₂ i) = mu₂ i • b₂ i)
-    {M : Type*} [AddCommMonoid M] (f : ℝ → M) :
-    (∑ i : Fin (Module.finrank 𝕜 (WithLp 2 (E₁ × E₂))),
-      f (((A.prodMap B).withLpMap 2).singularValues i)) =
-      (∑ i : Fin (Module.finrank 𝕜 E₁), f (A.singularValues i)) +
-        ∑ i : Fin (Module.finrank 𝕜 E₂), f (B.singularValues i) := by
-  classical
-  let mu : ι₁ ⊕ ι₂ → 𝕜 := Sum.elim mu₁ mu₂
-  have heigen (i : ι₁ ⊕ ι₂) :
-      (A.prodMap B).withLpMap 2 ((b₁.prod b₂) i) = mu i • (b₁.prod b₂) i := by
-    cases i with
-    | inl i =>
-      apply WithLp.ofLp_injective 2
-      apply Prod.ext <;> simp [LinearMap.coe_withLpMap, WithLp.map, hA, mu]
-    | inr i =>
-      apply WithLp.ofLp_injective 2
-      apply Prod.ext <;> simp [LinearMap.coe_withLpMap, WithLp.map, hB, mu]
-  rw [sum_singularValues_eq_sum_norm_eigenvalues (b₁.prod b₂) _ mu heigen f,
-    sum_singularValues_eq_sum_norm_eigenvalues b₁ A mu₁ hA f,
-    sum_singularValues_eq_sum_norm_eigenvalues b₂ B mu₂ hB f,
-    Fintype.sum_sum_type]
-  rfl
 
 /-- Every finite singular-value penalty is additive on orthogonal block
 sums, including zero singular values and penalties that do not vanish at zero.
@@ -71,39 +46,56 @@ theorem sum_singularValues_prodMap_withLpMap
       f (((A.prodMap B).withLpMap 2).singularValues i)) =
       (∑ i : Fin (Module.finrank 𝕜 E₁), f (A.singularValues i)) +
         ∑ i : Fin (Module.finrank 𝕜 E₂), f (B.singularValues i) := by
-  let b₁ := A.isSymmetric_operatorAbs.eigenvectorBasis rfl
-  let b₂ := B.isSymmetric_operatorAbs.eigenvectorBasis rfl
-  let mu₁ (i : Fin (Module.finrank 𝕜 E₁)) : 𝕜 :=
-    A.isSymmetric_operatorAbs.eigenvalues rfl i
-  let mu₂ (i : Fin (Module.finrank 𝕜 E₂)) : 𝕜 :=
-    B.isSymmetric_operatorAbs.eigenvalues rfl i
-  obtain ⟨UA, hUA⟩ := A.exists_linearIsometryEquiv_comp_operatorAbs_eq rfl
-  obtain ⟨UB, hUB⟩ := B.exists_linearIsometryEquiv_comp_operatorAbs_eq rfl
-  change UA.toLinearMap ∘ₗ A.operatorAbs = A at hUA
-  change UB.toLinearMap ∘ₗ B.operatorAbs = B at hUB
-  have hblock : (A.prodMap B).withLpMap 2 =
-      (LinearIsometryEquiv.withLpProdCongr 2 UA UB).toLinearMap ∘ₗ
-        (A.operatorAbs.prodMap B.operatorAbs).withLpMap 2 := by
-    ext x
-    apply WithLp.ofLp_injective 2
-    apply Prod.ext
-    · exact (LinearMap.congr_fun hUA x.fst).symm
-    · exact (LinearMap.congr_fun hUB x.snd).symm
-  calc
-    _ = ∑ i : Fin (Module.finrank 𝕜 (WithLp 2 (E₁ × E₂))),
-        f (((A.operatorAbs.prodMap B.operatorAbs).withLpMap 2).singularValues i) := by
-      rw [hblock]
-      exact congrArg (fun sigma : ℕ →₀ ℝ =>
-        ∑ i : Fin (Module.finrank 𝕜 (WithLp 2 (E₁ × E₂))), f (sigma i))
-        (LinearMap.singularValues_linearIsometryEquiv_comp
-          (LinearIsometryEquiv.withLpProdCongr 2 UA UB)
-          ((A.operatorAbs.prodMap B.operatorAbs).withLpMap 2))
-    _ = (∑ i : Fin (Module.finrank 𝕜 E₁), f (A.operatorAbs.singularValues i)) +
-        ∑ i : Fin (Module.finrank 𝕜 E₂), f (B.operatorAbs.singularValues i) :=
-      sum_singularValues_prodMap_withLpMap_of_eigenbases b₁ b₂ A.operatorAbs B.operatorAbs
-        mu₁ mu₂ (A.isSymmetric_operatorAbs.apply_eigenvectorBasis rfl)
-        (B.isSymmetric_operatorAbs.apply_eigenvectorBasis rfl) f
-    _ = _ := by rw [LinearMap.singularValues_operatorAbs, LinearMap.singularValues_operatorAbs]
+  classical
+  let C := (A.prodMap B).withLpMap 2
+  let vals (n : ℕ) (σ : ℕ →₀ ℝ) := (Finset.range n).val.map σ
+  have count_vals (n : ℕ) (σ : ℕ →₀ ℝ) (hσ : ∀ i, n ≤ i → σ i = 0) {s : ℝ}
+      (hs : s ≠ 0) : (vals n σ).count s = {i | σ i = s}.ncard := by
+    rw [Multiset.count_map]
+    change ((Finset.range n).filter fun i => s = σ i).card = _
+    rw [← Set.ncard_coe_finset]
+    congr 1
+    ext i
+    simp only [Finset.mem_coe, Finset.mem_filter, Finset.mem_range, Set.mem_ofPred_eq]
+    exact ⟨fun h => h.2.symm,
+      fun h => ⟨lt_of_not_ge fun hi => hs (h.symm.trans (hσ i hi)), h.symm⟩⟩
+  let a := vals (finrank 𝕜 E₁) A.singularValues
+  let b := vals (finrank 𝕜 E₂) B.singularValues
+  let c := vals (finrank 𝕜 (WithLp 2 (E₁ × E₂))) C.singularValues
+  have hcount (s : ℝ) (hs : s ≠ 0) : c.count s = (a + b).count s := by
+    dsimp only [c, a, b]
+    rw [Multiset.count_add, count_vals _ _ (fun _ => C.singularValues_of_finrank_le) hs,
+      count_vals _ _ (fun _ => A.singularValues_of_finrank_le) hs,
+      count_vals _ _ (fun _ => B.singularValues_of_finrank_le) hs]
+    exact LinearMap.ncard_ofPred_singularValues_prodMap_withLpMap A B
+  have hcard : c.card = (a + b).card := by
+    simp only [c, a, b, vals, Multiset.card_map, Finset.card_val, Finset.card_range,
+      Multiset.card_add, ← Module.finrank_prod]
+    exact (WithLp.linearEquiv 2 𝕜 (E₁ × E₂)).finrank_eq
+  have hparts (m : Multiset ℝ) :
+      m.card = m.count 0 + (m.filter (fun r => 0 ≠ r)).card := by
+    rw [Multiset.count_eq_card_filter_eq, ← Multiset.card_add]
+    exact congrArg Multiset.card (Multiset.filter_add_not (0 = ·) m).symm
+  have hfilter : c.filter (fun r => 0 ≠ r) = (a + b).filter (fun r => 0 ≠ r) := by
+    refine Multiset.ext.mpr fun s => ?_
+    simp only [Multiset.count_filter]
+    split_ifs with hs
+    · exact hcount s hs.symm
+    · rfl
+  have hzero : c.count 0 = (a + b).count 0 := by
+    rw [hparts c, hparts (a + b), hfilter] at hcard
+    exact Nat.add_right_cancel hcard
+  have hvals : c = a + b := by
+    refine Multiset.ext.mpr fun s => ?_
+    by_cases hs : s = 0
+    · simpa only [hs] using hzero
+    · exact hcount s hs
+  rw [Fin.sum_univ_eq_sum_range (fun i => f (C.singularValues i)),
+    Fin.sum_univ_eq_sum_range (fun i => f (A.singularValues i)),
+    Fin.sum_univ_eq_sum_range (fun i => f (B.singularValues i))]
+  simpa only [c, a, b, vals, C, Finset.sum,
+    Multiset.map_add, Multiset.sum_add, Multiset.map_map, Function.comp_def]
+    using congrArg (fun m : Multiset ℝ => (m.map f).sum) hvals
 
 /-- The actual finite Schatten power is additive on orthogonal block
 sums of endomorphisms over either real or complex scalars. -/

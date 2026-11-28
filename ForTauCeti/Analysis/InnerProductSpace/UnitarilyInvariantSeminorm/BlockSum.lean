@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import TauCeti.Analysis.InnerProductSpace.BlockSum
+import TauCeti.Analysis.InnerProductSpace.ProdL2
 
 /-!
 # Orthogonal block sums of rectangular maps
@@ -140,22 +141,7 @@ theorem starProjection_orthogonalBlockSumSubmodule
         WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (E₁ × E₂)) =
       (((U₁.starProjection : E₁ →L[𝕜] E₁) : E₁ →ₗ[𝕜] E₁).prodMap
         ((U₂.starProjection : E₂ →L[𝕜] E₂) : E₂ →ₗ[𝕜] E₂)).withLpMap 2 := by
-  refine LinearMap.ext fun x => ?_
-  refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
-  · rw [mem_orthogonalBlockSumSubmodule]
-    exact ⟨U₁.starProjection_apply_mem _, U₂.starProjection_apply_mem _⟩
-  · intro y hy
-    rw [mem_orthogonalBlockSumSubmodule] at hy
-    rw [WithLp.prod_inner_apply]
-    have h₁ := Submodule.starProjection_inner_eq_zero (K := U₁)
-      (WithLp.ofLp x).1 (WithLp.ofLp y).1 hy.1
-    have h₂ := Submodule.starProjection_inner_eq_zero (K := U₂)
-      (WithLp.ofLp x).2 (WithLp.ofLp y).2 hy.2
-    change ⟪(WithLp.ofLp x).1 - U₁.starProjection (WithLp.ofLp x).1,
-        (WithLp.ofLp y).1⟫_𝕜 +
-      ⟪(WithLp.ofLp x).2 - U₂.starProjection (WithLp.ofLp x).2,
-        (WithLp.ofLp y).2⟫_𝕜 = 0
-    rw [h₁, h₂, add_zero]
+  exact LinearMap.ext fun x => WithLp.starProjection_comap_prod U₁ U₂ x
 
 /-- **A blockwise scalar singular-value identity transfers to every unitarily invariant
 seminorm on the block sum.**

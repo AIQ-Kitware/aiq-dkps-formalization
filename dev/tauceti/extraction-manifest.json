@@ -8660,6 +8660,40 @@
       "integration": "b01b009b08f6340c9d6d0c383eb0095ce2b4f9ba, d81b59c694a9155b934108465cc1c824cf458226",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "The native contraction trace bound replaces the local absolute trace theorem and supplies the unitary support inequality using the inverse isometry. The native equality criterion at the identity reduces the finite real-trace equality to positivity. Zero dimension and maps with kernel are preserved. Real and complex transport consumers keep their statements. DKPS proof descent for these integrations is unverified."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum, ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum, DavisKahan.FiniteDimensional.Sharpness",
+      "source_declarations": [
+        "TauCeti.UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule",
+        "TauCeti.projection_orthogonalBlockSumSubmodule",
+        "TauCeti.DavisKahan.FiniteDimensional.projection_orthogonalBlockSumSubmodule"
+      ],
+      "original_source_anchor": "bf84b6ff10c2adf06760b3ddc38c739e4687fb7f (block projector), f8a57362456628aaefaa6523a25f85bb2c790faa (angle and sharpness), 1024bf48b (pre-retirement)",
+      "authors_license": "Jon Crall and Claude Fable 5 (block module), GPT-5.6 Sol (angle geometry), and GPT 5.6 High (sharpness). Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProdL2",
+      "final_declarations": ["WithLp.starProjection_comap_prod"],
+      "roadmap_targets": ["TaubesGromov §7.20 (product-subspace projector prerequisite)"],
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/7619",
+      "integration": "e05f2514af29ec24ff98757802a0a9ac9facf4dd",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Bundle the native pointwise fact to replace the finite DKPS orthogonality proof. Remove the two forwarding declarations and update their downstream consumers and source census. The existing field-linear product subspace still supplies the carrier in paper-facing statements. The native proof uses projected factors in arbitrary ambient inner product spaces. It landed as a Sobolev trace dependency, with the product-subspace formula shared with the earlier integer-lattice construction. DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten, ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockTrace",
+      "source_declarations": [
+        "TauCeti.sum_singularValues_prodMap_withLpMap_of_eigenbases",
+        "TauCeti.sum_singularValues_prodMap_withLpMap",
+        "TauCeti.kyFanSum_orthogonalBlockSum_full"
+      ],
+      "original_source_anchor": "0f5eb9611f66eb987a0d797bdd5de8aab3f02b7e (penalty sum), c19fb1d087ce3172928991a44ee3133c527b0758 (trace formula), 1024bf48b (pre-retirement)",
+      "authors_license": "Jon Crall and GPT-6, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BlockSum",
+      "final_declarations": ["LinearMap.ncard_ofPred_singularValues_prodMap_withLpMap"],
+      "roadmap_targets": ["Majorization B4 (orthogonal block sums)"],
+      "upstream_pr": "#14456, #35650",
+      "integration": "13f061f3f1b1dfce3a28c5af2629c16b08b97584, 5eeeaf3f759c9cea1e90419989d43b7c6150f16e",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Use native block counts for every nonzero value. The dimensions determine the zero multiplicity in the finite lists, so the formula still accepts an arbitrary penalty with values in any additive commutative monoid. The full Ky Fan formula uses the identity penalty. Retire the separate polar/eigenbasis and basis-trace calculations. #14456 reports no external formalization was vendored."
     }
   ],
   "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"
