@@ -1,5 +1,38 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 bounded spectral truncations and complementary ranges
+
+The bounded Sylvester and tangent truncations use the graph law from
+our DKPS-derived #44695 for the action of the centered spectral cut.
+Its centered-interval symbol is the native `BoundedBorelFunction.truncate`
+of the real coordinate. The native conjugation and indicator laws
+give symmetry and absorption by the cutoff on both sides. Lean checked
+the retired center-zero formulas on arbitrary bounded Borel sets,
+including arbitrary real values of the original bound. The paper
+truncation continues to be defined at every real radius.
+[#44695 integration](https://github.com/TauCetiProject/TauCeti/commit/391615e058611f8ea2939836b382f716e2095ca4) ·
+[#40748 integration](https://github.com/TauCetiProject/TauCeti/commit/398ebfee522278dea8a0b1a492983f55adf4790a) ·
+[#40390 move](https://github.com/TauCetiProject/TauCeti/commit/be72fe3dca1430aace55e47bc509068181d1296e)
+
+The #40748 integration by chrisflav also supplies general strong convergence of
+spectral projections. The centered, half-line, and reducing-subspace
+cutoffs now use it directly to exhaust the relevant ranges (SA-E31).
+For the central-band and Section 8 branches, kim-em's #1351 supplies
+the orthogonal range of the complementary star projection. The
+former Cayley construction module retires with its last lemma.
+DKPS proof descent for #40748 and #1351 is unverified.
+[#1351 integration](https://github.com/TauCetiProject/TauCeti/commit/bbe82ab541c0f117f704523a2de411b765f1447b)
+
+The extraction manifest preserves the original bounded spectral measure,
+complement, and truncation sources at DKPS `1fb7178f5`. The arbitrary-band
+domain inclusion and centered norm estimate still serve the free-beam,
+double-angle, and Sylvester proofs.
+
+The focused and default builds, Challenge, and the result semantic-surface
+audit passed with warnings treated as errors. All 1,569 source-census
+references resolved, and the 17 available Davis–Kahan comparator signatures
+matched.
+
 ## November 28 native Stone group and the Yosida limit
 
 DKPS now selects the unitary group from lucien-ad-lucem's Stone theorem

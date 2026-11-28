@@ -552,7 +552,7 @@
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.UnboundedSinThetaDataPMap.toClosed": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.UnboundedSylvesterGapPMap": "",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.UnboundedSylvesterGapPMap.toClosed": "",
-  "TauCeti.DavisKahan.Experimental.ExactSinTheta.abs_le_max_zero_of_mem_Icc": "TauCeti.DavisKahan.ExactSinTheta.abs_le_max_zero_of_mem_Icc",
+  "TauCeti.DavisKahan.Experimental.ExactSinTheta.abs_le_max_zero_of_mem_Icc": "TauCeti.DavisKahan.ExactSinTheta.abs_sub_zero_le_radius_of_mem_Icc",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.adjointResidualBlock_mem_and_gauge_le": "TauCeti.DavisKahan.ExactSinTheta.adjointResidualBlock_mem_and_gauge_le",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.adjoint_comp_self_eq_id_of_isometry": "TauCeti.DavisKahan.ExactSinTheta.adjoint_comp_self_eq_id_of_isometry",
   "TauCeti.DavisKahan.Experimental.ExactSinTheta.adjoint_planarComplementMap_apply": "TauCeti.DavisKahan.ExactSinTheta.adjoint_planarComplementMap_apply",

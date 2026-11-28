@@ -177,7 +177,6 @@ topics:
   title: The spectral measure of an unbounded self-adjoint operator, and Stone
   modules:
   - Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
-  - Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction
   - Analysis.InnerProductSpace.LinearPMap.SpectralGrid
   - Analysis.InnerProductSpace.LinearPMap.SpectralSupport
   - Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
@@ -499,7 +498,6 @@ rungs:
   - Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
   - Analysis.InnerProductSpace.LinearPMap.SpectralGrid
   - Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
-  - Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction
   - Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
   - Analysis.InnerProductSpace.LinearPMap.SpectralSupport
   - Analysis.InnerProductSpace.LinearPMap.YosidaApproximation

@@ -7,6 +7,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
+import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.DominatedConvergence
 
 /-!
 # Every reducing subspace carries the Appendix's cutoff family
@@ -249,13 +250,14 @@ theorem tendsto_reducingCutoffSeq (hA : IsSelfAdjoint A)
   have hAU : IsSelfAdjoint (LinearPMap.reducingRestriction A U hred) := by
     simpa only [LinearPMap.reducingRestriction_eq_restrict] using
       hred.isSelfAdjoint_restrict hA
-  have hshift : Filter.Tendsto (fun n : ℕ => (n : ℝ)) Filter.atTop Filter.atTop :=
-    tendsto_natCast_atTop_atTop
   have hband : Filter.Tendsto
       (fun n : ℕ => (_root_.LinearPMap.spectralPVM _ hAU).proj
         (Set.Icc (-(n : ℝ)) (n : ℝ)) measurableSet_Icc ⟨x, hx⟩)
       Filter.atTop (nhds (⟨x, hx⟩ : U)) :=
-    (LinearPMap.tendsto_specProjection_Icc hAU ⟨x, hx⟩).comp hshift
+    (_root_.LinearPMap.spectralPVM _ hAU).tendsto_proj_apply
+      (fun _ : ℕ => measurableSet_Icc) ⟨x, hx⟩
+      (Filter.Eventually.of_forall fun s =>
+        (tendsto_natCast_atTop_atTop.eventually_ge_atTop |s|).mono fun _ hs => abs_le.mp hs)
   have hcoe : Filter.Tendsto
       (fun n : ℕ => (((_root_.LinearPMap.spectralPVM _ hAU).proj
         (Set.Icc (-(n : ℝ)) (n : ℝ)) measurableSet_Icc ⟨x, hx⟩ : U) : H))

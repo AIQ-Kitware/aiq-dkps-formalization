@@ -275,7 +275,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
         "ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded",
@@ -311,7 +310,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
@@ -4107,34 +4105,61 @@
         "resolventSymbol",
         "resolventSymbol_apply",
         "resolvent_eq_cfcHom",
-        "resolvent_negI_eq_borelCalculus"
+        "resolvent_negI_eq_borelCalculus",
+        "boundedCoordinate",
+        "spectralCut_zero_integral",
+        "spectralCut_zero_eq_on_specProjection",
+        "isSelfAdjoint_spectralCut_zero",
+        "spectralCut_zero_mul_specProjection",
+        "specProjection_mul_spectralCut_zero",
+        "tendsto_specProjection_Icc"
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
-        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
-        "TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjoint",
-        "Mathlib"
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup"
+        "ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff",
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity",
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar",
+        "DavisKahan.Specialized.FreeBeam.BeamSection9",
+        "DavisKahan.Specialized.FreeBeam.BeamTangent",
+        "DavisKahan.TanTheta.UnboundedVector"
       ],
-      "status": "staged",
+      "status": "consumed-upstream-with-dkps-result-retained",
       "upstream_pr": null,
-      "migration_note": "2026-11-27: Retire reducesSubspace_specRange, specRestrict, specRestrict_domain, specRestrict_apply, isFormalAdjoint_specRestrict, exists_specRestrict_resolvent, dense_specRestrict_domain, isSelfAdjoint_specRestrict, and mem_resolventSet_specRestrict_of_gap from the SpectralMeasure module and its Construction split. Their source is cc24e76466ace67f68c2e384af4ad8748a21e32b at those paths, Jon Crall / Claude Opus 5, Kitware 2026, Apache-2.0. Consume LinearPMap.restrict, restrict_domain, mem_restrict_domain, coe_restrict_apply, IsReducing.dense_restrict_domain and IsSelfAdjoint.isReducing_range_spectralPVM_proj, isSelfAdjoint_restrict_range_spectralPVM_proj and mem_resolventSet_restrict_range_spectralPVM_proj from the accepted Forgejo #1964 integration c8bb063fe6bd7a441b156c5cc6e03b027dd29579 (SA-E09/E10). The native gap theorem only needs the projection on the gap to vanish and hence covers the original set-theoretic gap. Retire re_inner_apply_bounds_of_subset_Icc in favor of IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj and re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj (#41596, 81171bd524be1b4f119bb36877630bb96aaed6f8, SA-E11–E13). The paper-facing restriction, inclusion and localization preserve their hypotheses and conclusions, including for the trivial spectral range. Both upstream submissions are by other contributors, with direct DKPS proof descent undisclosed. Retain the Borel-coordinate bridge, spectral cut and exhaustion results. November 27: Derive interval cutoff convergence from ProjValMeasure.tendsto_proj_apply introduced by chrisflav in #43205 at 53cb857c7f0558aea91b355f1b354e2f86c4d7a6, accepted head 782bab02d0d540e29ed44b2a65b89718f4b446ae. The proof uses eventual membership in symmetric real intervals and no longer passes through Cayley-coordinate diagonal integrals. The November 28 migration uses the accepted cut in DavisKahan.SpectralTheory.BoundedFromSpectrum.exists_boundedRealization_of_spectrum_subset_Icc. That proof constructs the whole-space realization from the accepted centered spectralCut plus the midpoint. It uses spectralPVM_proj_eq_zero_of_forall_mem_resolventSet and proj_compl for full spectral support, and consumes IsSelfAdjoint.mem_graph_spectralCut and norm_spectralCut_le directly from DKPS-derived #44695 (391615e058611f8ea2939836b382f716e2095ca4, original DKPS donor 797408205). DavisKahan.semibounded_of_spectrum_subset_Icc consumes the two spectralPVM half-line form criteria from roed-math’s #41596 (81171bd524be1b4f119bb36877630bb96aaed6f8), and keeps its complex domain-aware statement. The older bounded-realization argument was filed at 81a1db68905ea2c43403bca7b01f1f3016082a0e and earlier used Spectra. See ca0151a6fbb3e94637d8979de71523a2de43e5d3:DavisKahan/{SpectralTheory/BoundedFromSpectrum,Sylvester/Unbounded/IntervalExterior}.lean for the displaced proofs (Jon Crall and Claude Fable 5, Kitware, Apache-2.0).",
+      "migration_note": "2026-11-27: Retire reducesSubspace_specRange, specRestrict, specRestrict_domain, specRestrict_apply, isFormalAdjoint_specRestrict, exists_specRestrict_resolvent, dense_specRestrict_domain, isSelfAdjoint_specRestrict, and mem_resolventSet_specRestrict_of_gap from the SpectralMeasure module and its Construction split. Their source is cc24e76466ace67f68c2e384af4ad8748a21e32b at those paths, Jon Crall / Claude Opus 5, Kitware 2026, Apache-2.0. Consume LinearPMap.restrict, restrict_domain, mem_restrict_domain, coe_restrict_apply, IsReducing.dense_restrict_domain and IsSelfAdjoint.isReducing_range_spectralPVM_proj, isSelfAdjoint_restrict_range_spectralPVM_proj and mem_resolventSet_restrict_range_spectralPVM_proj from the accepted Forgejo #1964 integration c8bb063fe6bd7a441b156c5cc6e03b027dd29579 (SA-E09/E10). The native gap theorem only needs the projection on the gap to vanish and hence covers the original set-theoretic gap. Retire re_inner_apply_bounds_of_subset_Icc in favor of IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj and re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj (#41596, 81171bd524be1b4f119bb36877630bb96aaed6f8, SA-E11–E13). The paper-facing restriction, inclusion and localization preserve their hypotheses and conclusions, including for the trivial spectral range. Both upstream submissions are by other contributors, with direct DKPS proof descent undisclosed. Retain the Borel-coordinate bridge, spectral cut and exhaustion results. November 27: Derive interval cutoff convergence from ProjValMeasure.tendsto_proj_apply introduced by chrisflav in #43205 at 53cb857c7f0558aea91b355f1b354e2f86c4d7a6, accepted head 782bab02d0d540e29ed44b2a65b89718f4b446ae. The proof uses eventual membership in symmetric real intervals and no longer passes through Cayley-coordinate diagonal integrals. The November 28 migration uses the accepted cut in DavisKahan.SpectralTheory.BoundedFromSpectrum.exists_boundedRealization_of_spectrum_subset_Icc. That proof constructs the whole-space realization from the accepted centered spectralCut plus the midpoint. It uses spectralPVM_proj_eq_zero_of_forall_mem_resolventSet and proj_compl for full spectral support, and consumes IsSelfAdjoint.mem_graph_spectralCut and norm_spectralCut_le directly from DKPS-derived #44695 (391615e058611f8ea2939836b382f716e2095ca4, original DKPS donor 797408205). DavisKahan.semibounded_of_spectrum_subset_Icc consumes the two spectralPVM half-line form criteria from roed-math’s #41596 (81171bd524be1b4f119bb36877630bb96aaed6f8), and keeps its complex domain-aware statement. The older bounded-realization argument was filed at 81a1db68905ea2c43403bca7b01f1f3016082a0e and earlier used Spectra. See ca0151a6fbb3e94637d8979de71523a2de43e5d3:DavisKahan/{SpectralTheory/BoundedFromSpectrum,Sylvester/Unbounded/IntervalExterior}.lean for the displaced proofs (Jon Crall and Claude Fable 5, Kitware, Apache-2.0). November 28. The centered-cut graph equation uses native #44695 (391615e058611f8ea2939836b382f716e2095ca4), which adapts DKPS. The bounded truncation interface reads symmetry and two-sided projection absorption from BoundedBorelFunction.truncate, star_truncate and indicator_norm_le_truncate. #40748 (398ebfee522278dea8a0b1a492983f55adf4790a) supplies level-set truncation and general projection convergence; #40390 (be72fe3dca1430aace55e47bc509068181d1296e) moves the bounded symbol API. The centered interval and reducing-subspace limits use ProjValMeasure.tendsto_proj_apply directly. The exact original arbitrary-Borel-set center-zero comparison was checked using the native truncation restricted by the Borel indicator for arbitrary real bounds. The centered-interval consumer also covers negative radii. Original sources 1fb7178f5 under the staging path and DavisKahan/SpectralTheory/BoundedTruncation.lean. Jon Crall, Claude Opus 5, and OpenAI GPT-5.6 Thinking as recorded in the respective Kitware headers, Apache-2.0. The two bounded-range facts for arbitrary Borel bands continue to use the graph and norm laws. DKPS proof descent for #40748 is unverified.",
       "retired_local_declarations": [
         "cayleyInv_add_I",
-        "inv_two_I_mul_one_sub_mul_cayleyInv_add_I"
+        "inv_two_I_mul_one_sub_mul_cayleyInv_add_I",
+        "boundedCoordinate",
+        "spectralCut_zero_integral",
+        "spectralCut_zero_eq_on_specProjection",
+        "isSelfAdjoint_spectralCut_zero",
+        "spectralCut_zero_mul_specProjection",
+        "specProjection_mul_spectralCut_zero",
+        "tendsto_specProjection_Icc"
       ],
       "accepted_upstream_declarations": [
-        "ProjValMeasure.tendsto_proj_apply"
+        "ProjValMeasure.tendsto_proj_apply",
+        "LinearPMap.spectralCut",
+        "IsSelfAdjoint.mem_graph_spectralCut",
+        "IsSelfAdjoint.spectralCut_eq_integral",
+        "BoundedBorelFunction.truncate",
+        "BoundedBorelFunction.star_truncate",
+        "BoundedBorelFunction.indicator_norm_le_truncate",
+        "ProjValMeasure.integral_mul_proj",
+        "ProjValMeasure.proj_mul_integral"
+      ],
+      "maintained_declarations": [
+        "TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded",
+        "TauCeti.LinearPMap.norm_sub_smul_le_of_mem_specRange"
       ]
     },
     {
@@ -7308,7 +7333,8 @@
         "TauCeti.LinearPMap.specProjection_eq_zero_of_subset",
         "TauCeti.DavisKahan.TanTheta.specProjection_eq_zero_of_subset",
         "TauCeti.LinearPMap.specProjection_mul_specProjection_of_subset",
-        "TauCeti.LinearPMap.specProjection_apply_specProjection_of_subset"
+        "TauCeti.LinearPMap.specProjection_apply_specProjection_of_subset",
+        "TauCeti.LinearPMap.specRange_compl"
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
@@ -7316,18 +7342,16 @@
       "ownership_class": "tauceti",
       "roadmap_target": "SA-E01 native Cayley PVM, SA-E02 pole nullity, and spectral projection and resolvent laws",
       "provenance_class": "Independent native PVM construction and resolvent calculus consumed. DKPS Cayley-coordinate contribution integrated separately in the narrower #29129 replay. The PVM construction in that submission was dropped.",
-      "direct_dependencies": [
-        "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded",
-        "TauCeti.Analysis.Complex.UpperHalfPlane.Cayley",
-        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "partially-upstreamed",
+      "status": "retired-upstream-subsumed-local-copy-removed",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/41596",
-      "migration_note": "2026-11-05 prepared and fork-pushed port-sa-e01-cayley-spectral-pvm at 2f582c0f01d06288b8401ced61f6ec030ed6ba34, based on accepted be6518de91d3cd0f039f0011b6b12f84690b0b62. Directly maps the native #27902 representation PVM of the Cayley transform to the real line; original subtype coordinate generalized to ℂ. SA-E02 nullity and downstream resolvent results are not claimed. Focused build 6515 jobs, 13 linters, scope examples and full style passed. Independent rubric review and live host preflight required; no PR submitted, no local retirement or integration claimed. November 22: remove the local spectralPVM factory and use LinearPMap.spectralPVM A hA directly from independent #41596. spectralPVM_def remains a genuine bridge to the legacy BorelCalculus representation, proved by native diagonal measure characterization. Other local Borel/restriction APIs are not declared exhausted. The narrowed #29129 replay supplies only coordinate auxiliaries, not the PVM construction. November 27: Retire the legacy PVM representation bridge, pole-nullity proof, and Cayley resolvent-symbol proof chain. Use the native PVM pushforward and spectral-projection intertwining and resolvent commutation from #41596 (81171bd524be1b4f119bb36877630bb96aaed6f8, accepted head 81ac90ae300b8a13dab49958b113afdcfb02fa71, roed-math). Use the Cayley coordinate and measurability from the narrower DKPS #29129 integration 557acd65e46af69e3208452678c225b6d75141bf, and the pole nullity from kim-em Forgejo #1165 at fb45507f3f0cacc2e9c175ed29acd861bea8bc8b. The orthogonal projection onto the spectral range uses Forgejo #1964 at c8bb063fe6bd7a441b156c5cc6e03b027dd29579. Keep the spectral projection and range names used by the paper, with native domain and action proofs. Original split f2250101339121c5129bab32f72a44383a679c83, Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The subsequent projection and range migration retires both aliases and their forwarding laws from DKPS 9b17124f5. Consumers directly use the native PVM projection and its range with the original measurable sets and domain hypotheses. The abstract projection laws descend from the DKPS/Spectra donor via Jon Crall #17527 (fde7c341f8e9b59c5083a87835b330d15581ad8f). The abstract projection laws are an explicit proof adaptation. The Cayley construction and reducing-range integrations were contributed separately. Mathlib supplies LinearMap.IsIdempotentElem.mem_range_iff and LinearMap.mem_range_self. specRange_compl remains in DKPS, derived from the native complement law and the orthogonal projection onto the range. The FreeBeam range inclusions use the native range monotonicity from #17527, renamed to ProjValMeasure.range_proj_mono in #40245 at 4084dee497a91e406cc88eb8c57123e67d3c7007. The specialized monotonicity wrapper originated in DKPS 0ca1b72c1 (Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0). November 27: After 0efd21085, retire the Gram PVM forwarding definition and its definitional projection bridge. The native PVM of gramLinearPMap supplies the same measurable bands for rectangular maps between arbitrary complete complex Hilbert spaces. Gram donor recorded at b081f639933cd952c8a5d8a710c2afd92a6ccb76 (Jon Crall and OpenAI GPT-5.6 Thinking). The Rayleigh–Ritz and cutoff callers use the native intersection, nested-set, idempotence, and null-set laws. The DKPS source is recorded in 028207b91ec15a8c178efe95ebbfe75b2e078a52 and 3ed9ed57bc0017dc8e27537164d153e1d5f8d913 (Jon Crall and Claude Opus 5), and the paper null-set helper at 0efd21085 (Jon Crall and Claude Fable 5). Kitware 2026, Apache-2.0. The abstract projection laws descend from #17527, pointwise idempotence from #19145 (2fd30bfaec10bd32fa274550505469d8f48a773c), and null-set monotonicity from #19005 (019f1ea2f4d48301568f5b01514068cd0e6b85ff). The accepted integrations use the DKPS-derived PVM core.",
+      "migration_note": "2026-11-05 prepared and fork-pushed port-sa-e01-cayley-spectral-pvm at 2f582c0f01d06288b8401ced61f6ec030ed6ba34, based on accepted be6518de91d3cd0f039f0011b6b12f84690b0b62. Directly maps the native #27902 representation PVM of the Cayley transform to the real line; original subtype coordinate generalized to ℂ. SA-E02 nullity and downstream resolvent results are not claimed. Focused build 6515 jobs, 13 linters, scope examples and full style passed. Independent rubric review and live host preflight required; no PR submitted, no local retirement or integration claimed. November 22: remove the local spectralPVM factory and use LinearPMap.spectralPVM A hA directly from independent #41596. spectralPVM_def remains a genuine bridge to the legacy BorelCalculus representation, proved by native diagonal measure characterization. Other local Borel/restriction APIs are not declared exhausted. The narrowed #29129 replay supplies only coordinate auxiliaries, not the PVM construction. November 27: Retire the legacy PVM representation bridge, pole-nullity proof, and Cayley resolvent-symbol proof chain. Use the native PVM pushforward and spectral-projection intertwining and resolvent commutation from #41596 (81171bd524be1b4f119bb36877630bb96aaed6f8, accepted head 81ac90ae300b8a13dab49958b113afdcfb02fa71, roed-math). Use the Cayley coordinate and measurability from the narrower DKPS #29129 integration 557acd65e46af69e3208452678c225b6d75141bf, and the pole nullity from kim-em Forgejo #1165 at fb45507f3f0cacc2e9c175ed29acd861bea8bc8b. The orthogonal projection onto the spectral range uses Forgejo #1964 at c8bb063fe6bd7a441b156c5cc6e03b027dd29579. Keep the spectral projection and range names used by the paper, with native domain and action proofs. Original split f2250101339121c5129bab32f72a44383a679c83, Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The subsequent projection and range migration retires both aliases and their forwarding laws from DKPS 9b17124f5. Consumers directly use the native PVM projection and its range with the original measurable sets and domain hypotheses. The abstract projection laws descend from the DKPS/Spectra donor via Jon Crall #17527 (fde7c341f8e9b59c5083a87835b330d15581ad8f). The abstract projection laws are an explicit proof adaptation. The Cayley construction and reducing-range integrations were contributed separately. Mathlib supplies LinearMap.IsIdempotentElem.mem_range_iff and LinearMap.mem_range_self. specRange_compl remains in DKPS, derived from the native complement law and the orthogonal projection onto the range. The FreeBeam range inclusions use the native range monotonicity from #17527, renamed to ProjValMeasure.range_proj_mono in #40245 at 4084dee497a91e406cc88eb8c57123e67d3c7007. The specialized monotonicity wrapper originated in DKPS 0ca1b72c1 (Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0). November 27: After 0efd21085, retire the Gram PVM forwarding definition and its definitional projection bridge. The native PVM of gramLinearPMap supplies the same measurable bands for rectangular maps between arbitrary complete complex Hilbert spaces. Gram donor recorded at b081f639933cd952c8a5d8a710c2afd92a6ccb76 (Jon Crall and OpenAI GPT-5.6 Thinking). The Rayleigh–Ritz and cutoff callers use the native intersection, nested-set, idempotence, and null-set laws. The DKPS source is recorded in 028207b91ec15a8c178efe95ebbfe75b2e078a52 and 3ed9ed57bc0017dc8e27537164d153e1d5f8d913 (Jon Crall and Claude Opus 5), and the paper null-set helper at 0efd21085 (Jon Crall and Claude Fable 5). Kitware 2026, Apache-2.0. The abstract projection laws descend from #17527, pointwise idempotence from #19145 (2fd30bfaec10bd32fa274550505469d8f48a773c), and null-set monotonicity from #19005 (019f1ea2f4d48301568f5b01514068cd0e6b85ff). The accepted integrations use the DKPS-derived PVM core. November 28. The last spectral-range complement proof retires. Section 8 and the central-band proof apply IsStarProjection.range_one_sub to the native PVM complement. The range theorem from #1351 (bbe82ab541c0f117f704523a2de411b765f1447b, kim-em, Varifolds) works for any star projection over an RCLike field in a complete space. The original complex PVM result was checked using this general law. Source 1fb7178f5 at the staging path, Jon Crall and Claude Opus 5, Kitware, Apache-2.0. DKPS proof descent for #1351 is unverified.",
       "final_declarations": [
-        "LinearPMap.spectralPVM"
+        "LinearPMap.spectralPVM",
+        "ProjValMeasure.proj_compl",
+        "IsStarProjection.range_one_sub"
       ],
       "integration": "81171bd524be1b4f119bb36877630bb96aaed6f8",
       "retired_local_declarations": [
@@ -7385,7 +7409,8 @@
         "TauCeti.LinearPMap.specProjection_eq_zero_of_subset",
         "TauCeti.DavisKahan.TanTheta.specProjection_eq_zero_of_subset",
         "TauCeti.LinearPMap.specProjection_mul_specProjection_of_subset",
-        "TauCeti.LinearPMap.specProjection_apply_specProjection_of_subset"
+        "TauCeti.LinearPMap.specProjection_apply_specProjection_of_subset",
+        "specRange_compl"
       ],
       "accepted_upstream_declarations": [
         "Complex.inverseCayleyCoord",

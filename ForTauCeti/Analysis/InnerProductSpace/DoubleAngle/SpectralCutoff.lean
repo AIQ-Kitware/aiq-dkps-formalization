@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
+import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.DominatedConvergence
 
 /-!
 # The canonical bounded cutoff, and unconditional pole exclusion
@@ -159,7 +160,10 @@ theorem tendsto_spectralCutoff (hA : IsSelfAdjoint A) (c : ℝ) {x : H}
   have hshift : Filter.Tendsto (fun n : ℕ => |c| + (n : ℝ)) Filter.atTop
       Filter.atTop :=
     Filter.tendsto_atTop_add_const_left _ _ tendsto_natCast_atTop_atTop
-  have hcomp := (LinearPMap.tendsto_specProjection_Icc hA x).comp hshift
+  have hfull := (A.spectralPVM hA).tendsto_proj_apply (fun _ : ℝ => measurableSet_Icc) x
+    (Filter.Eventually.of_forall fun s =>
+      (Filter.eventually_ge_atTop |s|).mono fun _ hs => abs_le.mp hs)
+  have hcomp := hfull.comp hshift
   refine hcomp.congr fun n => ?_
   set T : ℝ := |c| + (n : ℝ) with hTdef
   have hcT : c ≤ T := by

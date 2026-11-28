@@ -116,7 +116,7 @@ theorem measurableSet_bandExterior (l r d : ℝ) : MeasurableSet (bandExterior l
 /-- **The complement of the closed band selects the exterior.**
 
 `(Icc l r)ᶜ` also contains the two open gaps, but they carry no spectrum, so the
-two spectral ranges coincide.  Combined with `specRange_compl` this identifies
+two spectral ranges coincide. Combined with orthogonal projection complementation this identifies
 the orthogonal complement of the band range with the exterior range. -/
 theorem specRange_bandExterior_eq_orthogonal
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {l r d : ℝ}
@@ -165,8 +165,8 @@ theorem specRange_bandExterior_eq_orthogonal
     ext x
     simp only [← Submodule.starProjection_eq_self_iff, ProjValMeasure.starProjection_range_proj,
         hproj]
-  rw [← hrange]
-  exact TauCeti.LinearPMap.specRange_compl hA (Set.Icc l r) measurableSet_Icc
+  rw [← hrange, ProjValMeasure.proj_compl, ← ContinuousLinearMap.one_def]
+  exact ((A.spectralPVM hA).isStarProjection_proj (Set.Icc l r) measurableSet_Icc).range_one_sub
 
 /-- **The band block's real spectrum lies in the band.** -/
 theorem realSpectrum_specRestrict_Icc_subset

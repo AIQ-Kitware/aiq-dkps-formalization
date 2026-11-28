@@ -80,9 +80,11 @@ theorem canonicalLowBranchUnbounded_orthogonal
     (canonicalLowBranchUnbounded hB alpha)ᗮ
       = ((B.spectralPVM hB).proj (Set.Ioi alpha) measurableSet_Ioi).range := by
   rw [canonicalLowBranchUnbounded,
-    ← TauCeti.LinearPMap.specRange_compl hB (Set.Iic alpha) measurableSet_Iic]
-  rw [(B.spectralPVM hB).proj_congr (Set.compl_Iic (a := alpha))
-    measurableSet_Iic.compl measurableSet_Ioi]
+    ← (B.spectralPVM hB).proj_congr (Set.compl_Iic (a := alpha))
+      measurableSet_Iic.compl measurableSet_Ioi,
+    ProjValMeasure.proj_compl, ← ContinuousLinearMap.one_def]
+  exact ((B.spectralPVM hB).isStarProjection_proj (Set.Iic alpha)
+    measurableSet_Iic).range_one_sub.symm
 
 /-- **The sharp upper form bound on the branch.**  `Λ₀ ≤ α`. -/
 theorem re_inner_le_of_mem_canonicalLowBranchUnbounded

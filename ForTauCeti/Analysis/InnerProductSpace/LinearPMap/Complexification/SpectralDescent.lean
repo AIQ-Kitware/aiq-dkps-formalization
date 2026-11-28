@@ -19,7 +19,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic
 
 /-!
 # Spectral descent for real partial linear maps

@@ -10,6 +10,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.Sylvester.CutoffInterface
 public import DavisKahan.SpectralTheory.SpectralRestriction
+import TauCeti.Analysis.InnerProductSpace.ProjValMeasure.DominatedConvergence
 
 public section
 
@@ -63,9 +64,10 @@ theorem spectraSpectralCutoff_range_le_domain
     (hA : IsSelfAdjoint A) (τ : ℝ) :
     LinearMap.range (spectraSpectralCutoff A hA τ).toLinearMap ≤ A.domain := by
   rintro y ⟨x, rfl⟩
-  exact TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc
-    (M := max 0 τ) (fun s hs => le_trans (abs_le.mpr ⟨hs.1, hs.2⟩) (le_max_right 0 τ))
-    ((LinearMap.mem_range_self ((A.spectralPVM hA).proj _ measurableSet_Icc).toLinearMap x))
+  exact _root_.LinearPMap.mem_domain_of_mem_graph
+    (hA.mem_graph_spectralCut (Set.Icc (-τ) τ) measurableSet_Icc 0 (max 0 τ)
+      (le_max_left _ _) (fun s hs => by rw [sub_zero]; exact (abs_le.mpr hs).trans (le_max_right _ _))
+      x)
 
 /-- Spectral cutoffs preserve the domain and commute with the closed operator
 there. -/
@@ -84,7 +86,9 @@ theorem spectraSpectralCutoff_tendsto_identity
     (hA : IsSelfAdjoint A) (x : H) :
     Tendsto (fun τ : ℝ => spectraSpectralCutoff A hA τ x)
       atTop (𝓝 x) :=
-  TauCeti.LinearPMap.tendsto_specProjection_Icc hA x
+  (A.spectralPVM hA).tendsto_proj_apply (fun _ : ℝ => measurableSet_Icc) x
+    (Eventually.of_forall fun s =>
+      (eventually_ge_atTop |s|).mono fun _ hs => abs_le.mp hs)
 
 /-- The implementation of the coherent spectral cutoff interface. -/
 @[expose] noncomputable def spectraSpectralCutoffInterface
