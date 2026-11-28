@@ -9318,6 +9318,41 @@
       "integration": "2fef08202e8434f6e73cc761702d91c49ff642f9",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "The nuclear optimizer proofs identify the Schatten-one gauge by the native trace-class endpoint, with no separate expansion of the singular-value sum. The local optimizer results keep their original scope. This consumes David Roe's accepted family result as an existing dependency."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RayleighRitz",
+      "source_declarations": [
+        "TauCeti.LinearPMap.specProjection_apply_eq_zero_of_subset",
+        "TauCeti.LinearPMap.specProjection_add_compl_apply",
+        "TauCeti.LinearPMap.inner_specProjection_sub_specProjection",
+        "TauCeti.LinearPMap.specProjectionDomain_coe",
+        "TauCeti.LinearPMap.re_inner_eq_add_specProjection",
+        "TauCeti.LinearPMap.norm_sq_eq_add_specProjection",
+        "TauCeti.LinearPMap.specProjection_apply_eq_zero_of_eq_empty",
+        "TauCeti.LinearPMap.specProjection_apply_congr",
+        "TauCeti.LinearPMap.sub_specProjection_apply",
+        "TauCeti.LinearPMap.specProjection_eq_zero_of_eq_empty"
+      ],
+      "original_source_anchor": "028207b91ec15a8c178efe95ebbfe75b2e078a52 (original), 5841aecbf (pre-retirement)",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The native PVM core from #17527 preserves Adam Bornemann's Spectra ancestry via DKPS.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic; TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Null; TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic; Mathlib.Analysis.InnerProductSpace.Projection.Basic",
+      "final_declarations": [
+        "TauCeti.ProjValMeasure.proj_mul_eq_left_of_subset",
+        "TauCeti.ProjValMeasure.proj_mul_eq_zero_of_disjoint",
+        "TauCeti.ProjValMeasure.proj_compl",
+        "TauCeti.ProjValMeasure.proj_congr",
+        "TauCeti.ProjValMeasure.proj_empty",
+        "TauCeti.ProjValMeasure.proj_eq_zero_of_subset",
+        "TauCeti.ProjValMeasure.starProjection_range_proj",
+        "IsSelfAdjoint.intertwines_spectralPVM_proj",
+        "Submodule.inner_starProjection_left_eq_right",
+        "Submodule.norm_sq_eq_add_norm_sq_starProjection"
+      ],
+      "roadmap_targets": ["SA-B15–B18 (projection algebra)", "SA-B49 (PVM null sets)", "SA-E06–E07 (domain intertwining)", "SA-E09–E10 (spectral range projection infrastructure)"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/17527, https://github.com/TauCetiProject/TauCeti/pull/19005, https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1964, https://github.com/TauCetiProject/TauCeti/pull/41596",
+      "integration": "fde7c341f8e9b59c5083a87835b330d15581ad8f, 019f1ea2f4d48301568f5b01514068cd0e6b85ff, c8bb063fe6bd7a441b156c5cc6e03b027dd29579, 81171bd524be1b4f119bb36877630bb96aaed6f8",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Retire the projection-only wrappers and redundant coercion lemma. The quadratic form split uses native intertwining and orthogonal projection identities. The strict vector-local inequalities and trial-subspace gap and rank conclusions retain their original scope. #17527 explicitly adapted the DKPS PVM core, and #19005 uses that core. DKPS proof descent for the range-projection law in #1964 is unverified."
     }
   ],
   "current_consumption_pin": "48bd02333f9c6d89c2923a6c247a6771fba4c023"

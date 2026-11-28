@@ -72,38 +72,6 @@ theorem specProjection_apply_eq_zero_iff_diag (B : Set ℝ) (hB : MeasurableSet 
   rw [← ProjValMeasure.enorm_sq_proj_apply (A.spectralPVM hA) B hB x]
   simp only [pow_eq_zero_iff two_ne_zero, eNorm_eq_zero]
 
-/-- A vector with no spectral mass on `C` has none on a subset of `C`. -/
-theorem specProjection_apply_eq_zero_of_subset {B C : Set ℝ} (hB : MeasurableSet B)
-    (hC : MeasurableSet C) (hsub : B ⊆ C) {x : H}
-    (hx : (A.spectralPVM hA).proj C hC x = 0) :
-    (A.spectralPVM hA).proj B hB x = 0 := by
-  rw [specProjection_apply_eq_zero_iff_diag] at hx ⊢
-  exact measure_mono_null hsub hx
-
-/-- The projections of a set and its complement recompose the vector. -/
-theorem specProjection_add_compl_apply {B : Set ℝ} (hB : MeasurableSet B) (x : H) :
-    (A.spectralPVM hA).proj B hB x + (A.spectralPVM hA).proj Bᶜ hB.compl x = x := by
-  have h := congrArg (fun T : H →L[ℂ] H => T x) ((A.spectralPVM hA).proj_compl B hB)
-  rw [h]
-  simp
-
-/-- Spectral projections are orthogonal projections: the image of one vector is
-orthogonal to the complementary part of another. -/
-theorem inner_specProjection_sub_specProjection {B : Set ℝ} (hB : MeasurableSet B) (u v : H) :
-    ⟪(A.spectralPVM hA).proj B hB u, v - (A.spectralPVM hA).proj B hB v⟫_ℂ = 0 := by
-  have hadj : ((A.spectralPVM hA).proj B hB).adjoint = (A.spectralPVM hA).proj B hB :=
-    ((A.spectralPVM hA).isSelfAdjoint_proj B hB).adjoint_eq
-  have hidem : (A.spectralPVM hA).proj B hB ((A.spectralPVM hA).proj B hB v) =
-      (A.spectralPVM hA).proj B hB v := by
-    have h := congrArg (fun T : H →L[ℂ] H => T v) ((A.spectralPVM hA).proj_idem B hB)
-    simpa only [_root_.mul_apply_eq_comp] using h
-  have hmove : ∀ w : H,
-      ⟪(A.spectralPVM hA).proj B hB u, w⟫_ℂ = ⟪u, (A.spectralPVM hA).proj B hB w⟫_ℂ := by
-    intro w
-    nth_rewrite 1 [← hadj]
-    exact ContinuousLinearMap.adjoint_inner_left _ _ _
-  rw [hmove, map_sub, hidem, sub_self, inner_zero_right]
-
 /-! ## The energy split across a spectral projection -/
 
 /-- The spectral projection of a domain vector, as a domain vector. -/
@@ -111,11 +79,6 @@ theorem inner_specProjection_sub_specProjection {B : Set ℝ} (hB : MeasurableSe
 noncomputable def specProjectionDomain (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
     A.domain :=
   ⟨(A.spectralPVM hA).proj B hB (x : H), (hA.intertwines_spectralPVM_proj B hB).mem_domain x⟩
-
-/-- The underlying set of the spectral-projection domain. -/
-@[simp]
-theorem specProjectionDomain_coe (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
-    ((specProjectionDomain hA B hB x : A.domain) : H) = (A.spectralPVM hA).proj B hB (x : H) := rfl
 
 /-- **The quadratic form splits across a spectral projection.**  The cross terms
 vanish because the projection commutes with `A` on the domain and is an
@@ -126,68 +89,23 @@ theorem re_inner_eq_add_specProjection (B : Set ℝ) (hB : MeasurableSet B) (x :
             ((A.spectralPVM hA).proj B hB (x : H))⟫_ℂ).re
         + (⟪A (x - specProjectionDomain hA B hB x),
             ((x : H) - (A.spectralPVM hA).proj B hB (x : H))⟫_ℂ).re := by
-  set y : A.domain := specProjectionDomain hA B hB x with hy
-  have hyc : (y : H) = (A.spectralPVM hA).proj B hB (x : H) := rfl
-  have hAy : A y = (A.spectralPVM hA).proj B hB (A x) :=
+  let P := (A.spectralPVM hA).proj B hB
+  have hproj : P.range.starProjection = P := ProjValMeasure.starProjection_range_proj _ _ _
+  have hmove (u v : H) : ⟪P u, v⟫_ℂ = ⟪u, P v⟫_ℂ := by
+    rw [← hproj]
+    exact P.range.inner_starProjection_left_eq_right u v
+  have hAx : A (specProjectionDomain hA B hB x) = P (A x) :=
     ((hA.intertwines_spectralPVM_proj B hB).apply_eq x).symm
-  have hz : ((x - y : A.domain) : H) = (x : H) - (A.spectralPVM hA).proj B hB (x : H) := by
-    rw [← hyc]; rfl
-  have hAz : A (x - y) = A x - (A.spectralPVM hA).proj B hB (A x) := by
-    rw [_root_.LinearPMap.map_sub, hAy]
-  have hcross₁ : ⟪A y, (x : H) - (A.spectralPVM hA).proj B hB (x : H)⟫_ℂ = 0 := by
-    rw [hAy]
-    exact inner_specProjection_sub_specProjection hA hB (A x) (x : H)
-  have hcross₂ : ⟪A (x - y), (A.spectralPVM hA).proj B hB (x : H)⟫_ℂ = 0 := by
-    rw [hAz, ← inner_conj_symm,
-      show ⟪(A.spectralPVM hA).proj B hB (x : H), A x - (A.spectralPVM hA).proj B hB (A x)⟫_ℂ
-          = 0 from
-        inner_specProjection_sub_specProjection hA hB (x : H) (A x)]
-    simp
-  have hsplit : ⟪A x, (x : H)⟫_ℂ
-      = ⟪A y, (A.spectralPVM hA).proj B hB (x : H)⟫_ℂ
-        + ⟪A (x - y), (x : H) - (A.spectralPVM hA).proj B hB (x : H)⟫_ℂ := by
-    calc ⟪A x, (x : H)⟫_ℂ
-        = ⟪A y + A (x - y),
-            (A.spectralPVM hA).proj B hB (x : H)
-              + ((x : H) - (A.spectralPVM hA).proj B hB (x : H))⟫_ℂ := by
-          congr 1
-          · rw [hAz, hAy]; abel
-          · abel
-      _ = ⟪A y, (A.spectralPVM hA).proj B hB (x : H)⟫_ℂ
-            + ⟪A (x - y), (x : H) - (A.spectralPVM hA).proj B hB (x : H)⟫_ℂ := by
-          rw [inner_add_left, inner_add_right, inner_add_right, hcross₁, hcross₂]
-          ring
-  rw [hsplit, Complex.add_re]
-
-/-- The squared norm splits across a spectral projection. -/
-theorem norm_sq_eq_add_specProjection (B : Set ℝ) (hB : MeasurableSet B) (x : H) :
-    ‖x‖ ^ 2 = ‖(A.spectralPVM hA).proj B hB x‖ ^ 2 + ‖x - (A.spectralPVM hA).proj B hB x‖ ^ 2 := by
-  have hortho : ⟪(A.spectralPVM hA).proj B hB x, x - (A.spectralPVM hA).proj B hB x⟫_ℂ = 0 :=
-    inner_specProjection_sub_specProjection hA hB x x
-  calc ‖x‖ ^ 2
-      = ‖(A.spectralPVM hA).proj B hB x + (x - (A.spectralPVM hA).proj B hB x)‖ ^ 2 := by
-        rw [add_sub_cancel]
-    _ = ‖(A.spectralPVM hA).proj B hB x‖ ^ 2 + ‖x - (A.spectralPVM hA).proj B hB x‖ ^ 2 := by
-        simpa only [sq] using
-          norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ hortho
+  have hPP : ⟪P (A x), P (x : H)⟫_ℂ = ⟪A x, P (x : H)⟫_ℂ := by
+    rw [hmove, show P (P (x : H)) = P (x : H) from (A.spectralPVM hA).proj_apply_proj B hB x]
+  have hcross : ⟪P (A x), (x : H) - P (x : H)⟫_ℂ = 0 := by
+    rw [inner_sub_right, hmove (A x) (x : H), hPP, sub_self]
+  change _ = (⟪A (specProjectionDomain hA B hB x), P (x : H)⟫_ℂ).re +
+    (⟪A (x - specProjectionDomain hA B hB x), (x : H) - P (x : H)⟫_ℂ).re
+  rw [_root_.LinearPMap.map_sub, hAx, inner_sub_left, hcross, sub_zero, hPP,
+    ← Complex.add_re, ← inner_add_right, add_sub_cancel]
 
 /-! ## The strict vector-local form bounds -/
-
-/-- A projection over an empty set annihilates everything. -/
-theorem specProjection_apply_eq_zero_of_eq_empty {B : Set ℝ} (hB : MeasurableSet B)
-    (hemp : B = ∅) (x : H) : (A.spectralPVM hA).proj B hB x = 0 := by
-  rw [specProjection_apply_eq_zero_iff_diag, hemp, measure_empty]
-
-/-- The projection depends only on the set, not on the measurability witness. -/
-theorem specProjection_apply_congr {B C : Set ℝ} (h : B = C) (hB : MeasurableSet B)
-    (hC : MeasurableSet C) (x : H) :
-    (A.spectralPVM hA).proj B hB x = (A.spectralPVM hA).proj C hC x := by
-  subst h; rfl
-
-/-- The complementary part of a vector is the projection of the complement. -/
-theorem sub_specProjection_apply {B : Set ℝ} (hB : MeasurableSet B) (x : H) :
-    x - (A.spectralPVM hA).proj B hB x = (A.spectralPVM hA).proj Bᶜ hB.compl x :=
-  sub_eq_of_eq_add' (specProjection_add_compl_apply hA hB x).symm
 
 /-- **Strict vector-local lower energy bound.**  A nonzero domain vector with no
 spectral mass in `(-∞, c]` has quadratic form *strictly* above `c‖x‖²`.
@@ -232,28 +150,23 @@ theorem lt_re_inner_of_specProjection_Iic_apply_eq_zero {c : ℝ} (x : A.domain)
     hn ((specProjection_apply_eq_zero_iff_diag hA _ measurableSet_Ici (x : H)).1 (hyc ▸ h0))
   -- the high piece: no mass at or below `e`
   have hylow : (A.spectralPVM hA).proj (Set.Iic e) measurableSet_Iic (y : H) = 0 := by
-    rw [hyc, ← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
-    refine specProjection_apply_eq_zero_of_eq_empty hA _ ?_ _
-    ext t
-    simp only [Set.mem_inter_iff, Set.mem_Iic, Set.mem_Ici, Set.mem_empty_iff_false, iff_false,
-      not_and, not_le]
-    intro ht
-    linarith
+    have hdisj : Disjoint (Set.Iic e) (Set.Ici d) :=
+      Set.disjoint_left.2 fun _ ht hs => (not_le.2 hed) (le_trans hs ht)
+    rw [hyc, ← _root_.mul_apply_eq_comp,
+      (A.spectralPVM hA).proj_mul_eq_zero_of_disjoint measurableSet_Iic measurableSet_Ici hdisj,
+      _root_.zero_apply]
   -- the low piece: still no mass at or below `c`
   have hzc : ((x - y : A.domain) : H)
       = (A.spectralPVM hA).proj (Set.Ici d)ᶜ measurableSet_Ici.compl (x : H) := by
     change (x : H) - (y : H) = _
-    rw [hyc, sub_specProjection_apply]
+    rw [hyc, ProjValMeasure.proj_compl, _root_.sub_apply, ContinuousLinearMap.id_apply]
   have hzlow : (A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic ((x - y : A.domain) : H)
       = 0 := by
-    rw [hzc, ← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
-    rw [specProjection_apply_congr hA (C := Set.Iic c) ?_ _ measurableSet_Iic]
-    · exact hz
-    · ext t
-      simp only [Set.mem_inter_iff, Set.mem_Iic, Set.mem_compl_iff, Set.mem_Ici, not_le,
-        and_iff_left_iff_imp]
-      intro ht
-      linarith
+    have hsub : Set.Iic c ⊆ (Set.Ici d)ᶜ :=
+      fun _ ht hs => (not_le.2 (hce.trans hed)) (le_trans hs ht)
+    rw [hzc, ← _root_.mul_apply_eq_comp,
+      (A.spectralPVM hA).proj_mul_eq_left_of_subset hsub measurableSet_Iic measurableSet_Ici.compl,
+      hz]
   have hybound : e * ‖(y : H)‖ ^ 2 ≤ (⟪A y, (y : H)⟫_ℂ).re :=
     le_re_inner_of_specProjection_Iic_apply_eq_zero hA (c := e) y hylow
   have hzbound : c * ‖(x : H) - (y : H)‖ ^ 2
@@ -262,8 +175,11 @@ theorem lt_re_inner_of_specProjection_Iic_apply_eq_zero {c : ℝ} (x : A.domain)
   have hform : (⟪A x, (x : H)⟫_ℂ).re
       = (⟪A y, (y : H)⟫_ℂ).re + (⟪A (x - y), (x : H) - (y : H)⟫_ℂ).re :=
     re_inner_eq_add_specProjection hA (Set.Ici d) measurableSet_Ici x
-  have hnorm : ‖(x : H)‖ ^ 2 = ‖(y : H)‖ ^ 2 + ‖(x : H) - (y : H)‖ ^ 2 :=
-    norm_sq_eq_add_specProjection hA (Set.Ici d) measurableSet_Ici (x : H)
+  have hnorm : ‖(x : H)‖ ^ 2 = ‖(y : H)‖ ^ 2 + ‖(x : H) - (y : H)‖ ^ 2 := by
+    simpa only [hyc, Submodule.starProjection_orthogonal_val,
+      ProjValMeasure.starProjection_range_proj] using
+      Submodule.norm_sq_eq_add_norm_sq_starProjection
+        (x : H) ((A.spectralPVM hA).proj (Set.Ici d) measurableSet_Ici).range
   have hypos : 0 < ‖(y : H)‖ ^ 2 := by positivity
   have hprod : c * ‖(y : H)‖ ^ 2 < e * ‖(y : H)‖ ^ 2 :=
     mul_lt_mul_of_pos_right hce hypos
@@ -309,26 +225,22 @@ theorem re_inner_lt_of_specProjection_Ici_apply_eq_zero {c : ℝ} (x : A.domain)
   have hyne : (y : H) ≠ 0 := fun h0 =>
     hn ((specProjection_apply_eq_zero_iff_diag hA _ measurableSet_Iic (x : H)).1 (hyc ▸ h0))
   have hyhigh : (A.spectralPVM hA).proj (Set.Ici e) measurableSet_Ici (y : H) = 0 := by
-    rw [hyc, ← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
-    refine specProjection_apply_eq_zero_of_eq_empty hA _ ?_ _
-    ext t
-    simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic, Set.mem_empty_iff_false, iff_false]
-    rintro ⟨h1, h2⟩
-    linarith
+    have hdisj : Disjoint (Set.Ici e) (Set.Iic d) :=
+      Set.disjoint_left.2 fun _ ht hs => (not_le.2 hde) (le_trans ht hs)
+    rw [hyc, ← _root_.mul_apply_eq_comp,
+      (A.spectralPVM hA).proj_mul_eq_zero_of_disjoint measurableSet_Ici measurableSet_Iic hdisj,
+      _root_.zero_apply]
   have hzc : ((x - y : A.domain) : H)
       = (A.spectralPVM hA).proj (Set.Iic d)ᶜ measurableSet_Iic.compl (x : H) := by
     change (x : H) - (y : H) = _
-    rw [hyc, sub_specProjection_apply]
+    rw [hyc, ProjValMeasure.proj_compl, _root_.sub_apply, ContinuousLinearMap.id_apply]
   have hzhigh : (A.spectralPVM hA).proj (Set.Ici c) measurableSet_Ici ((x - y : A.domain) : H)
       = 0 := by
-    rw [hzc, ← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
-    rw [specProjection_apply_congr hA (C := Set.Ici c) ?_ _ measurableSet_Ici]
-    · exact hz
-    · ext t
-      simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_compl_iff, Set.mem_Iic, not_le,
-        and_iff_left_iff_imp]
-      intro ht
-      linarith
+    have hsub : Set.Ici c ⊆ (Set.Iic d)ᶜ :=
+      fun _ ht hs => (not_le.2 (hde.trans hec)) (le_trans ht hs)
+    rw [hzc, ← _root_.mul_apply_eq_comp,
+      (A.spectralPVM hA).proj_mul_eq_left_of_subset hsub measurableSet_Ici measurableSet_Iic.compl,
+      hz]
   have hybound : (⟪A y, (y : H)⟫_ℂ).re ≤ e * ‖(y : H)‖ ^ 2 :=
     re_inner_le_of_specProjection_Ici_apply_eq_zero hA (c := e) y hyhigh
   have hzbound : (⟪A (x - y), (x : H) - (y : H)⟫_ℂ).re
@@ -337,8 +249,11 @@ theorem re_inner_lt_of_specProjection_Ici_apply_eq_zero {c : ℝ} (x : A.domain)
   have hform : (⟪A x, (x : H)⟫_ℂ).re
       = (⟪A y, (y : H)⟫_ℂ).re + (⟪A (x - y), (x : H) - (y : H)⟫_ℂ).re :=
     re_inner_eq_add_specProjection hA (Set.Iic d) measurableSet_Iic x
-  have hnorm : ‖(x : H)‖ ^ 2 = ‖(y : H)‖ ^ 2 + ‖(x : H) - (y : H)‖ ^ 2 :=
-    norm_sq_eq_add_specProjection hA (Set.Iic d) measurableSet_Iic (x : H)
+  have hnorm : ‖(x : H)‖ ^ 2 = ‖(y : H)‖ ^ 2 + ‖(x : H) - (y : H)‖ ^ 2 := by
+    simpa only [hyc, Submodule.starProjection_orthogonal_val,
+      ProjValMeasure.starProjection_range_proj] using
+      Submodule.norm_sq_eq_add_norm_sq_starProjection
+        (x : H) ((A.spectralPVM hA).proj (Set.Iic d) measurableSet_Iic).range
   have hypos : 0 < ‖(y : H)‖ ^ 2 := by positivity
   have hprod : e * ‖(y : H)‖ ^ 2 < c * ‖(y : H)‖ ^ 2 :=
     mul_lt_mul_of_pos_right hec hypos
@@ -348,12 +263,6 @@ theorem re_inner_lt_of_specProjection_Ici_apply_eq_zero {c : ℝ} (x : A.domain)
   linarith [hform, hybound, hzbound, hprod, hcnorm]
 
 /-! ## The Rayleigh--Ritz gap theorem -/
-
-/-- A projection over an empty set is the zero operator. -/
-theorem specProjection_eq_zero_of_eq_empty {B : Set ℝ} (hB : MeasurableSet B) (hemp : B = ∅) :
-    (A.spectralPVM hA).proj B hB = 0 := by
-  ext x
-  simpa using specProjection_apply_eq_zero_of_eq_empty hA hB hemp x
 
 /-- **The Ritz bound makes the low spectral compression injective on the trial
 space.**  A nonzero trial vector cannot have all its spectral mass strictly
@@ -398,7 +307,8 @@ theorem specProjection_Ioo_eq_zero_of_rayleighRitz
     (A.spectralPVM hA).proj (Set.Ioo α β) measurableSet_Ioo = 0 := by
   classical
   rcases le_or_gt β α with hβα | hαβ
-  · exact specProjection_eq_zero_of_eq_empty hA _ (Set.Ioo_eq_empty (not_lt.2 hβα))
+  · exact ((A.spectralPVM hA).proj_congr (Set.Ioo_eq_empty (not_lt.2 hβα))
+      measurableSet_Ioo MeasurableSet.empty).trans (A.spectralPVM hA).proj_empty
   by_contra hne
   -- a nonzero spectral vector strictly inside the gap, produced from the dense domain
   obtain ⟨v, hvdom, hv⟩ :
@@ -420,20 +330,18 @@ theorem specProjection_Ioo_eq_zero_of_rayleighRitz
   -- everything in `W` has its spectral mass strictly below `β`
   set W : Submodule ℂ H := (Submodule.span ℂ ({x} : Set H)) ⊔ (K.map (Q : H →ₗ[ℂ] H)) with hW
   have hxIci : (A.spectralPVM hA).proj (Set.Ici β) measurableSet_Ici x = 0 := by
-    rw [hx, hP, ← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
-    refine specProjection_apply_eq_zero_of_eq_empty hA _ ?_ _
-    ext t
-    simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Ioo, Set.mem_empty_iff_false, iff_false]
-    rintro ⟨h1, -, h3⟩
-    linarith
+    have hdisj : Disjoint (Set.Ici β) (Set.Ioo α β) :=
+      Set.disjoint_left.2 fun _ ht hs => (not_lt.2 ht) hs.2
+    rw [hx, hP, ← _root_.mul_apply_eq_comp,
+      (A.spectralPVM hA).proj_mul_eq_zero_of_disjoint measurableSet_Ici measurableSet_Ioo hdisj,
+      _root_.zero_apply]
   have hQIci : ∀ u : H, (A.spectralPVM hA).proj (Set.Ici β) measurableSet_Ici (Q u) = 0 := by
     intro u
-    rw [hQ, ← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
-    refine specProjection_apply_eq_zero_of_eq_empty hA _ ?_ _
-    ext t
-    simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic, Set.mem_empty_iff_false, iff_false]
-    rintro ⟨h1, h2⟩
-    linarith
+    have hdisj : Disjoint (Set.Ici β) (Set.Iic α) :=
+      Set.disjoint_left.2 fun _ ht hs => (not_le.2 hαβ) (le_trans ht hs)
+    rw [hQ, ← _root_.mul_apply_eq_comp,
+      (A.spectralPVM hA).proj_mul_eq_zero_of_disjoint measurableSet_Ici measurableSet_Iic hdisj,
+      _root_.zero_apply]
   have hWIci : ∀ w ∈ W, (A.spectralPVM hA).proj (Set.Ici β) measurableSet_Ici w = 0 := by
     have hsub : W ≤ LinearMap.ker
         (((A.spectralPVM hA).proj (Set.Ici β) measurableSet_Ici : H →L[ℂ] H) : H →ₗ[ℂ] H) := by
@@ -481,16 +389,12 @@ theorem specProjection_Ioo_eq_zero_of_rayleighRitz
     have : a • x = 0 := by
       calc a • x = P (a • x) := hPfix.symm
         _ = P (Q (a • x)) := by rw [hQfix]
-        _ = (A.spectralPVM hA).proj (Set.Ioo α β ∩ Set.Iic α)
-              (measurableSet_Ioo.inter measurableSet_Iic) (a • x) := by
-          rw [hP, hQ, ← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
         _ = 0 := by
-          refine specProjection_apply_eq_zero_of_eq_empty hA _ ?_ _
-          ext t
-          simp only [Set.mem_inter_iff, Set.mem_Ioo, Set.mem_Iic, Set.mem_empty_iff_false,
-            iff_false, not_and, not_le]
-          rintro ⟨h1, -⟩
-          exact h1
+          have hdisj : Disjoint (Set.Ioo α β) (Set.Iic α) :=
+            Set.disjoint_left.2 fun _ ht hs => (not_lt.2 hs) ht.1
+          rw [hP, hQ, ← _root_.mul_apply_eq_comp,
+            ProjValMeasure.proj_mul_eq_zero_of_disjoint _ measurableSet_Ioo measurableSet_Iic hdisj,
+            _root_.zero_apply]
     exact this
   have : FiniteDimensional ℂ W := by
     rw [hW]
@@ -559,13 +463,12 @@ theorem finrank_le_of_le_specRange_Iic
           = ((w : W) : H) := (LinearMap.IsIdempotentElem.mem_range_iff
       (ContinuousLinearMap.IsIdempotentElem.toLinearMap ((A.spectralPVM hA).proj_idem _ _))
       (x := _)).1 (hW w.property)
-      rw [← hfix, ← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
-      refine specProjection_apply_eq_zero_of_eq_empty hA _ ?_ _
-      ext t
-      simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic, Set.mem_empty_iff_false,
-        iff_false]
-      rintro ⟨h1, h2⟩
-      linarith
+      have hdisj : Disjoint (Set.Ici β) (Set.Iic c) :=
+        Set.disjoint_left.2 fun _ ht hs => (not_le.2 hcβ) (le_trans ht hs)
+      conv_lhs => rw [← hfix]
+      rw [← _root_.mul_apply_eq_comp,
+        (A.spectralPVM hA).proj_mul_eq_zero_of_disjoint measurableSet_Ici measurableSet_Iic hdisj,
+        _root_.zero_apply]
     have hlow := re_inner_lt_of_specProjection_Ici_apply_eq_zero hA
       (⟨((w : W) : H), hwdom⟩ : A.domain) hIci hwH
     have hhigh := hCoercive ⟨((w : W) : H), hwdom⟩ hwperp

@@ -274,15 +274,13 @@ theorem beamLowEigenvalue_lt_five_hundred (ε : ℝ) (hε : 0 ≤ ε) (hε100 : 
       (x := _)).1 hmem
   have hIci : ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
       (Set.Ici 500) measurableSet_Ici f = 0 := by
+    have hdisj : Disjoint (Set.Ici 500) (Set.Iic (ritzHigh ε)) :=
+      Set.disjoint_left.2 fun _ ht hs =>
+        (not_le.2 (ritzHigh_lt_five_hundred hε100)) (le_trans ht hs)
     conv_lhs => rw [← hfix]
-    rw [← _root_.mul_apply_eq_comp, ProjValMeasure.proj_inter]
-    refine TauCeti.LinearPMap.specProjection_apply_eq_zero_of_eq_empty _ _ ?_ _
-    ext t
-    simp only [Set.mem_inter_iff, Set.mem_Ici, Set.mem_Iic, Set.mem_empty_iff_false,
-      iff_false, not_and, not_le]
-    intro ht
-    have := ritzHigh_lt_five_hundred hε100
-    linarith
+    rw [← _root_.mul_apply_eq_comp,
+      ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj_mul_eq_zero_of_disjoint
+        measurableSet_Ici measurableSet_Iic hdisj, _root_.zero_apply]
   have hlt := TauCeti.LinearPMap.re_inner_lt_of_specProjection_Ici_apply_eq_zero
     (beamPerturbed_isSelfAdjoint ε)
     (⟨f, beamLowEigenvector_mem_domain ε hε hε100 k⟩ : (beamPerturbed ε).domain) hIci hfne

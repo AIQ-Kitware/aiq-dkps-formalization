@@ -1,5 +1,33 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 Rayleigh–Ritz projection laws
+
+The strict form bounds, Rayleigh–Ritz gap and dimension count, Section 8
+branch bounds, and free-beam eigenbasis now use the native PVM laws for
+complements, disjoint products, absorption on subsets, and null sets.
+Our #17527 adapted the DKPS PVM core, preserving Adam Bornemann's
+Spectra ancestry. Our #19005 added downward closure of measurable PVM
+null sets using that core. The Section 8 argument uses this operator
+null-set law when the whole gap projection is zero.
+[#17527 integration](https://github.com/TauCetiProject/TauCeti/commit/fde7c341f8e9b59c5083a87835b330d15581ad8f) ·
+[#19005 integration](https://github.com/TauCetiProject/TauCeti/commit/019f1ea2f4d48301568f5b01514068cd0e6b85ff)
+
+The form and norm splits use the orthogonal projection onto the PVM
+range from Forgejo #1964 and Mathlib projection identities. The form
+split also uses the native domain intertwiner from #41596. The
+DKPS donor keeps the strict inequalities for a nonzero domain vector
+and the trial-subspace gap and dimension results. The original
+Rayleigh–Ritz proofs are at `028207b91ec15a8c178efe95ebbfe75b2e078a52`,
+by Jon Crall and Claude Opus 5, Kitware, Apache-2.0. DKPS proof descent
+for #1964 is unverified.
+[#1964 integration](https://github.com/TauCetiProject/TauCeti/commit/c8bb063fe6bd7a441b156c5cc6e03b027dd29579) ·
+[#41596 integration](https://github.com/TauCetiProject/TauCeti/commit/81171bd524be1b4f119bb36877630bb96aaed6f8)
+
+The focused and default builds, Challenge, and the result semantic-surface
+audit passed with warnings treated as errors. All 1,569 source-census
+references resolved and all 17 available Davis–Kahan comparator
+signatures matched.
+
 ## November 28 real spectral projection and reduction
 
 The real spectral projection inherits the native complex PVM's

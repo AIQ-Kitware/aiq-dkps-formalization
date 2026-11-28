@@ -98,23 +98,20 @@ theorem re_inner_le_of_mem_canonicalLowBranchUnbounded
       (LinearMap.IsIdempotentElem.mem_range_iff
       (ContinuousLinearMap.IsIdempotentElem.toLinearMap ((B.spectralPVM hB).proj_idem _ _))
       (x := _)).mp hx
-    have hsum := TauCeti.LinearPMap.specProjection_add_compl_apply hB
-      (B := Set.Iic alpha) measurableSet_Iic (x : H)
-    rw [hfix] at hsum
-    have hzero : (B.spectralPVM hB).proj ((Set.Iic alpha)ᶜ)
-        measurableSet_Iic.compl (x : H) = 0 := by
-      linear_combination (norm := module) hsum
-    rw [← hzero]
-    exact (TauCeti.LinearPMap.specProjection_apply_congr hB
-      (Set.compl_Iic (a := alpha)).symm measurableSet_Ioi measurableSet_Iic.compl (x : H))
+    have hcompl := (B.spectralPVM hB).proj_congr (Set.compl_Iic (a := alpha))
+      measurableSet_Iic.compl measurableSet_Ioi
+    rw [← hcompl, (B.spectralPVM hB).proj_compl (Set.Iic alpha) measurableSet_Iic,
+      sub_apply, ContinuousLinearMap.id_apply, hfix, sub_self]
   have hall : ∀ c : ℝ, alpha < c →
       (⟪B x, (x : H)⟫_ℂ).re ≤ c * ‖(x : H)‖ ^ 2 := by
     intro c hc
     have hsub : Set.Ici c ⊆ Set.Ioi alpha := fun s hs => lt_of_lt_of_le hc hs
     have hIci : (B.spectralPVM hB).proj (Set.Ici c) measurableSet_Ici
-        (x : H) = 0 :=
-      TauCeti.LinearPMap.specProjection_apply_eq_zero_of_subset hB measurableSet_Ici
-        measurableSet_Ioi hsub hIoi
+        (x : H) = 0 := by
+      have habsorb := DFunLike.congr_fun
+        ((B.spectralPVM hB).proj_mul_eq_left_of_subset hsub measurableSet_Ici measurableSet_Ioi)
+        (x : H)
+      simpa only [mul_apply_eq_comp, hIoi, map_zero] using habsorb.symm
     exact TauCeti.LinearPMap.re_inner_le_of_specProjection_Ici_apply_eq_zero hB x hIci
   by_contra hcon
   push Not at hcon
@@ -176,12 +173,11 @@ theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
       rintro s ⟨hs1, hs2⟩
       exact ⟨hs2, lt_of_le_of_lt hs1 hc⟩
     have hzero : (B.spectralPVM hB).proj (Set.Iic c ∩ Set.Ioi alpha)
-        (measurableSet_Iic.inter measurableSet_Ioi) (x : H) = 0 :=
-      TauCeti.LinearPMap.specProjection_apply_eq_zero_of_subset hB
-        (measurableSet_Iic.inter measurableSet_Ioi) measurableSet_Ioo hsub
-        (by rw [hgapzero]; rfl)
+        (measurableSet_Iic.inter measurableSet_Ioi) = 0 :=
+      (B.spectralPVM hB).proj_eq_zero_of_subset hsub
+        (measurableSet_Iic.inter measurableSet_Ioi) measurableSet_Ioo hgapzero
     have hIic : (B.spectralPVM hB).proj (Set.Iic c) measurableSet_Iic
-        (x : H) = 0 := by rw [hinter]; exact hzero
+        (x : H) = 0 := by rw [hinter, hzero, _root_.zero_apply]
     exact TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero hB x hIic
   by_contra hcon
   push Not at hcon

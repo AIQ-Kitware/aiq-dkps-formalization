@@ -59,11 +59,8 @@ theorem specProjection_eq_of_diff_eq_zero
     (A.spectralPVM hA).proj U hU
       = (A.spectralPVM hA).proj T hT := by
   refine ContinuousLinearMap.ext fun x => ?_
-  have hSx : (A.spectralPVM hA).proj S hS x = 0 := by rw [hzero]; rfl
   have hcompl : (A.spectralPVM hA).proj Sᶜ hS.compl x = x := by
-    have h := TauCeti.LinearPMap.specProjection_add_compl_apply hA hS x
-    rw [hSx, zero_add] at h
-    exact h
+    rw [(A.spectralPVM hA).proj_compl S hS, hzero, sub_zero, ContinuousLinearMap.id_apply]
   have hinter := DFunLike.congr_fun ((A.spectralPVM hA).proj_inter U Sᶜ hU hS.compl) x
   rw [_root_.mul_apply_eq_comp] at hinter
   rw [hcompl] at hinter

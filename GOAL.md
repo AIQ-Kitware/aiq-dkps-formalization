@@ -1006,10 +1006,9 @@ gives a bounded inverse `R` of `c - A` with `‖R‖ ≤ s⁻¹`, and
   spectral projection vanishes, hence
   `specRange B_t ((Icc l r)ᶜ) = specRange B_t (gapExterior l r d)` and the same
   resolvent lemma gives `realSpectrum ⊆ gapExterior l r d`, which is closed.
-  `specProjection_add_compl_apply` and `specProjection_apply_specProjection` are
-  the pieces that combine the two sets; there is **no** general
-  `specProjection (S ∪ T)` additivity lemma, so this is where the assembly work
-  is.
+  The assembly uses the native `ProjValMeasure.proj_compl`,
+  `ProjValMeasure.proj_inter`, and finite additivity on disjoint sets
+  (`ProjValMeasure.proj_union`).
 
 That pair is exactly `FormBoundedSylvesterGap.intervalExterior` with `β = l`,
 `α = r` and gap `d`, which is what the `sin Θ` and `sin 2Θ` endpoints consume.
