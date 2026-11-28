@@ -128,8 +128,8 @@ theorem exists_finiteDimensional_le_lt_approximationSingularValue
       c < ((K ∘L F.subtypeL).singularValue n : ℝ) := by
   classical
   obtain ⟨s, hcs, v, hv, hmod⟩ :=
-    (TauCeti.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-      TauCeti.HasMinMaxLowerBound.of_completeSpace (K ∘L Z.subtypeL) n hc0).mp hlt
+    TauCeti.hasMinMaxLowerBound_iff.mp TauCeti.HasMinMaxLowerBound.of_completeSpace
+      (K ∘L Z.subtypeL) n hc0 hlt
   have hspanfin : FiniteDimensional ℂ (Submodule.span ℂ (Set.range v)) :=
     FiniteDimensional.span_of_finite ℂ (Set.finite_range v)
   refine ⟨(Submodule.span ℂ (Set.range v)).map Z.subtype, inferInstance,

@@ -151,27 +151,6 @@ theorem approximationNumber_isLUB_finiteRestrictions
     h.exists_finiteRestrictionApproximationNumber_gt_of_lt T n hb0 (lt_of_not_ge hnot)
   exact (not_le_of_gt hv) (hb ⟨v, rfl⟩)
 
-/-- **Epsilon form of the min--max characterisation.**  `r` is strictly below `aₙ(T)`
-exactly when `T` has a strictly larger uniform lower modulus on some `(n+1)`-dimensional
-subspace.
-
-The forward direction is the hypothesis and the reverse is
-`ContinuousLinearMap.le_singularValue_of_linearIndependent`, so this is the statement
-in which both halves of the min--max theorem appear together. -/
-theorem lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-    (h : HasMinMaxLowerBound 𝕜 E F) (T : E →L[𝕜] F) (n : ℕ) {r : ℝ} (hr0 : 0 ≤ r) :
-    r < (T.singularValue n : ℝ) ↔
-      ∃ s : ℝ, r < s ∧
-        ∃ v : Fin (n + 1) → E, LinearIndependent 𝕜 v ∧
-          ∀ x ∈ Submodule.span 𝕜 (Set.range v), s * ‖x‖ ≤ ‖T x‖ := by
-  constructor
-  · intro hr
-    exact TauCeti.hasMinMaxLowerBound_iff.mp h T n hr0
-      (by exact hr)
-  · rintro ⟨s, hrs, v, hv, hV⟩
-    refine hrs.trans_le ?_
-    exact T.le_singularValue_of_linearIndependent hv hV
-
 /-- Every positive tolerance admits a finite source restriction whose approximation number
 is within that tolerance of the ambient one.  This is the exact hypothesis
 `ContinuousLinearMap.kyFanGaugeReal_add_le_of_exists_finiteRestriction` consumes, so it is the

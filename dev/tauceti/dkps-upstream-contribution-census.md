@@ -1,5 +1,34 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 pointwise singular-value comparison and min–max thresholds
+
+The Section 8 form-order comparison now uses
+`ContinuousLinearMap.singularValue_le_mul_of_forall_norm_apply_le`
+from independent #19914 (OI-A31). The more general DKPS comparison
+for incomplete target spaces uses the same theorem after embedding
+both targets in their Hilbert completions. Chrisflav's #41817
+supplies invariance of each approximation number under this
+embedding. The comparison still takes independent target universes
+and retains its original source assumption. #41817 credits
+Pietsch and Mario Ullrich's Lean-SNumbers, with DKPS proof descent
+unverified.
+[#19914 integration](https://github.com/TauCetiProject/TauCeti/commit/d3ad04e10d1834815f9ae5334183df440221a0e3) ·
+[#41817 integration](https://github.com/TauCetiProject/TauCeti/commit/a93bea8395fb831b71181b755119bafc1a593001)
+
+The Gram-square, block-sum and infinite-trial proofs apply the
+native min–max witness and coercive lower bound directly. This
+retires the DKPS threshold biconditional assembled from the two
+directions. The least-upper-bound statement for approximation
+numbers of the actual finite restrictions remains available,
+including its challenge signature.
+[#15423 integration](https://github.com/TauCetiProject/TauCeti/commit/abc7ac35a2fa3a5e87ddcac3b6e3209aa7e6cd6d)
+
+The focused build (9,429 jobs), default build (22,814 jobs), and
+Challenge with the semantic-surface audit (22,524 jobs) passed
+without warnings at TauCeti `007b3a1150`. All 1,569 source-census
+references resolved and all 17 available Davis–Kahan comparator
+signatures matched.
+
 ## November 28 rectangular Ky Fan localization
 
 The approximate orthonormal-pairing theorem used in Section 1 now

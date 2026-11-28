@@ -521,9 +521,7 @@ theorem min_le_approximationNumber_continuousOrthogonalBlockSum
         mul_pow μ ‖(WithLp.ofLp x).2‖ 2]
     exact le_of_sq_le_sq hsq (norm_nonneg _)
   have hfinal : m < ((T.singularValue (i + j + 1) : ℝ) : ℝ) :=
-    (TauCeti.HasMinMaxLowerBound.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound
-      TauCeti.HasMinMaxLowerBound.of_completeSpace
-      T (i + j + 1) hm0).mpr ⟨μ, hmμ, _, hu, hlower⟩
+    hmμ.trans_le (T.le_singularValue_of_linearIndependent hu hlower)
   exact absurd hfinal (by rw [← hm]; exact lt_irrefl m)
 
 end ScalarMinMax

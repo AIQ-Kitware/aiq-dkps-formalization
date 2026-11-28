@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramSquare
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 
 /-!
 # The compression sandwich bound behind Theorem 8.1(ii)
@@ -62,7 +62,7 @@ namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
 
-open scoped InnerProductSpace
+open scoped InnerProductSpace NNReal
 
 universe u v
 
@@ -127,7 +127,7 @@ dimension, while both sides of part (i) are positive (the `Pᗮ` form is at leas
 
 The proof is the factorization: `‖√S x‖² = Re ⟪x, S x⟫`, so the form hypothesis
 is exactly pointwise norm domination of the square roots, which
-`approximationNumber_le_of_norm_apply_le` converts into domination of their
+`ContinuousLinearMap.singularValue_le_mul_of_forall_norm_apply_le` converts into domination of their
 approximation numbers; then `approximationNumber_gramOperator_complex` squares it back,
 since `S = (√S)⋆(√S)`.
 
@@ -170,7 +170,10 @@ theorem approximationNumber_mono_of_form_le
         approximationNumber_gramOperator_complex _ n
     _ ≤ ((CFC.sqrt T).singularValue n : ℝ) ^ 2 := by
         gcongr
-        exact _root_.ContinuousLinearMap.approximationNumber_le_of_norm_apply_le _ _ hle n
+        have hle' (x : E) : ‖CFC.sqrt S x‖ ≤ ((1 : ℝ≥0) : ℝ) * ‖CFC.sqrt T x‖ := by
+          simpa only [NNReal.coe_one, one_mul] using hle x
+        have hsv := ContinuousLinearMap.singularValue_le_mul_of_forall_norm_apply_le hle' n
+        exact NNReal.coe_le_coe.mpr (by simpa only [one_mul] using hsv)
     _ = ((ApproximationNumber.gramOperator (CFC.sqrt T)).singularValue n : ℝ) :=
         (approximationNumber_gramOperator_complex _ n).symm
     _ = (T.singularValue n : ℝ) := by rw [hgram hT]

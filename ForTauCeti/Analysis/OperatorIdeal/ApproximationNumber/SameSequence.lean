@@ -6,9 +6,11 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 module
 
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Completion
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+import Mathlib.Analysis.InnerProductSpace.Completion
 
 /-!
 # Operators with the same approximation-number sequence
@@ -49,7 +51,7 @@ carried the hypothesis, so this is a small generalisation.
   `approximationNumber` rather than its `approximationSingularValue` alias.
   The relation and its equivalence proofs have since been retired in favor of
   accepted `ContinuousLinearMap.SameSingularValues`; only the additional
-  norm and incomplete-target min--max comparison results remain local.
+  norm and incomplete-target comparison results remain local.
 * Extraction motive: `DavisKahan/OperatorIdeal/ApproximationNumbers/BlockSum.lean` — a
   *generic* module — imported the source-layer file above for these six declarations alone.
   That backwards dependency was the last obstacle recorded against extraction cluster 1b.
@@ -57,6 +59,8 @@ carried the hypothesis, so this is a small generalisation.
 -/
 
 public section
+
+open scoped NNReal
 
 namespace ContinuousLinearMap
 
@@ -81,45 +85,36 @@ theorem SameSingularValues.norm_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[�
 `ContinuousLinearMap.SameSingularValues`. Only the additional Hilbert-space
 comparison results remain here. -/
 
-section MinMax
+section PointwiseComparison
 
-/-! ## Comparison through the min--max characterisation
-
-The native converse localization theorem holds over every `RCLike` field and
-permits independent source and target universes. These comparisons use
-`TauCeti.HasMinMaxLowerBound.of_completeSpace` directly; no global capability
-class is required. -/
+/-! ## Pointwise comparison for incomplete targets -/
 
 variable {X : Type v₁} {Y : Type w₁} {Z : Type w₂}
-  [NormedAddCommGroup X] [InnerProductSpace 𝕜 X] [CompleteSpace X]
+  [NormedAddCommGroup X] [InnerProductSpace 𝕜 X]
   [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y] [CompleteSpace Y]
   [NormedAddCommGroup Z] [InnerProductSpace 𝕜 Z] [CompleteSpace Z]
 
 omit [CompleteSpace Y] [CompleteSpace Z] in
-/-- **A pointwise norm bound is inherited by every approximation number.**
-
-The proof is the min--max characterisation used twice: a strict lower bound for `aₙ A` is
-realized as a uniform lower modulus on an `(n+1)`-dimensional subspace, and the pointwise
-estimate carries that same witness over to `B`.  It is rank-safe — no averaging of `A`
-against a second operator happens, so no rank doubling can occur. -/
-theorem approximationNumber_le_of_norm_apply_le
+/-- Pointwise norm domination compares approximation numbers even when the
+target spaces are incomplete. Passing to their completions preserves both
+the pointwise bounds and every approximation number. -/
+theorem approximationNumber_le_of_norm_apply_le [CompleteSpace X]
     (A : X →L[𝕜] Y) (B : X →L[𝕜] Z) (h : ∀ x : X, ‖A x‖ ≤ ‖B x‖) (n : ℕ) :
     (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ) := by
-  by_contra hnot
-  have hlt : (B.singularValue n : ℝ) < (A.singularValue n : ℝ) := lt_of_not_ge hnot
-  have hB0 : 0 ≤ (B.singularValue n : ℝ) := (B.singularValue n).coe_nonneg
-  have hmm : TauCeti.HasMinMaxLowerBound 𝕜 X Y := TauCeti.HasMinMaxLowerBound.of_completeSpace
-  have hmm' : TauCeti.HasMinMaxLowerBound 𝕜 X Z := TauCeti.HasMinMaxLowerBound.of_completeSpace
-  obtain ⟨s, hrs, v, hv, hV⟩ :=
-    (hmm.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound A n hB0).mp hlt
-  exact lt_irrefl _
-    ((hmm'.lt_approximationNumber_iff_exists_finiteDimensional_lowerBound B n hB0).mpr
-      ⟨s, hrs, v, hv, fun x hx => (hV x hx).trans (h x)⟩)
+  let A' := (UniformSpace.Completion.toComplL : Y →L[𝕜] UniformSpace.Completion Y) ∘L A
+  let B' := (UniformSpace.Completion.toComplL : Z →L[𝕜] UniformSpace.Completion Z) ∘L B
+  have h' (x : X) : ‖A' x‖ ≤ ((1 : ℝ≥0) : ℝ) * ‖B' x‖ := by
+    simpa only [A', B', ContinuousLinearMap.comp_apply, UniformSpace.Completion.coe_toComplL,
+      UniformSpace.Completion.norm_coe, NNReal.coe_one, one_mul] using h x
+  have hle := singularValue_le_mul_of_forall_norm_apply_le h' n
+  dsimp only [A', B'] at hle
+  rw [one_mul, A.singularValue_toComplL_comp, B.singularValue_toComplL_comp] at hle
+  exact NNReal.coe_le_coe.mpr hle
 
 omit [CompleteSpace Y] [CompleteSpace Z] in
 /-- Pointwise equality of norms determines the whole approximation-number sequence.  The two
 operators may have different targets, which is what the heterogeneous relation is for. -/
-theorem hasSameApproximationNumbers_of_norm_apply_eq
+theorem hasSameApproximationNumbers_of_norm_apply_eq [CompleteSpace X]
     (A : X →L[𝕜] Y) (B : X →L[𝕜] Z) (h : ∀ x : X, ‖A x‖ = ‖B x‖) :
     A.SameSingularValues B := by
   apply (sameSingularValues_iff _ _).mpr
@@ -129,6 +124,6 @@ theorem hasSameApproximationNumbers_of_norm_apply_eq
     (approximationNumber_le_of_norm_apply_le A B (fun x => (h x).le) n)
     (approximationNumber_le_of_norm_apply_le B A (fun x => (h x).ge) n)
 
-end MinMax
+end PointwiseComparison
 
 end ContinuousLinearMap
