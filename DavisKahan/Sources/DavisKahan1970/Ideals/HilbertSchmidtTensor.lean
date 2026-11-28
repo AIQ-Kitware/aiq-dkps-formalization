@@ -72,8 +72,7 @@ element of the `ℓ²` model. -/
 theorem approximationNumberEnergy_ne_top_iff_existsUnique_tensor (A : F →L[ℂ] E) :
     approximationNumberEnergy A ≠ ⊤ ↔
       ∃! f : lp (fun _ : HSIndex F => E) 2, (hSBasis F).columnOperator f = A := by
-  rw [approximationNumberEnergy_eq_basisEnergy (hSBasis F) A,
-    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+  rw [approximationNumberEnergy_eq_hilbertSchmidtEnergy (hSBasis F) A]
   constructor
   · exact (hSBasis F).existsUnique_columnOperator_eq
   · rintro ⟨f, hf, -⟩
@@ -86,8 +85,7 @@ noncomputable def hilbertSchmidtTensor (A : F →L[ℂ] E)
     (hA : approximationNumberEnergy A ≠ ⊤) : lp (fun _ : HSIndex F => E) 2 :=
   ⟨fun i => A (hSBasis F i),
     (A.hilbertSchmidtEnergy_ne_top_iff_memℓp (hSBasis F)).mp (by
-      simpa only [approximationNumberEnergy_eq_basisEnergy (hSBasis F) A,
-        hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hA)⟩
+      simpa only [approximationNumberEnergy_eq_hilbertSchmidtEnergy (hSBasis F) A] using hA)⟩
 
 /-- The tensor model's operator, unfolded.  This is the bridge between the tensor presentation of a
 Hilbert--Schmidt map and its operator form. -/
@@ -107,8 +105,7 @@ theorem norm_hilbertSchmidtTensor (A : F →L[ℂ] E)
 /-- Every element of the model represents a paper Hilbert--Schmidt operator. -/
 theorem approximationNumberEnergy_ne_top_toOperator (f : lp (fun _ : HSIndex F => E) 2) :
     approximationNumberEnergy ((hSBasis F).columnOperator f) ≠ ⊤ := by
-  rw [approximationNumberEnergy_eq_basisEnergy (hSBasis F),
-    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+  rw [approximationNumberEnergy_eq_hilbertSchmidtEnergy (hSBasis F)]
   simp
 
 /-- The paper square norm of the represented operator is exactly the model norm. -/

@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
@@ -52,13 +53,8 @@ The final argument is then a scalar subtraction.
 
 ## Scalar scope
 
-Everything except the Pythagorean splitting is scalar generic and is stated
-here over `RCLike 𝕜`.  The splitting itself is proved over `ℂ` because the
-column-energy bridge `approximationNumberEnergy_eq_basisEnergy` is; the real
-splitting, and with it the real Hilbert-space form of the lemma, is obtained by
-complexification in
-`DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean`.  The
-`_of_energySplit` core below is the shared engine of the two scalar cases.
+The energy splitting and leakage estimates hold over every `RCLike` scalar
+field. The complex and real statements give the two forms used in the paper.
 -/
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -159,67 +155,17 @@ theorem rank_starProjection_comp_le
   exact LinearMap.rank_comp_le_left
     K.toLinearMap Q.starProjection.toLinearMap
 
-section ComplexPythagoras
-
-variable {E' : Type u} {F' : Type v}
-  [NormedAddCommGroup E'] [InnerProductSpace ℂ E'] [CompleteSpace E']
-  [NormedAddCommGroup F'] [InnerProductSpace ℂ F'] [CompleteSpace F']
-
-/-- The paper square energy splits over an orthogonal decomposition of the
-domain.  This is the basis-free Pythagorean identity used in Lemma 6.3.
-
-Stated over `ℂ` because the column-energy bridge it uses is; the real form is
-`hilbertSchmidtEnergy_domain_projection_add_real`, obtained by
-complexification. -/
-theorem hilbertSchmidtEnergy_domain_projection_add_complex
-    (L : E' →L[ℂ] F')
-    (P : Submodule ℂ E') [P.HasOrthogonalProjection]
-    -- carried for source fidelity: Davis--Kahan Lemma 6.3 states this for
-    -- Hilbert--Schmidt `L`, and the proof happens not to need it
-    (_hfinite : approximationNumberEnergy L ≠ ⊤) :
+/-- The paper's square energy splits across an orthogonal decomposition of
+the source, including infinite energy. -/
+theorem approximationNumberEnergy_domain_projection_add
+    (L : E →L[𝕜] F) (P : Submodule 𝕜 E) [P.HasOrthogonalProjection] :
     approximationNumberEnergy L =
       approximationNumberEnergy (L ∘L P.starProjection) +
-      approximationNumberEnergy
-        (L ∘L (1 - P.starProjection)) := by
-  classical
-  obtain ⟨ι, b, -⟩ := exists_hilbertBasis ℂ F'
-  -- Rectangular Hilbert--Schmidt energy of any `M : E' → F'` equals the summed
-  -- squared columns of its adjoint over the fixed basis `b` of `F'`.
-  have hswap : ∀ M : E' →L[ℂ] F',
-      approximationNumberEnergy M =
-        hilbertSchmidtBasisEnergy b M.adjoint := by
-    intro M
-    obtain ⟨κ, bE, -⟩ := exists_hilbertBasis ℂ E'
-    rw [approximationNumberEnergy_eq_basisEnergy bE M,
-      hilbertSchmidtBasisEnergy_adjoint_swap bE b M]
-  -- The adjoints of the two compressed operators are the projected columns.
-  have hPadj :
-      (L ∘L P.starProjection).adjoint = P.starProjection ∘L L.adjoint := by
-    rw [ContinuousLinearMap.adjoint_comp,
-      (isSelfAdjoint_starProjection P).adjoint_eq]
-  have hPcadj :
-      (L ∘L (1 - P.starProjection)).adjoint =
-        (1 - P.starProjection) ∘L L.adjoint := by
-    have hsa : (1 - P.starProjection).adjoint = 1 - P.starProjection := by
-      rw [← Submodule.starProjection_orthogonal' P]
-      exact (isSelfAdjoint_starProjection Pᗮ).adjoint_eq
-    rw [ContinuousLinearMap.adjoint_comp, hsa]
-  rw [hswap L, hswap (L ∘L P.starProjection),
-    hswap (L ∘L (1 - P.starProjection)), hPadj, hPcadj]
-  unfold hilbertSchmidtBasisEnergy
-  rw [← tsum_add]
-  apply tsum_congr
-  intro i
-  simp only [ContinuousLinearMap.comp_apply]
-  -- Pointwise this is the Pythagorean identity for the orthogonal projection.
-  have hpyth := P.norm_sq_eq_add_norm_sq_starProjection (L.adjoint (b i))
-  rw [Submodule.starProjection_orthogonal' P] at hpyth
-  simp only [← ENNReal.coe_pow, ← ENNReal.coe_add, ENNReal.coe_inj]
-  apply NNReal.coe_injective
-  push_cast
-  exact hpyth
-
-end ComplexPythagoras
+        approximationNumberEnergy (L ∘L (1 - P.starProjection)) := by
+  obtain ⟨_, b, -⟩ := exists_hilbertBasis 𝕜 E
+  simp only [approximationNumberEnergy_eq_hilbertSchmidtEnergy b,
+    ← Submodule.starProjection_orthogonal' P]
+  exact (L.hilbertSchmidtEnergy_comp_starProjection_add_orthogonal b P).symm
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Under the paper's block-invariance hypothesis the selected source block
@@ -235,26 +181,16 @@ theorem leftCompressed_comp_source_eq
       K ∘L P.starProjection := by
   simpa only [ContinuousLinearMap.comp_assoc] using hKP.symm
 
-/-- **The scalar-generic engine of Lemma 6.3.**
-
-Everything in the proof of the lemma except the Pythagorean splitting of the
-square energy over `P + (1 - P)` is independent of the scalar field, so the
-splitting is taken here as a hypothesis on the one operator that needs it.
-Over `ℂ` the hypothesis is discharged by
-`hilbertSchmidtEnergy_domain_projection_add_complex`, over `ℝ` by
-`hilbertSchmidtEnergy_domain_projection_add_real`. -/
-theorem lemma6_3_approximationNumber_leakage_of_energySplit
+/-- **Lemma 6.3 in approximation numbers.** The rank bound on the target
+block controls the prefix energies, and the orthogonal domain decomposition
+splits the full square energy. -/
+theorem lemma6_3_approximationNumber_leakage
     (K : E →L[𝕜] F)
     (P : Submodule 𝕜 E) [P.HasOrthogonalProjection]
     (Q : Submodule 𝕜 F) [Q.HasOrthogonalProjection]
     (n : ℕ) (hn : 0 < n) (η : ℝ) (hη : 0 < η)
     (hKP : K ∘L P.starProjection = Q.starProjection ∘L K ∘L P.starProjection)
     (hrankQ : Q.starProjection.rank ≤ (n : Cardinal))
-    (hsplit :
-      approximationNumberEnergy (Q.starProjection ∘L K) =
-        approximationNumberEnergy ((Q.starProjection ∘L K) ∘L P.starProjection) +
-          approximationNumberEnergy
-            ((Q.starProjection ∘L K) ∘L (1 - P.starProjection)))
     (hnear : approximationEnergy (K ∘L P.starProjection) n >
       approximationEnergy K n - η ^ 2) :
     ‖Q.starProjection ∘L K ∘L (1 - P.starProjection)‖ < η := by
@@ -295,7 +231,7 @@ theorem lemma6_3_approximationNumber_leakage_of_energySplit
       approximationNumberEnergy_ne_top_of_rank_le hrankA
     have hBfinite : approximationNumberEnergy B ≠ ⊤ :=
       approximationNumberEnergy_ne_top_of_rank_le hrankB
-    have hreal := congrArg ENNReal.toReal hsplit
+    have hreal := congrArg ENNReal.toReal (approximationNumberEnergy_domain_projection_add L P)
     rw [hLP, hLB, ENNReal.toReal_add hAfinite hBfinite,
       ← approximationEnergy_eq_approximationNumberEnergy_toReal_of_rank_le L hrankL,
       ← approximationEnergy_eq_approximationNumberEnergy_toReal_of_rank_le A hrankA,
@@ -360,12 +296,7 @@ theorem lemma6_3_approximationNumber_leakage_complex
     (hnear : approximationEnergy (K ∘L P.starProjection) n >
       approximationEnergy K n - η ^ 2) :
     ‖Q.starProjection ∘L K ∘L (1 - P.starProjection)‖ < η := by
-  refine lemma6_3_approximationNumber_leakage_of_energySplit
-    K P Q n hn η hη hKP hrankQ ?_ hnear
-  refine hilbertSchmidtEnergy_domain_projection_add_complex
-    (Q.starProjection ∘L K) P ?_
-  exact approximationNumberEnergy_ne_top_of_rank_le
-    ((rank_starProjection_comp_le K Q).trans hrankQ)
+  exact lemma6_3_approximationNumber_leakage K P Q n hn η hη hKP hrankQ hnear
 
 /-- Finite-dimensional singular-value specialization of Lemma 6.3, with the
 source-faithful block hypothesis. -/

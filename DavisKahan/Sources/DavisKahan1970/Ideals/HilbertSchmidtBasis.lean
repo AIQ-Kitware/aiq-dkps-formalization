@@ -17,23 +17,13 @@ open TauCeti.DavisKahan.Sylvester
 /-!
 # Basis and tensor models of the paper square norm
 
-The source square norm is defined in the main development by the complete
-approximation-number sequence.  The spectral proof of the second generalized
-sine theorem needs the equivalent Hilbert-space model.  This file proves the
-coordinate bridge:
+The paper defines square energy through the approximation-number sequence.
+TauCeti's Hilbert–Schmidt reconciliation identifies it with the native
+column energy of any Hilbert basis. The tensor model uses that identity in
+`DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean`.
 
-* the column-square sum is independent of the Hilbert basis;
-* it equals the sum of squared approximation singular values;
-The tensor model itself — the identification with `E tensor Conj F` and the
-equality of the tensor norm with the paper square norm — lives in
-`DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean`, because it is the only
-part that needs `vendor/Spectra`.
-
-The key comparison uses finite basis projections.  For every finite set of
-basis vectors, finite-dimensional Eckart--Young and the Frobenius identity
-identify the two cutoff energies.  Strong convergence of the projections and
-monotone convergence then identify their suprema.  No compactness assumption
-is made; compactness follows afterwards from finite square energy.
+The finite-basis cutoff results identify the square energy of each
+compression and its supremum under strong convergence.
 -/
 
 namespace TauCeti
@@ -52,40 +42,6 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type vE} {F : Type vF}
 variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
-/-- Extended column-square energy in a chosen Hilbert basis of the domain. -/
-@[expose]
-def hilbertSchmidtBasisEnergy {ι : Type*}
-    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) : ENNReal :=
-  ∑' i, (‖A (b i)‖₊ : ENNReal) ^ 2
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- The paper column energy is the accepted `ContinuousLinearMap.hilbertSchmidtEnergy`. -/
-theorem hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
-    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    hilbertSchmidtBasisEnergy b A = A.hilbertSchmidtEnergy b := by
-  simp only [hilbertSchmidtBasisEnergy, ContinuousLinearMap.hilbertSchmidtEnergy_def,
-    eNorm_eq_nnNorm]
-
-/-- Adjoint cross-swap for rectangular operators. -/
-theorem hilbertSchmidtBasisEnergy_adjoint_swap
-    {ι κ : Type*} (bF : HilbertBasis ι 𝕜 F)
-    (bE : HilbertBasis κ 𝕜 E) (A : F →L[𝕜] E) :
-    hilbertSchmidtBasisEnergy bF A =
-      hilbertSchmidtBasisEnergy bE A.adjoint :=
-  by
-    rw [hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy,
-      hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
-    exact (A.hilbertSchmidtEnergy_adjoint bF bE).symm
-
-/-- The rectangular column-square energy does not depend on the domain basis. -/
-theorem hilbertSchmidtBasisEnergy_indep
-    {ι κ : Type*} (b c : HilbertBasis ι 𝕜 F)
-    (d : HilbertBasis κ 𝕜 E) (A : F →L[𝕜] E) :
-    hilbertSchmidtBasisEnergy b A =
-      hilbertSchmidtBasisEnergy c A := by
-  rw [hilbertSchmidtBasisEnergy_adjoint_swap b d A,
-    ← hilbertSchmidtBasisEnergy_adjoint_swap c d A]
 
 /-- The span of finitely many basis vectors is finite dimensional. -/
 instance basisSpan_finiteDimensional {ι : Type*}
@@ -433,23 +389,11 @@ theorem approximationNumberEnergy_eq_iSup_cutoff {ι : Type*}
     exact ENNReal.ofReal_le_ofReal (pow_le_pow_left₀
       ((ContinuousLinearMap.singularValue _ n).coe_nonneg) (hle s n) 2)
 
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- A nonnegative series is the supremum of its finite partial subsums. -/
-theorem hilbertSchmidtBasisEnergy_eq_iSup_finset {ι : Type*}
+/-- The paper's sum of squared approximation numbers equals the native column
+energy in every Hilbert basis of the source. -/
+theorem approximationNumberEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    hilbertSchmidtBasisEnergy b A =
-      ⨆ s : Finset ι, ∑ i ∈ s, ENNReal.ofReal (‖A (b i)‖ ^ 2) := by
-  unfold hilbertSchmidtBasisEnergy
-  rw [tsum_eq_iSup_sum]
-  refine iSup_congr fun s => Finset.sum_congr rfl fun i _ => ?_
-  rw [ENNReal.ofReal_pow (norm_nonneg _), ofReal_norm, eNorm_eq_nnNorm]
-
-/-- The approximation-number and basis definitions of rectangular
-Hilbert--Schmidt energy agree exactly. -/
-theorem approximationNumberEnergy_eq_basisEnergy {ι : Type*}
-    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    approximationNumberEnergy A = hilbertSchmidtBasisEnergy b A := by
-  rw [hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+    approximationNumberEnergy A = A.hilbertSchmidtEnergy b := by
   simpa only [approximationNumberEnergy,
     ENNReal.ofReal_pow NNReal.zero_le_coe, ENNReal.ofReal_coe_nnreal] using
     A.tsum_singularValue_sq_eq_hilbertSchmidtEnergy b
@@ -462,8 +406,7 @@ theorem approximationNumberEnergy_eq_hilbertSchmidtGauge_sq
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
   rw [OperatorIdealFamily.gauge_hilbertSchmidt A b,
     ← ENNReal.rpow_mul, one_div, inv_mul_cancel₀ (by norm_num : (2 : ℝ) ≠ 0),
-    ENNReal.rpow_one, approximationNumberEnergy_eq_basisEnergy b A,
-    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
+    ENNReal.rpow_one, approximationNumberEnergy_eq_hilbertSchmidtEnergy b A]
 
 /-- **The canonical real norm is the paper's square-root-of-energy formula**, with no
 finiteness hypothesis: off the ideal both sides are `0`, because `ENNReal.toReal` sends
@@ -475,54 +418,7 @@ theorem hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy
     (A : F →L[𝕜] E) :
     A.hilbertSchmidtNorm = Real.sqrt (approximationNumberEnergy A).toReal := by
   obtain ⟨_, b, -⟩ := exists_hilbertBasis 𝕜 F
-  rw [A.hilbertSchmidtNorm_eq_sqrt b, approximationNumberEnergy_eq_basisEnergy b A,
-    hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy]
-
-/-- Paper square membership is equivalent to square-summable columns in any
-Hilbert basis. -/
-theorem approximationNumberEnergy_ne_top_iff_summable_basis {ι : Type*}
-    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    approximationNumberEnergy A ≠ ⊤ ↔ Summable (fun i => ‖A (b i)‖ ^ 2) := by
-  have hE : hilbertSchmidtBasisEnergy b A
-      = ∑' i, ((‖A (b i)‖₊ ^ 2 : NNReal) : ENNReal) := by
-    simp only [hilbertSchmidtBasisEnergy, ENNReal.coe_pow]
-  rw [approximationNumberEnergy_eq_basisEnergy b A, hE,
-    ENNReal.tsum_coe_ne_top_iff_summable, ← NNReal.summable_coe]
-  simp only [NNReal.coe_pow, coe_nnNorm]
-
-/-- The paper square norm is the ordinary basis Hilbert--Schmidt norm. -/
-theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
-    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E)
-    (hA : approximationNumberEnergy A ≠ ⊤) :
-    ContinuousLinearMap.hilbertSchmidtNorm A = Real.sqrt (∑' i, ‖A (b i)‖ ^ 2) := by
-  have hsummable := (approximationNumberEnergy_ne_top_iff_summable_basis b A).1 hA
-  have hnn : Summable (fun i => ‖A (b i)‖₊ ^ 2) := by
-    rw [← NNReal.summable_coe]
-    simpa only [NNReal.coe_pow, coe_nnNorm] using hsummable
-  have hE : hilbertSchmidtBasisEnergy b A
-      = ((∑' i, (‖A (b i)‖₊ ^ 2 : NNReal) : NNReal) : ENNReal) := by
-    simp only [hilbertSchmidtBasisEnergy]
-    exact (ENNReal.coe_tsum hnn).symm
-  rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy,
-    approximationNumberEnergy_eq_basisEnergy b A, hE, ENNReal.coe_toReal]
-  congr 1
-  rw [NNReal.coe_tsum]
-  simp only [NNReal.coe_pow, coe_nnNorm]
-
-/-! ## Reconciliation with the accepted Hilbert–Schmidt ideal
-
-Tau Ceti owns the energy, norm and complete ideal family. The statements below
-identify the paper's approximation-number presentation with those accepted objects.
--/
-
-/-- **The singular-value energy is the column energy.**  This is the obligation recorded
-against Milestone B3 of `TauCetiRoadmap/OperatorTheory/OperatorIdeals/README.md`. -/
-theorem approximationNumberEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
-    (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
-    ∑' n : ℕ, ENNReal.ofReal ((A.singularValue n : ℝ) ^ 2) =
-      A.hilbertSchmidtEnergy b := by
-  rw [← hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy b A]
-  exact approximationNumberEnergy_eq_basisEnergy b A
+  rw [A.hilbertSchmidtNorm_eq_sqrt b, approximationNumberEnergy_eq_hilbertSchmidtEnergy b A]
 
 /-- On the paper ideal, the accepted Hilbert–Schmidt gauge is the real norm. -/
 theorem hilbertSchmidtGauge_eq_ofReal_hilbertSchmidtNorm
@@ -532,8 +428,7 @@ theorem hilbertSchmidtGauge_eq_ofReal_hilbertSchmidtNorm
       (ContinuousLinearMap.hilbertSchmidtNorm A) := by
   obtain ⟨w, b, -⟩ := exists_hilbertBasis 𝕜 F
   have henergy : A.hilbertSchmidtEnergy b = approximationNumberEnergy A := by
-    rw [← hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy b A]
-    exact (approximationNumberEnergy_eq_basisEnergy b A).symm
+    exact (approximationNumberEnergy_eq_hilbertSchmidtEnergy b A).symm
   have hne : approximationNumberEnergy A ≠ ⊤ := hA
   rw [hilbertSchmidtNorm_eq_sqrt_approximationNumberEnergy,
     OperatorIdealFamily.gauge_hilbertSchmidt A b,

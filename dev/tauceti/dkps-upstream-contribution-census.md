@@ -1,5 +1,35 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 Hilbert–Schmidt column energy and Lemma 6.3
+
+The paper's squared-approximation-number energy now connects directly to
+`ContinuousLinearMap.hilbertSchmidtEnergy` through the reconciliation from
+#16622 (OI-B90). The local column energy, its adjoint and basis-independence
+facades, and the unused summability and square-root presentations retire.
+The native square-summability and real column-sum laws are in
+`HilbertSchmidt.Columns` (#16160) and `HilbertSchmidt.Basic` (#46753).
+Theorem 6.2 and the tensor and ideal proofs use the single reconciliation.
+The finite-basis cutoff and strong-convergence results remain in DKPS.
+[#16622 integration](https://github.com/TauCetiProject/TauCeti/commit/cbeaee9f03627f5c09da950d62a5cf7af049e10d) ·
+[#16160 integration](https://github.com/TauCetiProject/TauCeti/commit/b035df48349600153bb6096a840e6b9acff91a08) ·
+[#46753 integration](https://github.com/TauCetiProject/TauCeti/commit/32ff1cb530ef1e94e4c330d30946f13947b6a4b2)
+
+Li Xuanji's #16348 (OI-C18–OI-C20) supplies the source-domain Pythagorean
+split of Hilbert–Schmidt energy, including infinite energy. Both scalar
+forms of Lemma 6.3 use the same leakage proof with this split. The
+complex-only column calculation, real complexification detour, and
+explicit energy-split hypothesis retire. The paper statements keep
+their exact real and complex scopes. The census now describes their
+off-block operator-norm conclusion. #16348 cites Reed–Simon and Simon
+and reports no vendored formalization. DKPS proof descent for the
+reconciliation and column lemmas is unverified.
+[#16348 integration](https://github.com/TauCetiProject/TauCeti/commit/5ee574142898c3b03d5b12640d277ca9d75cd877)
+
+The focused build (9,617 jobs), default build (22,812 jobs), and
+Challenge with the semantic-surface audit (22,522 jobs) passed without
+warnings at TauCeti `007b3a1150`. All 1,569 source-census references
+resolved and the 17 available Davis–Kahan comparator signatures matched.
+
 ## November 28 polar alignment, Hilbert–Schmidt restriction, and projections
 
 The Acharyya configuration perturbation proof now uses

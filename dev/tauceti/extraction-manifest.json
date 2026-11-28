@@ -2802,7 +2802,7 @@
         "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis"
       ],
       "status": "staged-partial",
-      "migration_note": "2026-10-25: canonical energy, adjoint/basis invariance and ideal laws consumed from Tau Ceti. Donor retains finite-partial-sum, negation and pointwise-bound consequences only. No energy definition or aliases remain.",
+      "migration_note": "2026-10-25: canonical energy, adjoint/basis invariance and ideal laws consumed from Tau Ceti. The donor retains finite-partial-sum and pointwise-bound consequences. 2026-11-28: retire the paper alias hilbertSchmidtBasisEnergy, its equality, adjoint swap, basis-independence and finite partial sum wrappers, approximationNumberEnergy_eq_basisEnergy, approximationNumberEnergy_ne_top_iff_summable_basis and hilbertSchmidtNorm_eq_sqrt_tsum_basis from DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtBasis.lean (proof origin 6eeb643c828ebc49cf1cd161f691b2842c5459b8; Jon Crall and OpenAI GPT-5.6 Thinking, Kitware, Apache-2.0). The existing approximationNumberEnergy_eq_hilbertSchmidtEnergy is now the single paper bridge to ContinuousLinearMap.tsum_singularValue_sq_eq_hilbertSchmidtEnergy, covering arbitrary rectangular RCLike Hilbert spaces and infinite energy. Native #16622 cbeaee9f03627f5c09da950d62a5cf7af049e10d satisfies OI-B90. Native hilbertSchmidtEnergy_ne_top_iff_summable comes from #16160 b035df48349600153bb6096a840e6b9acff91a08, and hasSum_sq_norm_apply from #46753 32ff1cb530ef1e94e4c330d30946f13947b6a4b2 as support for the VonNeumannAlgebras trace pairing. DKPS descent for these three contributions is unverified. The distinct finite-basis cutoff and SOT convergence results remain local.",
       "upstream_pr": null
     },
     {
@@ -4389,8 +4389,8 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "accepted-upstream-local-copy-removed",
-      "upstream_pr": null,
-      "migration_note": "2026-10-25: removed the three local splitting proofs. HilbertSchmidt.Block calls ContinuousLinearMap.tsum_tsum_hilbertSchmidtEnergy_comp directly. Accepted source checked at Tau Ceti efded067c28ffca3483fd731674eb13b42543fbb; overlap is verified, proof adaptation is not claimed."
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16348",
+      "migration_note": "2026-10-25: removed the three local splitting proofs. HilbertSchmidt.Block calls ContinuousLinearMap.tsum_tsum_hilbertSchmidtEnergy_comp directly. 2026-11-28: consume ContinuousLinearMap.hilbertSchmidtEnergy_comp_starProjection_add_orthogonal from Li Xuanji's #16348 (5ee574142898c3b03d5b12640d277ca9d75cd877, OI-C18 through OI-C20) in the paper's approximationNumberEnergy_domain_projection_add. It covers complete real or complex rectangular spaces and arbitrary extended energy, with the equation reversed. Retire the separate hilbertSchmidtEnergy_domain_projection_add_complex and _real proofs and complexify_one_eq and complexify_one_sub_starProjection in Section6AppendixLeakage and Section6AppendixLeakageReal (source ea77416c8b71d5e66609bbff46909b2ff3f2aeac and 1766dc7ab1c8923005e95d1308d8f1efc6e65a1d; Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5, Kitware, Apache-2.0). The scalar-generic lemma6_3_approximationNumber_leakage derives the energy split internally. The paper-scoped real and complex statements keep their hypotheses. The integration cites Reed--Simon and Simon and reports no vendored formalization."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",

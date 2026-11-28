@@ -4340,7 +4340,7 @@ FOR THIS ROW: item (b) does not close.  Its obstruction is now the attainment cl
 
 **importance:** `technical`  **section:** 6 appendix  **source:** Lemma 6.3  **kind:** lemma  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
-**Summary.** A nearly Ky-Fan-optimal finite-rank compression has small off-block trace norm.
+**Summary.** Near-saturation of the sum of the leading squared singular values gives a bound on the off-block operator norm.
 
 **Scope gap.** CLOSED 2026-08-09 (Claude Opus 5).  The gap recorded below was real and is now discharged: `lemma6_3_approximationNumber_leakage_real` and `lemma6_3_singularValue_leakage_real` (`DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean`) are Lemma 6.3 over a REAL Hilbert space of arbitrary dimension -- real operator `K : E →L[ℝ] F`, real subspaces `P`, `Q`, real approximation numbers, real operator norm -- with the source-faithful block hypothesis `K ∘ P = Q ∘ K ∘ P` unchanged and no dimension hypothesis on the approximation-number form.  PRIOR TEXT, for the record: real-scalar/infinite-dimensional: every declaration was `InnerProductSpace ℂ` only, confirmed by elaboration 2026-08-07 under the corrected repo-wide method, with no real endpoint anywhere in the repo.
 
@@ -4348,8 +4348,8 @@ FOR THIS ROW: item (b) does not close.  Its obstruction is now the attainment cl
 
 - `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex`
 - `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_complex`
-- `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_of_energySplit`
-- `TauCeti.DavisKahan1970.Section6Appendix.hilbertSchmidtEnergy_domain_projection_add_real`
+- `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage`
+- `TauCeti.DavisKahan1970.Section6Appendix.approximationNumberEnergy_domain_projection_add`
 - `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real`
 - `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_real`
 - `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_complex`
@@ -4364,6 +4364,8 @@ STATUS CORRECTED 2026-08-07 (Fable 5): `partial_or_wrapper_missing` -> `compiled
 **M32, THE SECTION 6 SCALAR TRANCHE, 2026-08-09 (Claude Opus 5).**  **THE REAL-SCALAR AXIS IS CLOSED, BY PROOF, AND THE ROUTE WAS NOT THE ONE THE BLOCKER PREDICTED.**  The blocker's standing ROUTE note says a real wrapper 'should go through' the complexification route 'rather than by reproving over `RCLike`, since several proofs use the complex continuous functional calculus essentially'.  MEASURED for this lemma: the proof uses no functional calculus at all.  Of its eight supporting declarations, seven are scalar generic verbatim -- they consume only `approximationSingularValue`, `approximationNumberEnergy_eq_sum_range_of_rank_le`, `approximationNumber_comp_le_norm_mul` and `starProjection_norm_le`, all of which are already `RCLike`.  Exactly ONE step was complex-only: the Pythagorean splitting `hilbertSchmidtEnergy_domain_projection_add_complex`, and only because the column-energy bridge `approximationNumberEnergy_eq_basisEnergy` (`Ideals/HilbertSchmidtBasis.lean`) is stated over `ℂ`.
 
 So `Section6AppendixLeakage.lean` was generalized to `RCLike 𝕜` (`approximationEnergy` and its five lemmas, plus the new engine `lemma6_3_approximationNumber_leakage_of_energySplit`, which takes the splitting for the one operator that needs it as a hypothesis), and only the splitting was transported.  `Section6AppendixLeakageReal.lean` proves `hilbertSchmidtEnergy_domain_projection_add_real` by reading the complex splitting at `complexify L` and `complexifySubmodule P`: complexification preserves the whole approximation singular-value sequence hence the energy (`approximationNumberEnergy_complexify`), the orthogonal projection onto a complexified real subspace is the complexification of the real one (`starProjection_complexifySubmodule`), and complexification carries `1 - P` to `1 - complexify P`.  `lemma6_3_approximationNumber_leakage_real` and the finite-dimensional `lemma6_3_singularValue_leakage_real` are then the ℝ instances of the same engine the ℂ forms use, word for word the complex statements with `InnerProductSpace ℂ` replaced by `InnerProductSpace ℝ`, at arbitrary dimension.  Both axiom-clean (`[propext, Classical.choice, Quot.sound]`), both in the default build.
+
+2026-11-28: TauCeti #16348 supplies the orthogonal domain energy split. The scalar-generic leakage theorem uses it through the squared-approximation-number reconciliation, and the real and complex source statements use that common proof.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 

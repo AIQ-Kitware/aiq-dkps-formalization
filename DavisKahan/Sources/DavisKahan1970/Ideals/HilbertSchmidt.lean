@@ -222,7 +222,7 @@ theorem approximationNumberEnergy_comp_le
 /-- **The two-sided ideal property**, at the level of finite approximation-number
 energy. The accepted Hilbert–Schmidt family supplies the same ideal property for its
 canonical predicate; the two are identified by
-`approximationNumberEnergy_eq_basisEnergy`
+`approximationNumberEnergy_eq_hilbertSchmidtEnergy`
 once the coordinate bridge is in scope. -/
 theorem approximationNumberEnergy_ne_top_comp
     {𝕜 : Type u} [RCLike 𝕜]
