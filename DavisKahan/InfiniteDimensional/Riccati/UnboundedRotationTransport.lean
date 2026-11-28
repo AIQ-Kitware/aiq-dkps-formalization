@@ -131,8 +131,7 @@ noncomputable abbrev unboundedGraphRotationPullback
     (H : UnboundedBlockData (𝕜 := ℂ) (E0 := E0) (E1 := E1))
     (X : E0 →L[ℂ] E1) :
     WithLp 2 (E0 × E1) →ₗ.[ℂ] WithLp 2 (E0 × E1) :=
-  TauCeti.LinearPMap.pullback (unboundedBlockOperatorCore H)
-    (unboundedGraphRotationEquiv X)
+  (unboundedBlockOperatorCore H).conj (unboundedGraphRotationEquiv X).symm.toLinearEquiv
 
 /-- Exact domain of the raw graph-rotated block core. -/
 @[simp] theorem mem_unboundedGraphRotationPullback_domain_iff
@@ -140,10 +139,7 @@ noncomputable abbrev unboundedGraphRotationPullback
     (X : E0 →L[ℂ] E1) (z : WithLp 2 (E0 × E1)) :
     z ∈ (unboundedGraphRotationPullback H X).domain ↔
       unboundedGraphRotation X z ∈ (unboundedBlockOperatorCore H).domain :=
-  by
-    rw [unboundedGraphRotationPullback, TauCeti.LinearPMap.pullback_domain,
-      TauCeti.LinearPMap.mem_pullbackDomain_iff]
-    rfl
+  _root_.LinearPMap.mem_conj_domain_iff
 
 /-- The raw graph-rotated block core is unitarily equivalent to the original
 raw block core. -/
@@ -155,7 +151,7 @@ theorem unboundedGraphRotationPullback_unitaryEquivalent
       (unboundedBlockOperatorCore H)
       (unboundedGraphRotationEquiv X).toContinuousLinearMap
       (unboundedGraphRotationEquiv X).symm.toContinuousLinearMap := by
-  exact TauCeti.LinearPMap.pullback_unitaryEquivalent
+  exact TauCeti.LinearPMap.unitaryEquivalent_symm_conj
     (unboundedBlockOperatorCore H)
     (unboundedGraphRotationEquiv X)
     (unboundedGraphRotationEquiv_unitary X)

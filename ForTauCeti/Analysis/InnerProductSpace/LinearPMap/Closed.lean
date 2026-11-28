@@ -9,6 +9,7 @@ public import Mathlib.Analysis.InnerProductSpace.LinearPMap
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Spectral.Separation
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Reducing
 public import TauCeti.Topology.Algebra.Module.LinearPMap.Restrict
+public import TauCeti.LinearAlgebra.LinearPMap.Conj
 
 /-!
 # Domain-aware infrastructure for partial linear maps
@@ -62,24 +63,6 @@ theorem orthogonalStarProjection_mem_domain
   exact hred.sub_starProjection_mem_domain hx
 
 end IsReducing
-
-/-- `LinearPMap.IsClosed` is stated on the graph, while the canonical
-reducing-restriction API states closedness as a range.  The two are the same set,
-so this is a reindexing lemma used in both directions. -/
-theorem isClosed_iff_range_isClosed
-    (f : E →ₗ.[𝕜] F) :
-    f.IsClosed ↔ IsClosed (Set.range fun x : f.domain => ((x : E), f x)) := by
-  have hgraph : (f.graph : Set (E × F)) =
-      Set.range (fun x : f.domain => ((x : E), f x)) := by
-    ext q
-    simp only [SetLike.mem_coe, LinearPMap.mem_graph_iff, Set.mem_range]
-    constructor
-    · rintro ⟨y, hy1, hy2⟩
-      exact ⟨y, Prod.ext hy1 hy2⟩
-    · rintro ⟨y, hy⟩
-      exact ⟨y, congrArg Prod.fst hy, congrArg Prod.snd hy⟩
-  change IsClosed (f.graph : Set (E × F)) ↔ _
-  rw [hgraph]
 
 /-- Two partial linear maps have the same operator domain. -/
 def SameDomain (A B : E →ₗ.[𝕜] E) : Prop :=
@@ -354,134 +337,6 @@ def Extends (A B : E →ₗ.[𝕜] E) : Prop :=
       hactBC ⟨(x : E), hdomAB x.property⟩
     _ = A x := hactAB x
 
-/-- Domain obtained by pulling a partial-map domain back through a continuous
-linear equivalence. -/
-def pullbackDomain (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : Submodule 𝕜 E :=
-  A.domain.comap e.toLinearMap
-
-/-- `x` lies in the pulled-back domain exactly when `e x` lies in the original
-one — the pullback domain is the preimage, so the condition is on the image. -/
-@[simp] theorem mem_pullbackDomain_iff
-    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) (x : E) :
-    x ∈ pullbackDomain A e ↔ e x ∈ A.domain :=
-  Iff.rfl
-
-/-- A vector in a pulled-back domain, transported to the original domain. -/
-def pullbackDomainToOriginal
-    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
-    pullbackDomain A e →ₗ[𝕜] A.domain where
-  toFun x := ⟨e (x : E), x.property⟩
-  map_add' x y := by
-    apply Subtype.ext
-    exact e.map_add (x : E) (y : E)
-  map_smul' c x := by
-    apply Subtype.ext
-    exact e.map_smul c (x : E)
-
-/-- Transporting a pulled-back domain vector applies `e`.  Unlike the reducing
-restriction, this map genuinely moves the vector. -/
-@[simp] theorem pullbackDomainToOriginal_coe
-    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
-    (x : pullbackDomain A e) :
-    ((pullbackDomainToOriginal A e x : A.domain) : E) = e (x : E) := (rfl)
-/-- Action of the partial map pulled back through a continuous linear
-equivalence. -/
-def pullbackLinearMap (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
-    pullbackDomain A e →ₗ[𝕜] E :=
-  e.symm.toLinearMap.comp (A.toFun.comp (pullbackDomainToOriginal A e))
-
-/-- The pulled-back action is `e⁻¹ ∘ A ∘ e`: push forward by `e`, apply `A`,
-pull back by `e⁻¹`.  Conjugation, written on the domain subtypes. -/
-@[simp] theorem pullbackLinearMap_apply
-    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
-    (x : pullbackDomain A e) :
-    pullbackLinearMap A e x =
-      e.symm (A (pullbackDomainToOriginal A e x)) := (rfl)
-/-- Pull a partial map back through a continuous linear equivalence.  Density
-and graph closedness are separate properties of the resulting partial map. -/
-noncomputable def pullback (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) : E →ₗ.[𝕜] E where
-  domain := pullbackDomain A e
-  toFun := pullbackLinearMap A e
-
-/-- The pulled-back partial map has the pulled-back domain, definitionally. -/
-@[simp] theorem pullback_domain
-    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E) :
-    (pullback A e).domain = pullbackDomain A e := (rfl)
-/-- The pulled-back action, with its domain hypothesis carried explicitly. -/
-@[simp] theorem pullback_apply
-    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
-    (x : E) (hx : x ∈ (pullback A e).domain) :
-    (pullback A e) ⟨x, hx⟩ = e.symm (A ⟨e x, by
-      rwa [pullback_domain, mem_pullbackDomain_iff] at hx⟩) := by
-  rfl
-
-/-- Pullback through a continuous linear equivalence preserves a dense domain. -/
-theorem pullback_dense
-    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
-    (hA : Dense (A.domain : Set E)) :
-    Dense ((pullback A e).domain : Set E) := by
-  rw [pullback_domain]
-  have himage : Dense (e.symm '' (A.domain : Set E)) :=
-    (e.symm.toHomeomorph.isDenseEmbedding.dense_image).2 hA
-  rw [show ((pullbackDomain A e : Submodule 𝕜 E) : Set E) =
-      e.symm '' (A.domain : Set E) by
-    ext x
-    constructor
-    · intro hx
-      exact ⟨e x, hx, e.symm_apply_apply x⟩
-    · rintro ⟨y, hy, rfl⟩
-      simpa using hy]
-  exact himage
-
-/-- Pullback through a continuous linear equivalence preserves graph
-closedness. -/
-theorem pullback_closedGraph
-    (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
-    (hA : IsClosed (Set.range fun x : A.domain => ((x : E), A x))) :
-    IsClosed (Set.range fun x : (pullback A e).domain =>
-      ((x : E), pullback A e x)) := by
-  let coords : E × E → E × E := fun p => (e p.1, e p.2)
-  have hcoords : Continuous coords := by fun_prop
-  rw [show Set.range (fun x : (pullback A e).domain =>
-      ((x : E), pullback A e x)) =
-      coords ⁻¹' (Set.range fun x : A.domain => ((x : E), A x)) by
-    ext p
-    constructor
-    · rintro ⟨x, rfl⟩
-      refine ⟨pullbackDomainToOriginal A e x, ?_⟩
-      apply Prod.ext
-      · rfl
-      · change A (pullbackDomainToOriginal A e x) =
-          e (pullbackLinearMap A e x)
-        -- `rw [pullbackLinearMap_apply]` cannot fire: `x : (pullback A e).domain` is only
-        -- definitionally `pullbackDomain A e`, and `rw`'s pattern match is syntactic.
-        -- `exact` checks up to defeq, so it goes through where the rewrite does not.
-        exact (e.apply_symm_apply _).symm
-    · rintro ⟨x, hx⟩
-      have hfst : (x : E) = e p.1 := congrArg Prod.fst hx
-      have hsnd : A x = e p.2 := congrArg Prod.snd hx
-      have hp1 : p.1 ∈ pullbackDomain A e := by
-        -- states the goal with the local definition unfolded, in the shape the next step
-        -- needs.
-        change e p.1 ∈ A.domain
-        rw [← hfst]
-        exact x.property
-      let z : (pullback A e).domain := ⟨p.1, hp1⟩
-      have hz : pullbackDomainToOriginal A e z = x := by
-        apply Subtype.ext
-        exact hfst.symm
-      refine ⟨z, Prod.ext rfl ?_⟩
-      apply e.injective
-      -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
-      -- stated without a cast: `x : (pullback A e).domain` does not reduce to
-      -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
-      -- `change` names the unfolded form instead.
-      change e (pullbackLinearMap A e z) = e p.2
-      -- See the `exact` above: `z : (pullback A e).domain` blocks the syntactic rewrite.
-      refine (e.apply_symm_apply _).trans ?_
-      exact (congrArg (fun y : A.domain => A y) hz).trans hsnd]
-  exact hA.preimage hcoords
-
 /-- A bounded operator is unitary when it is norm preserving and surjective. -/
 @[expose] def IsUnitaryOperator (W : E →L[𝕜] E) : Prop :=
   (∀ x, ‖W x‖ = ‖x‖) ∧ Function.Surjective W
@@ -500,69 +355,33 @@ maps transport both domains and both actions. -/
     (∀ y : B.domain,
       A ⟨Winv (y : E), hWinvdom y⟩ = Winv (B y))
 
-/-- Pullback through a unitary equivalence is unitarily equivalent to the
-original partial map. -/
-theorem pullback_unitaryEquivalent
+/-- Pullback by a unitary equivalence gives the two-way unitary
+intertwining data used in the Riccati reduction. -/
+theorem unitaryEquivalent_symm_conj
     (A : E →ₗ.[𝕜] E) (e : E ≃L[𝕜] E)
     (he : IsUnitaryOperator e.toContinuousLinearMap) :
-    UnitaryEquivalent (pullback A e) A e.toContinuousLinearMap
-      e.symm.toContinuousLinearMap := by
+    UnitaryEquivalent (A.conj e.symm.toLinearEquiv) A
+      e.toContinuousLinearMap e.symm.toContinuousLinearMap := by
   have hesymm : IsUnitaryOperator e.symm.toContinuousLinearMap := by
-    constructor
-    · intro y
-      have h := he.1 (e.symm y)
-      simpa using h.symm
-    · exact e.symm.surjective
+    refine ⟨fun y => ?_, e.symm.surjective⟩
+    simpa using (he.1 (e.symm y)).symm
   have hleft : e.symm.toContinuousLinearMap ∘L e.toContinuousLinearMap =
       ContinuousLinearMap.id 𝕜 E := by
-    apply ContinuousLinearMap.ext
-    intro x
+    ext x
     simp
   have hright : e.toContinuousLinearMap ∘L e.symm.toContinuousLinearMap =
       ContinuousLinearMap.id 𝕜 E := by
-    apply ContinuousLinearMap.ext
-    intro x
+    ext x
     simp
   refine ⟨he, hesymm, hleft, hright, ?_⟩
-  let hWdom : ∀ x : (pullback A e).domain,
-      e (x : E) ∈ A.domain := fun x => x.property
-  refine ⟨hWdom, ?_⟩
-  let hWinvdom : ∀ y : A.domain,
-      e.symm (y : E) ∈ (pullback A e).domain := fun y => by
-        -- states the goal with the local definition unfolded, in the shape the next step
-        -- needs.
-        change e (e.symm (y : E)) ∈ A.domain
-        simpa only [e.apply_symm_apply] using y.property
-  refine ⟨hWinvdom, ?_, ?_⟩
+  let hdom (x : (A.conj e.symm.toLinearEquiv).domain) : e (x : E) ∈ A.domain :=
+    _root_.LinearPMap.mem_conj_domain_iff.mp x.property
+  refine ⟨hdom, _root_.LinearPMap.map_mem_conj_domain, ?_, ?_⟩
   · intro x
-    -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
-    -- stated without a cast: `x : (pullback A e).domain` does not reduce to
-    -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
-    -- `change` names the unfolded form instead.
-    change A ⟨e (x : E), hWdom x⟩ = e ((pullback A e) x)
-    -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
-    -- stated without a cast: `x : (pullback A e).domain` does not reduce to
-    -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
-    -- `change` names the unfolded form instead.
-    change A ⟨e (x : E), hWdom x⟩ = e (pullbackLinearMap A e x)
-    -- See the `exact` in `isClosed_pullback`: `x : (pullback A e).domain` blocks the
-    -- syntactic rewrite, but the two sides are still definitionally equal.
+    rw [_root_.LinearPMap.conj_apply]
     exact (e.apply_symm_apply _).symm
   · intro y
-    -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
-    -- stated without a cast: `x : (pullback A e).domain` does not reduce to
-    -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
-    -- `change` names the unfolded form instead.
-    change (pullback A e) ⟨e.symm (y : E), hWinvdom y⟩ = e.symm (A y)
-    -- `pullback` has a `_domain` lemma but no `_apply` one, and an `_apply` cannot be
-    -- stated without a cast: `x : (pullback A e).domain` does not reduce to
-    -- `pullbackDomain A e` unless the body is exposed. Tried; it fails to elaborate.
-    -- `change` names the unfolded form instead.
-    change pullbackLinearMap A e ⟨e.symm (y : E), hWinvdom y⟩ = e.symm (A y)
-    rw [pullbackLinearMap_apply]
-    congr 2
-    apply Subtype.ext
-    simp
+    exact _root_.LinearPMap.conj_apply_map y
 
 /-- The explicit product domain of two partial maps, transported to the
 `L²` Hilbert direct sum. -/
@@ -784,81 +603,6 @@ theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
     LeftShiftedInverseBound A c s := by
   obtain ⟨J, _hdom, hleft, _hright, hnorm⟩ := h
   exact ⟨J, hleft, hnorm⟩
-
-/-- Relative boundedness of a domain-defined perturbation with respect to a
-partial linear map. -/
-def RelativelyBounded (A : E →ₗ.[𝕜] E)
-    (V : A.domain →ₗ[𝕜] E) (a b : ℝ) : Prop :=
-  ∀ x, ‖V x‖ ≤ a * ‖(x : E)‖ + b * ‖A x‖
-
-namespace RelativelyBounded
-
-/-- The zero perturbation has zero relative bound. -/
-theorem zero (A : E →ₗ.[𝕜] E) :
-    RelativelyBounded A (0 : A.domain →ₗ[𝕜] E) 0 0 := by
-  intro x
-  simp
-
-/-- Relative bounds may be weakened by increasing either coefficient. -/
-theorem mono {A : E →ₗ.[𝕜] E}
-    {V : A.domain →ₗ[𝕜] E} {a b a' b' : ℝ}
-    (hV : RelativelyBounded A V a b)
-    (haa' : a ≤ a') (hbb' : b ≤ b') :
-    RelativelyBounded A V a' b' := by
-  intro x
-  exact (hV x).trans <| add_le_add
-    (mul_le_mul_of_nonneg_right haa' (norm_nonneg (x : E)))
-    (mul_le_mul_of_nonneg_right hbb' (norm_nonneg (A x)))
-
-/-- Relative bounds add under addition of perturbations. -/
-theorem add {A : E →ₗ.[𝕜] E}
-    {V W : A.domain →ₗ[𝕜] E} {a b c d : ℝ}
-    (hV : RelativelyBounded A V a b)
-    (hW : RelativelyBounded A W c d) :
-    RelativelyBounded A (V + W) (a + c) (b + d) := by
-  intro x
-  calc
-    ‖(V + W) x‖ ≤ ‖V x‖ + ‖W x‖ := norm_add_le _ _
-    _ ≤ (a * ‖(x : E)‖ + b * ‖A x‖) +
-        (c * ‖(x : E)‖ + d * ‖A x‖) :=
-      add_le_add (hV x) (hW x)
-    _ = (a + c) * ‖(x : E)‖ + (b + d) * ‖A x‖ := by ring
-
-/-- Relative bounds scale by the norm of the scalar. -/
-theorem smul {A : E →ₗ.[𝕜] E}
-    {V : A.domain →ₗ[𝕜] E} {a b : ℝ}
-    (hV : RelativelyBounded A V a b) (c : 𝕜) :
-    RelativelyBounded A (c • V) (‖c‖ * a) (‖c‖ * b) := by
-  intro x
-  rw [LinearMap.smul_apply, norm_smul]
-  calc
-    ‖c‖ * ‖V x‖ ≤ ‖c‖ * (a * ‖(x : E)‖ + b * ‖A x‖) :=
-      mul_le_mul_of_nonneg_left (hV x) (norm_nonneg c)
-    _ = (‖c‖ * a) * ‖(x : E)‖ + (‖c‖ * b) * ‖A x‖ := by ring
-
-/-- Relative bounds are preserved by negation. -/
-theorem neg {A : E →ₗ.[𝕜] E}
-    {V : A.domain →ₗ[𝕜] E} {a b : ℝ}
-    (hV : RelativelyBounded A V a b) :
-    RelativelyBounded A (-V) a b := by
-  simpa using hV.smul (-1 : 𝕜)
-
-/-- Relative bounds add under subtraction of perturbations. -/
-theorem sub {A : E →ₗ.[𝕜] E}
-    {V W : A.domain →ₗ[𝕜] E} {a b c d : ℝ}
-    (hV : RelativelyBounded A V a b)
-    (hW : RelativelyBounded A W c d) :
-    RelativelyBounded A (V - W) (a + c) (b + d) := by
-  simpa [sub_eq_add_neg] using hV.add hW.neg
-
-/-- Restricting a bounded ambient operator to the domain gives relative bound
-`(‖V‖, 0)`. -/
-theorem domRestrict (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
-    RelativelyBounded A (V.toLinearMap.domRestrict A.domain) ‖V‖ 0 := by
-  intro x
-  simpa using V.le_opNorm (x : E)
-
-end RelativelyBounded
 
 /-- Real resolvent set of a partial linear map.  A parameter belongs to the set
 when the shifted map has a bounded two-sided inverse with explicit domain

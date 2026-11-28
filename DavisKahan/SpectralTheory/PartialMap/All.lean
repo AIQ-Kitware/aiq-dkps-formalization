@@ -9,11 +9,10 @@ public import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 public import DavisKahan.SpectralTheory.PartialMap.Complexification
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-public import DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation
 
 /-! # `DavisKahan/SpectralTheory/PartialMap`
 
 The Davis--Kahan additions to Mathlib's `LinearPMap`: the real resolvent set and
-spectrum, coordinatewise complexification, unitary conjugation, and bounded
+spectrum, coordinatewise complexification and bounded
 realization.  Named `PartialMap` until 2026-08-28, after the bundled record
 of that name. -/

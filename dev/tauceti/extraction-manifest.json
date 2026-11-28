@@ -439,6 +439,129 @@
   ],
   "records": [
     {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed and DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation",
+      "source_declarations": [
+        "TauCeti.LinearPMap.pullbackDomain",
+        "TauCeti.LinearPMap.mem_pullbackDomain_iff",
+        "TauCeti.LinearPMap.pullbackDomainToOriginal",
+        "TauCeti.LinearPMap.pullbackDomainToOriginal_coe",
+        "TauCeti.LinearPMap.pullbackLinearMap",
+        "TauCeti.LinearPMap.pullbackLinearMap_apply",
+        "TauCeti.LinearPMap.pullback",
+        "TauCeti.LinearPMap.pullback_domain",
+        "TauCeti.LinearPMap.pullback_apply",
+        "TauCeti.LinearPMap.pullback_dense",
+        "TauCeti.LinearPMap.pullback_closedGraph",
+        "TauCeti.LinearPMap.pullback_unitaryEquivalent",
+        "TauCeti.DavisKahan.unitaryConjugate",
+        "TauCeti.DavisKahan.unitaryConjugate_domain",
+        "TauCeti.DavisKahan.mem_unitaryConjugate_domain_iff",
+        "TauCeti.DavisKahan.unitaryConjugate_domain_eq_map",
+        "TauCeti.DavisKahan.unitaryConjugate_apply",
+        "TauCeti.DavisKahan.unitaryConjugate_map_mem_domain",
+        "TauCeti.DavisKahan.unitaryConjugate_apply_map",
+        "TauCeti.DavisKahan.unitaryConjugateBounded",
+        "TauCeti.DavisKahan.unitaryConjugateBounded_apply",
+        "TauCeti.DavisKahan.mem_resolventSet_unitaryConj_of_mem",
+        "TauCeti.DavisKahan.mem_resolventSet_unitaryConj_iff",
+        "TauCeti.DavisKahan.mem_resolventSet_unitaryConjugate_iff",
+        "TauCeti.DavisKahan.unitaryConjugate_isSelfAdjoint",
+        "TauCeti.DavisKahan.unitaryConjugate_spectrum_eq",
+        "TauCeti.DavisKahan.unitarySubmoduleMapIsometry",
+        "TauCeti.DavisKahan.unitarySubmoduleMapIsometry_coe_apply",
+        "TauCeti.DavisKahan.unitarySubmoduleMapIsometry_symm_coe_apply"
+      ],
+      "original_source_anchor": "77b4e837e3a828aabf4e2f0b9c9d30de08e574a6:ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean and 77b4e837e3a828aabf4e2f0b9c9d30de08e574a6:DavisKahan/SpectralTheory/PartialMap/UnitaryConjugation.lean",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.LinearAlgebra.LinearPMap.Conj",
+      "final_declarations": [
+        "LinearPMap.conj",
+        "LinearPMap.conj_domain",
+        "LinearPMap.mem_conj_domain_iff",
+        "LinearPMap.conj_apply",
+        "LinearPMap.map_mem_conj_domain",
+        "LinearPMap.conj_apply_map",
+        "LinearPMap.dense_conj_domain_iff",
+        "LinearPMap.IsClosed.conj",
+        "LinearPMap.resolventSet_conj",
+        "LinearPMap.spectrum_conj",
+        "IsSelfAdjoint.conj",
+        "LinearIsometryEquiv.submoduleMap"
+      ],
+      "roadmap_targets": [
+        "SA-C20",
+        "SA-C21",
+        "SA-C22",
+        "SA-C23",
+        "SA-C24",
+        "SA-C25",
+        "SA-C26",
+        "SA-C27",
+        "SA-C28"
+      ],
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1606",
+      "integration": "d96626c4be077ab13dcc114d8d939eac61497e8c",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "Forgejo #1606 by tauceti-ai-for-science independently consolidates the construction. SA-C25 through SA-C28 retain the credit of the earlier DKPS-derived #13871. The retired local unitary conjugation carries the Spectra ancestry recorded in its source header. The Riccati graph rotation uses conj by the inverse equivalence and still supplies both action and domain equalities in unitaryEquivalent_symm_conj. The real trial-compression transport preserves its source-facing bounds. Mathlib supplies the restricted isometry on submodules."
+    },
+    {
+      "source_module": "DavisKahan.Sources.DavisKahan1970.SineTheta.CommonCore",
+      "source_declarations": [
+        "TauCeti.DavisKahan.ExactSinTheta.CommonCoreResidualData.extends_to_domain",
+        "TauCeti.LinearPMap.isClosed_iff_range_isClosed"
+      ],
+      "original_source_anchor": "77b4e837e3a828aabf4e2f0b9c9d30de08e574a6:DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCore.lean and 77b4e837e3a828aabf4e2f0b9c9d30de08e574a6:ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Topology.Algebra.Module.LinearPMap.GraphCore",
+      "final_declarations": [
+        "LinearPMap.IsClosed.mem_domain_of_tendsto"
+      ],
+      "roadmap_target": "SA-C41 and SA-C42 closed-graph limit prerequisite",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/13871",
+      "integration": "b73f7898d5854ded5adbc9fa738a8f150c039724",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The domain extension applies the closed-graph limit theorem from the DKPS-derived #13871. Harahu simplified its proof in #36956 (162c10eb3d48607df7abec640823221f09f3fd90). The residual still requires closedness of the ambient operator only. The trial operator can be nonclosed, so its graph-density hypothesis remains local."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed",
+      "source_declarations": [
+        "TauCeti.LinearPMap.RelativelyBounded",
+        "TauCeti.LinearPMap.RelativelyBounded.zero",
+        "TauCeti.LinearPMap.RelativelyBounded.mono",
+        "TauCeti.LinearPMap.RelativelyBounded.add",
+        "TauCeti.LinearPMap.RelativelyBounded.smul",
+        "TauCeti.LinearPMap.RelativelyBounded.neg",
+        "TauCeti.LinearPMap.RelativelyBounded.sub",
+        "TauCeti.LinearPMap.RelativelyBounded.domRestrict"
+      ],
+      "original_source_anchor": "77b4e837e3a828aabf4e2f0b9c9d30de08e574a6:ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.LinearPMap.Relative.Bound",
+      "final_declarations": [
+        "LinearPMap.isRelativelyBounded_zero",
+        "LinearPMap.IsRelativelyBounded.mono",
+        "LinearPMap.IsRelativelyBounded.add",
+        "LinearPMap.IsRelativelyBounded.smul",
+        "LinearPMap.IsRelativelyBounded.neg",
+        "LinearPMap.IsRelativelyBounded.sub",
+        "ContinuousLinearMap.isRelativelyBounded_toPMap"
+      ],
+      "roadmap_targets": [
+        "SA-C44",
+        "SA-C45",
+        "SA-C46",
+        "SA-C47",
+        "SA-C48",
+        "SA-C49",
+        "SA-C50",
+        "SA-C51"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16432",
+      "integration": "42bafea8f5af10d6d230959cea180bf0e6407953",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "The native map may have a larger domain, and taking exactly the base domain recovers the retired predicate and its laws. The local predicate had no maintained consumers. #16432 by tauceti-ai-for-science reports no vendored code. Harahu generalized the API to semilinear maps in #36206 (cf9973f2277335df28cdf8810325735848fd411c). #43512 moved the API to Relative/Bound (9ff891570634142e74a5babde8e23ae6c75a3d48)."
+    },
+    {
       "source_module": "DavisKahan.SpectralTheory.GraphSubspace",
       "source_declarations": [
         "TauCeti.DavisKahanExt.IsAngularOperator",

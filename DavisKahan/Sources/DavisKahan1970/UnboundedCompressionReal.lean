@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import DavisKahan.TanTheta.Theorem63UnboundedCompression
 public import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
@@ -79,19 +80,6 @@ universe v
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
 
-/-! ## An upper form bound survives unitary conjugation -/
-
-/-- **A quadratic-form upper bound is preserved by unitary conjugation** of a self-adjoint
-closed operator.  The conjugating map is an isometry, so both the form and the norm are
-carried across unchanged. -/
-theorem semiboundedAbove_unitaryConjugate {G K : Type v}
-    [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-    [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
-    (W : G ≃ₗᵢ[ℂ] K) (A : G →ₗ.[ℂ] G)
-    (hA : IsSelfAdjoint A) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedAbove A c) :
-    TauCeti.LinearPMap.SemiboundedAbove (TauCeti.DavisKahan.unitaryConjugate W A hA) c := by
-  exact TauCeti.LinearPMap.semiboundedAbove_unitaryConj_of W hc
-
 /-! ## Complexifying real unbounded-compression trial data -/
 
 variable {Z V : Submodule ℝ E} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -107,12 +95,11 @@ def complexifyUnboundedCompressionTrialData
     (D : UnboundedCompressionTrialData Z) :
     UnboundedCompressionTrialData (complexifySubmodule Z) where
   compression :=
-    TauCeti.DavisKahan.unitaryConjugate (complexifySubmoduleEquiv Z)
-      (ExactSinTheta.PartialMapComplexification.complexify D.compression)
-      (ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify
-        D.compression_isSelfAdjoint)
+    (ExactSinTheta.PartialMapComplexification.complexify D.compression).conj
+      (complexifySubmoduleEquiv Z).toLinearEquiv
   compression_isSelfAdjoint :=
-    TauCeti.DavisKahan.unitaryConjugate_isSelfAdjoint _ _ _
+    (ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify
+      D.compression_isSelfAdjoint).conj (complexifySubmoduleEquiv Z)
   residual :=
     complexify D.residual ∘L
       (complexifySubmoduleEquiv Z).symm.toContinuousLinearEquiv.toContinuousLinearMap
@@ -234,10 +221,7 @@ theorem complexifyUnboundedCompressionTrialData_compression_upper
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha) :
     TauCeti.LinearPMap.SemiboundedAbove (complexifyUnboundedCompressionTrialData D).compression
       alpha :=
-  semiboundedAbove_unitaryConjugate (complexifySubmoduleEquiv Z)
-    (ExactSinTheta.PartialMapComplexification.complexify D.compression)
-    (ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify
-      D.compression_isSelfAdjoint)
+  TauCeti.LinearPMap.semiboundedAbove_unitaryConj_of (complexifySubmoduleEquiv Z)
     (ExactSinTheta.PartialMapComplexification.semiboundedAbove_complexify hupper)
 
 /-- The crossed form bound transports to the complexified data with the same constant. -/

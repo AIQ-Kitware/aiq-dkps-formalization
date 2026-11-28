@@ -5,7 +5,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation
 public import DavisKahan.SinTheta.SpectralProjection
 public import DavisKahan.Geometry.Angle.OperatorAngleComplex
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap

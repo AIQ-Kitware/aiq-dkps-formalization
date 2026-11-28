@@ -77,8 +77,13 @@ example [FiniteDimensional K E] {Z U : Submodule K E}
   N.mul_map_tanThetaMap_le_map_ritzResidual hA hU hδ hM hperp
 
 example (T : E →ₗ.[K] F) :
-    T.IsClosed ↔ IsClosed (Set.range fun x : T.domain => ((x : E), T x)) :=
-  TauCeti.LinearPMap.isClosed_iff_range_isClosed T
+    T.IsClosed ↔ IsClosed (Set.range fun x : T.domain => ((x : E), T x)) := by
+  have hgraph : (T.graph : Set (E × F)) =
+      Set.range (fun x : T.domain => ((x : E), T x)) := by
+    ext z
+    exact T.mem_graph_iff'
+  change IsClosed (T.graph : Set (E × F)) ↔ _
+  rw [hgraph]
 
 example [CompleteSpace E] (A : E →L[K] E) (hA : A.IsSymmetric) :
     IsSelfAdjoint ((A : E →ₗ[K] E).toPMap ⊤) :=

@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomain
+public import TauCeti.Topology.Algebra.Module.LinearPMap.GraphCore
 
 /-!
 # Graph-core form of the unbounded residual hypothesis
@@ -138,27 +139,8 @@ theorem extends_to_domain
       R ((((u n : C.core) : A₀.domain) : F)) +
         X (A₀ ((u n : C.core) : A₀.domain))
     exact sub_eq_iff_eq_add.mp (C.residual_on_core (u n))
-  have hgraph :
-      (X (x : F), R (x : F) + X (A₀ x)) ∈
-        Set.range (fun z : A.domain => ((z : E), A z)) :=
-    ((TauCeti.LinearPMap.isClosed_iff_range_isClosed A).mp hAclosed).mem_of_tendsto
-      (hX.prodMk_nhds hAseq)
-      (Eventually.of_forall fun n => ⟨xu n, rfl⟩)
-  rcases hgraph with ⟨z, hz⟩
-  have hzX : (z : E) = X (x : F) := congrArg Prod.fst hz
-  have hzA : A z = R (x : F) + X (A₀ x) :=
-    congrArg Prod.snd hz
-  have hx : X (x : F) ∈ A.domain := by
-    rw [← hzX]
-    exact z.property
-  refine ⟨hx, ?_⟩
-  have hsubtype : z = (⟨X (x : F), hx⟩ : A.domain) := Subtype.ext hzX
-  have haction : A ⟨X (x : F), hx⟩ =
-      R (x : F) + X (A₀ x) := by
-    rw [← hsubtype]
-    exact hzA
-  rw [haction]
-  abel
+  obtain ⟨hx, haction⟩ := hAclosed.mem_domain_of_tendsto (fun n => (xu n).property) hX hAseq
+  exact ⟨hx, sub_eq_iff_eq_add.mpr haction⟩
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Full-domain compatibility obtained from the graph-core hypothesis. -/

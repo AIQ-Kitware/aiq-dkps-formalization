@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Conj
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.DoubleAngle.Unbounded
@@ -274,9 +276,9 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
     infer_instance
   let : CompleteSpace Wc :=
     (Wc.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  let e : Uc ≃ₗᵢ[ℂ] Wc := unitarySubmoduleMapIsometry V.reflection Uc
-  let ΛJ := unitaryConjugate e Λ hΛ
-  let hΛJ : _root_.IsSelfAdjoint ΛJ := unitaryConjugate_isSelfAdjoint e Λ hΛ
+  let e : Uc ≃ₗᵢ[ℂ] Wc := V.reflection.submoduleMap Uc
+  let ΛJ := Λ.conj e.toLinearEquiv
+  let hΛJ : _root_.IsSelfAdjoint ΛJ := hΛ.conj e
   let X : U →L[ℂ] H := U.subtypeL
   let F₁ : Wc →L[ℂ] H := Wc.subtypeL
   have hXdom : ∀ x : A₀.domain, X (x : U) ∈ A.domain :=
@@ -288,7 +290,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
   -- three lines.  The rest of their common preamble is entangled with the
   -- `Λ.domain`/`A.domain` coercions and is left in place deliberately.
   have hzΛ : ∀ y : ΛJ.domain, e.symm (y : Wc) ∈ Λ.domain := fun y =>
-    (mem_unitaryConjugate_domain_iff e Λ hΛ).mp (by simpa only [ΛJ] using y.property)
+    _root_.LinearPMap.mem_conj_domain_iff.mp y.property
   have hFdom : ∀ y : ΛJ.domain, F₁ (y : Wc) ∈ A.domain := by
     intro y
     let z : Λ.domain := ⟨e.symm (y : Wc), hzΛ y⟩
@@ -333,10 +335,10 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
           congrArg V.reflectionOperator hAint
         _ = ((e (Λ z) : Wc) : H) := by
           rw [Submodule.reflectionOperator_apply_eq_reflection]
-          exact (unitarySubmoduleMapIsometry_coe_apply V.reflection Uc (Λ z)).symm
+          rfl
         _ = ((ΛJ y : Wc) : H) := by
           exact congrArg Subtype.val
-            (unitaryConjugate_apply e Λ hΛ y).symm
+            (_root_.LinearPMap.conj_apply (e := e.toLinearEquiv) y).symm
     calc
       (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Wc), hFdom y⟩ =
           (TauCeti.LinearPMap.addBounded A R)
@@ -354,7 +356,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
   have hΛJspecRoot : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ _root_.LinearPMap.spectrum ΛJ := by
     intro lam hlam
-    rw [unitaryConjugate_spectrum_eq e Λ hΛ]
+    rw [show ΛJ.spectrum = Λ.spectrum from
+    _root_.LinearPMap.spectrum_conj e.toContinuousLinearEquiv Λ]
     intro hmem
     exact hBcomplSpec lam hlam hmem
   have hΛJspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),

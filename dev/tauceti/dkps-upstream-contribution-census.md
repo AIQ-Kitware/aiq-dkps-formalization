@@ -1,5 +1,45 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 partial-map conjugation and closed graphs
+
+The Riccati graph rotation and the real and complex paper arguments use
+`LinearPMap.conj` directly. The inverse equivalence supplies the pullback.
+Native domain, action, self-adjointness and resolvent laws retire the local
+pullback and unitary-conjugation implementations. Mathlib supplies
+`LinearIsometryEquiv.submoduleMap` for the conjugating isometry on a
+spectral range. The Riccati reduction still gives explicit two-way
+intertwining. The local unitary-conjugation source carries Spectra
+ancestry. The generic conjugation in Forgejo #1606 is the independent
+SA-C20–C24 integration by tauceti-ai-for-science. The earlier DKPS-derived
+#13871 supplies the original SA-C25–C28 integration.
+[Forgejo #1606](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1606) ·
+[#13871](https://github.com/TauCetiProject/TauCeti/pull/13871)
+
+The graph-core residual proof applies `LinearPMap.IsClosed.mem_domain_of_tendsto`
+from #13871. Harahu simplified its proof in #36956. The paper argument
+still accepts graph-dense trial data for a possibly nonclosed trial
+operator. The closed-graph limit applies to the ambient operator.
+[#36956](https://github.com/TauCetiProject/TauCeti/pull/36956)
+
+The unused domain-defined `RelativelyBounded` predicate and its seven
+laws retire. The native SA-C44–C51 API in #16432 allows the perturbation
+to be defined on a larger domain. Harahu generalized it to semilinear
+maps in #36206, and #43512 moved it to `Relative/Bound`. The #16432 PR
+reports no vendored code.
+[#16432](https://github.com/TauCetiProject/TauCeti/pull/16432) ·
+[#36206](https://github.com/TauCetiProject/TauCeti/pull/36206) ·
+[#43512](https://github.com/TauCetiProject/TauCeti/pull/43512)
+
+The extraction manifest records the removed declarations at
+`77b4e837e3a828aabf4e2f0b9c9d30de08e574a6` (Jon Crall and OpenAI GPT-5.6
+Thinking, Kitware 2026, Apache-2.0).
+
+The focused build (12,724 jobs), default build (22,788 jobs), and combined
+Challenge and semantic-surface build (22,494 jobs) passed without warnings.
+All 17 available comparator signatures matched. The import policy reported
+zero violations, and the name-drift check kept the 49 baseline findings.
+The backport removes 531 net lines of Lean.
+
 ## November 27 angular graphs and the exact graph gap
 
 TauCeti #16152 covers SSP-C11 through SSP-C14. Its integration

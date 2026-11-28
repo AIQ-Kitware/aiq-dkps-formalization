@@ -103,29 +103,28 @@ theorem pullback_reducesSubspace_of_intertwines_projection
       V.starProjection ∘L e.toContinuousLinearMap)
     (hred : _root_.LinearPMap.IsReducing A V) :
     _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.pullback A e) U := by
+      (A.conj e.symm.toLinearEquiv) U := by
   have hprojOrth : e.toContinuousLinearMap ∘L Uᗮ.starProjection =
       Vᗮ.starProjection ∘L e.toContinuousLinearMap :=
     intertwines_orthogonal_projection_of_intertwines_projection e U V hproj
   refine ⟨?_, ?_, ?_⟩
   · intro x hx
-    rw [TauCeti.LinearPMap.pullback_domain, TauCeti.LinearPMap.mem_pullbackDomain_iff]
+    rw [_root_.LinearPMap.mem_conj_domain_iff]
+    change e (U.starProjection x) ∈ A.domain
     have hintertwine := congrArg (fun T : E →L[𝕜] E => T x) hproj
     change e (U.starProjection (x : E)) =
       V.starProjection (e (x : E)) at hintertwine
     rw [hintertwine]
-    exact hred.starProjection_mem_domain (by
-      rwa [TauCeti.LinearPMap.pullback_domain,
-        TauCeti.LinearPMap.mem_pullbackDomain_iff] at hx)
+    exact hred.starProjection_mem_domain (_root_.LinearPMap.mem_conj_domain_iff.mp hx)
   · rw [_root_.LinearPMap.isInvariant_iff]
     intro x hx
-    rw [TauCeti.LinearPMap.pullback_apply]
+    rw [_root_.LinearPMap.conj_apply]
     apply symm_map_mem_of_intertwines_projection e U V hproj
     apply hred.isInvariant.apply_mem _
       (map_mem_of_intertwines_projection e U V hproj hx)
   · rw [_root_.LinearPMap.isInvariant_iff]
     intro x hx
-    rw [TauCeti.LinearPMap.pullback_apply]
+    rw [_root_.LinearPMap.conj_apply]
     apply symm_map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth
     apply hred.isInvariant_orthogonal.apply_mem _
     exact map_mem_of_intertwines_projection e Uᗮ Vᗮ hprojOrth hx
