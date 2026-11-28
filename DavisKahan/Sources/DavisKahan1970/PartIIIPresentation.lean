@@ -93,8 +93,20 @@ alias unbounded_sylvester_intervalExterior_uiNorm_of_spectra :=
   DavisKahan.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
 alias real_sinTheta_symmetric_of_restriction_spectra :=
   TauCeti.SpectralOrder.opNorm_starProjection_sub_le_of_restriction_spectra
-alias real_upperFormBound_of_spectrum :=
-  TauCeti.SpectralOrder.upperFormBoundOn_top_of_spectrum_subset_Iic
+section SpectralFormBound
+
+attribute [local instance 100] ContinuousLinearMap.realAlgebra
+
+/-- A real spectral upper half-line gives the global upper form bound. -/
+theorem real_upperFormBound_of_spectrum
+    {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (T : H →L[𝕜] H) (hT : IsSelfAdjoint T) {c : ℝ}
+    (hσ : spectrum ℝ T ⊆ Set.Iic c) : T.UpperFormBoundOn ⊤ c :=
+  (ContinuousLinearMap.upperFormBoundOn_iff T ⊤ c).mpr fun x _ =>
+    ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic T hT hσ x
+
+end SpectralFormBound
+
 alias bounded_sinAngleOperatorC_norm := DavisKahan.Angle.norm_sinAngleOperatorC
 alias bounded_directedSinAngleOperatorC_norm :=
   DavisKahan.Angle.norm_directedSinAngleOperatorC

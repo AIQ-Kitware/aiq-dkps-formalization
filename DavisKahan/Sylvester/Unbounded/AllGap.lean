@@ -10,7 +10,7 @@ public import DavisKahan.Sylvester.Unbounded.IntervalExterior
 public import DavisKahan.SpectralTheory.OrderedHalfLine
 public import DavisKahan.Sylvester.CutoffInterface
 public import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 
 /-!
 # Spectral all-gap unbounded Sylvester theorem

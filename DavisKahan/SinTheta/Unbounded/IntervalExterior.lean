@@ -8,7 +8,7 @@ module
 public import DavisKahan.SinTheta.Unbounded.Core
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.Sylvester.Unbounded.IntervalExterior
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 
 public section
 

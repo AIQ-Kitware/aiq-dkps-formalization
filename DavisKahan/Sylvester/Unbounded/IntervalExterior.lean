@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.BoundedFromSpectrum
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.SpectralTheory.GapResolvent
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 
 public section
 
@@ -23,8 +23,8 @@ operators and all spectral hypotheses phrased through the accepted
 `_root_.LinearPMap.spectrum`:
 
 * `semibounded_of_spectrum_subset_Icc` — spectral inclusion in `[β, α]`
-  yields the matching quadratic-form bounds, through the bounded
-  realization of `BoundedFromSpectrum`;
+  yields the matching quadratic-form bounds by the spectral measure’s
+  half-line criteria;
 * `unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight`
   and `..._intervalLeft_exteriorRight` — the two orientations of the
   Davis--Kahan Theorem 5.2 interval/exterior configuration:
@@ -80,72 +80,30 @@ def SpectralIntervalExteriorGap
 
 end Sylvester
 
-/-- **Form bounds from spectral inclusion.**  A closed self-adjoint operator
-with Spectra spectrum in `[β, α]` has its quadratic form in `[β, α]`:
-transported through the bounded realization and the centered norm bound. -/
+/-- Spectral inclusion in `[β, α]` bounds the quadratic form on the domain. -/
 theorem semibounded_of_spectrum_subset_Icc
     {B : F →ₗ.[ℂ] F}
     (hB : IsSelfAdjoint B)
-    {β α : ℝ} (hβα : β ≤ α)
+    {β α : ℝ} (_hβα : β ≤ α)
     (hσ : Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B ⊆
         Set.Icc β α) :
     TauCeti.LinearPMap.SemiboundedBelow B β ∧
       TauCeti.LinearPMap.SemiboundedAbove B α := by
-  obtain ⟨R, hnorm⟩ :=
-    exists_boundedRealization_of_spectrum_subset_Icc hB hβα hσ
-  have key : ∀ x : B.domain,
-      |RCLike.re ⟪B x, (x : F)⟫_ℂ -
-        (β + α) / 2 * ‖(x : F)‖ ^ 2| ≤
-      (α - β) / 2 * ‖(x : F)‖ ^ 2 := by
-    intro x
-    have hag : R.operator (x : F) = B x := R.agrees x
-    have happ : (R.operator - (((β + α) / 2 : ℝ) : ℂ) •
-        ContinuousLinearMap.id ℂ F) (x : F) =
-        B x - (((β + α) / 2 : ℝ) : ℂ) • (x : F) := by
-      rw [sub_apply, smul_apply, ContinuousLinearMap.id_apply, hag]
-    have hn : ‖B x - (((β + α) / 2 : ℝ) : ℂ) • (x : F)‖ ≤
-        (α - β) / 2 * ‖(x : F)‖ := by
-      rw [← happ]
-      exact le_trans (ContinuousLinearMap.le_opNorm _ _)
-        (mul_le_mul_of_nonneg_right hnorm (norm_nonneg _))
-    have h1 : RCLike.re ⟪B x -
-        (((β + α) / 2 : ℝ) : ℂ) • (x : F), (x : F)⟫_ℂ =
-        RCLike.re ⟪B x, (x : F)⟫_ℂ -
-          (β + α) / 2 * ‖(x : F)‖ ^ 2 := by
-      simp only [inner_sub_left, map_sub, inner_smul_left, Complex.conj_ofReal,
-        ← Complex.real_smul, RCLike.smul_re, inner_self_eq_norm_sq]
-    have h2 : |RCLike.re ⟪B x -
-        (((β + α) / 2 : ℝ) : ℂ) • (x : F), (x : F)⟫_ℂ| ≤
-        (α - β) / 2 * ‖(x : F)‖ ^ 2 := by
-      refine le_trans (RCLike.abs_re_le_norm _) ?_
-      refine le_trans (norm_inner_le_norm _ _) ?_
-      calc ‖B x - (((β + α) / 2 : ℝ) : ℂ) • (x : F)‖ *
-            ‖(x : F)‖
-          ≤ ((α - β) / 2 * ‖(x : F)‖) * ‖(x : F)‖ :=
-            mul_le_mul_of_nonneg_right hn (norm_nonneg _)
-        _ = (α - β) / 2 * ‖(x : F)‖ ^ 2 := by ring
-    rw [h1] at h2
-    exact h2
   constructor
-  · rw [TauCeti.LinearPMap.semiboundedBelow_iff]
-    intro x
-    have h := (abs_le.mp (key x)).1
-    have hring : (β + α) / 2 * ‖(x : F)‖ ^ 2 -
-        (α - β) / 2 * ‖(x : F)‖ ^ 2 = β * ‖(x : F)‖ ^ 2 := by ring
-    have hlegacy : β * ‖(x : F)‖ ^ 2 ≤
-        RCLike.re ⟪B x, (x : F)⟫_ℂ := by
-      linarith
-    exact hlegacy
-  · rw [TauCeti.LinearPMap.semiboundedAbove_iff]
-    intro x
-    have h := (abs_le.mp (key x)).2
-    have hring : (β + α) / 2 * ‖(x : F)‖ ^ 2 +
-        (α - β) / 2 * ‖(x : F)‖ ^ 2 = α * ‖(x : F)‖ ^ 2 := by ring
-    have hlegacy :
-        RCLike.re ⟪B x, (x : F)⟫_ℂ ≤
-          α * ‖(x : F)‖ ^ 2 := by
-      linarith
-    exact hlegacy
+  · refine (TauCeti.LinearPMap.semiboundedBelow_iff B β).2
+      ((hB.spectralPVM_proj_Iio_eq_zero_iff β).mp ?_)
+    apply hB.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Iio
+    intro t ht
+    by_contra hres
+    exact (not_le_of_gt (Set.mem_Iio.mp ht))
+      (hσ ((_root_.LinearPMap.mem_spectrum_iff B (t : ℂ)).2 hres)).1
+  · refine (TauCeti.LinearPMap.semiboundedAbove_iff B α).2
+      ((hB.spectralPVM_proj_Ioi_eq_zero_iff α).mp ?_)
+    apply hB.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Ioi
+    intro t ht
+    by_contra hres
+    exact (not_le_of_gt (Set.mem_Ioi.mp ht))
+      (hσ ((_root_.LinearPMap.mem_spectrum_iff B (t : ℂ)).2 hres)).2
 
 /-- **Davis--Kahan Theorem 5.2, interval/exterior, exterior block on the
 left, genuine spectra.**  For closed self-adjoint `A`, `B` with the

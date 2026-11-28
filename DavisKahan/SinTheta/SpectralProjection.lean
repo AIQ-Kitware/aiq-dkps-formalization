@@ -9,7 +9,7 @@ public import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
 public import DavisKahan.SinTheta.BoundedPerturbation
 public import DavisKahan.Sylvester.Unbounded.IntervalExterior
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 
 public section
 

@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.DoubleAngle.UnboundedIdeal
 public import DavisKahan.TanTwoTheta.BoundedOffDiagonal
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 
 public section
 

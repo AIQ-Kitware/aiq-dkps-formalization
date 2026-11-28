@@ -13,7 +13,7 @@ public import DavisKahan.TanTheta.Theorem63FiniteSource
 public import DavisKahan.TanTheta.Theorem63InfiniteTrial
 public import DavisKahan.TanTheta.Theorem63Unbounded
 public import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 
 public section
 

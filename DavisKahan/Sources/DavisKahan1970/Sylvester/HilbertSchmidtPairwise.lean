@@ -8,7 +8,7 @@ public import DavisKahan.Sylvester.PairwiseSpectrumGap
 public import DavisKahan.SpectralTheory.PartialMap.Complexification
 public import DavisKahan.Sylvester.PairwiseHomogeneousUniqueness
 public import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap
 
 public section

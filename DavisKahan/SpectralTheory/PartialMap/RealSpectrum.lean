@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum

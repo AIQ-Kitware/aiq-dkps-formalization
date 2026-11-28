@@ -16,10 +16,9 @@ public import Mathlib.Analysis.InnerProductSpace.StarOrder
 /-!
 # Spectral order and quadratic forms over `RCLike`
 
-For bounded self-adjoint operators on Hilbert spaces over an arbitrary `RCLike` field,
-actual spectral inclusions imply upper and lower quadratic-form bounds.  The real continuous
-functional calculus is supplied by scalar transport, so the same spectral-order API serves
-real, complex, and abstract `RCLike` scalars.
+For bounded symmetric operators over an arbitrary `RCLike` field, the spectra
+of their restrictions give the form bounds used in the two-sided projection
+gap estimate. The restriction-spectrum and form-bound bridges come from TauCeti.
 
 ## Provenance
 
@@ -48,24 +47,6 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [Complete
 attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower
   ContinuousLinearMap.instStarOrderedRingRCLike
-
-/-- Spectral upper bound, packaged as a global upper form bound. -/
-theorem upperFormBoundOn_top_of_spectrum_subset_Iic
-    (T : H →L[𝕜] H) (hT : IsSelfAdjoint T) {c : ℝ}
-    (hσ : spectrum ℝ T ⊆ Set.Iic c) :
-    T.UpperFormBoundOn ⊤ c := by
-  apply (_root_.ContinuousLinearMap.upperFormBoundOn_iff T ⊤ c).2
-  intro x _
-  exact ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic T hT hσ x
-
-/-- Spectral lower bound, packaged as a global lower form bound. -/
-theorem lowerFormBoundOn_top_of_spectrum_subset_Ici
-    (T : H →L[𝕜] H) (hT : IsSelfAdjoint T) {c : ℝ}
-    (hσ : spectrum ℝ T ⊆ Set.Ici c) :
-    T.LowerFormBoundOn ⊤ c := by
-  apply (_root_.ContinuousLinearMap.lowerFormBoundOn_iff T ⊤ c).2
-  intro x _
-  exact ContinuousLinearMap.le_re_inner_of_spectrum_subset_Ici T hT hσ x
 
 /-- The sharp projector bound from spectra of the actual restrictions, uniformly over `RCLike`. -/
 theorem opNorm_starProjection_sub_le_of_restriction_spectra

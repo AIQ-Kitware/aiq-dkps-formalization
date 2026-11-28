@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.SpectralTheory.SpectralRestrictionOperator
 public import DavisKahan.Sylvester.ClosedSylvesterEquation
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 
 public section

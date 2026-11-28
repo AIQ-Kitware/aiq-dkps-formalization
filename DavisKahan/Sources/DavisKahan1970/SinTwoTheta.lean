@@ -14,7 +14,7 @@ public import DavisKahan.DoubleAngle.RealUnboundedIdeal
 public import DavisKahan.DoubleAngle.TangentTransport
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 
 public section
 

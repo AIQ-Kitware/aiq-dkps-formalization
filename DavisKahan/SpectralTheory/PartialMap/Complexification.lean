@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 public import DavisKahan.Sylvester.Gap
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
 
 public section

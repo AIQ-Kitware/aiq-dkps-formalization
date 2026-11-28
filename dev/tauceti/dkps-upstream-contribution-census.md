@@ -1,5 +1,40 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 spectral bands and form bounds
+
+A self-adjoint partial operator with spectrum in a bounded interval
+now has its bounded realization built from TauCeti’s centered spectral
+cut plus the midpoint. The native graph theorem gives the full domain
+and identifies the action there. Its norm bound gives the sharp
+centered estimate. Integration #44695 adapts the DKPS donors and
+credits Spectra for the cut-off reciprocal used in its gap inverse.
+The spectral-support and half-line form laws from roed-math’s #41596 give the two
+interval form bounds directly on the unbounded operator domain.
+[#44695 integration](https://github.com/TauCetiProject/TauCeti/commit/391615e058611f8ea2939836b382f716e2095ca4) ·
+[#41596 integration](https://github.com/TauCetiProject/TauCeti/commit/81171bd524be1b4f119bb36877630bb96aaed6f8)
+
+The bounded upper form bound in the Part III presentation keeps its
+`RCLike` scope and applies the native pointwise theorem from the
+DKPS-derived #28078. Both global donor wrappers retire. The resolvent
+sandwich uses native positivity of a symmetric operator with a zero
+lower form bound, from #13871, to turn the upper form bound into an
+order inequality. Its domain-specific sandwich arguments remain in
+DKPS.
+[#28078 integration](https://github.com/TauCetiProject/TauCeti/commit/f51ebb785dd4b3421cbd1442884fba30d5775364) ·
+[#13871 integration](https://github.com/TauCetiProject/TauCeti/commit/b73f7898d5854ded5adbc9fa738a8f150c039724)
+
+The partial-map real spectrum imports now go directly to TauCeti.
+Mathlib’s injective image membership law discharges the remaining
+cast bookkeeping in the resolvent sandwich, and its scalar-tower
+spectrum law converts the real spectrum in Section 8.
+[#22201 integration](https://github.com/TauCetiProject/TauCeti/commit/6d8167214e34885dc4b864f2873735adcdaa97ec) ·
+[Mathlib scalar-tower spectrum law](https://github.com/leanprover-community/mathlib4/blob/31ce06eaadf4a200c0e1407c5f10953cf606b8f8/Mathlib/Algebra/Algebra/Spectrum/Basic.lean)
+
+The focused build (10,225 jobs), default build (22,806 jobs), and
+Challenge with the semantic-surface audit (22,516 jobs) passed
+without warnings. All 1,569 source-census references resolved and
+all 17 available Davis–Kahan comparator signatures matched.
+
 ## November 28 finite compressions in strong-cutoff convergence
 
 Strong convergence of orthogonal cutoffs now gives convergence of

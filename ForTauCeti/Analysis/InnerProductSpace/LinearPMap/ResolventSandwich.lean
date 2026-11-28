@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic
 public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
@@ -135,29 +135,17 @@ formulation: for symmetric `R` with `re ⟪R φ, φ⟫ ≤ c ‖φ‖²` the dif
 theorem isPositive_smul_one_sub_of_upperFormBoundOn_top {R : E →L[𝕜] E}
     (hsym : R.IsSymmetric) {c : ℝ} (h : R.UpperFormBoundOn ⊤ c) :
     (((c : ℝ) : 𝕜) • (1 : E →L[𝕜] E) - R).IsPositive := by
-  have happ : ∀ w : E, (((c : ℝ) : 𝕜) • (1 : E →L[𝕜] E) - R) w
-      = ((c : ℝ) : 𝕜) • w - R w := fun _ => rfl
-  -- restates symmetry with the bundled application rather than the coerced linear
-  -- map, so that the rewrites below match syntactically.
-  have hsym' : ∀ w z : E, ⟪R w, z⟫_𝕜 = ⟪w, R z⟫_𝕜 := fun w z => hsym w z
-  refine ⟨fun u v => ?_, fun φ => ?_⟩
-  · -- restates symmetry with the operator applications unfolded, which is the
-    -- shape the inner-product rewrites match against.
-    change ⟪(((c : ℝ) : 𝕜) • (1 : E →L[𝕜] E) - R) u, v⟫_𝕜
-      = ⟪u, (((c : ℝ) : 𝕜) • (1 : E →L[𝕜] E) - R) v⟫_𝕜
-    rw [happ u, happ v, inner_sub_left, inner_sub_right, inner_smul_left,
-      inner_smul_right, RCLike.conj_ofReal, hsym' u v]
-  · have hval : (((c : ℝ) : 𝕜) • (1 : E →L[𝕜] E) - R).reApplyInnerSelf φ
-        = c * ‖φ‖ ^ 2 - RCLike.re ⟪R φ, φ⟫_𝕜 := by
-      -- `reApplyInnerSelf` is the real part of the diagonal form, by definition.
-      change RCLike.re ⟪(((c : ℝ) : 𝕜) • (1 : E →L[𝕜] E) - R) φ, φ⟫_𝕜
-        = c * ‖φ‖ ^ 2 - RCLike.re ⟪R φ, φ⟫_𝕜
-      rw [happ φ, inner_sub_left, map_sub, inner_smul_left, RCLike.conj_ofReal,
-        RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-    rw [hval]
-    have hb := (_root_.ContinuousLinearMap.upperFormBoundOn_iff R ⊤ c).1 h φ
-      Submodule.mem_top
-    linarith
+  have hscalar : (((c : ℝ) : 𝕜) • (1 : E →L[𝕜] E)).IsSymmetric :=
+    LinearMap.IsSymmetric.one.smul (RCLike.conj_ofReal c)
+  refine _root_.ContinuousLinearMap.isPositive_of_lowerFormBoundOn_top
+    (hscalar.sub hsym) ?_
+  apply (_root_.ContinuousLinearMap.lowerFormBoundOn_iff _ ⊤ 0).2
+  intro φ _
+  simp only [zero_mul, _root_.sub_apply, _root_.smul_apply, _root_.one_apply_eq_self,
+    inner_sub_left, map_sub, inner_smul_left, RCLike.conj_ofReal,
+    RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
+  exact sub_nonneg.mpr
+    ((_root_.ContinuousLinearMap.upperFormBoundOn_iff R ⊤ c).mp h φ Submodule.mem_top)
 
 /-- **An upper form bound is a Loewner upper bound.**  The companion of
 `isPositive_of_lowerFormBoundOn_top`, which grounds the lower bound. -/
@@ -532,9 +520,8 @@ variable [CompleteSpace E]
 
 /-- **From a half-line spectrum to the form lower bound.**
 
-`spectrum A ⊆ [β, ∞)`, read through `mem_of_subset_ofReal_image`, puts every
-real `l < β` in the resolvent set; the spectral measure therefore gives no mass
-to `(-∞, β)`, so the native half-line criterion gives the form bound. -/
+Every real `l < β` lies in the resolvent set. The spectral measure vanishes on
+`(-∞, β)`, and the native half-line criterion gives the form bound. -/
 theorem lowerFormBound_of_spectrum_subset_Ici (hA : IsSelfAdjoint A) {β : ℝ}
     (hσ : _root_.LinearPMap.spectrum A ⊆
       (RCLike.ofReal (K := ℂ) '' Set.Ici β)) (x : A.domain) :
@@ -546,7 +533,7 @@ theorem lowerFormBound_of_spectrum_subset_Ici (hA : IsSelfAdjoint A) {β : ℝ}
     by_contra hnot
     have hmem : (l : ℂ) ∈ _root_.LinearPMap.spectrum A :=
       (_root_.LinearPMap.mem_spectrum_iff A _).2 hnot
-    have hl' : l ∈ Set.Ici β := mem_of_subset_ofReal_image hσ hmem
+    have hl' : l ∈ Set.Ici β := RCLike.ofReal_injective.mem_set_image.mp (hσ hmem)
     exact absurd (Set.mem_Ici.mp hl') (not_le.mpr (Set.mem_Iio.mp hl))
   exact hroot
 

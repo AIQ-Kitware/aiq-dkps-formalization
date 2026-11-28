@@ -7,7 +7,7 @@ module
 
 public import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
 public import DavisKahan.SinTheta.Unbounded.SpectrumGap
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 
 public section

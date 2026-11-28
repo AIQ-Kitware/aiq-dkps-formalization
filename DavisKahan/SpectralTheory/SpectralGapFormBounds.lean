@@ -334,17 +334,6 @@ variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
 
 /-! ### Form bounds give restricted-spectrum containments -/
 
-omit [CompleteSpace F] in
-/-- Over `ℂ` the real Banach-algebra spectrum and the pulled-back complex
-spectrum are the same set. -/
-theorem realSpectrum_eq_spectrum_real (T : F →L[ℂ] F) :
-    realSpectrum T = spectrum ℝ T := by
-  ext r
-  show ((r : ℂ) ∈ spectrum ℂ T) ↔ r ∈ spectrum ℝ T
-  rw [spectrum.mem_iff, spectrum.mem_iff, not_iff_not,
-    IsScalarTower.algebraMap_apply ℝ ℂ (F →L[ℂ] F) r]
-  rfl
-
 /-- **A global upper form bound bounds the real spectrum above.**
 
 No functional calculus: `r - T` is uniformly coercive for `r > c`, hence a unit

@@ -8,7 +8,7 @@ module
 public import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 public import DavisKahan.SpectralTheory.BoundedFromSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 public section

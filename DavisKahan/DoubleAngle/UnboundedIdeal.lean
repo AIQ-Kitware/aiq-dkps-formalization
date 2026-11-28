@@ -12,7 +12,7 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.DoubleAngle.Unbounded
 public import DavisKahan.SinTheta.BoundedPerturbationIdeal
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 
 public section
 

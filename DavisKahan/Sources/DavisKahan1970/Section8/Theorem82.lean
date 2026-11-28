@@ -417,9 +417,8 @@ omit [CompleteSpace H] in
 Section 8 states its spectral placements with `Foundation.SpectrumIn`, which
 constrains `restrictedSpectrum`; the `sin 2Θ` development states them as
 `spectrum ℝ (compressOperator …)`.  On an invariant subspace the compression is
-the honest restriction (`compressOperator_eq_restrict_of_invariant`), and over
-`ℂ` the real Banach-algebra spectrum is the pulled-back complex spectrum
-(`realSpectrum_eq_spectrum_real`), so the two readings agree. -/
+the honest restriction. Mathlib's scalar-tower spectrum law identifies the
+real Banach-algebra spectrum with the pullback of the complex spectrum. -/
 theorem spectrum_compressOperator_subset_of_spectrumIn
     {T : H →L[ℂ] H} {U : Submodule ℂ H} [U.HasOrthogonalProjection]
     {s : Set ℝ} (h : Foundation.SpectrumIn T U s) :
@@ -427,8 +426,8 @@ theorem spectrum_compressOperator_subset_of_spectrumIn
   intro r hr
   refine h.subset ((Foundation.mem_restrictedSpectrum_iff T U r).mpr ⟨h.invariant, ?_⟩)
   rw [compressOperator_eq_restrict_of_invariant T U h.invariant] at hr
-  exact (realSpectrum_eq_spectrum_real
-    (T.restrict h.invariant)).ge hr
+  change (r : ℂ) ∈ spectrum ℂ (T.restrict h.invariant)
+  exact spectrum.algebraMap_mem ℂ hr
 
 /-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, perturbation form, for
 every source unitarily invariant norm.**

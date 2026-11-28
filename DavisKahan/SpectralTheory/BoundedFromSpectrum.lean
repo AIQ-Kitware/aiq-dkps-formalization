@@ -10,7 +10,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded
 
 /-!
 # Boundedness from a bounded spectrum
@@ -19,16 +19,10 @@ A closed densely defined self-adjoint operator whose spectrum lies in the
 bounded interval `[β, α]` is defined on the whole space and bounded, with the
 sharp centered estimate `‖A - (β+α)/2‖ ≤ (α-β)/2`.
 
-The proof assembles three facts about the native spectral measure
-`LinearPMap.spectralPVM`:
-
-* `IsSelfAdjoint.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet` — the spectral projection
-  vanishes off the spectrum, so `E([β,α]ᶜ) = 0`;
-* `ProjValMeasure.proj_compl` — complementation gives `E([β,α]) = 1`, so every
-  vector lies in the spectral range of `[β, α]`;
-* `mem_domain_of_mem_specRange_of_bounded` and
-  `norm_sub_smul_le_of_mem_specRange` — a bounded spectral range sits inside
-  `dom A`, and there `A - c` is bounded by the radius of the set around `c`.
+The spectral projection of the interval is the identity since the complement
+consists of resolvent points. TauCeti's `mem_graph_spectralCut` identifies the
+operator on this full range with the centered spectral cut plus the midpoint.
+The native spectral-cut norm bound gives the centered estimate directly.
 
 Until 2026-07-29 this went through Spectra: the operator was realized as the
 generator of its Yosida group and the four bricks were Spectra's.  The Stone
@@ -64,105 +58,36 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
     ∃ R : BoundedRealization (𝕜 := ℂ) (E := H) A,
       ‖R.operator - (((β + α) / 2 : ℝ) : ℂ) •
         ContinuousLinearMap.id ℂ H‖ ≤ (α - β) / 2 := by
-  classical
-  have hBm : MeasurableSet (Set.Icc β α) := measurableSet_Icc
-  -- every point outside `[β, α]` is a resolvent point
-  have hres : ∀ lam ∈ (Set.Icc β α)ᶜ,
-      (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
-    intro lam hlam
-    by_contra hnot
-    have hroot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
-      rw [_root_.LinearPMap.mem_spectrum_iff]
-      exact hnot
-    exact hlam (hσ hroot)
-  -- the spectral projection of the complement vanishes
-  have hprojc :
-      (A.spectralPVM hA).proj (Set.Icc β α)ᶜ hBm.compl = 0 :=
-    hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet hBm.compl hres
-  -- the interval carries the full projection
-  have hprojid :
-      (A.spectralPVM hA).proj (Set.Icc β α) hBm
-        = ContinuousLinearMap.id ℂ H := by
-    have hc := (A.spectralPVM hA).proj_compl (Set.Icc β α) hBm
-    rw [hprojc] at hc
-    linear_combination (norm := module) hc
-  have hfix : ∀ φ : H,
-      (A.spectralPVM hA).proj (Set.Icc β α) hBm φ = φ := by
-    intro φ; rw [hprojid]; rfl
-  have hrange : ∀ φ : H,
-      φ ∈ ((A.spectralPVM hA).proj (Set.Icc β α) hBm).range := fun φ =>
-    (LinearMap.IsIdempotentElem.mem_range_iff
-      (ContinuousLinearMap.IsIdempotentElem.toLinearMap ((A.spectralPVM hA).proj_idem _ hBm))
-      (x := φ)).mpr (hfix φ)
-  -- absolute and centered bounds on the interval
-  have hbnd : ∀ s ∈ Set.Icc β α, |s| ≤ max |β| |α| := by
-    intro s hs
+  have hB : MeasurableSet (Set.Icc β α) := measurableSet_Icc
+  have hprojc : (A.spectralPVM hA).proj (Set.Icc β α)ᶜ hB.compl = 0 := by
+    apply hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet hB.compl
+    intro t ht
+    by_contra hres
+    exact ht (hσ ((_root_.LinearPMap.mem_spectrum_iff A (t : ℂ)).2 hres))
+  have hproj : (A.spectralPVM hA).proj (Set.Icc β α) hB =
+      ContinuousLinearMap.id ℂ H := by
+    rw [ProjValMeasure.proj_compl] at hprojc
+    exact (sub_eq_zero.mp hprojc).symm
+  let c := (β + α) / 2
+  let r := (α - β) / 2
+  have hr : 0 ≤ r := div_nonneg (sub_nonneg.mpr hβα) (by norm_num)
+  have hcr : ∀ t ∈ Set.Icc β α, |t - c| ≤ r := by
+    intro t ht
+    dsimp [c, r]
     rw [abs_le]
-    refine ⟨?_, ?_⟩
-    · exact le_trans
-        (le_trans (neg_le_neg (le_max_left |β| |α|)) (neg_abs_le β)) hs.1
-    · exact le_trans hs.2 (le_trans (le_abs_self α) (le_max_right |β| |α|))
-  have hcr : ∀ s ∈ Set.Icc β α, |s - (β + α) / 2| ≤ (α - β) / 2 := by
-    intro s hs
-    rw [abs_le]
-    exact ⟨by linarith [hs.1], by linarith [hs.2]⟩
-  -- every vector lies in the domain, with the centered pointwise estimate
-  have hdomAll : ∀ φ : H, φ ∈ A.domain := fun φ =>
-    TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ hBm hbnd
-      (hrange φ)
-  have hbound : ∀ φ : H,
-      ‖A ⟨φ, hdomAll φ⟩ - (((β + α) / 2 : ℝ) : ℂ) • φ‖
-        ≤ (α - β) / 2 * ‖φ‖ := fun φ =>
-    TauCeti.LinearPMap.norm_sub_smul_le_of_mem_specRange hA _ hBm hbnd
-      (by linarith) hcr (hrange φ) (hdomAll φ)
-  -- the everywhere-defined linear realization
-  let g : H →ₗ[ℂ] H :=
-    { toFun := fun φ => A ⟨φ, hdomAll φ⟩
-      map_add' := fun φ ψ => by
-        have h : (⟨φ + ψ, hdomAll (φ + ψ)⟩ : A.domain) =
-            ⟨φ, hdomAll φ⟩ + ⟨ψ, hdomAll ψ⟩ := rfl
-        rw [h, A.map_add]
-      map_smul' := fun c φ => by
-        have h : (⟨c • φ, hdomAll (c • φ)⟩ : A.domain) =
-            c • ⟨φ, hdomAll φ⟩ := rfl
-        rw [h, A.map_smul]
-        rfl }
-  have hgφ : ∀ φ : H, g φ = A ⟨φ, hdomAll φ⟩ := fun _ => rfl
-  have hsm : ∀ φ : H, (((β + α) / 2 : ℝ) : ℂ) • φ = ((β + α) / 2 : ℝ) • φ :=
-    fun φ => (RCLike.real_smul_eq_coe_smul (K := ℂ) _ φ).symm
-  -- continuity of the realization
-  have hgbound : ∀ φ : H,
-      ‖g φ‖ ≤ (|(β + α) / 2| + (α - β) / 2) * ‖φ‖ := by
-    intro φ
-    have h := hbound φ
-    rw [← hgφ φ, hsm φ] at h
-    have h2 : ‖((β + α) / 2 : ℝ) • φ‖ = |(β + α) / 2| * ‖φ‖ := by
-      rw [norm_smul, Real.norm_eq_abs]
-    calc ‖g φ‖
-        = ‖(g φ - ((β + α) / 2 : ℝ) • φ) + ((β + α) / 2 : ℝ) • φ‖ := by
-          rw [sub_add_cancel]
-      _ ≤ ‖g φ - ((β + α) / 2 : ℝ) • φ‖ + ‖((β + α) / 2 : ℝ) • φ‖ :=
-          norm_add_le _ _
-      _ ≤ (α - β) / 2 * ‖φ‖ + |(β + α) / 2| * ‖φ‖ := by
-          rw [h2]; exact add_le_add h le_rfl
-      _ = (|(β + α) / 2| + (α - β) / 2) * ‖φ‖ := by ring
-  let T : H →L[ℂ] H := g.mkContinuous _ hgbound
-  have hTφ : ∀ φ : H, T φ = A ⟨φ, hdomAll φ⟩ := fun _ => rfl
-  refine ⟨⟨T, ?_, ?_⟩, ?_⟩
-  · -- the domain is everything
-    exact Submodule.eq_top_iff'.mpr hdomAll
-  · -- the realization agrees with `A` on the domain
-    intro x
-    rw [hTφ (x : H)]
-  · -- the centered norm bound
-    refine ContinuousLinearMap.opNorm_le_bound _ (by linarith) fun φ => ?_
-    have h := hbound φ
-    rw [← hTφ φ, hsm φ] at h
-    calc ‖(T - (((β + α) / 2 : ℝ) : ℂ) • ContinuousLinearMap.id ℂ H) φ‖
-        = ‖T φ - ((β + α) / 2 : ℝ) • φ‖ := by
-          rw [sub_apply, smul_apply,
-            ContinuousLinearMap.id_apply, hsm φ]
-      _ ≤ (α - β) / 2 * ‖φ‖ := h
+    exact ⟨by linarith [ht.1], by linarith [ht.2]⟩
+  let C := A.spectralCut hA (Set.Icc β α) hB c r hr hcr
+  let T := C + (c : ℂ) • ContinuousLinearMap.id ℂ H
+  have hgraph (x : H) : (x, T x) ∈ A.graph := by
+    have hx := hA.mem_graph_spectralCut (Set.Icc β α) hB c r hr hcr x
+    rw [hproj, ContinuousLinearMap.id_apply] at hx
+    exact hx
+  refine ⟨⟨T, Submodule.eq_top_iff'.mpr (fun x => _root_.LinearPMap.mem_domain_of_mem_graph
+    (hgraph x)), fun x => A.mem_graph_snd_inj (hgraph x) (A.mem_graph x) rfl⟩, ?_⟩
+  change ‖C + (c : ℂ) • ContinuousLinearMap.id ℂ H - (c : ℂ) •
+    ContinuousLinearMap.id ℂ H‖ ≤ r
+  rw [add_sub_cancel_right]
+  exact hA.norm_spectralCut_le (Set.Icc β α) hB c r hr hcr
 
 end ExactSinTheta
 end DavisKahan
