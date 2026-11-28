@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import DavisKahan.Geometry.Polar.NuclearRootMetric
-public import ForTauCeti.Analysis.OperatorIdeal.Family.Modulus
+public import TauCeti.Analysis.OperatorIdeal.Family.Modulus
 
 /-!
 # Antipodal geometry of all complex nuclear minimizers
@@ -59,9 +59,11 @@ theorem nuclearSignedSineParameters_gauge
     Φ.gauge A.val = Φ.gauge (K.starProjection - L.starProjection) := by
   have hmod := ((mem_nuclearSignedSineParameters K L D A.val).mp A.property).2.1
   calc
-    _ = Φ.gauge A.val.modulus := (Φ.gauge_modulus_eq A.val).symm
+    _ = Φ.gauge A.val.modulus := (Φ.toOperatorIdealFamily.gauge_modulus A.val).symm
     _ = Φ.gauge (K.sinAngleOperator L) := congrArg Φ.gauge hmod
-    _ = _ := by rw [Submodule.sinAngleOperator_def]; exact Φ.gauge_modulus_eq _
+    _ = _ := by
+      rw [Submodule.sinAngleOperator_def]
+      exact Φ.toOperatorIdealFamily.gauge_modulus _
 
 /-- The universal sharp upper bound on parameter differences in every
 symmetric ideal gauge, allowing infinite values. -/

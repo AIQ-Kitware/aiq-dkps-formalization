@@ -2712,6 +2712,8 @@ The recorded strictness narrowing `0 < theta n < pi/2` sits ONLY on `corollary3_
 
 SOURCE INVARIANT CORRECTED 2026-09-05. Corollary 3.1 says the complete invariants reduce to the eigenvalues of Theta_0 and Theta_1 counted with multiplicity -- the ANGLES. The registered classification witness was stated on `compactAngleEigenvalueList`, the eigenvalue list of the SINE-SQUARE block, and this row asserted it as the printed statement. The two determine each other because t -> sin^2 t is injective on [0, pi/2] -- which this row already proved for the REALIZATION half, as `angleSequence_eq_of_angleList_eq` -- but the classification half had never been restated on the angles. `compactAngleList` is the angle list, `compactAngleList_inj_iff` is the equivalence of the two spellings, and `compactAngleEigenvalueList_genericCosineBlock_le_one` discharges its hypothesis from the spectrum bound on Halmos's block. The sin^2 form is retained as the structural theorem.
 
+November 28: The angle sequence datum uses TauCeti's `lp.isSelfAdjoint_diagonalCLM_iff` from #27674 for its cosine and sine multipliers. Their composition and Pythagorean identities use the native diagonal arithmetic. The paper's realization permits independent angle-zero multiplicities.
+
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
 ### `DK-3.5-prop` — Angle commutation and eigenspace geometry

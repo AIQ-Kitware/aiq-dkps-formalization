@@ -494,12 +494,12 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     simpa [S, sourceDirectedSineBlock] using
       sourceDirectedSinThetaOperator_eq_modulus E₀ F₀
         htrial.isometry hexact.desiredIsometry
-  have hSmod : N.Mem S.modulus := by
-    simpa only [hsin_eq] using hsin
+  have hmodulus := N.toSymmetricOperatorIdealFamily.toOperatorIdealFamily.gauge_modulus S
   have hS : N.Mem S := by
-    apply (N.toSymmetricOperatorIdealFamily.mem_iff_mem_finiteSubmodule S).mpr
-    exact (N.toSymmetricOperatorIdealFamily.modulus_mem_iff S).mp
-      ((N.toSymmetricOperatorIdealFamily.mem_iff_mem_finiteSubmodule S.modulus).mp hSmod)
+    rw [hsin_eq] at hsin
+    change N.toSymmetricOperatorIdealFamily.gauge S.modulus ≠ ⊤ at hsin
+    change N.toSymmetricOperatorIdealFamily.gauge S ≠ ⊤
+    simpa only [hmodulus] using hsin
   have hrect :=
     sinTheta_unbounded_formGap_rectangular_whereDefinedUIN_rclike
       (𝕜 := 𝕜) N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ hgap
@@ -509,8 +509,7 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     calc
       N.gaugeReal (sourceDirectedSinThetaOperator E₀ F₀) =
           N.gaugeReal S.modulus := congrArg N.gaugeReal hsin_eq
-      _ = N.gaugeReal S :=
-        N.toSymmetricOperatorIdealFamily.gaugeReal_modulus_eq S
+      _ = N.gaugeReal S := congrArg ENNReal.toReal hmodulus
   rw [hgauge]
   simpa [S] using hrect
 

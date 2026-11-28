@@ -6,6 +6,8 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import DavisKahan.Geometry.Polar.NuclearSignedRoot
+import TauCeti.Analysis.OperatorIdeal.Family.Modulus
+import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
 
 /-!
 # Constructing unitary transport from signed sine roots
@@ -339,8 +341,7 @@ theorem nuclearSignedSineTransport_nuclearENorm
     (⟨nonacuteDirectRotation K L D, nonacuteDirectRotation_mem_unitary K L D⟩ : unitary (E →L[𝕜] E))
   let S := K.sinAngleOperator L
   have hn (B : E →L[𝕜] E) : Φ.gauge B = B.nuclearENorm := by
-    simp only [Φ, OperatorIdealFamily.gauge_schatten, one_div_one, ENNReal.rpow_one,
-      ContinuousLinearMap.nuclearENorm_def]
+    simp only [Φ, OperatorIdealFamily.schatten_one, OperatorIdealFamily.gauge_traceClass]
   have hg : Φ.gauge (star (V : E →L[𝕜] E) *
       (nonacuteDirectRotation K L D - (T.symm : E →L[𝕜] E) * nonacuteDirectRotation K L D)) =
         Φ.gauge (1 - (T : E →L[𝕜] E)) := by
@@ -352,11 +353,10 @@ theorem nuclearSignedSineTransport_nuclearENorm
         congr 1
       _ = Φ.gauge (1 - (T.symm : E →L[𝕜] E)) := Φ.gauge_comp_linearIsometryEquiv_right _ R
       _ = _ := by
-        rw [hn, hn]
         have ha : (1 - (T : E →L[𝕜] E)).adjoint = 1 - (T.symm : E →L[𝕜] E) := by
           change star (1 - (T : E →L[𝕜] E)) = _
           rw [star_sub, star_one, T.star_eq_symm]
-        rw [← ha, ContinuousLinearMap.nuclearENorm_adjoint]
+        rw [← ha, Φ.gauge_adjoint]
   rw [nuclearSignedSineTransport_dual_displacement] at hg
   have hnegodd : K.reflection.conjStarAlgEquiv (-A) = -(-A) := by rw [map_neg, hodd]
   have hsplit := ContinuousLinearMap.gauge_nuclear_modulus_add_of_unitary_odd (-A) hA.neg K.reflection hnegodd
@@ -365,11 +365,10 @@ theorem nuclearSignedSineTransport_nuclearENorm
   rw [Φ.gauge_neg] at hsplit
   have hAg : Φ.gauge A = Φ.gauge S := by
     change Φ.gauge A = Φ.gauge (K.sinAngleOperator L)
-    rw [← hmod]
-    simp only [Φ, OperatorIdealFamily.gauge_schatten, ContinuousLinearMap.singularValue_modulus]
+    rw [← hmod, Φ.gauge_modulus]
   have hSg : Φ.gauge S = Φ.gauge (K.starProjection - L.starProjection) := by
-    simp only [S, Submodule.sinAngleOperator_def, Φ, OperatorIdealFamily.gauge_schatten,
-      ContinuousLinearMap.singularValue_modulus]
+    change Φ.gauge (K.sinAngleOperator L) = _
+    rw [Submodule.sinAngleOperator_def, Φ.gauge_modulus]
   exact (hn _).symm.trans (hg.symm.trans (hsplit.trans (hAg.trans (hSg.trans (hn _)))))
 
 /-- Whenever an admissible root exists, its transporter minimizes over
@@ -387,7 +386,6 @@ theorem nuclearSignedSineTransport_isMin
       (1 - (W : E →L[𝕜] E)).nuclearENorm := by
   rw [nuclearSignedSineTransport_nuclearENorm K L D A hA hmod hcomm hodd]
   have h := (OperatorIdealFamily.schatten 𝕜 1 (by norm_num)).gauge_projection_sub_le_unitary_displacement K L W hW
-  simpa only [OperatorIdealFamily.gauge_schatten, one_div_one, ENNReal.rpow_one,
-    ContinuousLinearMap.nuclearENorm_def] using h
+  simpa only [OperatorIdealFamily.schatten_one, OperatorIdealFamily.gauge_traceClass] using h
 
 end TauCeti.DavisKahan

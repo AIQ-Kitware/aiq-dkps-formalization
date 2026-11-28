@@ -1,5 +1,50 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 ideal moduli, diagonal angle data, and nuclear trace
+
+The rectangular modulus gauge and membership proofs now use
+`OperatorIdealFamily.gauge_modulus` from chrisflav's #27674.
+The sine-theta presentation obtains its real equality by applying
+`ENNReal.toReal`. The same law replaces singular-value expansions in
+the signed-root and fixed-modulus compactness proofs, with infinite
+gauges still allowed. The local rectangular modulus module and the
+real and square forwarding theorems retire. The free-data square ideal
+has a separate factorization argument.
+[#27674 integration](https://github.com/TauCetiProject/TauCeti/commit/4d7402dd106a902f4b66aea0d7a0017e6b9b188d)
+
+Halmos angle sequence realization uses `lp.isSelfAdjoint_diagonalCLM_iff`
+from the same integration, whose index type is arbitrary. The accepted
+diagonal multiplier multiplication, addition and one laws give
+commutation and the Pythagorean equality directly from the coefficients.
+This retires the last local diagonal theorem and its module. The
+original angle sequence is arbitrary before imposing Corollary 3.1's
+compactness and ordering hypotheses. The October diagonal and
+approximation-number provenance is recorded separately under #15706.
+DKPS proof descent for #27674 is unverified.
+[#15706 integration](https://github.com/TauCetiProject/TauCeti/commit/bab29bb854c90d9b9565ccf87c28b09841e78154)
+
+The finite rectangular Gram nuclear norm uses the real trace of the
+modulus from #46215 and the orthonormal-basis trace formula from #14442,
+now in `Trace.Free` after #44637. The nuclear optimizer existence and
+compactness proofs use David Roe's `schatten_one` and `gauge_traceClass`
+from #19075 (OI-B83) for the same Schatten-one gauge.
+[#46215 integration](https://github.com/TauCetiProject/TauCeti/commit/d81b59c694a9155b934108465cc1c824cf458226) ·
+[#14442 integration](https://github.com/TauCetiProject/TauCeti/commit/09e43a78d09cdef107d8604de0517331119edd6e) ·
+[#19075 integration](https://github.com/TauCetiProject/TauCeti/commit/2fef08202e8434f6e73cc761702d91c49ff642f9)
+
+The finite Frobenius and Hilbert–Schmidt comparison now uses
+`ContinuousLinearMap.hilbertSchmidtEnergy_eq_ofReal_sq_frobenius`
+from independent #16010. That theorem accepts any source Hilbert basis
+in finite dimension and any codomain dimension. The standard-basis
+specialization in the roadmap bridge consumes it directly, and the
+last local declaration in `SchattenNorm` retires with its module.
+[#16010 integration](https://github.com/TauCetiProject/TauCeti/commit/0a4ee4102c6ab9af0285c16cf172b60f0dbac162)
+
+The focused build (20,258 jobs), default build (22,812 jobs), and
+Challenge with the semantic-surface audit (22,522 jobs) passed without
+warnings at TauCeti `007b3a1150`. All 1,569 source-census references
+resolved and all 18 available comparator signatures matched.
+
 ## November 28 compact adjoints, block unitaries, and isometric transport
 
 The compact-operator ideal now uses `IsCompactOperator.adjoint` and

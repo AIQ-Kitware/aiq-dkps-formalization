@@ -11,6 +11,8 @@ public import TauCeti.Analysis.InnerProductSpace.FanDominance
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius.Trace
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.KyFan
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.OpNorm
+import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Basic
+import TauCeti.Analysis.InnerProductSpace.Trace.Free
 
 /-!
 # DKPS extensions for rectangular unitarily invariant seminorms
@@ -50,18 +52,12 @@ theorem nuclear_adjoint_comp_self_eq_sum_sq_norm
     symm
     exact hG.eq_operatorAbs (by
       rw [hG.adjoint_eq])
-  rw [nuclear_apply]
-  change G.singularValues.sum (fun _ s => s) = _
   calc
-    G.singularValues.sum (fun _ s => s) =
-        ∑ i : Fin (finrank 𝕜 E), G.singularValues i := by
-      simpa only [id_eq] using (G.sum_fin_singularValues id rfl).symm
-    _ = ∑ i, ‖A (b i)‖ ^ 2 := by
-      rw [← sum_re_inner_abs_self_eq_sum_singularValues G rfl b,
-        hGabs]
-      apply Finset.sum_congr rfl
-      intro i hi
-      simp only [G, LinearMap.comp_apply, LinearMap.adjoint_inner_left,
-        inner_self_eq_norm_sq]
+    _ = RCLike.re (LinearMap.trace 𝕜 E G.operatorAbs) := G.re_trace_operatorAbs.symm
+    _ = _ := by
+      rw [hGabs]
+      change RCLike.re (LinearMap.trace 𝕜 E (A.adjoint ∘ₗ A)) = _
+      rw [A.trace_adjoint_comp_self_eq_sum_norm_apply_sq b]
+      exact RCLike.ofReal_re _
 
 end TauCeti.UnitarilyInvariantSeminorm

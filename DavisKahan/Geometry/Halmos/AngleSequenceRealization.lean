@@ -7,8 +7,9 @@ module
 
 public import DavisKahan.Geometry.Halmos.CompactClassification
 public import DavisKahan.Geometry.Halmos.Realization
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Diagonal
+public import TauCeti.Analysis.Normed.Lp.Diagonal.Positive
 
 public section
 
@@ -161,10 +162,25 @@ theorem angleSinSqOp_apply (x : AngleSequenceSpace 𝕜) (n : ℕ) :
 /-- The square of `sin Θ` is the diagonal operator with coefficients `sin² θₙ`. -/
 theorem angleSinOp_comp_angleSinOp :
     angleSinOp 𝕜 θ ∘L angleSinOp 𝕜 θ = angleSinSqOp 𝕜 θ := by
-  refine ContinuousLinearMap.ext fun x => lp.ext (funext fun n => ?_)
-  simp only [ContinuousLinearMap.comp_apply, angleSinOp_apply, angleSinSqOp_apply,
-    angleSinSeq, angleSinSqSeq]
-  rw [← mul_assoc, ← RCLike.ofReal_mul, sq]
+  rw [angleSinOp, angleSinSqOp, ← lp.diagonalCLM_mul]
+  apply congrArg (lp.diagonalCLM (p := 2))
+  refine lp.ext (funext fun n => ?_)
+  change angleSinSeq 𝕜 θ n * angleSinSeq 𝕜 θ n = angleSinSqSeq 𝕜 θ n
+  rw [angleSinSeq, angleSinSqSeq, ← RCLike.ofReal_mul, sq]
+
+private theorem angleCosOp_comp_add_angleSinOp_comp :
+    angleCosOp 𝕜 θ ∘L angleCosOp 𝕜 θ + angleSinOp 𝕜 θ ∘L angleSinOp 𝕜 θ = 1 := by
+  change _ = ContinuousLinearMap.id 𝕜 (AngleSequenceSpace 𝕜)
+  rw [angleCosOp, angleSinOp, ← lp.diagonalCLM_mul, ← lp.diagonalCLM_mul,
+    ← lp.diagonalCLM_add, ← lp.diagonalCLM_one]
+  apply congrArg (lp.diagonalCLM (p := 2))
+  refine lp.ext (funext fun n => ?_)
+  simp only [lp.coeFn_add, lp.infty_coeFn_mul, lp.infty_coeFn_one, Pi.add_apply, Pi.mul_apply,
+    Pi.one_apply]
+  rw [angleCosSeq, angleSinSeq, ← RCLike.ofReal_mul, ← RCLike.ofReal_mul, ← RCLike.ofReal_add,
+    show Real.cos (θ n) * Real.cos (θ n) + Real.sin (θ n) * Real.sin (θ n) = 1 by
+      nlinarith [Real.sin_sq_add_cos_sq (θ n)],
+    RCLike.ofReal_one]
 
 /-! ### The prescribed datum -/
 
@@ -176,72 +192,37 @@ exactly — including the multiplicity at `0`.  No hypothesis on `θ` is needed:
 the Pythagorean identity holds coefficientwise for every real number. -/
 @[expose]
 noncomputable def angleSequenceDatum :
-    HalmosAngleDatum 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜) where
-  cos₀ := angleCosOp 𝕜 θ
-  sin₀ := angleSinOp 𝕜 θ
-  cos₁ := angleCosOp 𝕜 θ
-  sin₁ := angleSinOp 𝕜 θ
-  intertwiner := 1
-  isSelfAdjoint_cos₀ := lp.isSelfAdjoint_diagonalCLM _ (conj_angleCosSeq 𝕜 θ)
-  isSelfAdjoint_sin₀ := lp.isSelfAdjoint_diagonalCLM _ (conj_angleSinSeq 𝕜 θ)
-  isSelfAdjoint_cos₁ := lp.isSelfAdjoint_diagonalCLM _ (conj_angleCosSeq 𝕜 θ)
-  isSelfAdjoint_sin₁ := lp.isSelfAdjoint_diagonalCLM _ (conj_angleSinSeq 𝕜 θ)
-  commute₀ := by
-    refine ContinuousLinearMap.ext fun x => lp.ext (funext fun n => ?_)
-    simp only [ContinuousLinearMap.comp_apply, angleCosOp_apply, angleSinOp_apply]
-    ring
-  commute₁ := by
-    refine ContinuousLinearMap.ext fun x => lp.ext (funext fun n => ?_)
-    simp only [ContinuousLinearMap.comp_apply, angleCosOp_apply, angleSinOp_apply]
-    ring
-  pythagoras₀ := by
-    refine ContinuousLinearMap.ext fun x => lp.ext (funext fun n => ?_)
-    have hone : angleCosSeq 𝕜 θ n * angleCosSeq 𝕜 θ n +
-        angleSinSeq 𝕜 θ n * angleSinSeq 𝕜 θ n = 1 := by
-      rw [angleCosSeq, angleSinSeq, ← RCLike.ofReal_mul, ← RCLike.ofReal_mul,
-        ← RCLike.ofReal_add,
-        show Real.cos (θ n) * Real.cos (θ n) + Real.sin (θ n) * Real.sin (θ n) = 1 by
-          nlinarith [Real.sin_sq_add_cos_sq (θ n)],
-        RCLike.ofReal_one]
-    simp only [add_apply, lp.coeFn_add, Pi.add_apply,
-      ContinuousLinearMap.comp_apply, angleCosOp_apply, angleSinOp_apply,
-      one_apply_eq_self]
-    calc angleCosSeq 𝕜 θ n * (angleCosSeq 𝕜 θ n * x n) +
-          angleSinSeq 𝕜 θ n * (angleSinSeq 𝕜 θ n * x n)
-        = (angleCosSeq 𝕜 θ n * angleCosSeq 𝕜 θ n +
-            angleSinSeq 𝕜 θ n * angleSinSeq 𝕜 θ n) * x n := by ring
-      _ = x n := by rw [hone, one_mul]
-  pythagoras₁ := by
-    refine ContinuousLinearMap.ext fun x => lp.ext (funext fun n => ?_)
-    have hone : angleCosSeq 𝕜 θ n * angleCosSeq 𝕜 θ n +
-        angleSinSeq 𝕜 θ n * angleSinSeq 𝕜 θ n = 1 := by
-      rw [angleCosSeq, angleSinSeq, ← RCLike.ofReal_mul, ← RCLike.ofReal_mul,
-        ← RCLike.ofReal_add,
-        show Real.cos (θ n) * Real.cos (θ n) + Real.sin (θ n) * Real.sin (θ n) = 1 by
-          nlinarith [Real.sin_sq_add_cos_sq (θ n)],
-        RCLike.ofReal_one]
-    simp only [add_apply, lp.coeFn_add, Pi.add_apply,
-      ContinuousLinearMap.comp_apply, angleCosOp_apply, angleSinOp_apply,
-      one_apply_eq_self]
-    calc angleCosSeq 𝕜 θ n * (angleCosSeq 𝕜 θ n * x n) +
-          angleSinSeq 𝕜 θ n * (angleSinSeq 𝕜 θ n * x n)
-        = (angleCosSeq 𝕜 θ n * angleCosSeq 𝕜 θ n +
-            angleSinSeq 𝕜 θ n * angleSinSeq 𝕜 θ n) * x n := by ring
-      _ = x n := by rw [hone, one_mul]
-  map_cos := by
-    refine ContinuousLinearMap.ext fun x => ?_
-    simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
-  map_sin := by
-    refine ContinuousLinearMap.ext fun x => ?_
-    simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
-  isometry_on_sin₀ := by
-    rw [ContinuousLinearMap.adjoint_one]
-    refine ContinuousLinearMap.ext fun x => ?_
-    simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
-  coisometry_on_sin₁ := by
-    rw [ContinuousLinearMap.adjoint_one]
-    refine ContinuousLinearMap.ext fun x => ?_
-    simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
+    HalmosAngleDatum 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜) := by
+  have hcomm : angleCosOp 𝕜 θ ∘L angleSinOp 𝕜 θ = angleSinOp 𝕜 θ ∘L angleCosOp 𝕜 θ := by
+    rw [angleCosOp, angleSinOp, ← lp.diagonalCLM_mul, ← lp.diagonalCLM_mul, mul_comm]
+  exact {
+    cos₀ := angleCosOp 𝕜 θ
+    sin₀ := angleSinOp 𝕜 θ
+    cos₁ := angleCosOp 𝕜 θ
+    sin₁ := angleSinOp 𝕜 θ
+    intertwiner := 1
+    isSelfAdjoint_cos₀ := (lp.isSelfAdjoint_diagonalCLM_iff _).mpr (conj_angleCosSeq 𝕜 θ)
+    isSelfAdjoint_sin₀ := (lp.isSelfAdjoint_diagonalCLM_iff _).mpr (conj_angleSinSeq 𝕜 θ)
+    isSelfAdjoint_cos₁ := (lp.isSelfAdjoint_diagonalCLM_iff _).mpr (conj_angleCosSeq 𝕜 θ)
+    isSelfAdjoint_sin₁ := (lp.isSelfAdjoint_diagonalCLM_iff _).mpr (conj_angleSinSeq 𝕜 θ)
+    commute₀ := hcomm
+    commute₁ := hcomm
+    pythagoras₀ := by exact angleCosOp_comp_add_angleSinOp_comp 𝕜 θ
+    pythagoras₁ := by exact angleCosOp_comp_add_angleSinOp_comp 𝕜 θ
+    map_cos := by
+      refine ContinuousLinearMap.ext fun x => ?_
+      simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
+    map_sin := by
+      refine ContinuousLinearMap.ext fun x => ?_
+      simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
+    isometry_on_sin₀ := by
+      rw [ContinuousLinearMap.adjoint_one]
+      refine ContinuousLinearMap.ext fun x => ?_
+      simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self]
+    coisometry_on_sin₁ := by
+      rw [ContinuousLinearMap.adjoint_one]
+      refine ContinuousLinearMap.ext fun x => ?_
+      simp only [ContinuousLinearMap.comp_apply, one_apply_eq_self] }
 
 /-- The datum's `P`-side sine is the prescribed diagonal operator. -/
 @[simp]

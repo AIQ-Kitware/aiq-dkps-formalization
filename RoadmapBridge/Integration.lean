@@ -6,8 +6,9 @@ module
 
 public import Mathlib
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Basic
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Spectral
-public import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
 
 /-!
 # Roadmap bridge: cross-module integration seams
@@ -176,7 +177,7 @@ example [CompleteSpace E] (A : E →L[𝕜] F) :
     A.hilbertSchmidtEnergy (stdOrthonormalBasis 𝕜 E).toHilbertBasis =
       ENNReal.ofReal (UnitarilyInvariantSeminorm.frobenius
         (𝕜 := 𝕜) (E := E) (F := F) A.toLinearMap ^ 2) :=
-  UnitarilyInvariantSeminorm.hilbertSchmidtEnergy_eq_ofReal_frobenius_sq A
+  A.hilbertSchmidtEnergy_eq_ofReal_sq_frobenius (stdOrthonormalBasis 𝕜 E).toHilbertBasis
 
 end UnifiedUIN
 

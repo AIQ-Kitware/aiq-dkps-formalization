@@ -8,6 +8,8 @@ module
 public import DavisKahan.Geometry.Polar.NuclearRootCompactness
 public import DavisKahan.Geometry.Polar.NuclearRootProfile
 public import ForTauCeti.Analysis.InnerProductSpace.CompactModulusIdeal
+import TauCeti.Analysis.OperatorIdeal.Family.Modulus
+import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
 
 /-!
 # Compactness of nuclear optimizers in ideal norms
@@ -43,12 +45,7 @@ theorem isCompact_nuclearSignedSineParameters_schatten
       A.toContinuousLinearMap ∈ nuclearSignedSineParameters K L D} := by
   let Φ := OperatorIdealFamily.schatten 𝕜 q hq
   have hS : Φ.gauge (K.sinAngleOperator L) ≠ ∞ := by
-    have heq := (SymmetricOperatorIdealFamily.schatten 𝕜 q hq).gauge_modulus_eq
-      (K.starProjection - L.starProjection)
-    change (SymmetricOperatorIdealFamily.schatten 𝕜 q hq).toOperatorIdealFamily.gauge _ =
-      (SymmetricOperatorIdealFamily.schatten 𝕜 q hq).toOperatorIdealFamily.gauge _ at heq
-    rw [SymmetricOperatorIdealFamily.schatten_toOperatorIdealFamily] at heq
-    rwa [Submodule.sinAngleOperator_def, heq]
+    rwa [Submodule.sinAngleOperator_def, Φ.gauge_modulus]
   apply (TauCeti.isCompact_setOf_isSelfAdjoint_modulus_eq_schatten q hq
     (K.sinAngleOperator L) (K.isPositive_sinAngleOperator L) hS).of_isClosed_subset
   · convert (isClosed_nuclearSignedSineParameters K L D).preimage
@@ -80,8 +77,7 @@ theorem isCompact_nuclear_optimizer_displacements_schatten_complex
   let Φ := OperatorIdealFamily.schatten ℂ q hq
   have hΔone : (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
       (K.starProjection - L.starProjection) ≠ ∞ := by
-    simpa only [OperatorIdealFamily.gauge_schatten, one_div_one, ENNReal.rpow_one,
-      ContinuousLinearMap.nuclearENorm_def] using hΔ
+    simpa only [OperatorIdealFamily.schatten_one, OperatorIdealFamily.gauge_traceClass] using hΔ
   have hΔq : Φ.gauge (K.starProjection - L.starProjection) ≠ ∞ :=
     ne_top_of_le_ne_top hΔone
       (OperatorIdealFamily.gauge_schatten_le_of_le (by norm_num : (1 : ℝ) ≤ 1) hq hq _)

@@ -14,7 +14,6 @@ public import DavisKahan.FiniteDimensional.Sylvester.All
 public import DavisKahan.FiniteDimensional.TanTheta.All
 public import DavisKahan.FiniteDimensional.DirectRotation
 public import DavisKahan.FiniteDimensional.Generalized
-public import ForTauCeti.Analysis.InnerProductSpace.SchattenNorm
 public import DavisKahan.FiniteDimensional.Sharpness
 
 /-! # `DavisKahan/FiniteDimensional` -/

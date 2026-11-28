@@ -47,7 +47,8 @@
         "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
+        "TauCeti.Analysis.Normed.Lp.Diagonal.Positive",
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Diagonal",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
@@ -114,7 +115,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry",
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
-        "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
+        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
         "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
@@ -1798,8 +1799,8 @@
         "TauCeti.UnitarilyInvariantSeminorm.schattenNormInf_apply"
       ],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SchattenNorm",
+      "staging_module": null,
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten, TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "moved; introduced at Davis--Kahan commit a8d4ea3; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
@@ -1810,11 +1811,11 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "DavisKahan.FiniteDimensional.Norms.All",
         "RoadmapBridge.Integration"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null
+      "status": "consumed-upstream",
+      "upstream_pr": "#16023, #16010",
+      "migration_note": "November 28: remove the final finite-energy theorem and retire this module. RoadmapBridge applies ContinuousLinearMap.hilbertSchmidtEnergy_eq_ofReal_sq_frobenius at the standard orthonormal basis. The native #16010 result at 0a4ee4102c6ab9af0285c16cf172b60f0dbac162 works in every Hilbert basis and allows arbitrary codomain dimension. The integration reports independent development. The local identity was introduced at b3852bf8338ae9bec83f5ea7b8e8eb25cf56e587, with Jon Crall and Claude Fable 5 in the donor header, Kitware 2026, Apache-2.0. The standard Schatten, zero, ideal and endpoint laws were already consumed from the canonical module."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.SchurHorn",
@@ -2048,7 +2049,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
         "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
-        "ForTauCeti.Analysis.InnerProductSpace.SchattenNorm",
+        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
@@ -6530,14 +6531,15 @@
         "TauCeti.apply_eq_zero_of_mem_span_single",
         "TauCeti.le_approximationNumber_diagOpLp",
         "TauCeti.approximationNumber_diagOpLp",
-        "TauCeti.isSelfAdjoint_diagOpLp"
+        "TauCeti.isSelfAdjoint_diagOpLp",
+        "lp.isSelfAdjoint_diagonalCLM"
       ],
       "current_namespace": "lp",
-      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
-      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Diagonal",
+      "staging_module": null,
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Diagonal, TauCeti.Analysis.Normed.Lp.Diagonal.Positive",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-number",
-      "provenance_class": "accepted API reuse; proof descent for #15706 unestablished",
+      "provenance_class": "accepted API reuse; proof descent for #15706 and #27674 unverified",
       "direct_dependencies": [
         "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Diagonal"
       ],
@@ -6545,12 +6547,9 @@
       "downstream_users": [
         "DavisKahan.Geometry.Halmos.AngleSequenceRealization"
       ],
-      "status": "partially-upstreamed",
-      "upstream_pr": "#15706",
-      "migration_note": "November 2 native diagonal checkpoint, against TauCeti 463ab293070d4cb355d0a0e036469464070088bc: retire diagCoord, diagOpLp, truncDiagOpLp and their norm, truncation-sum/rank/tail, compactness, approximation-number convergence, upper/lower/exact formula and finite-support proof engine. Consumers use lp.diagonalCLM, diagonalTruncation, diagonalTruncation_apply_eq_sum_single, rank_diagonalTruncation_range_le, norm_diagonalCLM_sub_diagonalTruncation_le, isCompactOperator_diagonalCLM, singularValue_diagonalCLM and exists_singularValue_diagonalCLM_eq. Accepted #15706 integration bab29bb854c90d9b9565ccf87c28b09841e78154 supplies these over general lp spaces; the multiplier source later moved to Normed/Lp/Diagonal/Basic in #21091 (2ca1127e251c2849880bc31d0478e87692dd2953). No DKPS adaptation or explicit independence disclosure was found for #15706; shared result is not evidence of proof descent. Its lp.mapCLM dependency is transitive Mathlib reuse. Original arbitrary unsorted real/complex convergence follows from native compactness and IsCompactOperator.tendsto_singularValue, independent #14589 integration c83058a3d5ab008a376e25d7330650b5bcec8179. Native lp.apply_eq_zero_of_mem_span_single supersedes the local finite-support helper. Full old operator and truncation correspondences and unsorted convergence compiled over arbitrary scalar universes. Retain only the star-fixed-coefficient self-adjointness proof, adapted onto the canonical carrier as lp.isSelfAdjoint_diagonalCLM; no accepted diagonal self-adjointness API was found. Source e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/DiagonalSequence.lean, introduction b24cd4145659ca6cc8784c53ec0fea30a09ae328, original Jon Crall / Claude Opus 5 (claude-opus-5[1m]), Kitware copyright, Apache-2.0.",
-      "maintained_declarations": [
-        "lp.isSelfAdjoint_diagonalCLM"
-      ]
+      "status": "consumed-upstream",
+      "upstream_pr": "#15706, #27674",
+      "migration_note": "November 2 native diagonal checkpoint, against TauCeti 463ab293070d4cb355d0a0e036469464070088bc: retire diagCoord, diagOpLp, truncDiagOpLp and their norm, truncation-sum/rank/tail, compactness, approximation-number convergence, upper/lower/exact formula and finite-support proof engine. Consumers use lp.diagonalCLM, diagonalTruncation, diagonalTruncation_apply_eq_sum_single, rank_diagonalTruncation_range_le, norm_diagonalCLM_sub_diagonalTruncation_le, isCompactOperator_diagonalCLM, singularValue_diagonalCLM and exists_singularValue_diagonalCLM_eq. Accepted #15706 integration bab29bb854c90d9b9565ccf87c28b09841e78154 supplies these over general lp spaces; the multiplier source later moved to Normed/Lp/Diagonal/Basic in #21091 (2ca1127e251c2849880bc31d0478e87692dd2953). No DKPS adaptation or explicit independence disclosure was found for #15706; shared result is not evidence of proof descent. Its lp.mapCLM dependency is transitive Mathlib reuse. Original arbitrary unsorted real/complex convergence follows from native compactness and IsCompactOperator.tendsto_singularValue, independent #14589 integration c83058a3d5ab008a376e25d7330650b5bcec8179. Native lp.apply_eq_zero_of_mem_span_single supersedes the local finite-support helper. Full old operator and truncation correspondences and unsorted convergence compiled over arbitrary scalar universes. Retain only the star-fixed-coefficient self-adjointness proof, adapted onto the canonical carrier as lp.isSelfAdjoint_diagonalCLM; no accepted diagonal self-adjointness API was found. Source e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/DiagonalSequence.lean, introduction b24cd4145659ca6cc8784c53ec0fea30a09ae328, original Jon Crall / Claude Opus 5 (claude-opus-5[1m]), Kitware copyright, Apache-2.0. November 28: retire the remaining diagonal module and use lp.isSelfAdjoint_diagonalCLM_iff from #27674 at 4d7402dd106a902f4b66aea0d7a0017e6b9b188d. The theorem covers arbitrary index types and star-fixed coefficients. The Halmos angle datum uses native multiplication, addition and the constant-one law from Diagonal.Basic. The underlying operators and arbitrary real input sequence keep their scope. DKPS proof descent is unverified."
     },
     {
       "source_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence",
@@ -8807,6 +8806,56 @@
       "integration": "4d7402dd106a902f4b66aea0d7a0017e6b9b188d",
       "status": "consumed-upstream",
       "migration_note": "Use the RCLike conjugation continuity theorem directly for the real and complex functional-calculus transport proofs in the Theorem 3.1 machinery. Update the corresponding source-census references and semantic audit. The native result uses continuous algebra conjugation. DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.Family.Modulus, DavisKahan.OperatorIdeal.CanonicalRealView, DavisKahan.SharedFoundations.Ideal.ModulusTransport",
+      "source_declarations": [
+        "TauCeti.SymmetricOperatorIdealFamily.norm_polarFactor_le_one_rectangular",
+        "TauCeti.SymmetricOperatorIdealFamily.polarFactor_and_adjoint_enorm_le_one_rectangular",
+        "TauCeti.SymmetricOperatorIdealFamily.gauge_modulus_eq",
+        "TauCeti.SymmetricOperatorIdealFamily.modulus_mem_iff",
+        "TauCeti.SymmetricOperatorIdealFamily.gaugeReal_modulus_eq",
+        "TauCeti.DavisKahan.SharedFoundations.Ideal.SymmetricOperatorIdealFamily.modulus_mem_and_gauge_eq"
+      ],
+      "original_source_anchor": "d5a8081145a99a0400ce7e4c3522acc85749fa0a (rectangular and real wrappers), d7da8957c208aaa8e1ee0ec45ca971f8b2de1e05 (square wrapper)",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Sol (rectangular donor), OpenAI GPT-5.6 Sol and Claude Opus 5 (real view), OpenAI GPT-5.6 Thinking (square wrapper). Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.Modulus",
+      "final_declarations": [
+        "TauCeti.OperatorIdealFamily.gauge_modulus",
+        "TauCeti.OperatorIdealFamily.modulus_mem_finiteSubmodule_iff",
+        "TauCeti.OperatorIdealFamily.gauge_adjoint"
+      ],
+      "roadmap_targets": ["NoncommutativeGeometry N4 (ideal invariance used in Dixmier traces)"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/27674",
+      "integration": "4d7402dd106a902f4b66aea0d7a0017e6b9b188d",
+      "status": "consumed-upstream",
+      "migration_note": "Use native gauge_modulus for rectangular membership and gauge transport, including infinite values. Paper-facing real equalities use ENNReal.toReal on the native equality. Remove the two proof-only rectangular polar contraction helpers with their module. The local free-data square symmetric ideal still has its own factorization proof. The accepted gauge laws require only the rectangular family on spaces in a common universe. #27674 uses the native contraction theorem for equal Gram operators. DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
+      "source_declarations": ["TauCeti.UnitarilyInvariantSeminorm.nuclear_adjoint_comp_self_eq_sum_sq_norm"],
+      "original_source_anchor": "bf84b6ff10c2adf06760b3ddc38c739e4687fb7f",
+      "authors_license": "Jon Crall and Claude Fable 5 in the donor header, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Basic, TauCeti.Analysis.InnerProductSpace.Trace.Free",
+      "final_declarations": ["LinearMap.re_trace_operatorAbs", "LinearMap.trace_adjoint_comp_self_eq_sum_norm_apply_sq"],
+      "roadmap_targets": ["SpectralSteepestDescent §1.2 (nuclear trace support prerequisite)", "Majorization (finite unitarily invariant seminorms)"],
+      "upstream_pr": "#46215, #14442, #44637",
+      "integration": "d81b59c694a9155b934108465cc1c824cf458226, 09e43a78d09cdef107d8604de0517331119edd6e, 6f8c65bd256bd3826a79ed2f80f42f3452b885fd",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The finite rectangular Gram theorem keeps its statement. Positivity identifies the Gram modulus, then the native nuclear trace formula and the native adjoint-square basis formula give the sum directly. #44637 moved the adjoint-square trace formula from the #14442 Frobenius module; DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "DavisKahan.Geometry.Polar.NuclearRootConstruction, DavisKahan.Geometry.Polar.NuclearRootCompactness, DavisKahan.Geometry.Polar.NuclearRootIdealCompactness",
+      "source_declarations": ["TauCeti.DavisKahan.nuclearSignedSineTransport_nuclearENorm", "TauCeti.DavisKahan.nuclearTransportOptimizers_nonempty_complex", "TauCeti.DavisKahan.isCompact_nuclear_optimizer_displacements_schatten_complex"],
+      "original_source_anchor": "3096c2004 (pre-backport source)",
+      "authors_license": "Jon Crall and GPT-6 in the source headers, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.TraceClass",
+      "final_declarations": ["TauCeti.OperatorIdealFamily.schatten_one", "TauCeti.OperatorIdealFamily.gauge_traceClass"],
+      "roadmap_targets": ["OI-B83 (trace-class endpoint of the Schatten scale)"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/19075",
+      "integration": "2fef08202e8434f6e73cc761702d91c49ff642f9",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The nuclear optimizer proofs identify the Schatten-one gauge by the native trace-class endpoint, with no separate expansion of the singular-value sum. The local optimizer results keep their original scope. This consumes David Roe's accepted family result as an existing dependency."
     }
   ],
   "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"

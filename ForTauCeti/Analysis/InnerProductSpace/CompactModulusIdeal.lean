@@ -8,6 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.CompactModulusFiber
 public import ForTauCeti.Analysis.OperatorIdeal.Family.SchattenConvergence
 public import TauCeti.Analysis.OperatorIdeal.Family.Carrier
+import TauCeti.Analysis.OperatorIdeal.Family.Modulus
 
 /-!
 # Fixed-modulus fibers are compact in Schatten norm
@@ -63,13 +64,8 @@ theorem isCompact_setOf_isSelfAdjoint_modulus_eq_schatten
   let Φ := OperatorIdealFamily.schatten 𝕜 p hp
   let X := {A : E →L[𝕜] E // IsSelfAdjoint A ∧ A.modulus = S}
   have hfinite (A : X) : Φ.gauge A.val ≠ ∞ := by
-    have heq : Φ.gauge A.val = Φ.gauge S := by
-      rw [OperatorIdealFamily.gauge_schatten, OperatorIdealFamily.gauge_schatten]
-      congr 1
-      apply tsum_congr
-      intro k
-      rw [← ContinuousLinearMap.singularValue_modulus A.val k, A.property.2]
-    rwa [heq]
+    rw [← Φ.gauge_modulus A.val, A.property.2]
+    exact hS
   let f : X → (Φ.operatorGauge E E).Carrier := fun A =>
     ⟨A.val, by simpa only [OperatorGauge.mem_finiteSubmodule,
       OperatorIdealFamily.operatorGauge_apply] using lt_top_iff_ne_top.mpr (hfinite A)⟩

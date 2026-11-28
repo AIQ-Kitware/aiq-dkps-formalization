@@ -85,11 +85,8 @@ theorem nuclearSignedSineTransport_schatten_power
   rw [ContinuousLinearMap.modulus_neg, hmod, ← sub_eq_add_neg, smul_neg, Φ.gauge_neg] at hs
   have hAg : Φ.gauge A = Φ.gauge (K.starProjection - L.starProjection) := by
     calc
-      _ = Φ.gauge A.modulus := by
-        simp only [Φ, OperatorIdealFamily.gauge_schatten, ContinuousLinearMap.singularValue_modulus]
-      _ = _ := by
-        rw [hmod, Submodule.sinAngleOperator_def]
-        simp only [Φ, OperatorIdealFamily.gauge_schatten, ContinuousLinearMap.singularValue_modulus]
+      _ = Φ.gauge A.modulus := (Φ.gauge_modulus A).symm
+      _ = _ := by rw [hmod, Submodule.sinAngleOperator_def, Φ.gauge_modulus]
   rw [Φ.gauge_smul, ← ofReal_norm, RCLike.norm_two, ENNReal.ofReal_ofNat, hAg, ← hc] at hs
   exact hs.symm
 

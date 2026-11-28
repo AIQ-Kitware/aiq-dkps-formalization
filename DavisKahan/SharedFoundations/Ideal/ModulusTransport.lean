@@ -99,17 +99,6 @@ theorem SymmetricNormIdeal.modulus_mem_and_gauge_eq
   have h := SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq I T
   exact ⟨h.1.mpr hT, h.2 hT⟩
 
-/-- Square specialization to an operator ideal family. -/
-theorem SymmetricOperatorIdealFamily.modulus_mem_and_gauge_eq
-    (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
-    {T : E →L[ℂ] E} (hT : N.Mem T) :
-    N.Mem (ContinuousLinearMap.modulus T) ∧
-      N.gaugeReal (ContinuousLinearMap.modulus T) = N.gaugeReal T := by
-  refine ⟨?_, N.gaugeReal_modulus_eq T⟩
-  change N.gauge T.modulus ≠ ⊤
-  rw [N.gauge_modulus_eq]
-  exact hT
-
 end Ideal
 end SharedFoundations
 end DavisKahan

@@ -8,6 +8,7 @@ module
 public import DavisKahan.Geometry.Polar.NuclearRootMetric
 public import ForTauCeti.Analysis.InnerProductSpace.CompactModulusFiber
 public import TauCeti.Analysis.Normed.Operator.LinearIsometryEquiv.Topology
+import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
 
 /-!
 # Norm compactness of the complete nuclear optimizer family
@@ -130,8 +131,7 @@ theorem nuclearTransportOptimizers_nonempty_complex
     ⟨nuclearPhaseRotation_map_complex K L D, ?_⟩⟩
   intro U hU
   have h := nuclearPhaseRotation_isMin_complex K L D U hU
-  simpa only [OperatorIdealFamily.gauge_schatten, one_div_one, ENNReal.rpow_one,
-    ContinuousLinearMap.nuclearENorm_def] using h
+  simpa only [OperatorIdealFamily.schatten_one, OperatorIdealFamily.gauge_traceClass] using h
 
 /-- **Attainment of a secondary objective while preserving the exact
 nuclear optimum.** Every lower semicontinuous extended nonnegative
@@ -187,8 +187,7 @@ theorem exists_finite_nearest_reference_nuclear_optimizer_schatten_complex
   have hfinite := ((nuclear_isMin_iff_certificate_complex K L D hΔ T hp.1).mp hp.2).1
   have hPhi1 : (OperatorIdealFamily.schatten ℂ 1 (by norm_num)).gauge
       (1 - (T : F →L[ℂ] F)) ≠ ∞ := by
-    simpa only [OperatorIdealFamily.gauge_schatten, one_div_one, ENNReal.rpow_one,
-      ContinuousLinearMap.nuclearENorm_def] using hfinite
+    simpa only [OperatorIdealFamily.schatten_one, OperatorIdealFamily.gauge_traceClass] using hfinite
   let Φ := OperatorIdealFamily.schatten ℂ q hq
   have hPhiq : Φ.gauge (1 - (T : F →L[ℂ] F)) ≠ ∞ :=
     ne_top_of_le_ne_top hPhi1
