@@ -1,5 +1,33 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 finite Hilbert-basis cutoffs
+
+The Hilbert–Schmidt cutoff results now use `HilbertBasis.projection`
+from Kim Morrison's Forgejo #955, including its finite sums and
+its values on basis vectors. The finite projection agrees with
+the previous star projection onto the span of the selected vectors.
+That equality was checked for an arbitrary Hilbert basis, which
+supplies completeness when needed. The local projection definition,
+span instance, and projection and expansion wrappers retire.
+The rank bound uses harahu's range formula from #44740.
+[Forgejo #955 integration](https://github.com/TauCetiProject/TauCeti/commit/3e24855a4c3798ddef16cfb39ab90ff2fe18247c) ·
+[#44740 integration](https://github.com/TauCetiProject/TauCeti/commit/a27413496eb0c8ecd3e0b5c4e429cd3675e1a37b)
+
+For an arbitrary finite-dimensional domain subspace the cutoff's square
+energy follows from the coisometric invariance in #16410 (OI-C16).
+For a coordinate cutoff it is the partial sum of the original column
+energy, so its supremum follows from the nonnegative series formula
+even at infinite energy. The strong convergence net still ranges
+over every finite set of basis indices. The singular-value convergence
+continues to allow an incomplete codomain. The integrations establish
+the native APIs, with DKPS proof descent unverified.
+[#16410 integration](https://github.com/TauCetiProject/TauCeti/commit/10743de6bdc505042bdc74b6ed1bf1717003e617)
+
+The focused build (9,627 jobs), default build (22,814 jobs), and
+Challenge with the semantic-surface audit (22,524 jobs) passed without
+warnings at TauCeti `007b3a1150`. All 1,569 source-census references
+resolved and the 17 available Davis–Kahan comparator signatures matched.
+
 ## November 28 Hilbert–Schmidt column energy and Lemma 6.3
 
 The paper's squared-approximation-number energy now connects directly to
