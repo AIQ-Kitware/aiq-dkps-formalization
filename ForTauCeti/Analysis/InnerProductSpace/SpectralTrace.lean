@@ -20,6 +20,7 @@ public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continu
 public import Mathlib.Analysis.Normed.Operator.Mul
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius.Trace
 public import Mathlib.Algebra.Star.StarProjection
+import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
 
 /-!
 # Supporting inequalities and first variations of normal spectral traces
@@ -294,47 +295,31 @@ namespace ContinuousLinearMap
 
 variable [CompleteSpace E]
 
+open UnitarilyInvariantSeminorm in
+private theorem re_trace_adjoint_mul_self_eq_frobenius_sq (A : E →L[ℂ] E) :
+    (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re =
+      frobenius ℂ E E A.toLinearMap ^ 2 := by
+  rw [_root_.ContinuousLinearMap.toLinearMap_mul,
+    ← _root_.ContinuousLinearMap.adjoint_toLinearMap, Module.End.mul_eq_comp]
+  exact (sq_frobenius_eq_re_trace A.toLinearMap).symm
+
 /-- The real trace of an adjoint square is nonnegative. -/
 theorem re_trace_adjoint_mul_self_nonneg (A : E →L[ℂ] E) :
     0 ≤ (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re := by
-  classical
-  let b := stdOrthonormalBasis ℂ E
-  have htrace : (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re =
-      ∑ i, ‖A (b i)‖ ^ 2 := by
-    rw [_root_.ContinuousLinearMap.toLinearMap_mul,
-      ← _root_.ContinuousLinearMap.adjoint_toLinearMap, Module.End.mul_eq_comp,
-      A.toLinearMap.trace_adjoint_comp_self_eq_sum_norm_apply_sq b]
-    exact RCLike.ofReal_re (K := ℂ) _
-  rw [htrace]
-  exact Finset.sum_nonneg (fun i _ => sq_nonneg ‖A (b i)‖)
+  rw [re_trace_adjoint_mul_self_eq_frobenius_sq]
+  exact sq_nonneg _
 
-/-- The finite complex trace is faithful on positive squares. The accepted
-Frobenius trace identity turns the hypothesis into a sum of squared column
-norms, each of which must vanish. -/
+open UnitarilyInvariantSeminorm in
+/-- The finite complex trace is faithful on positive squares, since the
+Frobenius norm bounds the operator norm. -/
 theorem eq_zero_of_re_trace_adjoint_mul_self_eq_zero
     (A : E →L[ℂ] E)
     (h : (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re = 0) : A = 0 := by
-  classical
-  let b := stdOrthonormalBasis ℂ E
-  have htrace : (LinearMap.trace ℂ E (A.adjoint * A).toLinearMap).re =
-      ∑ i, ‖A (b i)‖ ^ 2 := by
-    rw [_root_.ContinuousLinearMap.toLinearMap_mul,
-      ← _root_.ContinuousLinearMap.adjoint_toLinearMap, Module.End.mul_eq_comp,
-      A.toLinearMap.trace_adjoint_comp_self_eq_sum_norm_apply_sq b]
-    exact RCLike.ofReal_re (K := ℂ) _
-  rw [htrace] at h
-  have hA : A.toLinearMap = 0 := by
-    apply b.toBasis.ext
-    intro i
-    change A (b i) = 0
-    apply norm_eq_zero.mp
-    exact sq_eq_zero_iff.mp
-      ((Finset.sum_eq_zero_iff_of_nonneg (fun j _ => sq_nonneg ‖A (b j)‖)).mp h i
-        (Finset.mem_univ i))
-  ext x
-  change A.toLinearMap x = 0
-  rw [hA]
-  rfl
+  rw [re_trace_adjoint_mul_self_eq_frobenius_sq] at h
+  have hnorm : ‖A‖ ≤ frobenius ℂ E E A.toLinearMap :=
+    A.toLinearMap.norm_toContinuousLinearMap_le_frobenius
+  rw [sq_eq_zero_iff.mp h] at hnorm
+  exact norm_le_zero_iff.mp hnorm
 
 /-- The real trace of an adjoint square is strictly positive exactly
 when the operator is nonzero. -/

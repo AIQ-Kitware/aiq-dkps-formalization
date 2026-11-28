@@ -8715,6 +8715,38 @@
       "integration": "40822675c0a7f156b9534f0f95edf0087bed8475",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "Apply the native bounded block formula through LinearMap.IsSymmetric.toContinuousLinearMap_cfc. The union of the finite spectra discharges continuity for every real symbol, preserving the exact finite linear-map statement used by the sharpness assembly. Retire the two proof-only inclusions and their action and intertwining lemmas. The accepted auxiliary API was contributed by kim-em with the spectral-flow direct-sum result. DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SpectralTrace",
+      "source_declarations": [
+        "TauCeti.ContinuousLinearMap.re_trace_adjoint_mul_self_nonneg",
+        "TauCeti.ContinuousLinearMap.eq_zero_of_re_trace_adjoint_mul_self_eq_zero"
+      ],
+      "original_source_anchor": "9e9e006ef5603ad2b0e942db4fafcc0511998aff",
+      "authors_license": "Jon Crall and GPT-6, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius.Trace, TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten",
+      "final_declarations": [
+        "TauCeti.UnitarilyInvariantSeminorm.sq_frobenius_eq_re_trace",
+        "LinearMap.norm_toContinuousLinearMap_le_frobenius"
+      ],
+      "roadmap_targets": ["ShortGRH SecondMomentsOfPoincareSeries §1.2 (Frobenius trace)", "QuasiregularMaps §1.4 (operator-to-Frobenius norm bound)"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/46201, https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/4885",
+      "integration": "c690a1f9afa9f2f0f592d227b28af8329ec56017, cd08f50ed292d4eae4d4d167473b4fc6060b1ef2",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Replace the repeated basis sums and the columnwise vanishing proof by the native Frobenius trace equality and its control of the operator norm. The local complex continuous-map positivity and faithfulness conclusions retain their scope, including the zero space. #46201 credits grh-lean for the spreading-map development and derives the general Frobenius equality from the existing trace formula. Forgejo #4885 derives the norm comparison from the existing Schatten bound at p = 2. DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Projection.FiniteSpectralTrace",
+      "source_declarations": ["TauCeti.cfc_mul_projection_of_commute"],
+      "original_source_anchor": "d4aca8540fe792c39b658a66dc58ec49b897a7fd",
+      "authors_license": "Jon Crall and GPT-6, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Intertwining",
+      "final_declarations": ["ContinuousLinearMap.comp_cfc_eq_cfc_comp"],
+      "roadmap_targets": ["SA-D34 (general intertwining prerequisite)"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16184",
+      "integration": "78d22ee9e5dad58dbb36f72e7d9fb817c3aa2629",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Replace simultaneous diagonalization by two applications of the native intertwining law through the projector and its complement. The symbol is arbitrary on finite spectra and must vanish at zero, as before. The directed principal-sine trace still consumes the compression result. #16184 credits Mathlib's Commute.cfcHom argument."
     }
   ],
   "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"

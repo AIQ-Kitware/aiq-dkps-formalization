@@ -5,10 +5,10 @@ Authors: Jon Crall, GPT-6
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.JointEigenbasis
 public import ForTauCeti.Analysis.InnerProductSpace.SchattenSpectralCalculus
 public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 public import TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle
+import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Intertwining
 
 /-!
 # Spectral traces of directed principal sines
@@ -37,45 +37,32 @@ theorem cfc_mul_projection_of_commute
     (f : ℂ → ℂ) (hf : f 0 = 0) (T P : E →L[ℂ] E)
     (hT : IsSelfAdjoint T) (hP : IsStarProjection P) (hTP : Commute T P) :
     cfc f (T * P) = cfc f T * P := by
-  let : IsStarNormal T := hT.isStarNormal
   have hself : IsSelfAdjoint (T * P) := by
     change star (T * P) = T * P
     rw [star_mul, hT.star_eq, hP.isSelfAdjoint.star_eq]
     exact hTP.eq.symm
-  let : IsStarNormal (T * P) := hself.isStarNormal
-  have hcomm : Commute T.toLinearMap P.toLinearMap :=
-    congrArg ContinuousLinearMap.toLinearMap hTP.eq
-  obtain ⟨e, mu, nu, hTe, hPe⟩ :=
-    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hT).exists_joint_orthonormalBasis
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hP.isSelfAdjoint) hcomm
-  apply ContinuousLinearMap.coe_injective
-  apply e.toBasis.ext
-  intro i
-  have hPi : P (e i) = nu i • e i := hPe i
-  have hpid := DFunLike.congr_fun hP.isIdempotentElem.eq (e i)
-  change P (P (e i)) = P (e i) at hpid
-  rw [hPi, map_smul, hPi, smul_smul] at hpid
-  have hscalar := congrArg (fun x => ⟪e i, x⟫_ℂ) hpid
-  simp only [inner_smul_right, e.inner_eq_one, mul_one] at hscalar
-  have hprod : nu i * (nu i - 1) = 0 := by linear_combination hscalar
-  rcases mul_eq_zero.mp hprod with hn | hn
-  · have hPzero : P (e i) = 0 := by rw [show P (e i) = nu i • e i from hPe i, hn, zero_smul]
-    have hTPzero : (T * P) (e i) = (0 : ℂ) • e i := by
-      change T (P (e i)) = _
-      rw [hPzero, map_zero, zero_smul]
-    change cfc f (T * P) (e i) = cfc f T (P (e i))
-    rw [ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal f hTPzero,
-      hf, zero_smul, hPzero, map_zero]
-  · have hn1 : nu i = 1 := sub_eq_zero.mp hn
-    have hPone : P (e i) = e i := by
-      rw [show P (e i) = nu i • e i from hPe i, hn1, one_smul]
-    have hTPe : (T * P) (e i) = mu i • e i := by
-      change T (P (e i)) = _
-      rw [hPone]
-      exact hTe i
-    change cfc f (T * P) (e i) = cfc f T (P (e i))
-    rw [hPone, ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal f hTPe,
-      ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal f (hTe i)]
+  have hcompress : P * (T * P) = T * P := by
+    rw [← mul_assoc, ← hTP.eq, mul_assoc, hP.isIdempotentElem.eq]
+  have hkill : (1 - P) * (T * P) = 0 * (1 - P) := by
+    rw [sub_mul, one_mul, hcompress, sub_self, zero_mul]
+  have hcontinuous := ((T * P).finite_spectrum ℂ).continuousOn f
+  have h1 : P * cfc f (T * P) = cfc f T * P :=
+    P.comp_cfc_eq_cfc_comp hcompress
+      (by rw [hself.star_eq, hT.star_eq]; exact hcompress) f
+      hcontinuous ((T.finite_spectrum ℂ).continuousOn f)
+      hself.isStarNormal hT.isStarNormal
+  have h0 : (1 - P) * cfc f (T * P) = 0 := by
+    have h := (1 - P).comp_cfc_eq_cfc_comp hkill
+      (by rw [hself.star_eq, star_zero]; exact hkill) f
+      hcontinuous
+      (((0 : E →L[ℂ] E).finite_spectrum ℂ).continuousOn f)
+      hself.isStarNormal (IsSelfAdjoint.zero (R := E →L[ℂ] E)).isStarNormal
+    change (1 - P) * cfc f (T * P) = cfc f (0 : E →L[ℂ] E) * (1 - P) at h
+    simpa only [cfc_apply_zero, hf, map_zero, zero_mul] using h
+  have hsum : P + (1 - P) = (1 : E →L[ℂ] E) := add_sub_cancel _ _
+  calc
+    cfc f (T * P) = (P + (1 - P)) * cfc f (T * P) := by rw [hsum, one_mul]
+    _ = cfc f T * P := by rw [add_mul, h1, h0, add_zero]
 
 /-- The trace of a function of a positive map is the sum of that function
 of its singular values, including the zero values. -/

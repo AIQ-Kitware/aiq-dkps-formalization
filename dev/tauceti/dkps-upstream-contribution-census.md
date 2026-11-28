@@ -1,5 +1,34 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 Frobenius trace and spectral compression
+
+The finite complex trace of an adjoint square now uses
+`TauCeti.UnitarilyInvariantSeminorm.sq_frobenius_eq_re_trace` from
+#46201 and `LinearMap.norm_toContinuousLinearMap_le_frobenius` from
+Forgejo #4885. The native laws give positivity and faithfulness
+without choosing a basis. The DKPS statements on continuous linear
+maps keep their scope. #46201 derives the equality from the existing
+basis trace formula for the ShortGRH spreading-map development.
+Forgejo #4885 derives the comparison from the Schatten bound at
+`p = 2` for QuasiregularMaps §1.4. DKPS proof descent is unverified.
+[#46201 integration](https://github.com/TauCetiProject/TauCeti/commit/c690a1f9afa9f2f0f592d227b28af8329ec56017) ·
+[Forgejo #4885 integration](https://github.com/TauCetiProject/TauCeti/commit/cd08f50ed292d4eae4d4d167473b4fc6060b1ef2)
+
+The principal-sine trace uses a finite compression identity proved
+by applying `ContinuousLinearMap.comp_cfc_eq_cfc_comp` to the
+projector and its complement. The symbol can still be any complex
+function that vanishes at zero, because continuity is needed only
+on the finite spectra. This retires the local joint-eigenbasis
+calculation. The accepted SA-D34 prerequisite from #16184 follows
+Jireh Loreaux's Mathlib `Commute.cfcHom` proof.
+[#16184 integration](https://github.com/TauCetiProject/TauCeti/commit/78d22ee9e5dad58dbb36f72e7d9fb817c3aa2629)
+
+The focused build (8,827 jobs), default build (22,816 jobs), and
+Challenge with the result semantic-surface audit (22,526 jobs)
+passed without warnings at TauCeti `007b3a1150`. All 1,569
+source-census references resolved and all 17 available comparator
+signatures matched.
+
 ## November 27 block functional calculus
 
 The finite self-adjoint block formula now uses
