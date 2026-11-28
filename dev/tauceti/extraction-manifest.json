@@ -8241,6 +8241,59 @@
       "integration": "5eb11cced31a0f2c7088def1c52e9d61af6b7600",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "The general native Lp equivalence from an almost-everywhere inverse pair supplies both inverse laws. The complex and real diagonal measures, the original forward and inverse evaluations, and the spectral homeomorphism retain their scope. Forgejo #597 (c61d71e848152c749e55e4b6a8c0e1468ce75b74) moved the native API to its pinned module. DKPS proof descent is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.{Closed,Complexification,UnitaryTransport}, DavisKahan.{SpectralTheory.PartialMap.Complexification,SpectralTheory.PartialMap.RealSpectrum,Sylvester.ScalarTransport}",
+      "source_declarations": [
+        "TauCeti.LinearPMap.realResolventSet",
+        "TauCeti.LinearPMap.mem_realResolventSet_iff",
+        "TauCeti.LinearPMap.mem_realResolventSet_iff_mem_canonical_resolventSet",
+        "TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet",
+        "TauCeti.LinearPMap.realResolvent_mem_complexifyReal",
+        "TauCeti.LinearPMap.complexifyReal_realResolvent_mem",
+        "TauCeti.LinearPMap.mem_realResolventSet_complexifyReal_iff",
+        "TauCeti.LinearPMap.mem_realResolventSet_unitaryConj_of_mem",
+        "TauCeti.LinearPMap.realResolventSet_unitaryConj",
+        "TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.realResolvent_mem_complexify",
+        "TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.complexify_realResolvent_mem",
+        "TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.mem_realResolventSet_complexify_iff",
+        "TauCeti.DavisKahan.mem_realResolventSet_iff_mem_spectraResolvent",
+        "TauCeti.ScalarTransport.realResolventSet_pmap"
+      ],
+      "original_source_anchor": "1c258a1966b47c5006b2d8256a942d72ce64ad26 at the source modules above",
+      "authors_license": "Jon Crall with OpenAI GPT-5.6 Thinking (Closed and PartialMap modules), OpenAI GPT-5.6 Sol (donor Complexification), and Claude Opus 5 (UnitaryTransport and ScalarTransport), Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Basic",
+      "final_declarations": ["LinearPMap.IsResolventAt", "LinearPMap.resolventSet", "LinearPMap.mem_resolventSet_iff", "LinearPMap.spectrum", "LinearPMap.mem_spectrum_iff"],
+      "roadmap_targets": ["SA-D01", "SA-D02"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/12771",
+      "integration": "83eb0f7fbeb835397951914067a0b6fc359cf914",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "The inverse fields now use the accepted z I - A sign. Generic unitary resolvent-set transport, real complexification at real resolvent points and change of scalar model remain DKPS proofs without completeness hypotheses. The paper complexification shares the donor proof through definitionally equal coordinates. For the reducing-block construction, use isResolventAt_iff_surjective_and_apply_smul_sub from #15996 (a2f85833fcf95243524b7c520dfeda8888819f9b). The eigenvector introduction rule uses eq_zero_of_apply_eq_smul from #27591 (529a06a7fa2ae89b706ed5542bd5063e9ac49163). No DKPS descent is established for the accepted core or these supporting results."
+    },
+    {
+      "source_module": "DavisKahan.InfiniteDimensional.SinTheta.Restriction",
+      "source_declarations": ["TauCeti.DavisKahanExt.mem_realResolventSet_ofBounded_iff", "TauCeti.DavisKahanExt.boundedRealSpectrum_eq_realSpectrum"],
+      "original_source_anchor": "1c258a1966b47c5006b2d8256a942d72ce64ad26:DavisKahan/InfiniteDimensional/SinTheta/Restriction.lean",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Basic",
+      "final_declarations": ["ContinuousLinearMap.spectrum_toPMap_top"],
+      "roadmap_targets": ["SA-D01"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/21704",
+      "integration": "43aebcef40b7144972963104803d84635abde71f",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Use the native full-domain spectrum comparison, generalized by Harald Husum. The paper-facing equality retains the real-scalar spectrum formulation. The separate local shifted-inverse proof is deleted. No DKPS descent is established."
+    },
+    {
+      "source_module": "DavisKahan.Specialized.FreeBeam.{BeamSpectrum,BeamSpectrumReal}",
+      "source_declarations": ["TauCeti.DavisKahan.FreeBeam.Model.exists_eigenvector_of_mem_realSpectrum_beamOperator", "TauCeti.DavisKahan.FreeBeam.Model.Real.exists_eigenvector_of_mem_realSpectrum_beamOperator"],
+      "original_source_anchor": "1c258a1966b47c5006b2d8256a942d72ce64ad26:DavisKahan/Specialized/FreeBeam/{BeamSpectrum,BeamSpectrumReal}.lean",
+      "authors_license": "Jon Crall with Claude Fable 5 (complex) and OpenAI GPT-5.6 Sol (real), Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Inverse",
+      "final_declarations": ["ContinuousLinearMap.zero_mem_resolventSet_inverse_toPMap_top", "ContinuousLinearMap.mem_spectrum_inverse_toPMap_top_iff_hasEigenvalue"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/37946",
+      "integration": "edc36e596f267cb5b618f89ea9d348aa35431ed7",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The Dirichlet operator integration added the general compact-inverse spectrum API. The beam's shifted operator agrees with the native inverse of the variational resolvent. Apply the scalar shift from #14459 (9c887749b7f41032d4ba21b2b637f083b75c91a4) and the compact-inverse eigenvalue theorem in each scalar branch. Both beam statements retain their domain and spectral parameter. The integration's roadmap target is PDE D19. No DKPS descent is established."
     }
   ],
   "current_consumption_pin": "fba9bfbf453bcf0d77efdde60fbce2376c2e35a8"

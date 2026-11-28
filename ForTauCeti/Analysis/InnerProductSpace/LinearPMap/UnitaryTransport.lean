@@ -20,7 +20,7 @@ vocabulary travels with it.
 
 This module proves that a unitary equivalence transports
 
-* the real resolvent set, hence the real spectrum, as an *equality* of sets;
+* the resolvent set and the real spectrum as equalities of sets;
 * the two operator-form semibounds, in both directions;
 * the reducing-subspace property, onto the image subspace;
 * and the reducing restriction itself, as an *equality* of partial maps
@@ -63,71 +63,54 @@ variable {H H' : Type v}
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
   [NormedAddCommGroup H'] [InnerProductSpace 𝕜 H']
 
-/-! ### Conjugating back -/
+/-! ### Resolvent set and real spectrum -/
 
-/-! ### The real resolvent set and the real spectrum -/
-
-/-- A real resolvent point of `A` is a real resolvent point of `W A W⁻¹`: the
-inverse conjugates. -/
-theorem mem_realResolventSet_unitaryConj_of_mem
-    (W : H ≃ₗᵢ[𝕜] H') {A : H →ₗ.[𝕜] H} {lam : ℝ}
-    (h : lam ∈ realResolventSet A) :
-    lam ∈ realResolventSet (A.conj W.toLinearEquiv) := by
-  obtain ⟨R, hleft, hright⟩ := mem_realResolventSet_iff.mp h
-  refine mem_realResolventSet_iff.mpr
-    ⟨W.toLinearIsometry.toContinuousLinearMap ∘L R ∘L
-      W.symm.toLinearIsometry.toContinuousLinearMap, ?_, ?_⟩
-  · intro x
-    have hx : W.symm (x : H') ∈ A.domain :=
-      (_root_.LinearPMap.mem_conj_domain_iff).mp x.property
-    have h := congrArg W (hleft ⟨W.symm (x : H'), hx⟩)
-    simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
-      LinearIsometry.coe_toContinuousLinearMap,
-      LinearIsometryEquiv.coe_toLinearIsometry]
-    rw [_root_.LinearPMap.conj_apply]
-    dsimp only [LinearIsometryEquiv.coe_toLinearEquiv,
-      LinearIsometryEquiv.coe_symm_toLinearEquiv]
-    rw [(by rw [map_sub, map_smul, W.symm_apply_apply] :
-      W.symm (W (A ⟨W.symm (x : H'), hx⟩) - (lam : 𝕜) • (x : H')) =
-        A ⟨W.symm (x : H'), hx⟩ - (lam : 𝕜) • W.symm (x : H'))]
-    rw [h, W.apply_symm_apply]
+/-- The bounded inverse of the shift conjugates with the operator. -/
+private theorem mem_resolventSet_conj_of_mem
+    (W : H ≃ₗᵢ[𝕜] H') {A : H →ₗ.[𝕜] H} {z : 𝕜}
+    (hz : z ∈ A.resolventSet) : z ∈ (A.conj W.toLinearEquiv).resolventSet := by
+  obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp hz
+  let S := W.toLinearIsometry.toContinuousLinearMap ∘L R ∘L
+    W.symm.toLinearIsometry.toContinuousLinearMap
+  have hdom (y : H') : S y ∈ (A.conj W.toLinearEquiv).domain := by
+    apply _root_.LinearPMap.mem_conj_domain_iff.mpr
+    change W.symm (W (R (W.symm y))) ∈ A.domain
+    rw [W.symm_apply_apply]
+    exact hR.mem_domain (W.symm y)
+  refine (_root_.LinearPMap.mem_resolventSet_iff).mpr ⟨S, hdom, ?_, ?_⟩
   · intro y
-    have hy := hright (W.symm y)
-    obtain ⟨hmem, heq⟩ := hy
-    refine ⟨?_, ?_⟩
-    · apply (_root_.LinearPMap.mem_conj_domain_iff).mpr
-      simpa only [ContinuousLinearMap.coe_comp, Function.comp_apply,
-        LinearIsometry.coe_toContinuousLinearMap,
-        LinearIsometryEquiv.coe_toLinearIsometry,
-        LinearIsometryEquiv.coe_symm_toLinearEquiv, W.symm_apply_apply] using hmem
-    · simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
-        LinearIsometry.coe_toContinuousLinearMap,
-        LinearIsometryEquiv.coe_toLinearIsometry]
-      rw [_root_.LinearPMap.conj_apply]
-      dsimp only [LinearIsometryEquiv.coe_toLinearEquiv,
-        LinearIsometryEquiv.coe_symm_toLinearEquiv]
-      have hcongr : (⟨W.symm (W (R (W.symm y))), by
-            rw [W.symm_apply_apply]; exact hmem⟩ : A.domain) =
-          ⟨R (W.symm y), hmem⟩ := Subtype.ext (W.symm_apply_apply _)
-      rw [hcongr]
-      rw [(map_smul W (lam : 𝕜) (R (W.symm y))).symm, ← map_sub, heq,
-        W.apply_symm_apply]
+    rw [_root_.LinearPMap.conj_apply]
+    change z • W (R (W.symm y)) -
+      W (A ⟨W.symm (W (R (W.symm y))),
+        _root_.LinearPMap.mem_conj_domain_iff.mp (hdom y)⟩) = y
+    have hx : (⟨W.symm (W (R (W.symm y))),
+        _root_.LinearPMap.mem_conj_domain_iff.mp (hdom y)⟩ : A.domain) =
+        ⟨R (W.symm y), hR.mem_domain (W.symm y)⟩ := Subtype.ext (W.symm_apply_apply _)
+    rw [hx, ← map_smul, ← map_sub, hR.smul_sub_apply, W.apply_symm_apply]
+  · intro x
+    rw [_root_.LinearPMap.conj_apply]
+    change W (R (W.symm (z • (x : H') - W (A ⟨W.symm (x : H'),
+      _root_.LinearPMap.mem_conj_domain_iff.mp x.property⟩)))) = x
+    rw [map_sub, map_smul, W.symm_apply_apply]
+    let v : A.domain := ⟨W.symm (x : H'), _root_.LinearPMap.mem_conj_domain_iff.mp x.property⟩
+    change W (R (z • (v : H) - A v)) = x
+    exact (congrArg W (hR.apply_smul_sub v)).trans (W.apply_symm_apply _)
 
-/-- The real resolvent set is invariant under unitary conjugation. -/
-theorem realResolventSet_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) :
-    realResolventSet (A.conj W.toLinearEquiv) = realResolventSet A := by
-  ext lam
-  refine ⟨fun h => ?_, mem_realResolventSet_unitaryConj_of_mem W⟩
-  have h' := mem_realResolventSet_unitaryConj_of_mem W.symm h
-  rwa [LinearIsometryEquiv.toLinearEquiv_symm, _root_.LinearPMap.conj_conj_symm] at h'
+/-- Unitary conjugation preserves the resolvent set at every scalar. -/
+theorem resolventSet_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) :
+    (A.conj W.toLinearEquiv).resolventSet = A.resolventSet := by
+  ext z
+  refine ⟨fun hz => ?_, mem_resolventSet_conj_of_mem W⟩
+  have h := mem_resolventSet_conj_of_mem W.symm hz
+  rwa [LinearIsometryEquiv.toLinearEquiv_symm, _root_.LinearPMap.conj_conj_symm] at h
 
 /-- The real spectrum is invariant under unitary conjugation. -/
 theorem realSpectrum_unitaryConj (W : H ≃ₗᵢ[𝕜] H') (A : H →ₗ.[𝕜] H) :
     _root_.LinearPMap.realSpectrum (A.conj W.toLinearEquiv) =
       _root_.LinearPMap.realSpectrum A := by
-  rw [canonical_realSpectrum_eq_compl_realResolventSet,
-    canonical_realSpectrum_eq_compl_realResolventSet,
-    realResolventSet_unitaryConj]
+  ext r
+  simp only [_root_.LinearPMap.mem_realSpectrum_iff, _root_.LinearPMap.mem_spectrum_iff,
+    resolventSet_unitaryConj]
 
 /-! ### Operator-form semibounds -/
 

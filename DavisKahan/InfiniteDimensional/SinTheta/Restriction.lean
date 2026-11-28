@@ -46,48 +46,6 @@ variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [CompleteSpace F]
 
 omit [CompleteSpace E] in
-/-- The closed-operator real resolvent set of a bounded operator's full-domain
-realization is exactly the invertibility locus of `X - lam` in the bounded
-operator algebra. -/
-theorem mem_realResolventSet_ofBounded_iff (X : E →L[𝕜] E) (lam : ℝ) :
-    lam ∈ TauCeti.LinearPMap.realResolventSet
-        ((X.toLinearMap.toPMap ⊤)) ↔
-      IsUnit (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) := by
-  rw [TauCeti.LinearPMap.mem_realResolventSet_iff]
-  constructor
-  · rintro ⟨R, hleft, hright⟩
-    refine ⟨⟨X - (lam : 𝕜) • (1 : E →L[𝕜] E), R, ?_, ?_⟩, rfl⟩
-    · apply ContinuousLinearMap.ext
-      intro y
-      obtain ⟨h, hy⟩ := hright y
-      have hy' : X (R y) - (lam : 𝕜) • R y = y := hy
-      simpa [mul_apply_eq_comp, sub_apply,
-        smul_apply, one_apply_eq_self] using hy'
-    · apply ContinuousLinearMap.ext
-      intro x
-      have hx' : R (X x - (lam : 𝕜) • x) = x := hleft ⟨x, Submodule.mem_top⟩
-      simpa [mul_apply_eq_comp, sub_apply,
-        smul_apply, one_apply_eq_self] using hx'
-  · rintro ⟨u, hu⟩
-    have hval : (↑u : E →L[𝕜] E) = X - (lam : 𝕜) • (1 : E →L[𝕜] E) := hu
-    refine ⟨↑u⁻¹, ?_, ?_⟩
-    · intro x
-      show (↑u⁻¹ : E →L[𝕜] E) (X (x : E) - (lam : 𝕜) • (x : E)) = (x : E)
-      have hinv : (↑u⁻¹ : E →L[𝕜] E) * (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) = 1 := by
-        rw [← hval]; exact u.inv_mul
-      have hpt := ContinuousLinearMap.ext_iff.mp hinv (x : E)
-      simpa [mul_apply_eq_comp, sub_apply,
-        smul_apply, one_apply_eq_self] using hpt
-    · intro y
-      refine ⟨Submodule.mem_top, ?_⟩
-      show X ((↑u⁻¹ : E →L[𝕜] E) y) - (lam : 𝕜) • ((↑u⁻¹ : E →L[𝕜] E) y) = y
-      have hinv : (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) * (↑u⁻¹ : E →L[𝕜] E) = 1 := by
-        rw [← hval]; exact u.mul_inv
-      have hpt := ContinuousLinearMap.ext_iff.mp hinv y
-      simpa [mul_apply_eq_comp, sub_apply,
-        smul_apply, one_apply_eq_self] using hpt
-
-omit [CompleteSpace E] in
 /-- The bounded-realization real spectrum used by the `sin Θ` interval/exterior
 bridge coincides with the Banach-algebra real spectrum used by the abstract
 separation predicates. -/
@@ -98,17 +56,7 @@ theorem boundedRealSpectrum_eq_realSpectrum (X : E →L[𝕜] E) :
   change lam ∈ _root_.LinearPMap.realSpectrum
       (X.toLinearMap.toPMap (⊤ : Submodule 𝕜 E)) ↔
     (lam : 𝕜) ∈ spectrum 𝕜 X
-  rw [_root_.LinearPMap.mem_realSpectrum_iff,
-    _root_.LinearPMap.mem_spectrum_iff, spectrum.mem_iff,
-    Algebra.algebraMap_eq_smul_one]
-  apply not_congr
-  have hbridge := TauCeti.LinearPMap.mem_realResolventSet_iff_mem_canonical_resolventSet
-    (X.toLinearMap.toPMap (⊤ : Submodule 𝕜 E)) lam
-  have hbounded := mem_realResolventSet_ofBounded_iff X lam
-  exact hbridge.symm.trans (hbounded.trans (by
-    rw [show X - (lam : 𝕜) • (1 : E →L[𝕜] E) =
-      -(((lam : 𝕜) • (1 : E →L[𝕜] E)) - X) by module,
-      IsUnit.neg_iff]))
+  rw [_root_.LinearPMap.mem_realSpectrum_iff, X.spectrum_toPMap_top]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Orthogonal projection on the left is contractive in operator norm. -/

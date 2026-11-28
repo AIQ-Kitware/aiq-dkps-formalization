@@ -127,127 +127,36 @@ theorem beamResolvent_eigenvalue_classify {mu : ℝ} (hmu : mu ≠ 0)
 
 /-! ## Fredholm bridge -/
 
-/-- Every real spectral point of the real free beam is an eigenvalue. -/
+/-- Every real spectral point of the free beam is an eigenvalue. The spectral
+parameter of the shifted operator is `lam + 1`, and the compact variational
+resolvent has the corresponding eigenvalue `(lam + 1)⁻¹`. -/
 theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
     (hlam : lam ∈ _root_.LinearPMap.realSpectrum beamOperator) :
     ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
       beamOperator x = lam • (x : BeamL2) := by
-  rw [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet] at hlam
-  by_contra hcon
-  push Not at hcon
-  set R := beamCoerciveFormData.resolvent with hRdef
-  set c : ℝ := 1 + lam with hcdef
-  have hunit : IsUnit ((1 : BeamL2 →L[ℝ] BeamL2) - c • R) := by
-    by_cases hc : c = 0
-    · rw [hc, zero_smul, sub_zero]
-      exact isUnit_one
-    · have hmu : c⁻¹ ≠ 0 := inv_ne_zero hc
-      rcases isCompactOperator_beamResolvent.hasEigenvalue_or_mem_resolventSet hmu with
-        hev | hres
-      · exfalso
-        obtain ⟨v, hvmem, hv0⟩ := hev.exists_hasEigenvector
-        have hveq : R v = c⁻¹ • v := by
-          have hv := hvmem
-          simp only [Module.End.mem_genEigenspace_one] at hv
-          exact hv
-        obtain ⟨hvdom, hbeam⟩ := exists_beamOperator_apply_of_beamResolvent_smul hmu hveq
-        have hcc : c⁻¹⁻¹ - 1 = lam := by
-          rw [inv_inv, hcdef]
-          ring
-        refine hcon ⟨v, hvdom⟩ hv0 ?_
-        rw [← hcc]
-        exact hbeam
-      · have hres' := spectrum.mem_resolventSet_iff.mp hres
-        have hkey : (1 : BeamL2 →L[ℝ] BeamL2) - c • R =
-            c • (algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c⁻¹ - R) := by
-          rw [smul_sub]
-          congr 1
-          rw [Algebra.algebraMap_eq_smul_one, smul_smul, mul_inv_cancel₀ hc, one_smul]
-        rw [hkey]
-        have hcu : IsUnit (algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c) :=
-          IsUnit.map _ (isUnit_iff_ne_zero.mpr hc)
-        have hprod := hcu.mul hres'
-        rwa [show algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c *
-              (algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c⁻¹ - R) =
-            c • (algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c⁻¹ - R) from by
-          rw [Algebra.algebraMap_eq_smul_one, smul_mul_assoc, one_mul]] at hprod
-  obtain ⟨U, hU⟩ := hunit
-  set S : BeamL2 →L[ℝ] BeamL2 := ↑U⁻¹ with hSdef
-  have hcommU : Commute R ↑U := by
-    rw [hU]
-    show R * ((1 : BeamL2 →L[ℝ] BeamL2) - c • R) =
-      ((1 : BeamL2 →L[ℝ] BeamL2) - c • R) * R
-    rw [mul_sub, sub_mul, mul_one, one_mul, Algebra.smul_def]
-    congr 1
-    calc
-      R * (algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c * R) =
-          (R * algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c) * R := (mul_assoc _ _ _).symm
-      _ = (algebraMap ℝ (BeamL2 →L[ℝ] BeamL2) c * R) * R :=
-        congrArg (fun T => T * R) (Algebra.commutes c R).symm
-  have hSU : S * ↑U = 1 := U.inv_mul
-  have hUS : (↑U : BeamL2 →L[ℝ] BeamL2) * S = 1 := U.mul_inv
-  apply hlam
-  rw [TauCeti.LinearPMap.mem_realResolventSet_iff]
-  refine ⟨R * S, ?_, ?_⟩
-  · intro x
-    have hz := Abstract.R_inversePartialMap_apply R
-      beamCoerciveFormData.resolvent_isSelfAdjoint
-      beamCoerciveFormData.resolvent_injective x
-    set z : BeamL2 := beamShiftedFormData.shiftedOperator x with hzdef
-    have hRz : R z = (x : BeamL2) := hz
-    have hBx : beamOperator x - lam • (x : BeamL2) =
-        (↑U : BeamL2 →L[ℝ] BeamL2) z := by
-      have h1 : beamOperator x =
-          beamShiftedFormData.shiftedOperator x - (x : BeamL2) :=
-        beamShiftedFormData.beamOperator_apply x
-      have hUz : ((1 : BeamL2 →L[ℝ] BeamL2) - c • R) z =
-          z - c • (x : BeamL2) := by
-        rw [sub_apply]
-        rw [show ((1 : BeamL2 →L[ℝ] BeamL2)) z = z from rfl,
-          show (c • R) z = c • (R z) from rfl, hRz]
-      rw [h1, hU, hUz, hcdef]
-      rw [add_smul, one_smul]
-      abel
-    calc
-      (R * S) (beamOperator x - lam • (x : BeamL2)) =
-          (R * S) ((↑U : BeamL2 →L[ℝ] BeamL2) z) := congrArg (R * S) hBx
-      _ = R ((S * ↑U) z) := rfl
-      _ = R z := by rw [hSU]; rfl
-      _ = (x : BeamL2) := hRz
-  · intro y
-    have hmem : (R * S) y ∈ beamOperator.domain := by
-      change R (S y) ∈ beamOperator.domain
-      exact LinearMap.mem_range_self _ _
-    refine ⟨hmem, ?_⟩
-    have hshifted : beamShiftedFormData.shiftedOperator
-        ⟨(R * S) y, hmem⟩ = S y := by
-      have happ := Abstract.inversePartialMap_apply_R R
-        beamCoerciveFormData.resolvent_isSelfAdjoint
-        beamCoerciveFormData.resolvent_injective (S y)
-      have hsub : (⟨R (S y), LinearMap.mem_range_self _ _⟩ :
-          beamShiftedFormData.shiftedOperator.domain) = ⟨(R * S) y, hmem⟩ :=
-        Subtype.ext rfl
-      exact (congrArg beamShiftedFormData.shiftedOperator hsub).symm.trans happ
-    have h1 : beamOperator ⟨(R * S) y, hmem⟩ =
-        beamShiftedFormData.shiftedOperator ⟨(R * S) y, hmem⟩ - (R * S) y :=
-      beamShiftedFormData.beamOperator_apply _
-    have hfinal : S y - (R * S) y - lam • (R * S) y =
-        ((↑U : BeamL2 →L[ℝ] BeamL2) * S) y := by
-      rw [hU]
-      rw [show (((1 : BeamL2 →L[ℝ] BeamL2) - c • R) * S) y =
-          S y - c • (R (S y)) from by
-        rw [sub_mul, one_mul]
-        rfl]
-      rw [show ((R * S) y : BeamL2) = R (S y) from rfl, hcdef]
-      rw [add_smul, one_smul]
-      abel
-    calc
-      beamOperator ⟨(R * S) y, hmem⟩ - lam • ((R * S) y) =
-          beamShiftedFormData.shiftedOperator ⟨(R * S) y, hmem⟩ -
-            (R * S) y - lam • ((R * S) y) := by rw [h1]
-      _ = S y - (R * S) y - lam • (R * S) y := by rw [hshifted]
-      _ = ((↑U : BeamL2 →L[ℝ] BeamL2) * S) y := hfinal
-      _ = y := by rw [hUS]; rfl
+  let R := beamCoerciveFormData.resolvent
+  have hinj : Function.Injective R := beamCoerciveFormData.resolvent_injective
+  let c : ℝ := lam + 1
+  have hshift : c ∈ (R.toLinearMap.toPMap ⊤).inverse.spectrum := by
+    have h := _root_.LinearPMap.mem_realSpectrum_iff.mp hlam
+    change lam ∈ beamShiftedFormData.beamOperator.spectrum at h
+    rw [beamShiftedFormData.beamOperator_eq_subScalar, _root_.LinearPMap.mem_spectrum_iff,
+      TauCeti.LinearPMap.mem_resolventSet_subScalar_iff,
+      beamShiftedFormData.shiftedOperator_eq_inverse] at h
+    exact (_root_.LinearPMap.mem_spectrum_iff _ _).mpr h
+  have hc : c ≠ 0 := by
+    intro h0
+    rw [h0] at hshift
+    exact (_root_.LinearPMap.mem_spectrum_iff _ _).mp hshift
+      (R.zero_mem_resolventSet_inverse_toPMap_top hinj)
+  have hev := (R.mem_spectrum_inverse_toPMap_top_iff_hasEigenvalue hinj
+    isCompactOperator_beamResolvent hc).mp hshift
+  obtain ⟨v, hvmem, hv0⟩ := hev.exists_hasEigenvector
+  have hveq : R v = c⁻¹ • v := by
+    simpa only [Module.End.mem_genEigenspace_one, ContinuousLinearMap.coe_coe] using hvmem
+  obtain ⟨hvdom, hbeam⟩ := exists_beamOperator_apply_of_beamResolvent_smul (inv_ne_zero hc) hveq
+  refine ⟨⟨v, hvdom⟩, hv0, ?_⟩
+  simpa only [inv_inv, c, add_sub_cancel_right] using hbeam
 
 /-- The real spectrum consists only of zero and characteristic fourth powers. -/
 theorem realSpectrum_beamOperator_subset :

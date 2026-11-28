@@ -1,5 +1,43 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 real resolvents and the free-beam spectrum
+
+DKPS retired the residual `realResolventSet` predicate and its sign-conversion
+bridges. The accepted `LinearPMap.resolventSet` and `IsResolventAt` from
+harahu's #12771 use the shift `z I - A` (SA-D01/D02). For reducing blocks,
+`isResolventAt_iff_surjective_and_apply_smul_sub` from #15996 combines
+surjectivity and the bounded left inverse. Unitary transport now works at
+every scalar. Real complexification and change of scalar model keep their
+incomplete-space scope. Both complexification paths share the inverse proof
+in `ForTauCeti`. These transport and block arguments remain local.
+[#12771](https://github.com/TauCetiProject/TauCeti/pull/12771) ·
+[#15996](https://github.com/TauCetiProject/TauCeti/pull/15996)
+
+The bounded restriction bridge applies `ContinuousLinearMap.spectrum_toPMap_top`
+as generalized by harahu in #21704. The eigenvector introduction rule uses
+`LinearPMap.eq_zero_of_apply_eq_smul` from #27591. The real and complex
+free-beam proofs use the scalar-shift law from #14459 and the compact inverse
+spectrum calculation from #37946, which introduced the latter while
+formalizing the Dirichlet operator. The free-beam result keeps its exact
+eigenvector and spectral parameter. No DKPS proof descent is established for
+these accepted declarations.
+[#21704](https://github.com/TauCetiProject/TauCeti/pull/21704) ·
+[#27591](https://github.com/TauCetiProject/TauCeti/pull/27591) ·
+[#14459](https://github.com/TauCetiProject/TauCeti/pull/14459) ·
+[#37946](https://github.com/TauCetiProject/TauCeti/pull/37946)
+
+The extraction manifest records the retired declarations and their source
+notices at `1c258a1966b47c5006b2d8256a942d72ce64ad26`. The previous
+October sign-convention equivalence remains in the historical proof-lineage
+record.
+
+The focused build (9,759 jobs), full default build (22,790 jobs), and combined
+Challenge and paper audits (22,498 jobs) passed without warnings. All 17
+available comparator signatures matched, and all 1,573 source-census
+declaration references resolved. The import policy reported zero violations,
+and the declaration-name findings were unchanged from the previous checkout.
+The backport removes 455 net lines of Lean.
+
 ## November 27 bounded perturbations of partial maps
 
 DKPS now writes an ambient bounded perturbation as `V.toLinearMap +ᵥ A`,

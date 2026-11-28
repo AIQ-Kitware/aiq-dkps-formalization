@@ -16,7 +16,7 @@ public import TauCeti.LinearAlgebra.LinearPMap.Conj
 
 Reusable algebra for unbounded operators represented canonically by Mathlib's
 `LinearPMap`: domain transport, extension, symmetry, inverse bounds,
-and elementary real resolvent predicates.
+and a real-spectrum introduction rule.
 
 The declarations deliberately take raw partial maps.  Closedness, dense domain,
 and self-adjointness are separate hypotheses supplied by the theorem that needs
@@ -570,108 +570,14 @@ theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
   obtain ⟨J, _hdom, hleft, _hright, hnorm⟩ := h
   exact ⟨J, hleft, hnorm⟩
 
-/-- Real resolvent set of a partial linear map.  A parameter belongs to the set
-when the shifted map has a bounded two-sided inverse with explicit domain
-transport for the right-inverse leg. -/
-def realResolventSet (A : E →ₗ.[𝕜] E) : Set ℝ :=
-  {lam : ℝ | ∃ R : E →L[𝕜] E,
-      (∀ x : A.domain, R (A x - (lam : 𝕜) • (x : E)) = (x : E)) ∧
-      (∀ y : E, ∃ h : R y ∈ A.domain,
-        A ⟨R y, h⟩ - (lam : 𝕜) • R y = y)}
-
-/-- Unfolds real resolvent membership through a stable public API.
-
-`realResolventSet` is intentionally kept abstract across module boundaries; downstream
-proofs should use this theorem instead of depending on definitional transparency. -/
-theorem mem_realResolventSet_iff {A : E →ₗ.[𝕜] E} {lam : ℝ} :
-    lam ∈ realResolventSet A ↔
-      ∃ R : E →L[𝕜] E,
-        (∀ x : A.domain, R (A x - (lam : 𝕜) • (x : E)) = (x : E)) ∧
-        (∀ y : E, ∃ h : R y ∈ A.domain,
-          A ⟨R y, h⟩ - (lam : 𝕜) • R y = y) :=
-  Iff.rfl
-
-/-!
-## Temporary migration bridge to the accepted spectrum
-
-`_root_.LinearPMap.realSpectrum` is now authoritative, as defined by
-`TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSeparation`.
-This module *does not* define a second real spectrum.  The legacy real resolvent
-predicate is retained only while its constructive inversion arguments are being
-converted to the canonical `_root_.LinearPMap.resolventSet`.  Its operator is the inverse
-of `A - λ`; the canonical operator is the inverse of `λ I - A`, and the two
-inverses are negatives of each other.
-
-Remove this bridge after the remaining old inverse witnesses are migrated.
--/
-
-/-- The legacy real resolvent predicate is equivalent to membership in the
-accepted partial-operator resolvent set at the real scalar, over either `ℝ`
-or `ℂ`. There is no self-adjointness or completeness hypothesis. -/
-theorem mem_realResolventSet_iff_mem_canonical_resolventSet
-    (A : E →ₗ.[𝕜] E) (lam : ℝ) :
-    lam ∈ realResolventSet A ↔
-      (lam : 𝕜) ∈ _root_.LinearPMap.resolventSet A := by
-  rw [mem_realResolventSet_iff, _root_.LinearPMap.mem_resolventSet_iff]
-  constructor
-  · rintro ⟨R, hleft, hright⟩
-    refine ⟨-R, fun y => neg_mem (hright y).choose, fun y => ?_, fun x => ?_⟩
-    · have h := (hright y).choose_spec
-      have hneg : A
-            (⟨(-R) y, neg_mem (hright y).choose⟩ : A.domain)
-          = -(A ⟨R y, (hright y).choose⟩) :=
-        _root_.LinearPMap.map_neg A ⟨R y, (hright y).choose⟩
-      rw [hneg]
-      simp only [_root_.neg_apply]
-      linear_combination (norm := module) h
-    · have h := hleft x
-      have harg : (lam : 𝕜) • (x : E) - A x
-          = -(A x - (lam : 𝕜) • (x : E)) := by module
-      simp only [_root_.neg_apply, harg, map_neg, neg_neg]
-      exact h
-  · rintro ⟨R, hR⟩
-    refine ⟨-R, fun x => ?_, fun y => ?_⟩
-    · have hstep : ∀ c : 𝕜, R (c • (x : E) - A x) = (x : E) →
-          (-R) (A x - c • (x : E)) = (x : E) := by
-        intro c hc
-        have harg : A x - c • (x : E)
-            = -(c • (x : E) - A x) := by module
-        rw [_root_.neg_apply, harg, map_neg, hc, neg_neg]
-      exact hstep _ (hR.apply_smul_sub x)
-    · refine ⟨neg_mem (hR.mem_domain y), ?_⟩
-      have h := hR.smul_sub_apply y
-      have hneg : A
-            (⟨(-R) y, neg_mem (hR.mem_domain y)⟩ : A.domain)
-          = -(A ⟨R y, hR.mem_domain y⟩) :=
-        _root_.LinearPMap.map_neg A ⟨R y, hR.mem_domain y⟩
-      rw [hneg]
-      simp only [_root_.neg_apply]
-      linear_combination (norm := module) h
-
-/-- The accepted real-spectrum preimage is the complement of the legacy real
-resolvent set.  This is a theorem, not a duplicate spectrum definition. -/
-theorem canonical_realSpectrum_eq_compl_realResolventSet
-    (A : E →ₗ.[𝕜] E) :
-    _root_.LinearPMap.realSpectrum A = (realResolventSet A)ᶜ := by
-  ext lam
-  simp only [_root_.LinearPMap.mem_realSpectrum_iff,
-    _root_.LinearPMap.mem_spectrum_iff, Set.mem_compl_iff]
-  exact not_congr
-    (mem_realResolventSet_iff_mem_canonical_resolventSet A lam).symm
-
-/-- A nonzero eigenvector produces a spectral point in TauCeti's *canonical*
-real spectrum.  The legacy shifted inverse is used only inside this proof. -/
+/-- A nonzero eigenvector gives a point of the real spectrum. -/
 theorem mem_realSpectrum_of_eigenvector
     {A : E →ₗ.[𝕜] E} {lam : ℝ} {x : A.domain}
     (hx : (x : E) ≠ 0) (heig : A x = (lam : 𝕜) • (x : E)) :
     lam ∈ _root_.LinearPMap.realSpectrum A := by
-  rw [canonical_realSpectrum_eq_compl_realResolventSet]
+  rw [_root_.LinearPMap.mem_realSpectrum_iff, _root_.LinearPMap.mem_spectrum_iff]
   intro hres
-  obtain ⟨R, hleft, -⟩ :=
-    (mem_realResolventSet_iff).mp hres
-  have hzero : R (A x - (lam : 𝕜) • (x : E)) = (x : E) := hleft x
-  rw [heig, sub_self, map_zero] at hzero
-  exact hx hzero.symm
+  exact hx (congrArg Subtype.val (_root_.LinearPMap.eq_zero_of_apply_eq_smul hres x heig))
 
 end LinearPMap
 end TauCeti

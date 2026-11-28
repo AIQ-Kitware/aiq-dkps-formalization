@@ -69,7 +69,7 @@ omit [CompleteSpace E] in
 
 The unbounded counterpart of the bounded `realSpectrum_subset_union_of_reduces`.
 If `lam` inverts both blocks, the direct sum of the two block inverses inverts
-`A - lam`, because `A` acts blockwise on a reducing decomposition. -/
+`lam I - A`, because `A` acts blockwise on a reducing decomposition. -/
 theorem realSpectrum_subset_union_of_reduces
     {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U) :
@@ -82,17 +82,17 @@ theorem realSpectrum_subset_union_of_reduces
   by_contra hcon
   simp only [Set.mem_union, not_or] at hcon
   obtain ⟨h1, h2⟩ := hcon
-  rw [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
-    Set.mem_compl_iff, not_not] at h1 h2
-  rw [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
-    Set.mem_compl_iff] at hlam
-  obtain ⟨R1, hL1, hRt1⟩ := TauCeti.LinearPMap.mem_realResolventSet_iff.mp h1
-  obtain ⟨R2, hL2, hRt2⟩ := TauCeti.LinearPMap.mem_realResolventSet_iff.mp h2
-  refine hlam ?_
-  apply TauCeti.LinearPMap.mem_realResolventSet_iff.mpr
-  refine ⟨U.subtypeL ∘L R1 ∘L U.orthogonalProjectionOnto
-    + Uᗮ.subtypeL ∘L R2 ∘L Uᗮ.orthogonalProjectionOnto, ?_, ?_⟩
-  · -- left inverse
+  simp only [_root_.LinearPMap.mem_realSpectrum_iff, _root_.LinearPMap.mem_spectrum_iff,
+    not_not] at h1 h2
+  obtain ⟨R1, hR1⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp h1
+  obtain ⟨R2, hR2⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp h2
+  apply (_root_.LinearPMap.mem_spectrum_iff _ _).mp
+    (_root_.LinearPMap.mem_realSpectrum_iff.mp hlam)
+  let R := U.subtypeL ∘L R1 ∘L U.orthogonalProjectionOnto
+    + Uᗮ.subtypeL ∘L R2 ∘L Uᗮ.orthogonalProjectionOnto
+  suffices hsurj : Function.Surjective (fun x : A.domain => (lam : 𝕜) • (x : E) - A x) by
+    refine (_root_.LinearPMap.isResolventAt_iff_surjective_and_apply_smul_sub.mpr
+      ⟨hsurj, ?_⟩ : A.IsResolventAt (lam : 𝕜) R).mem_resolventSet
     intro x
     obtain ⟨a, ha, hadef⟩ : ∃ a, ∃ h : a ∈ A.domain, a = U.starProjection (x : E) :=
       ⟨_, hred.starProjection_mem_domain x.property, rfl⟩
@@ -103,18 +103,18 @@ theorem realSpectrum_subset_union_of_reduces
     -- the `U` leg
     have hUdom : (⟨a, haU⟩ : U) ∈ (TauCeti.LinearPMap.reducingRestriction A U hred).domain :=
       (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred _).mpr ha
-    have hUleg := hL1 ⟨⟨a, haU⟩, hUdom⟩
-    have hUproj : U.orthogonalProjectionOnto (A x - (lam : 𝕜) • (x : E))
-        = (TauCeti.LinearPMap.reducingRestriction A U hred) ⟨⟨a, haU⟩, hUdom⟩
-          - (lam : 𝕜) • (⟨a, haU⟩ : U) := by
+    have hUleg := hR1.apply_smul_sub ⟨⟨a, haU⟩, hUdom⟩
+    have hUproj : U.orthogonalProjectionOnto ((lam : 𝕜) • (x : E) - A x)
+        = (lam : 𝕜) • (⟨a, haU⟩ : U)
+          - (TauCeti.LinearPMap.reducingRestriction A U hred) ⟨⟨a, haU⟩, hUdom⟩ := by
       refine Subtype.ext ?_
       have hcomm := starProjection_apply_eq_of_reduces hred x
-      show U.starProjection (A x - (lam : 𝕜) • (x : E)) = _
+      show U.starProjection ((lam : 𝕜) • (x : E) - A x) = _
       rw [map_sub, hcomm, map_smul]
       simp only [Submodule.coe_sub, Submodule.coe_smul]
       rw [TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred ⟨a, haU⟩ ha]
-      show (A ⟨U.starProjection (x : E), hred.starProjection_mem_domain x.property⟩ : E)
-        - (lam : 𝕜) • U.starProjection (x : E) = (A ⟨a, ha⟩ : E) - (lam : 𝕜) • a
+      show (lam : 𝕜) • U.starProjection (x : E) -
+        A ⟨U.starProjection (x : E), hred.starProjection_mem_domain x.property⟩ = (lam : 𝕜) • a - A ⟨a, ha⟩
       have hsub : (⟨U.starProjection (x : E), hred.starProjection_mem_domain x.property⟩ : A.domain)
           = ⟨a, ha⟩ := Subtype.ext hadef.symm
       rw [hsub, ← hadef]
@@ -122,65 +122,65 @@ theorem realSpectrum_subset_union_of_reduces
     have hVdom : (⟨b, hbU⟩ : Uᗮ) ∈
         (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal).domain :=
       (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A Uᗮ hred.orthogonal _).mpr hb
-    have hVleg := hL2 ⟨⟨b, hbU⟩, hVdom⟩
-    have hVproj : Uᗮ.orthogonalProjectionOnto (A x - (lam : 𝕜) • (x : E))
-        = (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) ⟨⟨b, hbU⟩, hVdom⟩
-          - (lam : 𝕜) • (⟨b, hbU⟩ : Uᗮ) := by
+    have hVleg := hR2.apply_smul_sub ⟨⟨b, hbU⟩, hVdom⟩
+    have hVproj : Uᗮ.orthogonalProjectionOnto ((lam : 𝕜) • (x : E) - A x)
+        = (lam : 𝕜) • (⟨b, hbU⟩ : Uᗮ)
+          - (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) ⟨⟨b, hbU⟩, hVdom⟩ := by
       refine Subtype.ext ?_
       have hcomm := starProjection_apply_eq_of_reduces hred.orthogonal x
-      show Uᗮ.starProjection (A x - (lam : 𝕜) • (x : E)) = _
+      show Uᗮ.starProjection ((lam : 𝕜) • (x : E) - A x) = _
       rw [map_sub, hcomm, map_smul]
       simp only [Submodule.coe_sub, Submodule.coe_smul]
       rw [TauCeti.LinearPMap.coe_reducingRestriction_apply A Uᗮ hred.orthogonal ⟨b, hbU⟩ hb]
-      show (A ⟨Uᗮ.starProjection (x : E), hred.orthogonal.starProjection_mem_domain x.property⟩ : E)
-        - (lam : 𝕜) • Uᗮ.starProjection (x : E) = (A ⟨b, hb⟩ : E) - (lam : 𝕜) • b
+      show (lam : 𝕜) • Uᗮ.starProjection (x : E) -
+        A ⟨Uᗮ.starProjection (x : E), hred.orthogonal.starProjection_mem_domain x.property⟩ = (lam : 𝕜) • b - A ⟨b, hb⟩
       have hsub : (⟨Uᗮ.starProjection (x : E), hred.orthogonal.starProjection_mem_domain x.property⟩
           : A.domain) = ⟨b, hb⟩ := Subtype.ext hbdef.symm
       rw [hsub, ← hbdef]
-    show (U.subtypeL (R1 (U.orthogonalProjectionOnto (A x - (lam : 𝕜) • (x : E)))) : E)
-      + (Uᗮ.subtypeL (R2 (Uᗮ.orthogonalProjectionOnto (A x - (lam : 𝕜) • (x : E)))) : E)
+    show (U.subtypeL (R1 (U.orthogonalProjectionOnto ((lam : 𝕜) • (x : E) - A x))) : E)
+      + (Uᗮ.subtypeL (R2 (Uᗮ.orthogonalProjectionOnto ((lam : 𝕜) • (x : E) - A x))) : E)
       = (x : E)
     rw [hUproj, hVproj, hUleg, hVleg]
     show a + b = (x : E)
     rw [hadef, hbdef, Submodule.starProjection_orthogonal_apply]
     abel
-  · -- right inverse
-    intro y
-    obtain ⟨hu, hueq⟩ := hRt1 (U.orthogonalProjectionOnto y)
-    obtain ⟨hv, hveq⟩ := hRt2 (Uᗮ.orthogonalProjectionOnto y)
-    have hua : ((R1 (U.orthogonalProjectionOnto y) : U) : E) ∈ A.domain :=
-      (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred _).mp hu
-    have hvb : ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E) ∈ A.domain :=
-      (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A Uᗮ hred.orthogonal _).mp hv
-    have hmem : (U.subtypeL (R1 (U.orthogonalProjectionOnto y)) : E)
-        + (Uᗮ.subtypeL (R2 (Uᗮ.orthogonalProjectionOnto y)) : E) ∈ A.domain :=
-      A.domain.add_mem hua hvb
-    refine ⟨hmem, ?_⟩
-    have hadd : A ⟨(U.subtypeL (R1 (U.orthogonalProjectionOnto y)) : E)
-          + (Uᗮ.subtypeL (R2 (Uᗮ.orthogonalProjectionOnto y)) : E), hmem⟩
-        = A ⟨((R1 (U.orthogonalProjectionOnto y) : U) : E), hua⟩
-          + A ⟨((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E), hvb⟩ := by
-      rw [← _root_.LinearPMap.map_add]
-      congr 1
-    have hueq' : (A ⟨((R1 (U.orthogonalProjectionOnto y) : U) : E), hua⟩ : E)
-        - (lam : 𝕜) • ((R1 (U.orthogonalProjectionOnto y) : U) : E)
-        = U.starProjection y := by
-      simpa only [Submodule.coe_sub, Submodule.coe_smul, Submodule.coe_orthogonalProjectionOnto_apply,
-        TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred _ hua] using
-        congrArg (fun z : U => (z : E)) hueq
-    have hveq' : (A ⟨((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E), hvb⟩ : E)
-        - (lam : 𝕜) • ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E)
-        = Uᗮ.starProjection y := by
-      simpa only [Submodule.coe_sub, Submodule.coe_smul, Submodule.coe_orthogonalProjectionOnto_apply,
-        TauCeti.LinearPMap.coe_reducingRestriction_apply A Uᗮ hred.orthogonal _ hvb] using
-        congrArg (fun z : Uᗮ => (z : E)) hveq
-    show (A ⟨_, hmem⟩ : E) - (lam : 𝕜) •
-      (((R1 (U.orthogonalProjectionOnto y) : U) : E)
-        + ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E)) = y
-    rw [hadd, smul_add]
-    have hsum : U.starProjection y + Uᗮ.starProjection y = y := by
-      rw [Submodule.starProjection_orthogonal_apply]; abel
-    linear_combination (norm := module) hueq' + hveq' + hsum
+  intro y
+  have hu := hR1.mem_domain (U.orthogonalProjectionOnto y)
+  have hueq := hR1.smul_sub_apply (U.orthogonalProjectionOnto y)
+  have hv := hR2.mem_domain (Uᗮ.orthogonalProjectionOnto y)
+  have hveq := hR2.smul_sub_apply (Uᗮ.orthogonalProjectionOnto y)
+  have hua : ((R1 (U.orthogonalProjectionOnto y) : U) : E) ∈ A.domain :=
+    (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A U hred _).mp hu
+  have hvb : ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E) ∈ A.domain :=
+    (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A Uᗮ hred.orthogonal _).mp hv
+  have hmem : (U.subtypeL (R1 (U.orthogonalProjectionOnto y)) : E)
+      + (Uᗮ.subtypeL (R2 (Uᗮ.orthogonalProjectionOnto y)) : E) ∈ A.domain :=
+    A.domain.add_mem hua hvb
+  refine ⟨⟨R y, hmem⟩, ?_⟩
+  have hadd : A ⟨(U.subtypeL (R1 (U.orthogonalProjectionOnto y)) : E)
+        + (Uᗮ.subtypeL (R2 (Uᗮ.orthogonalProjectionOnto y)) : E), hmem⟩
+      = A ⟨((R1 (U.orthogonalProjectionOnto y) : U) : E), hua⟩
+        + A ⟨((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E), hvb⟩ := by
+    rw [← _root_.LinearPMap.map_add]
+    congr 1
+  have hueq' : (lam : 𝕜) • ((R1 (U.orthogonalProjectionOnto y) : U) : E)
+      - A ⟨((R1 (U.orthogonalProjectionOnto y) : U) : E), hua⟩
+      = U.starProjection y := by
+    simpa only [Submodule.coe_sub, Submodule.coe_smul, Submodule.coe_orthogonalProjectionOnto_apply,
+      TauCeti.LinearPMap.coe_reducingRestriction_apply A U hred _ hua] using
+      congrArg (fun z : U => (z : E)) hueq
+  have hveq' : (lam : 𝕜) • ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E)
+      - A ⟨((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E), hvb⟩
+      = Uᗮ.starProjection y := by
+    simpa only [Submodule.coe_sub, Submodule.coe_smul, Submodule.coe_orthogonalProjectionOnto_apply,
+      TauCeti.LinearPMap.coe_reducingRestriction_apply A Uᗮ hred.orthogonal _ hvb] using
+      congrArg (fun z : Uᗮ => (z : E)) hveq
+  show (lam : 𝕜) • (((R1 (U.orthogonalProjectionOnto y) : U) : E)
+      + ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E)) - A ⟨_, hmem⟩ = y
+  rw [hadd, smul_add]
+  have hsum : U.starProjection y + Uᗮ.starProjection y = y := by
+    rw [Submodule.starProjection_orthogonal_apply]; abel
+  linear_combination (norm := module) hueq' + hveq' + hsum
 
 /-! ## Invariance plus self-adjointness gives reduction
 

@@ -11,14 +11,7 @@ public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
-/-!
-# The real resolvent of a partial map, and the ambient spectrum
-
-`TauCeti.LinearPMap.realResolventSet` is defined without importing the ambient
-spectral theory, so it remains available over every `RCLike` scalar field.  This
-file identifies its complex specialization with the ambient spectrum.  The
-bridge is intentionally kept above both foundations to avoid an import cycle.
--/
+/-! # Real spectrum of a complex self-adjoint partial map -/
 
 public section
 
@@ -29,29 +22,8 @@ open scoped InnerProductSpace
 
 universe u v
 
-variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E : Type v} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
-
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
-
-variable {F : Type v}
-  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-
-omit [CompleteSpace E] in
-/-- The old sign-convention inverse condition agrees with the canonical resolvent.
-The scalar-generic sign change is proved in `LinearPMap/Closed.lean`. -/
-theorem mem_realResolventSet_iff_mem_spectraResolvent
-    (A : E →ₗ.[ℂ] E) (lam : ℝ) :
-    lam ∈ TauCeti.LinearPMap.realResolventSet A ↔
-      (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A :=
-  TauCeti.LinearPMap.mem_realResolventSet_iff_mem_canonical_resolventSet A lam
-
-/-! ## The spectrum of a self-adjoint operator is real
-
-Tau Ceti proves the more general `RCLike` statement that the canonical
-`LinearPMap` spectrum lies on the zero-imaginary axis. This paper-facing result
-now states that canonical spectrum directly. -/
 
 /-- **A self-adjoint partial map has real spectrum.** -/
 theorem spectrum_subset_real_of_isSelfAdjoint {A : E →ₗ.[ℂ] E}

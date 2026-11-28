@@ -9,6 +9,7 @@ public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import DavisKahan.SpectralTheory.Complexification.Subspace
 public import DavisKahan.Sylvester.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
 
 public section
 
@@ -655,85 +656,11 @@ theorem isSelfAdjoint_complexify
     exact sub_eq_zero.mp (inner_self_eq_zero.mp hzero)
 
 omit [CompleteSpace E] in
-/-- A real bounded inverse complexifies to a complex bounded inverse of every
-real shift. -/
-theorem realResolvent_mem_complexify
-    (A : E →ₗ.[ℝ] E)
-    {lam : ℝ} (hlam : lam ∈ TauCeti.LinearPMap.realResolventSet A) :
-    lam ∈ TauCeti.LinearPMap.realResolventSet (complexify A) := by
-  rcases LinearPMap.mem_realResolventSet_iff.mp hlam with ⟨R, hleft, hright⟩
-  apply LinearPMap.mem_realResolventSet_iff.mpr
-  refine ⟨RealComplexification.complexify R, ?_, ?_⟩
-  · intro z
-    apply RealComplexification.ext
-    · rw [re_complexify, re_sub, complexify_toLinearPMap_apply_re,
-        re_complex_smul]
-      simpa [domainRePMap] using hleft (domainRePMap A z)
-    · rw [im_complexify, im_sub, complexify_toLinearPMap_apply_im,
-        im_complex_smul]
-      simpa [domainImPMap] using hleft (domainImPMap A z)
-  · intro w
-    obtain ⟨hrdom, hr⟩ := hright (re w)
-    obtain ⟨hidom, hi⟩ := hright (im w)
-    refine ⟨(mem_complexify_toLinearPMap_domain_iff A _).2
-      ⟨hrdom, hidom⟩, ?_⟩
-    apply RealComplexification.ext
-    · rw [re_sub, complexify_toLinearPMap_apply_re, re_complex_smul]
-      simpa [domainRePMap] using hr
-    · rw [im_sub, complexify_toLinearPMap_apply_im, im_complex_smul]
-      simpa [domainImPMap] using hi
-
-omit [CompleteSpace E] in
-/-- A complex resolvent of the coordinatewise complexification descends to a
-real resolvent by restricting to the real copy and taking real coordinates. -/
-theorem complexify_realResolvent_mem
-    (A : E →ₗ.[ℝ] E)
-    {lam : ℝ} (hlam : lam ∈ TauCeti.LinearPMap.realResolventSet (complexify A)) :
-    lam ∈ TauCeti.LinearPMap.realResolventSet A := by
-  rcases LinearPMap.mem_realResolventSet_iff.mp hlam with ⟨R, hleft, hright⟩
-  let RrLinear : E →ₗ[ℝ] E :=
-    { toFun := fun y => re (R (ofReal y))
-      map_add' := fun y z => by simp
-      map_smul' := fun r y => by simp }
-  let Rr : E →L[ℝ] E :=
-    RrLinear.mkContinuous ‖R‖ (fun y => by
-      calc
-        ‖RrLinear y‖ ≤ ‖R (ofReal y)‖ := norm_re_le _
-        _ ≤ ‖R‖ * ‖ofReal y‖ := R.le_opNorm _
-        _ = ‖R‖ * ‖y‖ := by rw [ofReal.norm_map])
-  apply LinearPMap.mem_realResolventSet_iff.mpr
-  refine ⟨Rr, ?_, ?_⟩
-  · intro x
-    have hx := hleft (ofRealDomainPMap A x)
-    rw [complexify_toLinearPMap_apply_ofReal] at hx
-    simpa [Rr, RrLinear, ofRealDomainPMap] using congrArg re hx
-  · intro y
-    obtain ⟨hdom, hy⟩ := hright (ofReal y)
-    refine ⟨(mem_complexify_toLinearPMap_domain_iff A
-      (R (ofReal y))).mp hdom |>.1, ?_⟩
-    have hre := congrArg re hy
-    rw [re_sub, complexify_toLinearPMap_apply_re, re_complex_smul] at hre
-    simpa [Rr, RrLinear, domainRePMap] using hre
-
-omit [CompleteSpace E] in
-/-- Real resolvent membership is exactly preserved by closed-operator
-complexification. -/
-theorem mem_realResolventSet_complexify_iff
-    (A : E →ₗ.[ℝ] E)
-    (lam : ℝ) :
-    lam ∈ TauCeti.LinearPMap.realResolventSet (complexify A) ↔ lam ∈ TauCeti.LinearPMap.realResolventSet A := by
-  exact ⟨complexify_realResolvent_mem A, realResolvent_mem_complexify A⟩
-
-omit [CompleteSpace E] in
-/-- Closed-operator real spectrum is exactly preserved by
-coordinatewise complexification. -/
+/-- Coordinatewise complexification preserves the real spectrum. -/
 theorem closed_realSpectrum_complexify
     (A : E →ₗ.[ℝ] E) :
-    _root_.LinearPMap.realSpectrum (complexify A) = _root_.LinearPMap.realSpectrum A := by
-  ext lam
-  simp only [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
-    Set.mem_compl_iff]
-  exact not_congr (mem_realResolventSet_complexify_iff A lam)
+    _root_.LinearPMap.realSpectrum (complexify A) = _root_.LinearPMap.realSpectrum A :=
+  TauCeti.LinearPMap.realSpectrum_complexifyReal A
 
 omit [CompleteSpace E] in
 /-- The real spectrum of a real closed operator is the genuine real spectrum

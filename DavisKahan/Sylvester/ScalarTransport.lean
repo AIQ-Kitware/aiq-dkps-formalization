@@ -31,7 +31,7 @@ What has to be carried across, and is, in this file:
 | --- | --- |
 | finite Ky Fan gauges | `kyFanApproximationGauge_clm` |
 | operator-form semibounds | `semiboundedAbove_pmap_iff`, `semiboundedBelow_pmap_iff` |
-| the real resolvent set and spectrum | `realResolventSet_pmap`, `realSpectrum_pmap` |
+| the real spectrum | `realSpectrum_pmap` |
 | the three-constructor separation | `formBoundedSylvesterGap_pmap` |
 | the domain-aware Sylvester equation | `sylvesterEquation_pmap` |
 
@@ -102,44 +102,39 @@ theorem semiboundedBelow_pmap_iff {A : E →ₗ.[𝕜] E} {c : ℝ} :
     rwa [e.re_map]
 
 omit [CompleteSpace E] in
-/-- The real resolvent set is unchanged: an inverse on one side is an inverse on the other. -/
-theorem realResolventSet_pmap (A : E →ₗ.[𝕜] E) :
-    TauCeti.LinearPMap.realResolventSet (pmap (e := e) A) =
-      TauCeti.LinearPMap.realResolventSet A := by
-  ext lam
-  rw [TauCeti.LinearPMap.mem_realResolventSet_iff, TauCeti.LinearPMap.mem_realResolventSet_iff]
-  constructor
-  · rintro ⟨R, hleft, hright⟩
-    refine ⟨(clmEquiv (e := e)).symm R, fun x => ?_, fun y => ?_⟩
-    · have h2 := hleft ⟨of (e := e) (x : E), x.2⟩
-      rwa [show (((lam : ℝ) : 𝕂)) • (of (e := e) (x : E)) =
-        of (e := e) ((((lam : ℝ)) : 𝕜) • (x : E)) from ofReal_smul_of _ _] at h2
-    · obtain ⟨h, hh⟩ := hright (of (e := e) y)
-      refine ⟨h, ?_⟩
-      rwa [show (((lam : ℝ) : 𝕂)) • (R (of (e := e) y)) =
-        of (e := e) ((((lam : ℝ)) : 𝕜) • out (R (of (e := e) y))) from
-          ofReal_smul_of (e := e) (E := E) lam (out (R (of (e := e) y)))] at hh
-  · rintro ⟨R, hleft, hright⟩
-    refine ⟨clm (e := e) R, fun x => ?_, fun y => ?_⟩
-    · have h2 := hleft (domainOut (e := e) A x)
-      rw [show (((lam : ℝ) : 𝕂)) • ((x : ScalarTransport e E)) =
-        of (e := e) ((((lam : ℝ)) : 𝕜) • out (x : ScalarTransport e E)) from
-          ofReal_smul_of (e := e) (E := E) lam (out (x : ScalarTransport e E))]
-      exact congrArg (of (e := e)) h2
-    · obtain ⟨h, hh⟩ := hright (out y)
-      refine ⟨h, ?_⟩
-      rw [show (((lam : ℝ) : 𝕂)) • ((clm (e := e) R) y) =
-        of (e := e) ((((lam : ℝ)) : 𝕜) • (R (out y))) from
-          ofReal_smul_of (e := e) (E := E) lam (R (out y))]
-      exact congrArg (of (e := e)) hh
-
-omit [CompleteSpace E] in
-/-- and hence so is the real spectrum. -/
+/-- Changing the scalar model preserves the real spectrum by transporting the inverse. -/
 theorem realSpectrum_pmap (A : E →ₗ.[𝕜] E) :
     _root_.LinearPMap.realSpectrum (pmap (e := e) A) = _root_.LinearPMap.realSpectrum A := by
-  rw [TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
-    TauCeti.LinearPMap.canonical_realSpectrum_eq_compl_realResolventSet,
-    realResolventSet_pmap]
+  ext r
+  simp only [_root_.LinearPMap.mem_realSpectrum_iff, _root_.LinearPMap.mem_spectrum_iff,
+    _root_.LinearPMap.mem_resolventSet_iff]
+  apply not_congr
+  constructor
+  · rintro ⟨R, hR⟩
+    refine ⟨(clmEquiv (e := e)).symm R, fun y => hR.mem_domain (of (e := e) y), ?_, ?_⟩
+    · intro y
+      have h := hR.smul_sub_apply (of (e := e) y)
+      rw [show (r : 𝕂) • R (of (e := e) y) =
+        of (e := e) ((r : 𝕜) • out (R (of (e := e) y))) from
+          ofReal_smul_of (e := e) (E := E) r _] at h
+      exact congrArg out h
+    · intro x
+      have h := hR.apply_smul_sub ⟨of (e := e) (x : E), x.2⟩
+      rw [ofReal_smul_of r (x : E)] at h
+      exact congrArg out h
+  · rintro ⟨R, hR⟩
+    refine ⟨clm (e := e) R, fun y => hR.mem_domain (out y), ?_, ?_⟩
+    · intro y
+      have h := hR.smul_sub_apply (out y)
+      rw [show (r : 𝕂) • (clm (e := e) R) y =
+        of (e := e) ((r : 𝕜) • R (out y)) from ofReal_smul_of (e := e) (E := E) r _]
+      exact congrArg (of (e := e)) h
+    · intro x
+      have h := hR.apply_smul_sub (domainOut (e := e) A x)
+      rw [show (r : 𝕂) • (x : ScalarTransport e E) =
+        of (e := e) ((r : 𝕜) • out (x : ScalarTransport e E)) from
+          ofReal_smul_of (e := e) (E := E) r _]
+      exact congrArg (of (e := e)) h
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The three-constructor separation transports, constructor by constructor. -/

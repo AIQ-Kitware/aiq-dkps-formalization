@@ -10,6 +10,8 @@ public import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
 public import DavisKahan.SpectralTheory.FormMethod.FormCompactness
 public import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
 public import DavisKahan.SinTheta.BoundedPerturbation
+public import TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Inverse
+public import TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Shift
 public import Mathlib.Tactic
 
 public section
@@ -74,6 +76,19 @@ noncomputable def shiftedOperator
     H →ₗ.[𝕜] H :=
   D.toCoerciveFormData.associatedOperator
 
+/-- The shifted realization is the partial inverse of its variational resolvent. -/
+theorem shiftedOperator_eq_inverse
+    (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.shiftedOperator = (D.resolvent.toLinearMap.toPMap ⊤).inverse := by
+  have hdom : D.shiftedOperator.domain = (D.resolvent.toLinearMap.toPMap ⊤).inverse.domain := by
+    ext x
+    exact (D.resolvent.mem_domain_inverse_toPMap_top_iff).symm
+  refine _root_.LinearPMap.ext hdom fun x hx hy => ?_
+  apply D.resolvent_injective
+  exact (R_inversePartialMap_apply D.resolvent D.resolvent_isSelfAdjoint
+    D.resolvent_injective ⟨x, hx⟩).trans
+      (D.resolvent.apply_inverse_toPMap_top D.resolvent_injective ⟨x, hy⟩).symm
+
 /-- The free-beam operator is the shifted realization minus the identity. -/
 @[expose]
 noncomputable def beamOperator
@@ -90,11 +105,25 @@ noncomputable def beamOperator
 @[simp] theorem beamOperator_apply
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.beamOperator.domain) :
-    D.beamOperator x =
-      D.shiftedOperator x - (x : H) := by
-  change -(x : H) + D.shiftedOperator x =
-    D.shiftedOperator x - (x : H)
+    D.beamOperator x = D.shiftedOperator x - (x : H) := by
+  change -(x : H) + D.shiftedOperator x = D.shiftedOperator x - (x : H)
   rw [sub_eq_add_neg, add_comm]
+
+/-- The beam realization is the scalar shift used by the resolvent API. -/
+theorem beamOperator_eq_subScalar
+    (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.beamOperator = D.shiftedOperator.subScalar 1 := by
+  refine _root_.LinearPMap.ext (by rw [beamOperator_domain, _root_.LinearPMap.subScalar_domain])
+    fun x hx hy => ?_
+  refine (D.beamOperator_apply ⟨x, hx⟩).trans ?_
+  let u : D.shiftedOperator.domain := ⟨x, D.beamOperator_domain ▸ hx⟩
+  let v : D.shiftedOperator.domain :=
+    ⟨x, _root_.LinearPMap.subScalar_domain D.shiftedOperator 1 ▸ hy⟩
+  have huv : u = v := Subtype.ext rfl
+  have h := _root_.LinearPMap.subScalar_apply D.shiftedOperator 1 ⟨x, hy⟩
+  rw [one_smul] at h
+  change D.shiftedOperator u - x = _
+  exact (congrArg (fun w : D.shiftedOperator.domain => D.shiftedOperator w - x) huv).trans h.symm
 
 /-- Form-space representative of a vector in the shifted operator domain. -/
 @[expose]
