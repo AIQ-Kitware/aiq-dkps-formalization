@@ -41,10 +41,12 @@ theorem norm_reflectionDefect_isometricRange_le_two_mul_residual
     (A : H →L[ℂ] H) (hA : IsSelfAdjoint A)
     (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) :
-    letI := rangeHasOrthogonalProjection X hX
+    letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+      (AddMonoidHomClass.isometry_of_norm X hX)
     let V : Submodule ℂ H := LinearMap.range X.toLinearMap
     ‖reflectionDefect V A‖ ≤ 2 * ‖residual A X M‖ := by
-  let := rangeHasOrthogonalProjection X hX
+  let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+    (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   calc
     ‖reflectionDefect V A‖

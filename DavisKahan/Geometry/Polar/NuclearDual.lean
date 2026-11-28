@@ -65,9 +65,14 @@ theorem reflection_conj_polarFactor_nonacuteDirectRotation_sub_cosine
     K.reflection.conjStarAlgEquiv
       (nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L).polarFactor =
         -(nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L).polarFactor := by
-  rw [ContinuousLinearMap.conjStarAlgEquiv_polarFactor,
-    reflection_conj_nonacuteDirectRotation_sub_cosine,
-    ContinuousLinearMap.polarFactor_neg]
+  let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
+  calc
+    K.reflection.conjStarAlgEquiv B.polarFactor =
+        (K.reflection.conjStarAlgEquiv B).polarFactor :=
+      (ContinuousLinearMap.polarFactor_conj K.reflection K.reflection B).symm
+    _ = -B.polarFactor := by
+      rw [reflection_conj_nonacuteDirectRotation_sub_cosine K L D,
+        ContinuousLinearMap.polarFactor_neg]
 
 /-- The actual full-space nuclear dual: polar quarter turn on the
 moving sector and identity on all common fixed directions. -/
@@ -164,11 +169,11 @@ theorem nonacuteDirectRotation_comm_nuclearTransportDual
   let C := Proposition35.section3CosAngleOperator K L
   let B := R - C
   let Q := B.ker.starProjection
-  let R' := Unitary.linearIsometryEquiv
-    (⟨R, nonacuteDirectRotation_mem_unitary K L D⟩ : unitary (E →L[𝕜] E))
   have hRC : Commute R C := Proposition35.nonacuteDirectRotation_comm_cosine K L D
   have hRB : Commute R B := (Commute.refl R).sub_right hRC
-  have hRF : Commute R B.polarFactor := ContinuousLinearMap.commute_unitary_polarFactor B R' hRB
+  have hRF : Commute R B.polarFactor :=
+    ContinuousLinearMap.commute_polarFactor_of_mem_unitary
+      (nonacuteDirectRotation_mem_unitary K L D) hRB
   have hRQ : R * Q = Q := nonacuteDirectRotation_mul_skew_ker_projection K L D
   have hQR : Q * R = Q := by
     have h := congrArg star hRQ

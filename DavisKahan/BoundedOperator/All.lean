@@ -7,7 +7,6 @@ module
 
 public import DavisKahan.BoundedOperator.BlockShift
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-public import DavisKahan.BoundedOperator.IsometricRangeProjection
 public import DavisKahan.BoundedOperator.Problem
 public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap

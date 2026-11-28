@@ -536,9 +536,9 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
       _ ≤ 1 * ((residual A V.subtypeL M).kyFanGauge k : ℝ) * 1 := by
         have hproj : ‖(Vᗮ.starProjection : E →L[ℂ] E)‖ ≤ 1 :=
           Vᗮ.starProjection_norm_le
-        have hadj : ‖V.subtypeL.adjoint‖ ≤ 1 :=
-          (TauCeti.DavisKahan.BoundedOperator.isometry_and_adjoint_norm_le_one
-            V.subtypeL hX).2
+        have hadj : ‖V.subtypeL.adjoint‖ ≤ 1 := by
+          rw [ContinuousLinearMap.adjoint.norm_map]
+          exact ExactSinTheta.opNorm_le_one_of_isometry hX
         have hnonneg : 0 ≤ ((residual A V.subtypeL M).kyFanGauge k : ℝ) :=
           (NNReal.coe_nonneg ((residual A V.subtypeL M).kyFanGauge k))
         have hleft :

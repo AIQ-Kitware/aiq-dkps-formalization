@@ -6,7 +6,6 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import ForTauCeti.Analysis.OperatorIdeal.OrthogonalAdditivity
-public import ForTauCeti.Analysis.InnerProductSpace.ModulusConjugation
 public import ForTauCeti.Analysis.OperatorIdeal.Family.UnitaryTransport
 
 /-!
@@ -50,13 +49,9 @@ theorem gauge_schatten_rpow_modulus_add_of_unitary_odd
     calc
       _ = S * S - A * A := by noncomm_ring [hAS.eq]
       _ = 0 := by rw [hSS, sub_self]
-  have hgram : J.conjStarAlgEquiv (A.adjoint ∘L A) = (-A).adjoint ∘L (-A) := by
-    change J.conjStarAlgEquiv (star A * A) = star (-A) * (-A)
-    rw [map_mul, map_star, hodd]
-  have hSj : J.conjStarAlgEquiv S = S := by
-    have h := conjStarAlgEquiv_modulus J hgram
-    rw [modulus_neg] at h
-    exact h
+  have hSj : J.conjStarAlgEquiv S = S := calc
+    _ = (J.conjStarAlgEquiv A).modulus := (modulus_conj J J A).symm
+    _ = S := by rw [hodd, modulus_neg]
   have hconj (T : E →L[𝕜] E) : Φ.gauge (J.conjStarAlgEquiv T) = Φ.gauge T := by
     rw [LinearIsometryEquiv.conjStarAlgEquiv_apply,
       Φ.gauge_comp_linearIsometryEquiv_left, Φ.gauge_comp_linearIsometryEquiv_right]

@@ -245,14 +245,14 @@ variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
 /-- The common part and the source defect are jointly complemented. -/
 noncomputable instance instHasOrthogonalProjectionCommonSupSource :
     (halmosCommonPart U₁ V₁ ⊔ halmosSourceDefect U₁ V₁).HasOrthogonalProjection :=
-  hasOrthogonalProjection_sup_of_le_orthogonal _ _
-    (halmosCommon_le_sourceDefect_orthogonal U₁ V₁)
+  (Submodule.isOrtho_iff_le.2 (halmosCommon_le_sourceDefect_orthogonal U₁ V₁))
+    |>.hasOrthogonalProjection_sup
 
 /-- The target defect and the exterior part are jointly complemented. -/
 noncomputable instance instHasOrthogonalProjectionTargetSupExterior :
     (halmosTargetDefect U₁ V₁ ⊔ halmosExteriorPart U₁ V₁).HasOrthogonalProjection :=
-  hasOrthogonalProjection_sup_of_le_orthogonal _ _
-    (halmosTargetDefect_le_exterior_orthogonal U₁ V₁)
+  (Submodule.isOrtho_iff_le.2 (halmosTargetDefect_le_exterior_orthogonal U₁ V₁))
+    |>.hasOrthogonalProjection_sup
 
 omit [CompleteSpace H₁] [U₁.HasOrthogonalProjection] [V₁.HasOrthogonalProjection] in
 /-- The two halves of the trivial part are orthogonal. -/

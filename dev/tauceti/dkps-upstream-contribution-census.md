@@ -1,5 +1,57 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 characteristic roots, polar laws, and orthogonal projections
+
+DKPS pins TauCeti at `007b3a1150fc0293b327e10238b5e097afc05c56` with the
+same Mathlib and Lean. The normal displacement-cost proof now obtains the
+characteristic-root multiset from `Module.Basis.roots_charpoly_of_apply`.
+Bastiaan Braams’s #45937 supplies it as part of
+EigenvalueAndSingularValueInequalities §3.5. The PR describes the root lemma
+as new work and credits lean-CKMA separately for the first Hoffman–Wielandt
+bound and its Frobenius expansion. DKPS retains the arbitrary penalty
+identity and the real scalar-extension argument. The replaced proof block
+is in `NormalCharpolyCost.lean` at `345e511bf` (Jon Crall and GPT-6,
+Kitware 2026, Apache-2.0).
+[#45937](https://github.com/TauCetiProject/TauCeti/pull/45937)
+
+The nuclear transport dual now uses the rectangular
+`ContinuousLinearMap.polarFactor_conj` from MorseTheory M2 #33543 and
+the unitary commutation law from chrisflav’s VonNeumannAlgebras Layer 2
+#41452. The regular-block projection identities also use #41452’s
+initial and final projection laws. The two general-purpose DKPS theorems
+in `Polar/Symmetry.lean` at `345e511bf` retire (Jon Crall and GPT-6,
+Kitware 2026, Apache-2.0). Kernel completion and the geometric
+identification of the regular block remain DKPS proofs.
+[#33543 integration](https://github.com/TauCetiProject/TauCeti/commit/7e361e004a9036cf8d369f62322e8ffa1163c13a) ·
+[#41452 integration](https://github.com/TauCetiProject/TauCeti/commit/72bd47d10f6d4e1718f4081ce1f96ce87fba6ba1)
+
+The odd-modulus splitting and nuclear root profile now use #33543’s
+`ContinuousLinearMap.modulus_conj`. Halmos reconstruction still uses
+the DKPS conjugation theorem for source Gram operators with unrelated
+target spaces. Proof descent from DKPS is unestablished for these
+native modulus and polar laws.
+[#33543 integration](https://github.com/TauCetiProject/TauCeti/commit/7e361e004a9036cf8d369f62322e8ffa1163c13a)
+
+Halmos decomposition and nonacute rotation now take their orthogonal
+projection instances for intersections and orthogonal sums from #42554
+and #42936. The native sum law has the original incomplete-space scope.
+The range projection of an isometric trial map and its formula
+`X ∘L X.adjoint` now use TauCeti’s `RangeProjection` API. The underlying
+formula came from #16661, which explicitly describes independent work and
+acknowledges DKPS’s implementation of the OperatorTheory roadmap. #42936
+generalizes the projection facts as support for semiparametric score
+spaces. The eight DKPS isometric range and adjoint helpers retire with
+their module. The original trial-residual and reflection-defect
+statements continue to use the same norm-preserving hypothesis.
+[#42554 integration](https://github.com/TauCetiProject/TauCeti/commit/e0b62e5d1606cdbb679a55b09af8cb306edf2def) ·
+[#42936 integration](https://github.com/TauCetiProject/TauCeti/commit/b7158a7a74a5e16704f49fc52aef1adb7b39071d) ·
+[#16661 integration](https://github.com/TauCetiProject/TauCeti/commit/c5920d8f1e7cad46b0c0d79052124180557ea6d2)
+
+The backport removes 222 net lines of Lean. The focused build (10,019 jobs),
+full default build (22,804 jobs), and Challenge with the Section 3 and
+semantic-surface audits (22,512 jobs) passed without warnings. The import
+policy reported zero violations.
+
 ## November 27 closed sesquilinear forms in the free-beam realization
 
 The coercive form represented by the bounded operator now uses

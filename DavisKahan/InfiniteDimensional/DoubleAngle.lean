@@ -849,11 +849,6 @@ theorem reflectionDefect_range_le_residual
         rw [hres]
         linarith
 
--- `hasOrthogonalProjection_range_of_isometric` stood here: a second proof of
--- `DavisKahan/BoundedOperator/IsometricRangeProjection.lean`'s `rangeHasOrthogonalProjection`,
--- under a different name and with no consumer anywhere in the repository.  Dead and
--- duplicated, so removed rather than repointed.
-
 /-- Reflection-defect `sin 2Θ` theorem.
 
 This is the theorem previously named `sinTwoTheta_residual`. The old name was

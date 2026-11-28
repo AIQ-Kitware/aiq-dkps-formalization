@@ -30,7 +30,7 @@ warningAsError = true
 [[require]]
 name = "TauCeti"
 git = "https://github.com/TauCetiProject/TauCeti.git"
-rev = "fba9bfbf453bcf0d77efdde60fbce2376c2e35a8"
+rev = "007b3a1150fc0293b327e10238b5e097afc05c56"
 # END Tau Ceti dependency
 
 # BEGIN authoritative root Mathlib dependency

@@ -161,13 +161,13 @@ theorem nuclearSignedSineTransport_operatorNorm_complex
     calc
       _ = S * S - A * A := by noncomm_ring [hAS.eq]
       _ = 0 := by rw [hSS, sub_self]
-  have hgram : K.reflection.conjStarAlgEquiv (A.adjoint ∘L A) = (-A).adjoint ∘L (-A) := by
-    change K.reflection.conjStarAlgEquiv (star A * A) = star (-A) * (-A)
-    rw [map_mul, map_star, hodd]
   have hSj : K.reflection.conjStarAlgEquiv S = S := by
-    have h := ContinuousLinearMap.conjStarAlgEquiv_modulus K.reflection hgram
-    rw [ContinuousLinearMap.modulus_neg, hmod] at h
-    exact h
+    change K.reflection.conjStarAlgEquiv (K.sinAngleOperator L) = K.sinAngleOperator L
+    rw [← hmod]
+    calc
+      _ = (K.reflection.conjStarAlgEquiv A).modulus :=
+        (ContinuousLinearMap.modulus_conj K.reflection K.reflection A).symm
+      _ = A.modulus := by rw [hodd, ContinuousLinearMap.modulus_neg]
   have hsameGauge : Φ.gauge (S - A) = Φ.gauge (S + A) := by
     calc
       _ = Φ.gauge (K.reflection.conjStarAlgEquiv (S + A)) := by rw [map_add, hSj, hodd, ← sub_eq_add_neg]

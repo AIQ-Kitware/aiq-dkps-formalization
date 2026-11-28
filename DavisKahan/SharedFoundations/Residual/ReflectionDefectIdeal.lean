@@ -46,10 +46,12 @@ theorem SymmetricOperatorIdealFamily.reflectionDefect_isometricRange_mem
     (A : H →L[ℂ] H) (hA : IsSelfAdjoint A)
     (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
-    letI := rangeHasOrthogonalProjection X hX
+    letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+      (AddMonoidHomClass.isometry_of_norm X hX)
     let V : Submodule ℂ H := LinearMap.range X.toLinearMap
     N.Mem (reflectionDefect V A) := by
-  let := rangeHasOrthogonalProjection X hX
+  let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+    (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   change N.Mem (reflectionDefect V A)
   let T : H →L[ℂ] H := Vᗮ.starProjection ∘L A ∘L V.starProjection
@@ -73,10 +75,12 @@ theorem SymmetricOperatorIdealFamily.gauge_reflectionDefect_isometricRange_le_fo
     (A : H →L[ℂ] H) (hA : IsSelfAdjoint A)
     (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
-    letI := rangeHasOrthogonalProjection X hX
+    letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+      (AddMonoidHomClass.isometry_of_norm X hX)
     let V : Submodule ℂ H := LinearMap.range X.toLinearMap
     N.gaugeReal (reflectionDefect V A) ≤ 4 * N.gaugeReal (residual A X M) := by
-  let := rangeHasOrthogonalProjection X hX
+  let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+    (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   change N.gaugeReal (reflectionDefect V A) ≤
     4 * N.gaugeReal (residual A X M)

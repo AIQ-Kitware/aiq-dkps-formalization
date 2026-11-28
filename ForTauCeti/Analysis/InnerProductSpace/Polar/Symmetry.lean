@@ -6,12 +6,10 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
-public import ForTauCeti.Analysis.InnerProductSpace.ModulusConjugation
 
 /-!
 # Symmetries and skew-adjoint completion of the accepted polar factor
 
-The accepted polar factor respects negation and unitary conjugation.
 For a skew-adjoint endomorphism it is skew-adjoint and becomes an
 actual unitary on adjoining identity on the original kernel. The
 construction uses the accepted factor-through-modulus representation.
@@ -25,44 +23,6 @@ namespace ContinuousLinearMap
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
-
-/-- Unitary conjugation preserves the accepted canonical polar factor. -/
-theorem conjStarAlgEquiv_polarFactor (A : E →L[𝕜] E) (U : E ≃ₗᵢ[𝕜] E) :
-    U.conjStarAlgEquiv A.polarFactor = (U.conjStarAlgEquiv A).polarFactor := by
-  have hgram : U.conjStarAlgEquiv (A.adjoint ∘L A) =
-      (U.conjStarAlgEquiv A).adjoint ∘L U.conjStarAlgEquiv A := by
-    change U.conjStarAlgEquiv (star A * A) = star (U.conjStarAlgEquiv A) * U.conjStarAlgEquiv A
-    rw [map_mul, map_star]
-  have hmod := conjStarAlgEquiv_modulus U hgram
-  apply eq_polarFactor
-  · change U.conjStarAlgEquiv A.polarFactor * (U.conjStarAlgEquiv A).modulus = U.conjStarAlgEquiv A
-    rw [← hmod, ← map_mul]
-    exact congrArg U.conjStarAlgEquiv A.polarFactor_comp_modulus
-  · intro x hx
-    change U (A (U.symm x)) = 0 at hx
-    have hAx : A (U.symm x) = 0 := U.injective (by simpa only [map_zero] using hx)
-    rw [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply,
-      A.polarFactor_apply_of_mem_ker hAx, map_zero]
-
-/-- A unitary commuting with an operator also commutes with its
-accepted canonical polar factor. No closed-range or invertibility
-assumption is needed. -/
-theorem commute_unitary_polarFactor (A : E →L[𝕜] E) (U : E ≃ₗᵢ[𝕜] E)
-    (h : Commute (U : E →L[𝕜] E) A) : Commute (U : E →L[𝕜] E) A.polarFactor := by
-  have hconj : U.conjStarAlgEquiv A = A := by
-    ext x
-    have hx := congrArg (fun T : E →L[𝕜] E => T (U.symm x)) h.eq
-    change U (A (U.symm x)) = A (U (U.symm x)) at hx
-    simpa only [LinearIsometryEquiv.conjStarAlgEquiv_apply_apply,
-      U.apply_symm_apply] using hx
-  have hphase : U.conjStarAlgEquiv A.polarFactor = A.polarFactor := by
-    rw [conjStarAlgEquiv_polarFactor, hconj]
-  change (U : E →L[𝕜] E) * A.polarFactor = A.polarFactor * (U : E →L[𝕜] E)
-  ext x
-  change U (A.polarFactor x) = A.polarFactor (U x)
-  have hx := congrArg (fun T : E →L[𝕜] E => T (U x)) hphase
-  change U (A.polarFactor (U.symm (U x))) = A.polarFactor (U x) at hx
-  simpa only [U.symm_apply_apply] using hx
 
 /-- A skew-adjoint polar phase, completed by identity on its kernel,
 is an actual unitary in arbitrary Hilbert dimension over either field. -/
@@ -83,7 +43,7 @@ theorem polarFactor_add_ker_starProjection_mem_unitary_of_adjoint_eq_neg
     rw [star_mul, hF, hQ.isSelfAdjoint.star_eq, mul_neg, star_zero] at h
     exact neg_eq_zero.mp h
   have hFF : F * F = -P := by
-    have h := A.adjoint_polarFactor_comp_polarFactor
+    have h := A.star_polarFactor_mul_polarFactor
     change star F * F = P at h
     rw [hF, neg_mul] at h
     exact neg_eq_iff_eq_neg.mp h

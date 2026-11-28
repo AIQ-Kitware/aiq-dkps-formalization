@@ -8,6 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.SingularCharpoly
 public import ForTauCeti.Analysis.InnerProductSpace.SchattenSpectralCalculus
 public import Mathlib.LinearAlgebra.Charpoly.ToMatrix
+import TauCeti.LinearAlgebra.Charpoly.Roots
 
 /-!
 # Spectral displacement costs from characteristic polynomials
@@ -62,16 +63,8 @@ theorem sum_displacement_singularValues_eq_roots_of_isStarNormal
   obtain ⟨b, mu, hmu⟩ :=
     LinearMap.exists_orthonormalBasis_apply_eq_smul_of_isStarNormal A
       (ι := Fin (Module.finrank ℂ E)) (by simp)
-  have hdiag : A = Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal mu) := by
-    apply b.toBasis.ext
-    intro i
-    simpa [Matrix.toLin_self, Matrix.diagonal_apply] using hmu i
-  have hroots : A.charpoly.roots = Finset.univ.val.map mu := by
-    rw [hdiag, Matrix.charpoly_toLin, Matrix.charpoly_diagonal,
-      Polynomial.roots_prod _ _ (by
-        simp only [Finset.prod_ne_zero_iff]
-        exact fun i _ => Polynomial.X_sub_C_ne_zero (mu i))]
-    simp
+  have hroots : A.charpoly.roots = Finset.univ.val.map mu :=
+    b.toBasis.roots_charpoly_of_apply A hmu
   have heigen (i : Fin (Module.finrank ℂ E)) :
       (LinearMap.id - A : E →ₗ[ℂ] E) (b i) = (1 - mu i) • b i := by
     simp only [LinearMap.sub_apply, LinearMap.id_apply, hmu, sub_smul, one_smul]

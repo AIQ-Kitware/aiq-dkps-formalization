@@ -55,46 +55,6 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 
 section RCLikeGeometry
 
-/-! ## Complemented intersections and orthogonal sums -/
-
-/-- The intersection of two orthogonally complemented subspaces again admits
-an orthogonal projection. -/
-noncomputable instance instHasOrthogonalProjectionInf
-    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection]
-    [L.HasOrthogonalProjection] : (K ⊓ L).HasOrthogonalProjection := by
-  have hKclosed : IsClosed (K : Set H) :=
-    K.isComplete_coe_of_hasOrthogonalProjection.isClosed
-  have hLclosed : IsClosed (L : Set H) :=
-    L.isComplete_coe_of_hasOrthogonalProjection.isClosed
-  have hclosed : IsClosed (((K ⊓ L : Submodule 𝕜 H) : Set H)) := by
-    change IsClosed ((K : Set H) ∩ (L : Set H))
-    exact hKclosed.inter hLclosed
-  let : CompleteSpace ↥(K ⊓ L) := hclosed.completeSpace_coe
-  exact Submodule.HasOrthogonalProjection.ofCompleteSpace (K ⊓ L)
-
-omit [CompleteSpace H] in
-/-- An orthogonal sum of complemented subspaces is complemented. -/
-theorem hasOrthogonalProjection_sup_of_le_orthogonal
-    (K L : Submodule 𝕜 H) [K.HasOrthogonalProjection]
-    [L.HasOrthogonalProjection] (hKL : K ≤ Lᗮ) :
-    (K ⊔ L).HasOrthogonalProjection := by
-  refine ⟨?_⟩
-  intro x
-  obtain ⟨k, hk, hxk⟩ :=
-    Submodule.HasOrthogonalProjection.exists_orthogonal (K := K) x
-  obtain ⟨l, hl, hrl⟩ :=
-    Submodule.HasOrthogonalProjection.exists_orthogonal (K := L) (x - k)
-  have hlK : l ∈ Kᗮ := by
-    intro y hy
-    exact inner_eq_zero_symm.mp (hKL hy l hl)
-  have hrK : x - k - l ∈ Kᗮ := Kᗮ.sub_mem hxk hlK
-  refine ⟨k + l, Submodule.mem_sup.mpr ⟨k, hk, l, hl, rfl⟩, ?_⟩
-  have hres : x - (k + l) = x - k - l := by abel
-  rw [hres, Submodule.mem_orthogonal]
-  intro y hy
-  rcases Submodule.mem_sup.mp hy with ⟨a, ha, b, hb, rfl⟩
-  rw [inner_add_left, hrK a ha, hrl b hb, zero_add]
-
 omit [CompleteSpace H] in
 /-- Membership in the orthogonal complement of a span is tested on the spanning
 set alone.
@@ -319,17 +279,13 @@ noncomputable instance instHasOrthogonalProjectionHalmosTrivialPart
     (halmosTrivialPart U V).HasOrthogonalProjection := by
   let A := halmosCommonPart U V ⊔ halmosSourceDefect U V
   let B := halmosTargetDefect U V ⊔ halmosExteriorPart U V
-  have hA : A.HasOrthogonalProjection :=
-    hasOrthogonalProjection_sup_of_le_orthogonal
-      (halmosCommonPart U V) (halmosSourceDefect U V)
-      (halmosCommon_le_sourceDefect_orthogonal U V)
-  have hB : B.HasOrthogonalProjection :=
-    hasOrthogonalProjection_sup_of_le_orthogonal
-      (halmosTargetDefect U V) (halmosExteriorPart U V)
-      (halmosTargetDefect_le_exterior_orthogonal U V)
-  let : A.HasOrthogonalProjection := hA
-  let : B.HasOrthogonalProjection := hB
-  apply hasOrthogonalProjection_sup_of_le_orthogonal A B
+  let : A.HasOrthogonalProjection :=
+    (Submodule.isOrtho_iff_le.2 (halmosCommon_le_sourceDefect_orthogonal U V))
+      |>.hasOrthogonalProjection_sup
+  let : B.HasOrthogonalProjection :=
+    (Submodule.isOrtho_iff_le.2 (halmosTargetDefect_le_exterior_orthogonal U V))
+      |>.hasOrthogonalProjection_sup
+  refine ((Submodule.isOrtho_iff_le (U := A) (V := B)).2 ?_).hasOrthogonalProjection_sup
   intro x hx y hy
   rcases Submodule.mem_sup.mp hx with ⟨x₁, hx₁, x₂, hx₂, rfl⟩
   rcases Submodule.mem_sup.mp hy with ⟨y₁, hy₁, y₂, hy₂, rfl⟩

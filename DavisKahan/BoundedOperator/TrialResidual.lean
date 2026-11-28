@@ -5,9 +5,11 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import DavisKahan.BoundedOperator.IsometricRangeProjection
+public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.OperatorIdeal.CanonicalRealView
+public import DavisKahan.SinTheta.FrameFactorization
 public import DavisKahan.Sylvester.Spectrum
+public import TauCeti.Analysis.InnerProductSpace.RangeProjection
 public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
 
 public section
@@ -107,7 +109,8 @@ theorem residual_eq_comp_subtypeL {𝕜 : Type*} [RCLike 𝕜] {G : Type*}
 /-- Ambient projection onto the range of an isometric trial map. -/
 noncomputable def isometricRangeProjection
     (X : F →L[ℂ] H) (hX : IsometricEmbedding X) : H →L[ℂ] H := by
-  letI := rangeHasOrthogonalProjection X hX
+  letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+    (AddMonoidHomClass.isometry_of_norm X hX)
   exact (LinearMap.range X.toLinearMap).starProjection
 
 /-- The ambient complementary cross block of `A` relative to the range of an
@@ -116,17 +119,17 @@ isometric trial map. -/
 noncomputable def isometricRangeCrossBlock
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (hX : IsometricEmbedding X) :
     H →L[ℂ] H := by
-  letI := rangeHasOrthogonalProjection X hX
+  letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+    (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   exact Vᗮ.starProjection ∘L A ∘L V.starProjection
 
 /-- The range projection has the expected explicit factorization. -/
 theorem isometricRangeProjection_eq_comp_adjoint
     (X : F →L[ℂ] H) (hX : IsometricEmbedding X) :
-    isometricRangeProjection X hX = X ∘L X.adjoint := by
-  unfold isometricRangeProjection
-  let := rangeHasOrthogonalProjection X hX
-  exact starProjection_range_eq_comp_adjoint X hX
+    isometricRangeProjection X hX = X ∘L X.adjoint :=
+  (ContinuousLinearMap.comp_adjoint_eq_starProjection_range
+    (AddMonoidHomClass.isometry_of_norm X hX)).symm
 
 /-- The cross block factors exactly through any residual `A X - X M`.
 The term involving `M` disappears because the complementary range projection
@@ -136,15 +139,15 @@ theorem isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint
     (hX : IsometricEmbedding X) :
     isometricRangeCrossBlock A X hX =
       ((by
-        letI := rangeHasOrthogonalProjection X hX
+        letI := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+          (AddMonoidHomClass.isometry_of_norm X hX)
         let V : Submodule ℂ H := LinearMap.range X.toLinearMap
         exact Vᗮ.starProjection ∘L residual A X M) : F →L[ℂ] H) ∘L X.adjoint := by
-  let := rangeHasOrthogonalProjection X hX
+  have hIso : Isometry X := AddMonoidHomClass.isometry_of_norm X hX
+  let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry hIso
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   have hP : V.starProjection = X ∘L X.adjoint :=
-    starProjection_range_eq_comp_adjoint X hX
-  have hQX : Vᗮ.starProjection ∘L X = 0 :=
-    complementaryProjection_range_comp_isometry X hX
+    (ContinuousLinearMap.comp_adjoint_eq_starProjection_range hIso).symm
   unfold isometricRangeCrossBlock
   dsimp only
   rw [hP, ← ContinuousLinearMap.comp_assoc]
@@ -152,8 +155,8 @@ theorem isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint
   intro y
   simp only [ContinuousLinearMap.comp_apply, residual, sub_apply]
   have hzero : Vᗮ.starProjection (X (M (X.adjoint y))) = 0 := by
-    have h := congrArg (fun L : F →L[ℂ] H => L (M (X.adjoint y))) hQX
-    simpa using h
+    exact V.starProjection_orthogonal_apply_eq_zero
+      (LinearMap.mem_range_self X.toLinearMap _)
   rw [map_sub, hzero, sub_zero]
 
 /-- The exact-range cross block is bounded by the residual norm. -/
@@ -161,7 +164,8 @@ theorem norm_isometricRangeCrossBlock_le_residual
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) :
     ‖isometricRangeCrossBlock A X hX‖ ≤ ‖residual A X M‖ := by
-  let := rangeHasOrthogonalProjection X hX
+  let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+    (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   rw [isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint A X M hX]
   calc
@@ -177,7 +181,8 @@ theorem norm_isometricRangeCrossBlock_le_residual
     _ ≤ 1 * ‖residual A X M‖ * 1 := by
       gcongr
       · exact Vᗮ.starProjection_norm_le
-      · exact (isometry_and_adjoint_norm_le_one X hX).2
+      · rw [ContinuousLinearMap.adjoint.norm_map]
+        exact opNorm_le_one_of_isometry hX
     _ = ‖residual A X M‖ := by ring
 
 /-- Rectangular ideal membership of a residual implies membership of the exact
@@ -188,7 +193,8 @@ theorem isometricRangeCrossBlock_mem
     (A : H →L[ℂ] H) (X : F →L[ℂ] H) (M : F →L[ℂ] F)
     (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
     N.Mem (isometricRangeCrossBlock A X hX) := by
-  let := rangeHasOrthogonalProjection X hX
+  let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+    (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   rw [isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint A X M hX]
   exact N.comp_mem Vᗮ.starProjection X.adjoint hR
@@ -209,12 +215,15 @@ theorem gauge_isometricRangeCrossBlock_le
     (hX : IsometricEmbedding X) (hR : N.Mem (residual A X M)) :
     N.gaugeReal (isometricRangeCrossBlock A X hX) ≤
       N.gaugeReal (residual A X M) := by
-  let := rangeHasOrthogonalProjection X hX
+  let := ContinuousLinearMap.hasOrthogonalProjection_range_of_isometry
+    (AddMonoidHomClass.isometry_of_norm X hX)
   let V : Submodule ℂ H := LinearMap.range X.toLinearMap
   rw [isometricRangeCrossBlock_eq_projectedResidual_comp_adjoint A X M hX]
   refine N.gaugeReal_comp_le_of_contractions (E := F) (F := H) (G := H) (H := H)
     Vᗮ.starProjection X.adjoint hR
-    Vᗮ.starProjection_norm_le (isometry_and_adjoint_norm_le_one X hX).2
+    Vᗮ.starProjection_norm_le ?_
+  rw [ContinuousLinearMap.adjoint.norm_map]
+  exact opNorm_le_one_of_isometry hX
 
 end BoundedOperator
 end DavisKahan

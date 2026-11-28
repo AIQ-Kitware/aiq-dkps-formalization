@@ -83,9 +83,8 @@ noncomputable def crossedDefectSum : Submodule 𝕜 H :=
 decomposition has an orthogonal projection onto it. -/
 noncomputable instance crossedDefectSum_hasOrthogonalProjection :
     (crossedDefectSum U V).HasOrthogonalProjection :=
-  hasOrthogonalProjection_sup_of_le_orthogonal
-    (halmosSourceDefect U V) (halmosTargetDefect U V)
-    (halmosSourceDefect_le_targetDefect_orthogonal U V)
+  (Submodule.isOrtho_iff_le.2 (halmosSourceDefect_le_targetDefect_orthogonal U V))
+    |>.hasOrthogonalProjection_sup
 
 /-- Projection onto the crossed-defect block. -/
 noncomputable def crossedDefectProjection : H →L[𝕜] H :=
@@ -428,16 +427,10 @@ theorem canonicalPolarFactor_initial_final_projection :
     spectraCanonicalPolarFactor U V *
         star (spectraCanonicalPolarFactor U V) = regularProjection U V := by
   constructor
-  · have h := ContinuousLinearMap.adjoint_polarFactor_comp_polarFactor
-      (spectraCanonicalIntertwiner U V)
-    simp only [polarInitial_canonicalIntertwiner_eq_regular U V] at h
-    rw [ContinuousLinearMap.star_eq_adjoint]
-    exact h
-  · have h := ContinuousLinearMap.polarFactor_comp_adjoint_polarFactor
-      (spectraCanonicalIntertwiner U V)
-    simp only [polarFinal_canonicalIntertwiner_eq_regular U V] at h
-    rw [ContinuousLinearMap.star_eq_adjoint]
-    exact h
+  · rw [spectraCanonicalPolarFactor, ContinuousLinearMap.star_polarFactor_mul_polarFactor]
+    simp only [polarInitial_canonicalIntertwiner_eq_regular U V, regularProjection]
+  · rw [spectraCanonicalPolarFactor, ContinuousLinearMap.polarFactor_mul_star_polarFactor]
+    simp only [polarFinal_canonicalIntertwiner_eq_regular U V, regularProjection]
 
 /-- The polar factor maps the regular block into itself. -/
 theorem canonicalPolarFactor_mem_regular (x : H) :
