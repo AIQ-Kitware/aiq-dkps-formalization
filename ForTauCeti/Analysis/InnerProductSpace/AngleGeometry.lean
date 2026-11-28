@@ -13,16 +13,15 @@ public import TauCeti.Analysis.InnerProductSpace.Projection.Acute.PrincipalAngle
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+import TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine
 
 /-!
 # Directed principal-angle geometry
 
-Native submodule principal cosines, sines, angles, tangents and quarter-turn
-conditions and the directed cosine/sine/double-angle maps are consumed directly
-from TauCeti. Finite singular-value and matrix arguments use their explicit
-linear-map carriers. This donor retains the finite positive angle-operator
-presentations and additional projector/basis consequences; those positive
-presentations remain for the next representation slice.
+TauCeti supplies the submodule angle maps, the sine embedding, and their
+singular values. The basis formulas here use the native cosine spectrum
+and directed Frobenius sine. The projection-gap results relate finite
+acuteness and its infinite-dimensional obstruction.
 
 ## Provenance
 
@@ -107,91 +106,7 @@ theorem isAcute_iff_projectionGap_lt_one {U V : Submodule 𝕜 E}
     Submodule.IsAcute U V ↔ U.projectionGap V < 1 :=
   ⟨projectionGap_lt_one_of_isAcute, Submodule.IsAcute.of_projectionGap_lt_one U V⟩
 
-/-! ### Reading the principal-angle sequence on a basis of the source subspace
-
-`cosThetaMap U V = P_V P_U` and `sinThetaMap U V = P_{Vᗮ} P_U` both vanish on
-`Uᗮ`, so restricting their domain to `U` loses nothing: the singular-value
-sequence is unchanged.  Combined with the Frobenius identity
-`∑ᵢ σᵢ(A)² = ∑ₖ ‖A bₖ‖²` (the native Frobenius energy identity), this reads the squared
-principal cosines and sines as ordinary sums over an orthonormal basis of `U`,
-with **no** basis of the ambient space and no trace machinery. -/
-
-section SourceBasis
-
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-  [FiniteDimensional 𝕜 F]
-
-/-- **Restricting the domain to a subspace only removes zero padding.**
-`A ∘ₗ U.subtype` and `A ∘ₗ P_U` have the same singular values.
-
-The adjoint of the isometric inclusion `U → E` is the orthogonal projection
-onto `U`, so the second map is the first precomposed with the adjoint of an
-isometric embedding, which is `LinearMap.singularValues_comp_adjoint_linearIsometry`. -/
-theorem singularValues_comp_subtype (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (A : E →ₗ[𝕜] F) :
-    (A ∘ₗ U.subtype).singularValues = (A ∘ₗ U.starProjection.toLinearMap).singularValues := by
-  have hsub : U.subtypeₗᵢ.toLinearMap = U.subtype := by
-    ext x
-    rfl
-  have hadj : LinearMap.adjoint U.subtypeₗᵢ.toLinearMap =
-      U.orthogonalProjectionOnto.toLinearMap := by
-    rw [hsub, eq_comm]
-    refine (LinearMap.eq_adjoint_iff U.orthogonalProjectionOnto.toLinearMap
-      U.subtype).2 fun x y => ?_
-    -- states the goal in the ambient space, where the projection's defining
-    -- property applies; there is no `_apply` lemma to rewrite with here.
-    change ⟪U.starProjection x, (y : E)⟫_𝕜 = ⟪x, (y : E)⟫_𝕜
-    rw [U.inner_starProjection_left_eq_right,
-      U.starProjection_eq_self_iff.mpr y.property]
-  have hcomp : (A ∘ₗ U.subtype) ∘ₗ LinearMap.adjoint U.subtypeₗᵢ.toLinearMap =
-      A ∘ₗ U.starProjection.toLinearMap := by
-    rw [hadj]
-    ext x
-    rfl
-  rw [← hcomp, LinearMap.singularValues_comp_adjoint_linearIsometry]
-
-omit [FiniteDimensional 𝕜 E] in
-/-- The cosine cross projection is unchanged by precomposition with `P_U`. -/
-theorem cosThetaMap_comp_projection (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (U.cosThetaMap V).toLinearMap ∘ₗ U.starProjection.toLinearMap = (U.cosThetaMap V).toLinearMap
-        := by
-  simp only [Submodule.cosThetaMap_def]
-  ext x
-  -- exposes the two nested projections, which no `simp` lemma reassociates.
-  change V.starProjection (U.starProjection (U.starProjection x)) =
-    V.starProjection (U.starProjection x)
-  rw [U.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)]
-
-omit [FiniteDimensional 𝕜 E] in
-/-- The sine cross projection is unchanged by precomposition with `P_U`. -/
-theorem sinThetaMap_comp_projection (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (U.sinThetaMap V).toLinearMap ∘ₗ U.starProjection.toLinearMap = (U.sinThetaMap V).toLinearMap
-        := by
-  simp only [Submodule.sinThetaMap_def]
-  ext x
-  -- exposes the two nested projections, which no `simp` lemma reassociates.
-  change Vᗮ.starProjection (U.starProjection (U.starProjection x)) =
-    Vᗮ.starProjection (U.starProjection x)
-  rw [U.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)]
-
-/-- The principal cosines are the singular values of `P_V P_U` restricted to
-`U`, with no zero padding removed. -/
-theorem singularValues_cosThetaMap_comp_subtype (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ((U.cosThetaMap V).toLinearMap ∘ₗ U.subtype).singularValues =
-      Submodule.principalCosines U V := by
-  rw [singularValues_comp_subtype, cosThetaMap_comp_projection,
-    Submodule.principalCosines_def, Submodule.cosThetaMap_def]
-
-/-- The principal sines are the singular values of `P_{Vᗮ} P_U` restricted to
-`U`. -/
-theorem singularValues_sinThetaMap_comp_subtype (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ((U.sinThetaMap V).toLinearMap ∘ₗ U.subtype).singularValues = Submodule.principalSines U V := by
-  rw [singularValues_comp_subtype, sinThetaMap_comp_projection,
-    Submodule.principalSines_def, Submodule.sinThetaMap_def]
+/-! ### Principal-angle energy on a basis of the source subspace -/
 
 /-- **The squared principal cosines summed over an orthonormal basis of `U`.**
 
@@ -204,71 +119,38 @@ theorem sum_sq_principalCosines_eq_sum_sq_norm_projection (U V : Submodule 𝕜 
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
     ∑ i : Fin (finrank 𝕜 U), Submodule.principalCosines U V (i : ℕ) ^ 2 =
       ∑ i, ‖V.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2 := by
-  have happ : ∀ i, ((U.cosThetaMap V).toLinearMap ∘ₗ U.subtype) (b i) =
-      V.starProjection.toLinearMap ((b i : U) : E) := by
-    intro i
-    rw [Submodule.cosThetaMap_def]
-    -- exposes the inner projection, which is the identity on a vector of `U`.
-    change V.starProjection (U.starProjection ((b i : U) : E)) =
-      V.starProjection ((b i : U) : E)
-    rw [U.starProjection_eq_self_iff.mpr (b i).property]
-  rw [← singularValues_cosThetaMap_comp_subtype U V]
-  let A := (U.cosThetaMap V).toLinearMap ∘ₗ U.subtype
+  let A : U →L[𝕜] E := V.starProjection ∘L U.subtypeL
+  have hσ : U.principalCosines V = A.toLinearMap.singularValues := by
+    simpa only [Submodule.toLinearMap_subtypeL, Submodule.range_subtype] using
+      (V.principalCosines_range_eq_singularValues (X := U.subtypeL) U.subtypeₗᵢ.isometry)
+  rw [hσ]
   calc
-    ∑ i : Fin (finrank 𝕜 U), A.singularValues i ^ 2 =
-        A.singularValues.sum (fun _ s => s ^ 2) :=
-      A.sum_fin_singularValues (· ^ 2) (by simp)
-    _ = ∑ i, ‖A (b i)‖ ^ 2 :=
+    ∑ i : Fin (finrank 𝕜 U), A.toLinearMap.singularValues i ^ 2 =
+        A.toLinearMap.singularValues.sum (fun _ s => s ^ 2) :=
+      A.toLinearMap.sum_fin_singularValues (· ^ 2) (by simp)
+    _ = ∑ i, ‖A.toLinearMap (b i)‖ ^ 2 :=
       RCLike.ofReal_injective
-        (A.trace_adjoint_comp_self_eq_sum_sq_singularValues.symm.trans
-          (A.trace_adjoint_comp_self_eq_sum_norm_apply_sq b))
-    _ = ∑ i, ‖V.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2 :=
-      Finset.sum_congr rfl fun i _ => congrArg (fun x : E => ‖x‖ ^ 2) (happ i)
-
-/-- **The squared principal sines summed over an orthonormal basis of `U`.**
-
-`∑ₖ sin²θₖ = ∑ᵢ ‖P_{Vᗮ} bᵢ‖²` for every orthonormal basis `b` of `U`. -/
-theorem sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection
-    (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
-    ∑ i : Fin (finrank 𝕜 U), Submodule.principalSines U V (i : ℕ) ^ 2 =
-      ∑ i, ‖Vᗮ.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2 := by
-  have happ : ∀ i, ((U.sinThetaMap V).toLinearMap ∘ₗ U.subtype) (b i) =
-      Vᗮ.starProjection.toLinearMap ((b i : U) : E) := by
-    intro i
-    rw [Submodule.sinThetaMap_def]
-    -- exposes the inner projection, which is the identity on a vector of `U`.
-    change Vᗮ.starProjection (U.starProjection ((b i : U) : E)) =
-      Vᗮ.starProjection ((b i : U) : E)
-    rw [U.starProjection_eq_self_iff.mpr (b i).property]
-  rw [← singularValues_sinThetaMap_comp_subtype U V]
-  let A := (U.sinThetaMap V).toLinearMap ∘ₗ U.subtype
-  calc
-    ∑ i : Fin (finrank 𝕜 U), A.singularValues i ^ 2 =
-        A.singularValues.sum (fun _ s => s ^ 2) :=
-      A.sum_fin_singularValues (· ^ 2) (by simp)
-    _ = ∑ i, ‖A (b i)‖ ^ 2 :=
-      RCLike.ofReal_injective
-        (A.trace_adjoint_comp_self_eq_sum_sq_singularValues.symm.trans
-          (A.trace_adjoint_comp_self_eq_sum_norm_apply_sq b))
-    _ = ∑ i, ‖Vᗮ.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2 :=
-      Finset.sum_congr rfl fun i _ => congrArg (fun x : E => ‖x‖ ^ 2) (happ i)
+        (A.toLinearMap.trace_adjoint_comp_self_eq_sum_sq_singularValues.symm.trans
+          (A.toLinearMap.trace_adjoint_comp_self_eq_sum_norm_apply_sq b))
 
 /-- **`∑ₖ sin²θₖ = ∑ᵢ (1 - ‖P_V bᵢ‖²)` over an orthonormal basis of `U`.**
 
 This is the Davis--Kahan square-sum right-hand side: the deficit of the
-`V`-projection energy of a basis of `U`, term by term the Pythagorean
-complement of `sum_sq_principalCosines_eq_sum_sq_norm_projection`.  It is the
-identity that turns a statement about the basis into the printed statement
-about the principal angles. -/
+`V`-projection energy of a basis of `U`. The directed Frobenius sine identifies
+the energy in the orthogonal complement, and Pythagoras gives the deficit. -/
 theorem sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
     ∑ i : Fin (finrank 𝕜 U), Submodule.principalSines U V (i : ℕ) ^ 2 =
       ∑ i, (1 - ‖V.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2) := by
-  rw [sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection U V b]
+  have hsum : ∑ i : Fin (finrank 𝕜 U), U.principalSines V (i : ℕ) ^ 2 =
+      (U.sinThetaFrobenius V) ^ 2 := by
+    rw [U.sq_sinThetaFrobenius V, ← U.singularValues_sinThetaEmbedding V]
+    exact (U.sinThetaEmbedding V).toLinearMap.sum_fin_singularValues (· ^ 2) (by simp)
+  rw [hsum, U.sq_sinThetaFrobenius_eq_sum_projection_of_orthonormal V
+    (b.orthonormal.comp_linearIsometry U.subtypeₗᵢ)
+    ((U.span_range_subtype_eq_top_iff fun i => (b i).property).mp b.toBasis.span_eq)]
   refine Finset.sum_congr rfl fun i _ => ?_
   have hunit : ‖((b i : U) : E)‖ = 1 := by
     -- the ambient norm of a subspace vector is its norm in the subspace
@@ -281,7 +163,5 @@ theorem sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection
     1 - ‖V.starProjection ((b i : U) : E)‖ ^ 2
   rw [one_pow] at hpy
   linarith
-
-end SourceBasis
 
 end TauCeti

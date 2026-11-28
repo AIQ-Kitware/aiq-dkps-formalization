@@ -42,20 +42,6 @@ private theorem inner_projection_partition (K : Submodule 𝕜 E) (x y : E) :
     Kᗮ.starProjection_eq_self_iff.mpr (Kᗮ.starProjection_apply_mem y)]
   rw [← inner_add_right, K.starProjection_add_starProjection_orthogonal]
 
-/-- For equal-rank subspaces, the target's sine embedding into the
-source complement has exactly the accepted principal-sine sequence. -/
-theorem principalSines_eq_singularValues_sineEmbedding
-    (K L : Submodule 𝕜 E) (hKL : Module.finrank 𝕜 K = Module.finrank 𝕜 L) :
-    K.principalSines L =
-      (Kᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ L.subtype).singularValues := by
-  let A := Kᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ L.subtype
-  have h := K.principalSines_range_eq_singularValues (X := L.subtypeL) L.subtypeₗᵢ.isometry
-  have hrange : L.subtypeL.range = L := L.range_subtype
-  have hincl : Kᗮ.subtypeₗᵢ.toLinearMap ∘ₗ A =
-      (Kᗮ.starProjection ∘L L.subtypeL).toLinearMap := by ext x; rfl
-  rw [← LinearMap.singularValues_linearIsometry_comp Kᗮ.subtypeₗᵢ A, hincl]
-  simpa only [hrange, K.principalSines_comm L hKL] using h
-
 /-- Every equal-rank finite pair has a full source basis, a full target
 basis and complementary vectors with the actual accepted principal angles.
 Only positive-angle complementary vectors are unit vectors; the zero
@@ -82,8 +68,14 @@ theorem exists_cosineSine_principalAngle_frame
   let A : L →ₗ[𝕜] Kᗮ := Kᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ L.subtype
   let B : L →ₗ[𝕜] K := K.orthogonalProjectionOnto.toLinearMap ∘ₗ L.subtype
   let w := A.rightSingularBasis
-  have hsv : A.singularValues = K.principalSines L :=
-    (K.principalSines_eq_singularValues_sineEmbedding L hKL).symm
+  have hA : Kᗮ.subtypeₗᵢ.toLinearMap ∘ₗ A = (L.sinThetaEmbedding K).toLinearMap := by
+    ext x
+    change (Kᗮ.subtypeₗᵢ.toLinearMap ∘ₗ A) x = L.sinThetaEmbedding K x
+    rw [L.sinThetaEmbedding_apply K]
+    rfl
+  have hsv : A.singularValues = K.principalSines L := by
+    rw [← LinearMap.singularValues_linearIsometry_comp Kᗮ.subtypeₗᵢ A, hA,
+      L.singularValues_sinThetaEmbedding K, K.principalSines_comm L hKL]
   have hs (i : Fin (Module.finrank 𝕜 L)) :
       A.singularValues i = Real.sin (K.principalAngles L i) := by
     rw [hsv]
@@ -260,15 +252,15 @@ theorem principalAngles_eq_of_cosineSine_frame
   classical
   have hKL : Module.finrank 𝕜 K = Module.finrank 𝕜 L := by
     rw [Module.finrank_eq_card_basis u.toBasis, Module.finrank_eq_card_basis w.toBasis]
-  let A := Kᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ L.subtype
-  have hA (i) : A (w i) = ((Real.sin (theta i) : ℝ) : 𝕜) • v i := by
-    apply Subtype.ext
-    change Kᗮ.starProjection (w i : E) = _
-    rw [hdecomp, map_add, map_smul, map_smul,
+  let A : L →ₗ[𝕜] E := (L.sinThetaEmbedding K).toLinearMap
+  have hv' : Orthonormal 𝕜 fun i => (v i : E) :=
+    hv.comp_linearIsometry Kᗮ.subtypeₗᵢ
+  have hA (i) : A (w i) = ((Real.sin (theta i) : ℝ) : 𝕜) • (v i : E) := by
+    change L.sinThetaEmbedding K (w i) = _
+    rw [L.sinThetaEmbedding_apply K, hdecomp, map_add, map_smul, map_smul,
       Kᗮ.starProjection_apply_eq_zero_iff.mpr
         (by simpa only [K.orthogonal_orthogonal] using (u i).property),
       Kᗮ.starProjection_eq_self_iff.mpr (v i).property, smul_zero, zero_add]
-    rfl
   have hmu : Antitone (fun i => Real.sin (theta i)^2) := by
     intro i j hij
     have hsin := Real.sin_le_sin_of_le_of_le_pi_div_two
@@ -284,7 +276,7 @@ theorem principalAngles_eq_of_cosineSine_frame
     change ⟪A.adjoint (A (w i)), w j⟫_𝕜 =
       ⟪((Real.sin (theta i)^2 : ℝ) : 𝕜) • w i, w j⟫_𝕜
     rw [LinearMap.adjoint_inner_left, hA, hA, inner_smul_left, inner_smul_right,
-      orthonormal_iff_ite.mp hv, inner_smul_left, w.inner_eq_ite]
+      orthonormal_iff_ite.mp hv', inner_smul_left, w.inner_eq_ite]
     simp only [RCLike.conj_ofReal, RCLike.ofReal_pow]
     by_cases hij : i = j
     · subst j
@@ -296,7 +288,9 @@ theorem principalAngles_eq_of_cosineSine_frame
     (hrange i).1 ((hrange i).2.trans (by linarith [Real.pi_pos]))
   have hsv : A.singularValues i = Real.sin (theta i) :=
     (sq_eq_sq₀ (A.singularValues_nonneg i) hsin0).mp hsq
-  rw [principalAngles_apply, K.principalSines_eq_singularValues_sineEmbedding L hKL, hsv]
+  rw [principalAngles_apply, K.principalSines_comm L hKL, ← L.singularValues_sinThetaEmbedding K]
+  change Real.arcsin (A.singularValues i) = theta i
+  rw [hsv]
   exact Real.arcsin_sin (by linarith [(hrange i).1, Real.pi_pos]) (hrange i).2
 
 end Submodule

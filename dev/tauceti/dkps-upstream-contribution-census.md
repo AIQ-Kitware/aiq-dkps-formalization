@@ -1,5 +1,38 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native principal-angle embedding and basis energy
+
+The finite cosine energy formula uses #16661's
+`Submodule.principalCosines_range_eq_singularValues` on the source
+subspace inclusion. This retires the local domain-compression
+singular-value proof and its cosine and sine consequences. #16661
+reports independent development and acknowledges the DKPS roadmap
+implementation of the trial-map angle API for SSP-C01–C08.
+[#16661 integration](https://github.com/TauCetiProject/TauCeti/commit/c5920d8f1e7cad46b0c0d79052124180557ea6d2)
+
+The full trace formula and both cosine–sine frame proofs now use
+`Submodule.singularValues_sinThetaEmbedding` from our #19329
+submission (SSP-C28/C29). The frame existence proof keeps its
+complement-valued singular vectors through the native isometric
+inclusion law. #19329 assembled accepted TauCeti and Mathlib APIs
+into the directed tangent construction. The local DKPS frame
+theorems remain distinct results.
+[#19329 integration](https://github.com/TauCetiProject/TauCeti/commit/3c5f90168962d9621de78324b9bbf1ce3fe3f383)
+
+The real and complex Proposition 4.2 basis-energy proofs read the
+squared principal sines through `Submodule.sq_sinThetaFrobenius` from
+our DKPS-derived #18985 (SSP-D02) and the orthonormal-family identity
+from our DKPS-derived #20342 (canonical SSP-D16). Mathlib's Pythagoras
+converts the complement energy to the printed deficit formula.
+[#18985 integration](https://github.com/TauCetiProject/TauCeti/commit/8f3309548f652e2dcad9f36c5642a1e5f4b0d2a0) ·
+[#20342 integration](https://github.com/TauCetiProject/TauCeti/commit/93100a5ab2aab79794c6da85a98e8747aaa29591)
+
+The focused build (9,967 jobs), default build (22,804 jobs), and
+Challenge with the result semantic-surface audit (22,514 jobs)
+passed without warnings at TauCeti `007b3a1150`. All 1,572
+source-census references resolved and all 17 available comparator
+signatures matched.
+
 ## November 27 rectangular sine blocks and compressions
 
 The norm of the rectangular sine block now follows from

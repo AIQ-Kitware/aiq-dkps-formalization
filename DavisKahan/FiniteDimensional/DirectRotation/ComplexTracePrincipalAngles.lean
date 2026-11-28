@@ -37,10 +37,9 @@ theorem kyFanSum_directedSine_eq_sum_sin_principalAngles
     [V.HasOrthogonalProjection] :
     ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank ℂ H) =
       ∑ j : Fin (finrank ℂ U), Real.sin (Submodule.principalAngles U V (j : ℕ)) := by
-  let A : U →ₗ[ℂ] H := (U.sinThetaMap V).toLinearMap ∘ₗ U.subtype
-  have hσ : A.singularValues = ((U.sinThetaMap V).toLinearMap).singularValues := by
-    rw [show A = (U.sinThetaMap V).toLinearMap ∘ₗ U.subtype from rfl,
-      singularValues_sinThetaMap_comp_subtype, Submodule.principalSines_def]
+  let A : U →ₗ[ℂ] H := (U.sinThetaEmbedding V).toLinearMap
+  have hσ : A.singularValues = ((U.sinThetaMap V).toLinearMap).singularValues :=
+    (U.singularValues_sinThetaEmbedding V).trans (U.principalSines_def V)
   have hrank : finrank ℂ U ≤ finrank ℂ H := Submodule.finrank_le U
   calc
     ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank ℂ H) =

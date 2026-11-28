@@ -8568,6 +8568,52 @@
       "integration": "7bbe813acf610ee6db4caba078b9c4facf357b90",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "Use the DKPS-derived native isometric invariance for precomposition by the subspace reflection at every index, in NNReal. The source block identity and its scope stay intact. The broader local contractive right-inverse lemma still permits split surjections with kernel and the local subspace transport still handles nonsurjective inclusions."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
+      "source_declarations": [
+        "TauCeti.singularValues_comp_subtype",
+        "TauCeti.cosThetaMap_comp_projection",
+        "TauCeti.sinThetaMap_comp_projection",
+        "TauCeti.singularValues_cosThetaMap_comp_subtype",
+        "TauCeti.singularValues_sinThetaMap_comp_subtype",
+        "TauCeti.sum_sq_principalCosines_eq_sum_sq_norm_projection",
+        "TauCeti.sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection",
+        "TauCeti.sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection"
+      ],
+      "original_source_anchor": "20501e16b47eab006f70aab538c8786b9da9b5c9 and 9d0f38887bb8fc4eec543e31cd76cedf4c32e464 at ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean",
+      "authors_license": "Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularValues, TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle, TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine",
+      "final_declarations": [
+        "ContinuousLinearMap.singularValues_comp_starProjection_range",
+        "Submodule.principalCosines_range_eq_singularValues",
+        "Submodule.singularValues_sinThetaEmbedding",
+        "Submodule.sq_sinThetaFrobenius",
+        "Submodule.sq_sinThetaFrobenius_eq_sum_projection_of_orthonormal"
+      ],
+      "roadmap_targets": ["SSP-C01–C08 (trial-map angle API)", "SSP-C28/C29 (sine embedding)", "SSP-D02", "SSP-D16 (orthonormal-family energy)"],
+      "upstream_pr": "#16661, #19329, #18985, #20342",
+      "integration": "c5920d8f1e7cad46b0c0d79052124180557ea6d2, 3c5f90168962d9621de78324b9bbf1ce3fe3f383, 8f3309548f652e2dcad9f36c5642a1e5f4b0d2a0, 93100a5ab2aab79794c6da85a98e8747aaa29591",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Retire the finite subspace compression derivations and the two projection idempotence consequences, which Mathlib Submodule.isIdempotentElem_starProjection supplies. The cosine energy and the Proposition 4.2 deficit remain at their original statements. The latter uses native Frobenius sine and Mathlib Pythagoras. #16661 reports independent development and acknowledges the DKPS roadmap. #19329 was our integration of accepted APIs. #18985 and #20342 record DKPS adaptation."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Projection.CosineSineFrame, DavisKahan.FiniteDimensional.DirectRotation.ComplexTracePrincipalAngles",
+      "source_declarations": [
+        "Submodule.principalSines_eq_singularValues_sineEmbedding",
+        "Submodule.exists_cosineSine_principalAngle_frame",
+        "Submodule.principalAngles_eq_of_cosineSine_frame",
+        "TauCeti.DavisKahan.FiniteDimensional.ComplexTraceOptimality.kyFanSum_directedSine_eq_sum_sin_principalAngles"
+      ],
+      "original_source_anchor": "fbcc342fea9aad6a5efb04ae285f9d297545fe9a (frame), b00c5c8c35e1aab826064285c530260fd558da9b (trace), 9d0f38887bb8fc4eec543e31cd76cedf4c32e464 (pre-retirement)",
+      "authors_license": "Jon Crall and GPT-6, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle",
+      "final_declarations": ["Submodule.sinThetaEmbedding", "Submodule.singularValues_sinThetaEmbedding"],
+      "roadmap_targets": ["SSP-C28/C29 (sine embedding)"],
+      "upstream_pr": "#19329",
+      "integration": "3c5f90168962d9621de78324b9bbf1ce3fe3f383",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Use the native sine embedding directly for the trace and frame-angle identification. For the existence of a frame, transport the native singular values through the isometric inclusion of the complement to obtain vectors in the correct carrier. Preserve the full frame theorems and the trace formula. Our #19329 integrates accepted TauCeti and Mathlib APIs in the directed tangent construction."
     }
   ],
   "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"
