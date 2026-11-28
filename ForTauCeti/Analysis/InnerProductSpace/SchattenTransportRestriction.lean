@@ -27,25 +27,6 @@ noncomputable section
 
 open scoped ENNReal Topology
 
-namespace ContinuousLinearMap
-
-variable {𝕜 E F : Type*} [RCLike 𝕜]
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
-/-- Orthogonal sums of unitary operators are unitary. No dimension
-assumption is required. -/
-theorem withLpProdMap_mem_unitary {A : E →L[𝕜] E} {B : F →L[𝕜] F}
-    (hA : A ∈ unitary (E →L[𝕜] E)) (hB : B ∈ unitary (F →L[𝕜] F)) :
-    A.withLpProdMap 2 B ∈ unitary (WithLp 2 (E × F) →L[𝕜] WithLp 2 (E × F)) := by
-  refine Unitary.mem_iff.mpr ⟨?_, ?_⟩
-  · rw [star_withLpProdMap, ← withLpProdMap_mul,
-      Unitary.star_mul_self_of_mem hA, Unitary.star_mul_self_of_mem hB, withLpProdMap_one]
-  · rw [star_withLpProdMap, ← withLpProdMap_mul,
-      Unitary.mul_star_self_of_mem hA, Unitary.mul_star_self_of_mem hB, withLpProdMap_one]
-
-end ContinuousLinearMap
-
 namespace TauCeti
 
 variable {𝕜 E F H : Type*} [RCLike 𝕜]
@@ -118,9 +99,10 @@ theorem isMinOn_block_transport_of_cost_orthogonal_sum
   have hfeasible : lift A ∈ unitary (H →L[𝕜] H) ∧
       lift A * e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁) * star (lift A) =
         lift U * e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁) * star (lift U) := by
-    refine ⟨Unitary.map_mem e.conjStarAlgEquiv
-      (ContinuousLinearMap.withLpProdMap_mem_unitary hA.1 V.property), ?_⟩
-    rw [htrans, htrans, hA.2]
+    refine ⟨Unitary.map_mem e.conjStarAlgEquiv ?_, ?_⟩
+    · rw [← ContinuousLinearMap.withLpProdMapStarAlgHom_apply (A, (V : F →L[𝕜] F))]
+      exact Unitary.map_mem _ (Prod.mem_unitary_iff.mpr ⟨hA.1, V.property⟩)
+    · rw [htrans, htrans, hA.2]
   have hle := hmin hfeasible
   change cost (lift U) ≤ cost (lift A) at hle
   rw [hcost, hcost] at hle
@@ -160,9 +142,10 @@ theorem isLocalMinOn_block_transport_of_cost_orthogonal_sum
       lift A ∈ unitary (H →L[𝕜] H) ∧
         lift A * e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁) * star (lift A) =
           lift U * e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁) * star (lift U) := by
-    refine ⟨Unitary.map_mem e.conjStarAlgEquiv
-      (ContinuousLinearMap.withLpProdMap_mem_unitary hA.1 V.property), ?_⟩
-    rw [htrans, htrans, hA.2]
+    refine ⟨Unitary.map_mem e.conjStarAlgEquiv ?_, ?_⟩
+    · rw [← ContinuousLinearMap.withLpProdMapStarAlgHom_apply (A, (V : F →L[𝕜] F))]
+      exact Unitary.map_mem _ (Prod.mem_unitary_iff.mpr ⟨hA.1, V.property⟩)
+    · rw [htrans, htrans, hA.2]
   have hlift : Continuous lift := by
     change Continuous (fun A : E →L[𝕜] E => (e : _ →L[𝕜] H) ∘L
       (A.withLpProdMap 2 (V : F →L[𝕜] F)) ∘L (e.symm : H →L[𝕜] _))

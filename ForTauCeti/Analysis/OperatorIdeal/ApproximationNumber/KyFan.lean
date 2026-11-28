@@ -8,7 +8,8 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan

@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import YuWangSamworth2015.Rectangular.FrobeniusGram
+import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius.Basic
 
 /-!
 # Yu--Wang--Samworth Appendix Lemma A1
@@ -171,20 +172,14 @@ private theorem rectangularFrobenius_comp_adjoint_linearIsometry
         (A ∘ₗ W.toLinearMap.adjoint) =
         UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
           (A ∘ₗ W.toLinearMap.adjoint).adjoint :=
-      (by
-        simpa only [UnitarilyInvariantSeminorm.schatten_two] using
-          (UnitarilyInvariantSeminorm.schatten_apply_adjoint
-            2 (A ∘ₗ W.toLinearMap.adjoint)).symm)
+      (UnitarilyInvariantSeminorm.frobenius_adjoint (A ∘ₗ W.toLinearMap.adjoint)).symm
     _ = UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
           (W.toLinearMap ∘ₗ A.adjoint) := by
       rw [LinearMap.adjoint_comp, LinearMap.adjoint_adjoint]
     _ = UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A.adjoint :=
-      UnitarilyInvariantSeminorm.frobenius_linearIsometry_comp
-        W A.adjoint
+      LinearMap.frobenius_linearIsometry_comp W A.adjoint
     _ = UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A :=
-      (by
-        simpa only [UnitarilyInvariantSeminorm.schatten_two] using
-          (UnitarilyInvariantSeminorm.schatten_apply_adjoint 2 A))
+      UnitarilyInvariantSeminorm.frobenius_adjoint A
 
 /-- Lemma A1 in the literal orthonormal-row API.  Here `U` and `W` bundle the
 transposed row maps, whose columns are orthonormal.
@@ -206,8 +201,7 @@ theorem yuWangSamworth_lemma5_orthonormalRows
         (U.toLinearMap ∘ₗ (A ∘ₗ W.toLinearMap.adjoint)) =
         UnitarilyInvariantSeminorm.frobenius 𝕜 _ _
           (A ∘ₗ W.toLinearMap.adjoint) :=
-      UnitarilyInvariantSeminorm.frobenius_linearIsometry_comp
-        U (A ∘ₗ W.toLinearMap.adjoint)
+      LinearMap.frobenius_linearIsometry_comp U (A ∘ₗ W.toLinearMap.adjoint)
     _ = UnitarilyInvariantSeminorm.frobenius 𝕜 _ _ A :=
       rectangularFrobenius_comp_adjoint_linearIsometry A W
 

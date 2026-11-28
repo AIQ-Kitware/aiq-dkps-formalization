@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
 public import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
+import TauCeti.Analysis.InnerProductSpace.Spectral.BlockSum
 
 /-!
 # Literal finite spectral displacement costs
@@ -62,10 +63,7 @@ theorem normalDisplacementSpectralCost_conj
     (rho : ℝ → ℝ) (e : E ≃ₗᵢ[ℂ] F) (U : unitary (E →L[ℂ] E)) :
     normalDisplacementSpectralCost rho (e.conjStarAlgEquiv (U : E →L[ℂ] E)) =
       normalDisplacementSpectralCost rho (U : E →L[ℂ] E) := by
-  let V := e.symm.trans ((Unitary.linearIsometryEquiv U).trans e)
-  have hV : (V : F →L[ℂ] F) = e.conjStarAlgEquiv (U : E →L[ℂ] E) := by ext x; rfl
-  let : IsStarNormal (V : F →L[ℂ] F) :=
-    isStarNormal_of_mem_unitary (Unitary.linearIsometryEquiv.symm V).property
+  let := isStarNormal_of_mem_unitary (Unitary.map_mem e.conjStarAlgEquiv U.property)
   let := isStarNormal_of_mem_unitary U.property
   have hconj : LinearMap.id - (e.conjStarAlgEquiv (U : E →L[ℂ] E)).toLinearMap =
       (e : E →ₗ[ℂ] F) ∘ₗ (LinearMap.id - (U : E →L[ℂ] E).toLinearMap) ∘ₗ
@@ -74,8 +72,8 @@ theorem normalDisplacementSpectralCost_conj
     change x - e ((U : E →L[ℂ] E) (e.symm x)) =
       e (e.symm x - (U : E →L[ℂ] E) (e.symm x))
     rw [map_sub, e.apply_symm_apply]
-  rw [← hV, normalDisplacementSpectralCost_eq_sum_singularValues,
-    normalDisplacementSpectralCost_eq_sum_singularValues, hV, hconj,
+  rw [normalDisplacementSpectralCost_eq_sum_singularValues,
+    normalDisplacementSpectralCost_eq_sum_singularValues, hconj,
     LinearMap.singularValues_linearIsometryEquiv_comp,
     LinearMap.singularValues_comp_linearIsometryEquiv, ← e.toLinearEquiv.finrank_eq]
 
@@ -89,8 +87,10 @@ theorem normalDisplacementSpectralCost_withLpProdMap
           normalDisplacementSpectralCost rho (V : F →L[ℂ] F) := by
   let := isStarNormal_of_mem_unitary U.property
   let := isStarNormal_of_mem_unitary V.property
-  let := isStarNormal_of_mem_unitary
-    (ContinuousLinearMap.withLpProdMap_mem_unitary U.property V.property)
+  have hUV : (U : E →L[ℂ] E).withLpProdMap 2 (V : F →L[ℂ] F) ∈ unitary _ := by
+    rw [← ContinuousLinearMap.withLpProdMapStarAlgHom_apply ((U : E →L[ℂ] E), (V : F →L[ℂ] F))]
+    exact Unitary.map_mem _ (Prod.mem_unitary_iff.mpr ⟨U.property, V.property⟩)
+  let := isStarNormal_of_mem_unitary hUV
   have hblock : LinearMap.id -
       ((U : E →L[ℂ] E).withLpProdMap 2 (V : F →L[ℂ] F)).toLinearMap =
       ((LinearMap.id - (U : E →L[ℂ] E).toLinearMap).prodMap

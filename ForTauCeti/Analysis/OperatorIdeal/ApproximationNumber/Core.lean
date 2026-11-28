@@ -7,7 +7,6 @@ module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import Mathlib.Topology.Algebra.Module.FiniteDimension
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax

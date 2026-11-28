@@ -7,7 +7,7 @@ module
 
 public import TauCeti.Analysis.OperatorIdeal.OperatorNorm
 public import TauCeti.Analysis.OperatorIdeal.Family.Carrier
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+public import TauCeti.Analysis.Normed.Operator.Compact.HilbertAdjoint
 
 /-!
 # Compact operators as an ideal family
@@ -19,9 +19,7 @@ ideal family: the smallest interesting one, sitting inside
 Everything the ideal laws need is in Mathlib already — `IsCompactOperator.add`,
 `.smul`, `.comp_clm`, `.clm_comp`, `isCompactOperator_zero` and
 `isClosed_setOfPred_isCompactOperator` — except adjoint-invariance, which is
-Schauder's theorem; that is
-`TauCeti.ContinuousLinearMap.isCompactOperator_adjoint`, whose own docstring
-records that it was written to unblock exactly this family.
+Schauder's theorem supplied by Tau Ceti's `IsCompactOperator.adjoint`.
 
 ## The gauge is `∞` off the ideal
 
@@ -236,8 +234,7 @@ noncomputable def compactOperatorFamily (𝕜 : Type u) [RCLike 𝕜] :
   gauge_adjoint A := by
     classical
     by_cases hA : IsCompactOperator A
-    · have hAdj : IsCompactOperator (ContinuousLinearMap.adjoint A) :=
-        ContinuousLinearMap.isCompactOperator_adjoint hA
+    · have hAdj := hA.adjoint
       rw [gauge_compactOperatorIdealFamily, gauge_compactOperatorIdealFamily,
         ite_eq_left hAdj, ite_eq_left hA, ← ofReal_norm, ← ofReal_norm,
         ContinuousLinearMap.adjoint.norm_map]

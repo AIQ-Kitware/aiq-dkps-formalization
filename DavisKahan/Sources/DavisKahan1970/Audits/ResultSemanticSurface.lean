@@ -544,7 +544,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc
 #check @TauCeti.sameSpectralMultiplicity_cfc_iff
 #check @TauCeti.OperatorUnitaryEquiv.cfc_real
-#check @TauCeti.continuous_conjStarAlgEquiv
+#check @LinearIsometryEquiv.continuous_conjStarAlgEquiv
 #check @TauCeti.DavisKahan1970.genericCosineBlock_nonneg
 #check @TauCeti.DavisKahan1970.genericCosineBlock_le_one
 -- The same, over a real Hilbert space, on the source's own angle operator.

@@ -256,7 +256,7 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
   have hY : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := Uᗮ) Y =
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
         (sinThetaEmbedding U X) := by
-    rw [← UnitarilyInvariantSeminorm.frobenius_subtype_comp Uᗮ Y]
+    rw [← Y.frobenius_linearIsometry_comp Uᗮ.subtypeₗᵢ]
     congr 1
   have hC : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := Uᗮ) C ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
@@ -265,7 +265,7 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
         Uᗮ.starProjection.toLinearMap ∘ₗ residual A X M := by
       ext x
       simp [C, ContinuousLinearMap.coe_coe, LinearMap.comp_apply]
-    rw [← UnitarilyInvariantSeminorm.frobenius_subtype_comp Uᗮ C, hCembed]
+    rw [← C.frobenius_linearIsometry_comp Uᗮ.subtypeₗᵢ, hCembed]
     have hproj := (UnitarilyInvariantSeminorm.frobenius
       (𝕜 := 𝕜) (E := F) (F := E)).map_starProjection_comp_le Uᗮ
         (residual A X M).toContinuousLinearMap

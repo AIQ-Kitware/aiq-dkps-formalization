@@ -81,7 +81,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ExtendedSequ
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import ForTauCeti.Analysis.OperatorIdeal.Family.Basic
 public import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence

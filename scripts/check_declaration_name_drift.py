@@ -64,7 +64,9 @@ beyond the alias's own name. So a *failure* is strong evidence of drift
 and a *pass* is not a proof of resolvability -- the compiler and
 ``check_comparator_signatures.py`` remain ground truth. It is a cheap tripwire
 for the specific failure mode that has actually occurred here, not a type
-checker.
+checker. Source-census declarations are resolved by
+``check_davis_kahan_1970_source_census.py`` through Lean, which can also
+see declarations imported from dependencies.
 
 Usage
 -----
@@ -323,44 +325,6 @@ def main() -> int:
                     }
                 )
 
-    # The Davis--Kahan source census restates declaration names as data too, and
-    # nothing compiles it. Its names silently became unresolvable after the
-    # ForMathlib -> TauCeti namespace move: every gate stayed green while all 87
-    # named declarations had ceased to exist under those names.
-    census_names = 0
-    census_rel = os.path.join("dev", "davis-kahan-1970-full-source-census.json")
-    census_path = os.path.join(root, census_rel)
-    if os.path.isfile(census_path):
-        try:
-            with open(census_path, encoding="utf-8") as handle:
-                census = json.load(handle)
-        except (OSError, json.JSONDecodeError) as exc:
-            findings.append(
-                {
-                    "check": "census-readable",
-                    "where": census_rel,
-                    "detail": f"cannot read census: {exc}",
-                }
-            )
-            census = {"items": []}
-        for item in census.get("items", []):
-            item_id = item.get("id", "<no id>")
-            for name in item.get("lean_declarations", []) or []:
-                if not isinstance(name, str):
-                    continue
-                census_names += 1
-                if name not in index:
-                    findings.append(
-                        {
-                            "check": "pinned-name-resolves",
-                            "where": f"{census_rel} [{item_id}]",
-                            "detail": (
-                                f"`{name}` names a declaration that does not exist "
-                                "in the tree"
-                            ),
-                        }
-                    )
-
     if args.json:
         print(json.dumps({"findings": findings, "notes": notes}, indent=2))
     else:
@@ -382,7 +346,6 @@ def main() -> int:
             f"declaration-name-drift check: "
             f"{'FAIL' if findings else 'OK'} "
             f"({len(configs)} comparator configs, {len(index)} declarations indexed, "
-            f"{census_names} census declarations, "
             f"{len(findings)} finding(s), {len(notes)} note(s))"
         )
     return 1 if findings else 0

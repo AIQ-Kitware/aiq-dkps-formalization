@@ -1,5 +1,44 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 compact adjoints, block unitaries, and isometric transport
+
+The compact-operator ideal now uses `IsCompactOperator.adjoint` and
+`ContinuousLinearMap.isCompactOperator_adjoint_iff` from #25726.
+The two local Schauder proofs and their module retire. The native
+theorems cover independently universed complete real or complex
+Hilbert spaces. The integration derives the laws from accepted
+compactness and adjoint-invariance results for singular values, as
+prerequisites for the NoncommutativeGeometry N3 Fredholm modules.
+DKPS proof descent is unverified.
+[#25726 integration](https://github.com/TauCetiProject/TauCeti/commit/03915570635ec4e2f46a86642f32211bfea9a1b6)
+
+Block-unitary membership uses Mathlib's `Unitary.map_mem` on
+`ContinuousLinearMap.withLpProdMapStarAlgHom` from Forgejo #630.
+Finite spectral costs and the arbitrary-dimensional transport
+variation proofs keep their statements. This retires the local
+membership theorem. The block algebra map was a prerequisite of
+kim-em's spectral-flow additivity result. DKPS proof descent is
+unverified.
+[Forgejo #630 integration](https://github.com/TauCetiProject/TauCeti/commit/40822675c0a7f156b9534f0f95edf0087bed8475)
+
+The Frobenius estimate for the projected residual uses the isometric
+embedding law from Forgejo #4885, which allows infinite-dimensional
+codomains. Yu–Wang–Samworth Appendix A1 uses the same embedding law
+and the Frobenius adjoint law from #46201. The Theorem 3.1 real and complex
+functional-calculus transport proofs use the scalar-generic conjugation
+continuity theorem from chrisflav's #27674. The source census and
+semantic audit now reference that native declaration. DKPS proof
+descent for the integrations is unverified.
+[Forgejo #4885 integration](https://github.com/TauCetiProject/TauCeti/commit/cd08f50ed292d4eae4d4d167473b4fc6060b1ef2) ·
+[#46201 integration](https://github.com/TauCetiProject/TauCeti/commit/c690a1f9afa9f2f0f592d227b28af8329ec56017) ·
+[#27674 integration](https://github.com/TauCetiProject/TauCeti/commit/4d7402dd106a902f4b66aea0d7a0017e6b9b188d)
+
+The focused builds (9,683 and 8,713 jobs), default build (22,816 jobs),
+and Challenge with the result semantic-surface audit (22,526 jobs)
+passed without warnings at TauCeti `007b3a1150`. The Lean census probe
+resolved all 1,569 references. All 18 available Davis–Kahan and
+Yu–Wang–Samworth comparator signatures matched.
+
 ## November 27 Frobenius trace and spectral compression
 
 The finite complex trace of an adjoint square now uses

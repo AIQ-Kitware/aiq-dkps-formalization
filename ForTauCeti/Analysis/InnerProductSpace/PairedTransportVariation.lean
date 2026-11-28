@@ -9,6 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
 public import TauCeti.Analysis.Normed.Lp.ProdLp
 public import Mathlib.Analysis.CStarAlgebra.Exponential
 public import Mathlib.Analysis.SpecialFunctions.Exponential
+import TauCeti.Analysis.InnerProductSpace.Spectral.BlockSum
 
 /-!
 # Feasible paired variations for an arbitrary unitary transport cost
@@ -81,10 +82,13 @@ theorem isLocalMin_paired_variation_of_isLocalMinOn_transports_complex
     rw [skewAdjoint.mem_iff]
     simp [star_smul, hH.star_eq]
   have hCunit (t : ℝ) : C t ∈ unitary (F →L[ℂ] F) := by
-    have hD : D t ∈ unitary (WithLp 2 (WithLp 2 (E × E) × R) →L[ℂ]
-        WithLp 2 (WithLp 2 (E × E) × R)) :=
-      ContinuousLinearMap.withLpProdMap_mem_unitary
-        (ContinuousLinearMap.withLpProdMap_mem_unitary (hBunit t) (hBunit t)) (one_mem _)
+    have hD : D t ∈ unitary _ := by
+      dsimp only [D]
+      rw [← ContinuousLinearMap.withLpProdMapStarAlgHom_apply
+        ((B t).withLpProdMap 2 (B t), (1 : R →L[ℂ] R))]
+      refine Unitary.map_mem _ (Prod.mem_unitary_iff.mpr ⟨?_, one_mem _⟩)
+      rw [← ContinuousLinearMap.withLpProdMapStarAlgHom_apply (B t, B t)]
+      exact Unitary.map_mem _ (Prod.mem_unitary_iff.mpr ⟨hBunit t, hBunit t⟩)
     let d := Unitary.linearIsometryEquiv ⟨D t, hD⟩
     let c := e.symm.trans (d.trans e)
     have hc := (Unitary.linearIsometryEquiv.symm c).property

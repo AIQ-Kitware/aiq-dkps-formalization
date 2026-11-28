@@ -8,6 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPowerVariation
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarySpectralCost
 public import ForTauCeti.Analysis.InnerProductSpace.PairedTransportVariation
+import TauCeti.Analysis.InnerProductSpace.Spectral.BlockSum
 
 /-!
 # Feasible ambient variations of smoothed-power spectral blocks
@@ -65,12 +66,15 @@ theorem isLocalMin_paired_cost_of_isLocalMinOn_transports
   let A : unitary (E →L[ℂ] E) := ⟨_, mul_mem U.2 hexp⟩
   let B : unitary (E →L[ℂ] E) := ⟨_, mul_mem V.2 hexp⟩
   let AB : unitary (WithLp 2 (E × E) →L[ℂ] WithLp 2 (E × E)) :=
-    ⟨(A : E →L[ℂ] E).withLpProdMap 2 (B : E →L[ℂ] E),
-      ContinuousLinearMap.withLpProdMap_mem_unitary A.2 B.2⟩
+    ⟨(A : E →L[ℂ] E).withLpProdMap 2 (B : E →L[ℂ] E), by
+      rw [← ContinuousLinearMap.withLpProdMapStarAlgHom_apply ((A : E →L[ℂ] E), (B : E →L[ℂ] E))]
+      exact Unitary.map_mem _ (Prod.mem_unitary_iff.mpr ⟨A.2, B.2⟩)⟩
   let C : unitary (WithLp 2 (WithLp 2 (E × E) × R) →L[ℂ]
       WithLp 2 (WithLp 2 (E × E) × R)) :=
-    ⟨(AB : _ →L[ℂ] _).withLpProdMap 2 (Z : R →L[ℂ] R),
-      ContinuousLinearMap.withLpProdMap_mem_unitary AB.2 Z.2⟩
+    ⟨(AB : _ →L[ℂ] _).withLpProdMap 2 (Z : R →L[ℂ] R), by
+      rw [← ContinuousLinearMap.withLpProdMapStarAlgHom_apply
+        ((AB : WithLp 2 (E × E) →L[ℂ] WithLp 2 (E × E)), (Z : R →L[ℂ] R))]
+      exact Unitary.map_mem _ (Prod.mem_unitary_iff.mpr ⟨AB.2, Z.2⟩)⟩
   let rho := fun s : ℝ => (tau ^ 2 + s ^ 2) ^ (p / 2) - tau ^ p
   change normalDisplacementSpectralCost rho (e.conjStarAlgEquiv (C : _ →L[ℂ] _)) =
     normalDisplacementSpectralCost rho (A : E →L[ℂ] E) +

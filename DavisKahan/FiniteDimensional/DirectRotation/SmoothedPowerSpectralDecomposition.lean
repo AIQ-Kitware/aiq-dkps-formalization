@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedPowerPositiveBasis
 public import ForTauCeti.Analysis.InnerProductSpace.PairedSpectralDecomposition
+import TauCeti.Analysis.InnerProductSpace.Spectral.BlockSum
 
 /-!
 # A common ambient spectral decomposition for smoothed-power transport
@@ -179,12 +180,15 @@ theorem spectral_decomposition_of_isLocalMinOn_transports
   let w := Unitary.linearIsometryEquiv.symm W
   let r := Unitary.linearIsometryEquiv.symm R
   let vw : unitary (WithLp 2 (H × H) →L[ℂ] WithLp 2 (H × H)) :=
-    ⟨(V : H →L[ℂ] H).withLpProdMap 2 (W : H →L[ℂ] H),
-      ContinuousLinearMap.withLpProdMap_mem_unitary v.2 w.2⟩
+    ⟨(v : H →L[ℂ] H).withLpProdMap 2 (w : H →L[ℂ] H), by
+      rw [← ContinuousLinearMap.withLpProdMapStarAlgHom_apply ((v : H →L[ℂ] H), (w : H →L[ℂ] H))]
+      exact Unitary.map_mem _ (Prod.mem_unitary_iff.mpr ⟨v.2, w.2⟩)⟩
   let vwr : unitary (WithLp 2 (WithLp 2 (H × H) × Z) →L[ℂ]
       WithLp 2 (WithLp 2 (H × H) × Z)) :=
-    ⟨(vw : _ →L[ℂ] _).withLpProdMap 2 (R : Z →L[ℂ] Z),
-      ContinuousLinearMap.withLpProdMap_mem_unitary vw.2 r.2⟩
+    ⟨(vw : _ →L[ℂ] _).withLpProdMap 2 (r : Z →L[ℂ] Z), by
+      rw [← ContinuousLinearMap.withLpProdMapStarAlgHom_apply
+        ((vw : WithLp 2 (H × H) →L[ℂ] WithLp 2 (H × H)), (r : Z →L[ℂ] Z))]
+      exact Unitary.map_mem _ (Prod.mem_unitary_iff.mpr ⟨vw.2, r.2⟩)⟩
   let rho := fun s : ℝ => (tau ^ 2 + s ^ 2) ^ (p / 2) - tau ^ p
   have hblockcost : displacementCost p tau (U : E →L[ℂ] E) =
       displacementCost p tau (V : H →L[ℂ] H) + displacementCost p tau (W : H →L[ℂ] H) +

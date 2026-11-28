@@ -2946,7 +2946,7 @@
         "TauCeti.DavisKahan1970.SameHilbertDimensionSum",
         "TauCeti.sameSpectralMultiplicity_cfc_iff",
         "TauCeti.OperatorUnitaryEquiv.cfc_real",
-        "TauCeti.continuous_conjStarAlgEquiv",
+        "LinearIsometryEquiv.continuous_conjStarAlgEquiv",
         "TauCeti.DavisKahan1970.spectrum_genericCosineBlock_subset_Icc_real",
         "TauCeti.DavisKahan1970.genericAngleBlockReal",
         "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real",
@@ -3113,7 +3113,7 @@
           "note": "Unitary equivalence survives the functional calculus, by the same unitary; the content beneath the transport."
         },
         {
-          "declaration": "TauCeti.continuous_conjStarAlgEquiv",
+          "declaration": "LinearIsometryEquiv.continuous_conjStarAlgEquiv",
           "role": "transport_lemma",
           "note": "Continuity of conjugation by a linear isometric equivalence, the side condition StarAlgHomClass.map_cfc needs."
         },

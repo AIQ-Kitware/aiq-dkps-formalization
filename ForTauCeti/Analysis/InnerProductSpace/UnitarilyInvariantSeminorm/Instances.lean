@@ -22,8 +22,7 @@ not appear in the accepted API.
 ## Provenance
 
 The deleted standard seminorm constructors and their defining proofs duplicated the corresponding
-Tau Ceti modules. The retained results extend those canonical constructions to isometric
-embeddings and connect the nuclear norm of a Gram operator to column energy.
+Tau Ceti modules. The retained result relates the nuclear norm of a Gram operator to column energy.
 -/
 
 public section
@@ -38,27 +37,6 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
-variable {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
-  [FiniteDimensional 𝕜 G]
-
-omit [FiniteDimensional 𝕜 F] [FiniteDimensional 𝕜 G] in
-/-- Postcomposition by a linear isometric embedding preserves the Frobenius seminorm. -/
-theorem frobenius_linearIsometry_comp
-    (ι : F →ₗᵢ[𝕜] G) (A : E →ₗ[𝕜] F) :
-    frobenius 𝕜 E G (ι.toLinearMap ∘ₗ A) = frobenius 𝕜 E F A := by
-  rw [frobenius_apply (stdOrthonormalBasis 𝕜 E) _,
-    frobenius_apply (stdOrthonormalBasis 𝕜 E) _]
-  congr 1
-  exact Finset.sum_congr rfl fun i _ => by
-    rw [LinearMap.comp_apply, LinearIsometry.coe_toLinearMap, ι.norm_map]
-
-omit [FiniteDimensional 𝕜 F] in
-/-- Passing from a subtype-valued map to its ambient inclusion preserves the Frobenius
-seminorm. -/
-theorem frobenius_subtype_comp
-    (U : Submodule 𝕜 F) (A : E →ₗ[𝕜] U) :
-    frobenius 𝕜 E F (U.subtypeₗᵢ.toLinearMap ∘ₗ A) = frobenius 𝕜 E U A :=
-  frobenius_linearIsometry_comp U.subtypeₗᵢ A
 
 /-- The nuclear seminorm of a Gram operator is the sum of squared column norms in any
 orthonormal basis. -/

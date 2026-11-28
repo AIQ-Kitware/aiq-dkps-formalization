@@ -43,7 +43,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "ForTauCeti.Analysis.Normed.FiniteLpGauge",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
@@ -749,7 +750,7 @@
         "ContinuousLinearMap.approximationNumber_adjoint"
       ],
       "current_namespace": "ContinuousLinearMap",
-      "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+      "staging_module": null,
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1",
@@ -762,9 +763,9 @@
       "downstream_users": [
         "DavisKahan.OperatorIdeal.ApproximationNumbers.Core"
       ],
-      "status": "partially-upstreamed",
-      "upstream_pr": null,
-      "migration_note": "TauCeti 273ea28e now proves approximation-number adjoint invariance and rank preservation. The local approximationNumber_adjoint is only the real-coercion adapter; the duplicate rank proof and infimum argument were removed. The separate compact-operator adjoint consequence remains local and is derived from the local compactness/approximation-number criterion."
+      "status": "consumed-upstream",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/14759",
+      "migration_note": "Native singularValue_adjoint replaced the approximation-number adjoint equality, rank argument and real-coercion adapter. The last local module at 233f5eb2e held only Schauder's theorem. It retires with direct use of #25726's HilbertAdjoint API, recorded separately below."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.CourantFischer",
@@ -2978,7 +2979,8 @@
       "provenance_class": "copied and renamespaced 2026-07-28 from DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean, once the min-max theorem behind the triangle inequality became Spectra-free; the Davis-Kahan names remain as one-line delegations",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction"
       ],
       "blocked_dependencies": [],
@@ -8747,6 +8749,64 @@
       "integration": "78d22ee9e5dad58dbb36f72e7d9fb817c3aa2629",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "Replace simultaneous diagonalization by two applications of the native intertwining law through the projector and its complement. The symbol is arbitrary on finite spectra and must vanish at zero, as before. The directed principal-sine trace still consumes the compression result. #16184 credits Mathlib's Commute.cfcHom argument."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction",
+      "source_declarations": ["ContinuousLinearMap.withLpProdMap_mem_unitary"],
+      "original_source_anchor": "f5e62da2df88360ef4150c82b8342bf97064f24c",
+      "authors_license": "Jon Crall and GPT-6, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Spectral.BlockSum",
+      "final_declarations": ["ContinuousLinearMap.withLpProdMapStarAlgHom"],
+      "roadmap_targets": ["HeegaardFloer §3.3 (block-sum algebra prerequisite)"],
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/630",
+      "integration": "40822675c0a7f156b9534f0f95edf0087bed8475",
+      "status": "consumed-upstream",
+      "migration_note": "The feasibility and spectral-cost consumers use Mathlib's Unitary.map_mem and Prod.mem_unitary_iff with the native star algebra homomorphism. The global and local block restrictions still work in arbitrary Hilbert dimensions. Forgejo #630 supplied the homomorphism as part of spectral-flow additivity. DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
+      "source_declarations": [
+        "ContinuousLinearMap.isCompactOperator_adjoint",
+        "ContinuousLinearMap.isCompactOperator_adjoint_iff"
+      ],
+      "original_source_anchor": "080819a39f37507cf250cbfc6691654a27883ce0 (Schauder's theorem), 233f5eb2e (pre-retirement)",
+      "authors_license": "Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta and Rawad Kansoh in the donor header, Kitware 2026, Apache-2.0. The latter three names preserve the approximation-number source ancestry.",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.Compact.HilbertAdjoint",
+      "final_declarations": ["IsCompactOperator.adjoint", "ContinuousLinearMap.isCompactOperator_adjoint_iff"],
+      "roadmap_targets": ["NoncommutativeGeometry N3 (compactness prerequisite for Fredholm modules)"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/25726",
+      "integration": "03915570635ec4e2f46a86642f32211bfea9a1b6",
+      "status": "consumed-upstream",
+      "migration_note": "Retire the local Schauder proofs and their module. The compact-operator symmetric ideal uses the native laws on both directions of adjoint compactness, with independently universed real or complex Hilbert spaces. The other imports formerly supplied by this module use the accepted approximation-number files directly. The integration derives the result from native compactness and adjoint invariance of singular values. DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
+      "source_declarations": [
+        "TauCeti.UnitarilyInvariantSeminorm.frobenius_linearIsometry_comp",
+        "TauCeti.UnitarilyInvariantSeminorm.frobenius_subtype_comp"
+      ],
+      "original_source_anchor": "bf84b6ff10c2adf06760b3ddc38c739e4687fb7f",
+      "authors_license": "Jon Crall and Claude Fable 5 in the donor header, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius.Basic",
+      "final_declarations": ["LinearMap.frobenius_linearIsometry_comp", "TauCeti.UnitarilyInvariantSeminorm.frobenius_adjoint"],
+      "roadmap_targets": ["QuasiregularMaps §1.4 (Hilbert–Schmidt invariance under isometries)"],
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/4885, https://github.com/TauCetiProject/TauCeti/pull/46201",
+      "integration": "cd08f50ed292d4eae4d4d167473b4fc6060b1ef2, c690a1f9afa9f2f0f592d227b28af8329ec56017",
+      "status": "consumed-upstream",
+      "migration_note": "The native isometric-embedding law requires finite-dimensionality only of the domain. The perturbation proof uses it at the subspace inclusion and the local theorem and its subtype specialization retire. Yu–Wang–Samworth Appendix A1 uses the native embedding and adjoint laws for its rectangular Frobenius identity. DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv",
+      "source_declarations": ["TauCeti.continuous_conjStarAlgEquiv", "TauCeti.continuous_conjStarAlgEquiv_real"],
+      "original_source_anchor": "17ed7fd8813d2f5d791267486519579483207e4a (complex form), 88307313b385d9fa528b165ffa61fd6e0801273f (real form)",
+      "authors_license": "Jon Crall, OpenAI GPT-5.6 Thinking and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ContinuousFunctionalCalculus",
+      "final_declarations": ["LinearIsometryEquiv.continuous_conjStarAlgEquiv"],
+      "roadmap_targets": ["NoncommutativeGeometry N4 (unitary conjugation for Dixmier traces)"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/27674",
+      "integration": "4d7402dd106a902f4b66aea0d7a0017e6b9b188d",
+      "status": "consumed-upstream",
+      "migration_note": "Use the RCLike conjugation continuity theorem directly for the real and complex functional-calculus transport proofs in the Theorem 3.1 machinery. Update the corresponding source-census references and semantic audit. The native result uses continuous algebra conjugation. DKPS proof descent is unverified."
     }
   ],
   "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"

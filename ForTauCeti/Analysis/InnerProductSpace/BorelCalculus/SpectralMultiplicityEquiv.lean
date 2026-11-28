@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModel
 public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
+public import TauCeti.Analysis.InnerProductSpace.ContinuousFunctionalCalculus
 
 /-!
 # Spectral multiplicity data as a complete unitary invariant
@@ -196,18 +197,6 @@ section FunctionalCalculusTransport
 variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℂ H₁] [CompleteSpace H₁]
 variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℂ H₂] [CompleteSpace H₂]
 
-/-- Conjugation by a linear isometric equivalence is continuous on operators.
-
-It is `LinearIsometryEquiv.conjStarAlgEquiv`, and its continuity is the side
-condition `StarAlgHomClass.map_cfc` needs. -/
-theorem continuous_conjStarAlgEquiv (e : H₁ ≃ₗᵢ[ℂ] H₂) :
-    Continuous (e.conjStarAlgEquiv : (H₁ →L[ℂ] H₁) → (H₂ →L[ℂ] H₂)) := by
-  have hrw : (e.conjStarAlgEquiv : (H₁ →L[ℂ] H₁) → (H₂ →L[ℂ] H₂)) =
-      fun x => (e.toContinuousLinearEquiv : H₁ →L[ℂ] H₂) ∘L x ∘L
-        (e.symm.toContinuousLinearEquiv : H₂ →L[ℂ] H₁) := rfl
-  rw [hrw]
-  fun_prop
-
 /-- **Unitary equivalence survives the continuous functional calculus**, by the
 same unitary. -/
 theorem OperatorUnitaryEquiv.cfc_real {A : H₁ →L[ℂ] H₁} {B : H₂ →L[ℂ] H₂} (f : ℝ → ℝ)
@@ -223,7 +212,7 @@ theorem OperatorUnitaryEquiv.cfc_real {A : H₁ →L[ℂ] H₁} {B : H₂ →L[�
     simp
   refine operatorUnitaryEquiv_of_intertwines e fun x => ?_
   have hmap := StarAlgHomClass.map_cfc e.conjStarAlgEquiv f A hf
-    (continuous_conjStarAlgEquiv e)
+    e.continuous_conjStarAlgEquiv
   rw [hB, ← hmap]
   simp
 
@@ -284,15 +273,6 @@ section RealTransport
 variable {G₁ : Type u} [NormedAddCommGroup G₁] [InnerProductSpace ℝ G₁] [CompleteSpace G₁]
 variable {G₂ : Type v} [NormedAddCommGroup G₂] [InnerProductSpace ℝ G₂] [CompleteSpace G₂]
 
-/-- Conjugation by a real linear isometric equivalence is continuous on operators. -/
-theorem continuous_conjStarAlgEquiv_real (e : G₁ ≃ₗᵢ[ℝ] G₂) :
-    Continuous (e.conjStarAlgEquiv : (G₁ →L[ℝ] G₁) → (G₂ →L[ℝ] G₂)) := by
-  have hrw : (e.conjStarAlgEquiv : (G₁ →L[ℝ] G₁) → (G₂ →L[ℝ] G₂)) =
-      fun x => (e.toContinuousLinearEquiv : G₁ →L[ℝ] G₂) ∘L x ∘L
-        (e.symm.toContinuousLinearEquiv : G₂ →L[ℝ] G₁) := rfl
-  rw [hrw]
-  fun_prop
-
 /-- **Unitary equivalence survives the continuous functional calculus over `ℝ`.** -/
 theorem OperatorUnitaryEquiv.cfc_ofReal {A : G₁ →L[ℝ] G₁} {B : G₂ →L[ℝ] G₂} (f : ℝ → ℝ)
     (h : OperatorUnitaryEquiv A B)
@@ -307,7 +287,7 @@ theorem OperatorUnitaryEquiv.cfc_ofReal {A : G₁ →L[ℝ] G₁} {B : G₂ →L
     simp
   refine operatorUnitaryEquiv_of_intertwines e fun x => ?_
   have hmap := StarAlgHomClass.map_cfc e.conjStarAlgEquiv f A hf
-    (continuous_conjStarAlgEquiv_real e)
+    e.continuous_conjStarAlgEquiv
   rw [hB, ← hmap]
   simp
 

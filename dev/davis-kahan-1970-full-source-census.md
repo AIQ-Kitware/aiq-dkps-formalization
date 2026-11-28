@@ -2326,7 +2326,7 @@ CENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately 
 - `TauCeti.DavisKahan1970.SameHilbertDimensionSum`
 - `TauCeti.sameSpectralMultiplicity_cfc_iff`
 - `TauCeti.OperatorUnitaryEquiv.cfc_real`
-- `TauCeti.continuous_conjStarAlgEquiv`
+- `LinearIsometryEquiv.continuous_conjStarAlgEquiv`
 - `TauCeti.DavisKahan1970.genericCosineBlock_nonneg_real`
 - `TauCeti.DavisKahan1970.genericCosineBlock_le_one_real`
 - `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_complex`

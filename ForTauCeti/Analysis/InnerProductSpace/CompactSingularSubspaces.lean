@@ -6,7 +6,6 @@ Authors: Jon Crall, GPT-5.6 Sol
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.CompactSpectralDecomposition
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 
 /-!
 # Singular eigenspaces of compact operators
