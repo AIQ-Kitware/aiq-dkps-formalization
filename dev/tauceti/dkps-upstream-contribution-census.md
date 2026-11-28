@@ -1,5 +1,24 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 rectangular Ky Fan localization
+
+The approximate orthonormal-pairing theorem used in Section 1 now
+obtains one finite compression for the first `k` singular values
+from TauCeti's #15423 (OI-A38, OI-A40, OI-A47). Enlarging the source
+by the span of the given source family and the target by the span
+of the given target family retains the dimension needed for the
+finite rectangular Ky Fan theorem. The final pairing, the
+tolerance and the scalar and completeness hypotheses are the same.
+The codomain compression uses the existing contractive
+split-embedding law, including on incomplete ambient spaces.
+#15423 cites Pietsch and Gohberg–Krein. DKPS proof descent is
+unverified.
+[#15423 integration](https://github.com/TauCetiProject/TauCeti/commit/abc7ac35a2fa3a5e87ddcac3b6e3209aa7e6cd6d)
+
+The focused build (8,233 jobs), default build (22,812 jobs), and
+Challenge with the semantic-surface audit (22,522 jobs) passed
+without warnings at TauCeti `007b3a1150`.
+
 ## November 28 complete Hilbert–Schmidt families and rank cutoffs
 
 David Roe's #18952 supplies the complete Hilbert–Schmidt family for

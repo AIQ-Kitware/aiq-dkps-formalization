@@ -145,32 +145,19 @@ theorem approximationNumber_orthogonalProjectionOnto_comp_eq
     (W : Submodule 𝕜 F) [W.HasOrthogonalProjection]
     (A : E →L[𝕜] F) (hA : ∀ x, A x ∈ W) (n : ℕ) :
     ((W.orthogonalProjectionOnto ∘L A).singularValue n : ℝ) = (A.singularValue n : ℝ) := by
-  set AW : E →L[𝕜] W := W.orthogonalProjectionOnto ∘L A with hAW
+  let AW : E →L[𝕜] W := W.orthogonalProjectionOnto ∘L A
   have hfactor : W.subtypeL ∘L AW = A := by
     ext x
-    -- states the goal with the definition unfolded, in the shape the next step needs;
-    -- there is no `_apply` lemma to rewrite with here.
     change W.starProjection (A x) = A x
     exact W.starProjection_eq_self_iff.mpr (hA x)
-  have hproj : ‖W.orthogonalProjectionOnto‖ ≤ (1 : ℝ) := W.orthogonalProjectionOnto_norm_le
-  have hsub : ‖W.subtypeL‖ ≤ (1 : ℝ) := W.norm_subtypeL_le
-  refine le_antisymm ?_ ?_
-  · calc
-      (AW.singularValue n : ℝ)
-          ≤ ‖W.orthogonalProjectionOnto‖ * (A.singularValue n : ℝ) :=
-        (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left
-            W.orthogonalProjectionOnto A n))
-      _ ≤ 1 * (A.singularValue n : ℝ) :=
-        mul_le_mul_of_nonneg_right hproj ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
-      _ = (A.singularValue n : ℝ) := by rw [one_mul]
-  · rw [← hfactor]
-    calc
-      ((W.subtypeL ∘L AW).singularValue n : ℝ)
-          ≤ ‖W.subtypeL‖ * (AW.singularValue n : ℝ) :=
-        (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left W.subtypeL AW n))
-      _ ≤ 1 * (AW.singularValue n : ℝ) :=
-        mul_le_mul_of_nonneg_right hsub ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
-      _ = (AW.singularValue n : ℝ) := by rw [one_mul]
+  have hleft : Function.LeftInverse W.orthogonalProjectionOnto W.subtypeL :=
+    W.orthogonalProjectionOnto_mem_subspace_eq_self
+  calc
+    (AW.singularValue n : ℝ) = ((W.subtypeL ∘L AW).singularValue n : ℝ) :=
+      congrArg NNReal.toReal
+        (singularValue_comp_eq_of_leftInverse hleft W.norm_subtypeL_le
+          W.orthogonalProjectionOnto_norm_le AW n).symm
+    _ = (A.singularValue n : ℝ) := by rw [hfactor]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Ky Fan form of `approximationNumber_orthogonalProjectionOnto_comp_eq`. -/

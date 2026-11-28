@@ -326,24 +326,12 @@ end KyFanStrongCutoff
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The Ky Fan gauge is approached by orthonormal pairings.**
 
-For a bounded `K : E →L[𝕜] F` and any `ε > 0` there are orthonormal `k`-families `v` in `E`
-and `u` in `F` with `kyFanApproximationGauge k K - ε ≤ re ∑ᵢ ⟪uᵢ, K vᵢ⟫`.  Together with the
-reverse inequality this says the gauge is the *supremum* of those pairings.
-
-Only the approximate form is available at this generality, and that is not a defect of the
-proof: for a noncompact `K` the supremum need not be attained.  With `K` diagonal with
-entries `1 - 1/n` on an orthonormal basis every approximation number equals `1`, so the gauge
-is `k`, while `‖K x‖ < ‖x‖` for every `x ≠ 0` makes each pairing strictly smaller.
-
-The two orthonormal families `x` and `y` are hypotheses, not conclusions: they say only that
-`E` and `F` have room for `k` orthonormal vectors, without which no such `u`, `v` can exist.
-
-The min--max lower bound `hlb` is what turns the ambient approximation numbers into
-approximation numbers of a *finite-dimensional* restriction; Tau Ceti's finite-dimensional
-rectangular Ky Fan principle
-`LinearMap.exists_orthonormal_sum_inner_eq_kyFanSum` then attains them exactly, and
-the compression is transported back along the inclusion and the projection, which are
-isometric on the vectors involved. -/
+The given families certify that both spaces admit `k` orthonormal vectors.
+The converse min–max theorem supplies a finite compression approximating the
+first `k` singular values. Enlarging its source and target to contain the
+given families lets the finite rectangular Ky Fan principle produce the
+desired pairing. The approximation also applies when a noncompact operator's
+supremum is unattained. -/
 theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
     [CompleteSpace F]
     (hlb : TauCeti.HasMinMaxLowerBound 𝕜 E F)
@@ -355,82 +343,53 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
   classical
   rcases Nat.eq_zero_or_pos k with hk0 | hkpos
   · subst hk0
-    exact ⟨y, x, hy, hx, by
-      simp [ hε.le]⟩
-  set δ : ℝ := ε / k with hδdef
+    exact ⟨y, x, hy, hx, by simp [hε.le]⟩
+  let δ : ℝ := ε / k
   have hδ : 0 < δ := div_pos hε (by exact_mod_cast hkpos)
-  -- a finite set of vectors whose span nearly attains the `n`-th approximation number
-  have hstep : ∀ n : ℕ, ∃ S : Finset E,
-      (K.singularValue n : ℝ)
-        < ((K ∘L (Submodule.span 𝕜 (S : Set E)).subtypeL).singularValue n : ℝ) + δ := by
-    intro n
-    obtain ⟨w, hw⟩ := hlb.exists_finiteRestrictionApproximationNumber_add_gt K n δ hδ
-    refine ⟨Finset.image w Finset.univ, ?_⟩
-    have hrange : ((Finset.image w Finset.univ : Finset E) : Set E) = Set.range w := by
-      simp
-    rw [hrange]
-    exact hw
-  choose S hS using hstep
-  -- the finite-dimensional domain restriction
-  set T : Finset E := (Finset.range k).biUnion S ∪ Finset.image x Finset.univ with hTdef
-  set W : Submodule 𝕜 E := Submodule.span 𝕜 (T : Set E) with hWdef
-  have : FiniteDimensional 𝕜 W := FiniteDimensional.span_of_finite 𝕜 T.finite_toSet
-  have : CompleteSpace W := FiniteDimensional.completeSpace 𝕜 W
-  have hSW : ∀ n < k, Submodule.span 𝕜 ((S n : Set E)) ≤ W := by
-    intro n hn
-    refine Submodule.span_mono (Finset.coe_subset.mpr ?_)
-    exact (Finset.subset_biUnion_of_mem S (Finset.mem_range.mpr hn)).trans
-      Finset.subset_union_left
+  obtain ⟨V, hVfinite, hV⟩ := hlb.exists_singularValue_le_compression K k hδ
+  let W := V ⊔ Submodule.span 𝕜 (Set.range x)
+  have : FiniteDimensional 𝕜 (Submodule.span 𝕜 (Set.range x)) :=
+    FiniteDimensional.span_of_finite 𝕜 (Set.finite_range x)
+  have : FiniteDimensional 𝕜 W := by
+    dsimp [W]
+    infer_instance
+  have hxW (i : Fin k) : x i ∈ W :=
+    Submodule.mem_sup_right (Submodule.subset_span (Set.mem_range_self i))
+  have hkW : k ≤ Module.finrank 𝕜 W := by
+    simpa using (hx.codRestrict W hxW).linearIndependent.fintype_card_le_finrank
+  have hterm (n : ℕ) (hn : n ∈ Finset.range k) :
+      (K.singularValue n : ℝ) ≤ ((K ∘L W.subtypeL).singularValue n : ℝ) + δ := by
+    let L := V.map K.toLinearMap
+    have hrange (z : V) : (K ∘L V.subtypeL) z ∈ L :=
+      Submodule.mem_map_of_mem z.property
+    have hcomp := hV n (Finset.mem_range.mp hn)
+    rw [ContinuousLinearMap.approximationNumber_orthogonalProjectionOnto_comp_eq
+      L (K ∘L V.subtypeL) hrange n] at hcomp
+    exact hcomp.trans (add_le_add
+      (ContinuousLinearMap.approximationNumber_restrict_mono K n (le_sup_left : V ≤ W)) le_rfl)
   have hgaugeW : (K.kyFanGauge k : ℝ) - ε
       ≤ ((K ∘L W.subtypeL).kyFanGauge k : ℝ) := by
-    have hterm : ∀ n ∈ Finset.range k,
-        (K.singularValue n : ℝ)
-          < ((K ∘L W.subtypeL).singularValue n : ℝ) + δ := by
-      intro n hn
-      have hmono := ContinuousLinearMap.approximationNumber_restrict_mono K n
-        (hSW n (Finset.mem_range.mp hn))
-      have hn' := hS n
-      linarith
-    have hsum : ∑ n ∈ Finset.range k, (K.singularValue n : ℝ)
-        ≤ (∑ n ∈ Finset.range k, ((K ∘L W.subtypeL).singularValue n : ℝ))
-          + (k : ℝ) * δ := by
-      have := Finset.sum_le_sum (fun n hn => (hterm n hn).le)
-      simpa [Finset.sum_add_distrib, mul_comm] using this
-    have hkne : (k : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hkpos.ne'
+    have hsum := Finset.sum_le_sum hterm
     have hkδ : (k : ℝ) * δ = ε := by
-      rw [hδdef]
+      dsimp [δ]
       field_simp
-    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
-    rw [hkδ] at hsum
-    linarith
-  -- both restrictions have room for `k` orthonormal vectors
-  have hxW : ∀ i, x i ∈ W := fun i => Submodule.subset_span (by simp [hTdef])
-  have hx' : Orthonormal 𝕜 (fun i => (⟨x i, hxW i⟩ : W)) := by
-    rw [orthonormal_iff_ite] at hx ⊢
-    intro i j
-    simpa [Submodule.coe_inner] using hx i j
-  have hkW : k ≤ Module.finrank 𝕜 W := by
-    simpa using hx'.linearIndependent.fintype_card_le_finrank
-  set T' : Finset F := (T.image K) ∪ Finset.image y Finset.univ with hT'def
-  set W' : Submodule 𝕜 F := Submodule.span 𝕜 (T' : Set F) with hW'def
-  have : FiniteDimensional 𝕜 W' := FiniteDimensional.span_of_finite 𝕜 T'.finite_toSet
-  have : CompleteSpace W' := FiniteDimensional.completeSpace 𝕜 W'
-  have hyW' : ∀ i, y i ∈ W' := fun i => Submodule.subset_span (by simp [hT'def])
-  have hy' : Orthonormal 𝕜 (fun i => (⟨y i, hyW' i⟩ : W')) := by
-    rw [orthonormal_iff_ite] at hy ⊢
-    intro i j
-    simpa [Submodule.coe_inner] using hy i j
+    simp only [Finset.sum_add_distrib, Finset.sum_const, Finset.card_range, nsmul_eq_mul,
+      hkδ] at hsum
+    simp only [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    exact sub_le_iff_le_add.mpr hsum
+  let W' := W.map K.toLinearMap ⊔ Submodule.span 𝕜 (Set.range y)
+  have : FiniteDimensional 𝕜 (Submodule.span 𝕜 (Set.range y)) :=
+    FiniteDimensional.span_of_finite 𝕜 (Set.finite_range y)
+  have : FiniteDimensional 𝕜 W' := by
+    dsimp [W']
+    infer_instance
+  have hyW' (i : Fin k) : y i ∈ W' :=
+    Submodule.mem_sup_right (Submodule.subset_span (Set.mem_range_self i))
   have hkW' : k ≤ Module.finrank 𝕜 W' := by
-    simpa using hy'.linearIndependent.fintype_card_le_finrank
-  have hKW : ∀ z : W, K (z : E) ∈ W' := by
-    intro z
-    have hle : W ≤ Submodule.comap (K : E →ₗ[𝕜] F) W' := by
-      rw [hWdef]
-      refine Submodule.span_le.mpr fun t ht => Submodule.subset_span ?_
-      simp only [hT'def, Finset.coe_union, Set.mem_union, Finset.coe_image]
-      exact Or.inl ⟨t, ht, rfl⟩
-    exact hle z.property
-  set K' : W →L[𝕜] W' := W'.orthogonalProjectionOnto ∘L (K ∘L W.subtypeL) with hK'def
+    simpa using (hy.codRestrict W' hyW').linearIndependent.fintype_card_le_finrank
+  have hKW (z : W) : K (z : E) ∈ W' :=
+    Submodule.mem_sup_left (Submodule.mem_map_of_mem z.property)
+  let K' : W →L[𝕜] W' := W'.orthogonalProjectionOnto ∘L (K ∘L W.subtypeL)
   have hgaugeK' : (K'.kyFanGauge k : ℝ)
       = ((K ∘L W.subtypeL).kyFanGauge k : ℝ) :=
     (ContinuousLinearMap.kyFanGaugeReal_orthogonalProjectionOnto_comp_eq W' (K ∘L W.subtypeL) hKW k)
@@ -439,33 +398,27 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
   have hbridge : K'.toLinearMap.kyFanSum k
       = (K'.kyFanGauge k : ℝ) :=
     (ContinuousLinearMap.kyFanGauge_eq_kyFanSum K'.toLinearMap.toContinuousLinearMap k).symm
-  refine ⟨fun i => (u' i : F), fun i => (v' i : E), ?_, ?_, ?_⟩
-  · rw [orthonormal_iff_ite] at hu' ⊢
-    intro i j
-    simpa [Submodule.coe_inner] using hu' i j
-  · rw [orthonormal_iff_ite] at hv' ⊢
-    intro i j
-    simpa [Submodule.coe_inner] using hv' i j
-  · have hpair : ∀ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜
-        = ⟪((u' i : F)), K ((v' i : E))⟫_𝕜 := by
-      intro i
-      have hval : ((K'.toLinearMap (v' i) : W') : F) = W'.starProjection (K ((v' i : E))) := rfl
-      rw [Submodule.coe_inner, hval, ← W'.inner_starProjection_left_eq_right,
-        Submodule.starProjection_eq_self_iff.mpr (u' i).property]
-    have hsum : (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
-        = ∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜 :=
-      Finset.sum_congr rfl fun i _ => (hpair i).symm
-    have hreal : RCLike.re (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
-        = ((K ∘L W.subtypeL).kyFanGauge k : ℝ) := by
-      calc
-        RCLike.re (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
-            = RCLike.re (∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜) :=
-              congrArg RCLike.re hsum
-        _ = K'.toLinearMap.kyFanSum k := by rw [heq]; simp
-        _ = (K'.kyFanGauge k : ℝ) := hbridge
-        _ = ((K ∘L W.subtypeL).kyFanGauge k : ℝ) := hgaugeK'
-    rw [hreal]
-    exact hgaugeW
+  refine ⟨fun i => (u' i : F), fun i => (v' i : E),
+    W'.subtypeₗᵢ.orthonormal_comp_iff.mpr hu', W.subtypeₗᵢ.orthonormal_comp_iff.mpr hv', ?_⟩
+  have hpair : ∀ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜
+      = ⟪((u' i : F)), K ((v' i : E))⟫_𝕜 := by
+    intro i
+    have hval : ((K'.toLinearMap (v' i) : W') : F) = W'.starProjection (K ((v' i : E))) := rfl
+    rw [Submodule.coe_inner, hval, Submodule.starProjection_eq_self_iff.mpr (hKW (v' i))]
+  have hsum : (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
+      = ∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜 :=
+    Finset.sum_congr rfl fun i _ => (hpair i).symm
+  have hreal : RCLike.re (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
+      = ((K ∘L W.subtypeL).kyFanGauge k : ℝ) := by
+    calc
+      RCLike.re (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
+          = RCLike.re (∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜) :=
+            congrArg RCLike.re hsum
+      _ = K'.toLinearMap.kyFanSum k := by rw [heq]; simp
+      _ = (K'.kyFanGauge k : ℝ) := hbridge
+      _ = ((K ∘L W.subtypeL).kyFanGauge k : ℝ) := hgaugeK'
+  rw [hreal]
+  exact hgaugeW
 
 /-- **The Ky Fan gauge is approached by orthonormal pairings**, over `ℂ`.
 
