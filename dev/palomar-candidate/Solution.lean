@@ -292,13 +292,9 @@ omit [CompleteSpace E] in
 /-- The Challenge's bounded perturbation of a partial map is the
 development's. -/
 theorem addBounded_eq (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
-    addBounded A V = TauCeti.LinearPMap.addBounded A V := by
-  refine LinearPMap.ext ?_ ?_
-  · rw [TauCeti.LinearPMap.addBounded_domain]
-    rfl
-  · intro x hf hg
-    rw [TauCeti.LinearPMap.addBounded_apply]
-    rfl
+    addBounded A V = V.toLinearMap +ᵥ A := by
+  refine LinearPMap.ext rfl fun x hx hy => ?_
+  exact add_comm (A ⟨x, hx⟩) (V x)
 
 
 /-- **A Challenge Rayleigh--Ritz bundle is the development's unbounded Ritz
@@ -461,8 +457,13 @@ theorem sinTwoTheta_ambient_proof
       V.reflection (H (V.reflection (V.reflection ((x : E))))) = _
     rw [Submodule.reflection_reflection]
     rfl
-  rw [TauCeti.LinearPMap.addBounded_apply, hD, ← add_sub_assoc]
-  exact sub_eq_iff_eq_add.mpr hc
+  rw [_root_.LinearPMap.vadd_apply, ContinuousLinearMap.coe_coe, hD]
+  calc
+    H (V.reflectionOperator (x : E)) - V.reflectionOperator (H (x : E)) +
+        A ⟨V.reflectionOperator (x : E), hRI.mapsDomain x⟩ =
+        (A ⟨V.reflectionOperator (x : E), hRI.mapsDomain x⟩ +
+          H (V.reflectionOperator (x : E))) - V.reflectionOperator (H (x : E)) := by abel
+    _ = V.reflectionOperator (A x) := sub_eq_iff_eq_add.mpr hc
 
 end SinTwoThetaAmbient
 

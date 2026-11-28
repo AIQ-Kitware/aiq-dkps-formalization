@@ -16,6 +16,9 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -247,7 +250,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
@@ -306,7 +309,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
     rw [hy]
     exact hJdom za
   have hFint : ∀ y : ΛJ.domain,
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Wc), hFdom y⟩ =
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Wc), hFdom y⟩ =
         F₁ (ΛJ y) := by
     intro y
     let z : Λ.domain := ⟨e.symm (y : Wc), hzΛ y⟩
@@ -319,7 +322,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
         rw [Submodule.reflectionOperator_apply_eq_reflection]
         exact (congrArg Subtype.val (e.apply_symm_apply (y : Wc))).symm
     have hsub :
-        (⟨F₁ (y : Wc), hFdom y⟩ : (TauCeti.LinearPMap.addBounded A R).domain) =
+        (⟨F₁ (y : Wc), hFdom y⟩ : (R.toLinearMap +ᵥ A).domain) =
           ⟨V.reflectionOperator (za : H), hJdom za⟩ :=
       Subtype.ext hy
     have hAint := selfAdjointSpectralRestriction_inclusion_intertwines
@@ -340,11 +343,11 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
           exact congrArg Subtype.val
             (_root_.LinearPMap.conj_apply (e := e.toLinearEquiv) y).symm
     calc
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Wc), hFdom y⟩ =
-          (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Wc), hFdom y⟩ =
+          (R.toLinearMap +ᵥ A)
             ⟨V.reflectionOperator (za : H), hJdom za⟩ := by
-        exact congrArg (fun q : (TauCeti.LinearPMap.addBounded A R).domain =>
-          TauCeti.LinearPMap.addBounded A R q) hsub
+        exact congrArg (fun q : (R.toLinearMap +ᵥ A).domain =>
+          (R.toLinearMap +ᵥ A) q) hsub
       _ = V.reflectionOperator (A za) := hJintertwines za
       _ = F₁ (ΛJ y) := hright
   have hXiso : IsometricEmbedding X := by
@@ -465,7 +468,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
@@ -502,15 +505,15 @@ theorem sinTwoTheta_addBounded_gauge_of_spectrum_gap
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ≤
         2 * N.gaugeReal E := by
-  let C := TauCeti.LinearPMap.addBounded A E
-  let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
+  let C := (E.toLinearMap +ᵥ A)
+  let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)
   let V := selfAdjointSpectralSubspace C hC S hS
   let D := reflectionPerturbation V E
   have hD : D.IsSymmetric :=
@@ -537,12 +540,12 @@ theorem sinTwoTheta_addBounded_gauge_of_intervalExterior
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ≤
         2 * N.gaugeReal E := by
   obtain ⟨hBlow, hBhigh⟩ :=
     selfAdjointSpectralRestriction_semibounded_of_subset_Icc
@@ -573,17 +576,17 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ≤
         2 * N.gaugeReal E := by
   let T := sinTwoThetaIdealBlock
     (selfAdjointSpectralSubspace A hA B hB)
-    (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-      (addBounded_isSelfAdjoint A hA E hE) S hS)
+    (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)
   have hprefix : ∀ k, (δ / 2) * (T.kyFanGauge k : ℝ) ≤
       (E.kyFanGauge k : ℝ) := by
     intro k
@@ -620,12 +623,12 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ≤
         2 * N.gaugeReal E := by
   obtain ⟨hBlow, hBhigh⟩ :=
     selfAdjointSpectralRestriction_semibounded_of_subset_Icc A hA B hB hBsub
@@ -656,7 +659,7 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
         V.reflectionOperator (A x)) :
     δ * ‖directedSinTwoAngleOperatorC
@@ -689,11 +692,11 @@ theorem sinTwoTheta_addBounded_of_spectrum_gap
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl)) :
     δ * ‖directedSinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)‖ ≤
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)‖ ≤
       2 * ‖E‖ := by
-  let C := TauCeti.LinearPMap.addBounded A E
-  let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
+  let C := (E.toLinearMap +ᵥ A)
+  let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)
   let V := selfAdjointSpectralSubspace C hC S hS
   let D := reflectionPerturbation V E
   have hD : D.IsSymmetric :=
@@ -718,8 +721,8 @@ theorem sinTwoTheta_addBounded_of_intervalExterior
     (hBcomplDisj : Bᶜ ∩ Set.Ioo (β - δ) (α + δ) = ∅) :
     δ * ‖directedSinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)‖ ≤
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)‖ ≤
       2 * ‖E‖ := by
   obtain ⟨hBlow, hBhigh⟩ :=
     selfAdjointSpectralRestriction_semibounded_of_subset_Icc

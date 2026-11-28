@@ -12,6 +12,9 @@ public import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -111,7 +114,7 @@ theorem sinTheta_addBounded_gauge_real_isometric
       A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+      (V.toLinearMap +ᵥ A) ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁ y))
     (hXiso : IsometricEmbedding X) (hF₁iso : IsometricEmbedding F₁)
     {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
@@ -121,8 +124,8 @@ theorem sinTheta_addBounded_gauge_real_isometric
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
-    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
-    exact addBounded_isSelfAdjoint A hA V hV
+    change _root_.IsSelfAdjoint (V.toLinearMap +ᵥ A)
+    exact isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)
   have hXnorm : ‖X‖ ≤ 1 := opNorm_le_one_of_isometry hXiso
   have hResMem : N.Mem D.residual := by
     change N.Mem (V ∘L X)
@@ -151,7 +154,7 @@ theorem sinTheta_addBounded_gauge_real_block
       A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+      (V.toLinearMap +ᵥ A) ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁ y))
     (hF₁iso : IsometricEmbedding F₁)
     {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
@@ -161,8 +164,8 @@ theorem sinTheta_addBounded_gauge_real_block
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
-    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
-    exact addBounded_isSelfAdjoint A hA V hV
+    change _root_.IsSelfAdjoint (V.toLinearMap +ᵥ A)
+    exact isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)
   have hResMem : N.Mem D.residual := by
     change N.Mem (V ∘L X)
     exact N.comp_right_mem X hVmem
@@ -211,7 +214,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : E), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
@@ -241,7 +244,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
   have hF₁dom : ∀ y : Λ.domain, F₁ (y : Uc) ∈ A.domain := fun y =>
     hJdom ⟨((y : Uc) : E), hUcdom y⟩
   have hF₁int : ∀ y : Λ.domain,
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Uc), hF₁dom y⟩ =
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩ =
         F₁ (Λ y) := by
     intro y
     have hAy : A ⟨((y : Uc) : E), hUcdom y⟩ =
@@ -249,7 +252,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
       exact realSelfAdjointSpectralRestriction_inclusion_intertwines
         A hA Sᶜ hS.compl y
     calc
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Uc), hF₁dom y⟩
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩
           = J (A ⟨((y : Uc) : E), hUcdom y⟩) :=
             hJintertwines ⟨((y : Uc) : E), hUcdom y⟩
       _ = J ((Λ y : Uc) : E) := congrArg J hAy
@@ -365,7 +368,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_real
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : E), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
@@ -410,7 +413,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : E), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
@@ -438,7 +441,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
   have hF₁dom : ∀ y : Λ.domain, F₁ (y : Uc) ∈ A.domain := fun y =>
     hJdom ⟨((y : Uc) : E), hUcdom y⟩
   have hF₁int : ∀ y : Λ.domain,
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Uc), hF₁dom y⟩ =
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩ =
         F₁ (Λ y) := by
     intro y
     have hAy : A ⟨((y : Uc) : E), hUcdom y⟩ =
@@ -446,7 +449,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
       (TauCeti.LinearPMap.coe_reducingRestriction_apply A Uᗮ hred.orthogonal
         (y : Uc) (hUcdom y)).symm
     calc
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Uc), hF₁dom y⟩
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩
           = J (A ⟨((y : Uc) : E), hUcdom y⟩) :=
             hJintertwines ⟨((y : Uc) : E), hUcdom y⟩
       _ = J ((Λ y : Uc) : E) := congrArg J hAy
@@ -627,11 +630,11 @@ of the perturbed operator preserves the original domain, because the two
 operators have the same domain. -/
 theorem realPerturbedSpectralReflection_mem_domain
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
-    (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-      (addBounded_isSelfAdjoint A hA Eop hEop) S hS).reflectionOperator
+    (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS).reflectionOperator
         (x : E) ∈ A.domain := by
-  let C := TauCeti.LinearPMap.addBounded A Eop
-  let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA Eop hEop
+  let C := (Eop.toLinearMap +ᵥ A)
+  let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)
   let xc : C.domain := ⟨(x : E), x.property⟩
   exact realSpectralReflection_mem_domain C hC S hS xc
 
@@ -640,18 +643,18 @@ through a spectral range of `A + E` is the same as adding the bounded operator
 `E - J E J`. -/
 theorem real_add_reflectionPerturbation_intertwines
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
-    (TauCeti.LinearPMap.addBounded A (reflectionPerturbation
-        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (addBounded_isSelfAdjoint A hA Eop hEop) S hS) Eop))
-        ⟨(realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-            (addBounded_isSelfAdjoint A hA Eop hEop) S hS).reflectionOperator
+    ((reflectionPerturbation
+        (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS) Eop).toLinearMap +ᵥ A)
+        ⟨(realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+            (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS).reflectionOperator
               (x : E),
           realPerturbedSpectralReflection_mem_domain A hA Eop hEop S hS x⟩ =
-      (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-        (addBounded_isSelfAdjoint A hA Eop hEop) S hS).reflectionOperator
+      (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS).reflectionOperator
           (A x) := by
-  set C := TauCeti.LinearPMap.addBounded A Eop with hCdef
-  set hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA Eop hEop with hCsa
+  set C := (Eop.toLinearMap +ᵥ A) with hCdef
+  set hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop) with hCsa
   set V := realSelfAdjointSpectralSubspace C hC S hS with hVdef
   set J : E →L[ℝ] E := V.reflectionOperator with hJdef
   set D : E →L[ℝ] E := reflectionPerturbation V Eop with hDdef
@@ -665,9 +668,10 @@ theorem real_add_reflectionPerturbation_intertwines
     calc
       A ⟨J (x : E), hJdomA⟩ + Eop (J (x : E)) =
           C
-            ⟨J (x : E), realSpectralReflection_mem_domain C hC S hS xc⟩ := rfl
+            ⟨J (x : E), realSpectralReflection_mem_domain C hC S hS xc⟩ :=
+        add_comm _ _
       _ = J (C xc) := hcommC
-      _ = J (A x + Eop (x : E)) := rfl
+      _ = J (A x + Eop (x : E)) := congrArg J (add_comm _ _)
   have hJJ : J (J (x : E)) = (x : E) := by
     simpa only [J, Submodule.reflectionOperator_apply_eq_reflection] using
       V.reflection_reflection (x : E)
@@ -686,10 +690,10 @@ theorem real_add_reflectionPerturbation_intertwines
         rw [hreflection (Eop (J (J (x : E))))]
       _ = Eop (J (x : E)) - J (Eop (x : E)) := by rw [hJJ]
   calc
-    (TauCeti.LinearPMap.addBounded A D)
+    (D.toLinearMap +ᵥ A)
         ⟨J (x : E), realPerturbedSpectralReflection_mem_domain
           A hA Eop hEop S hS x⟩ =
-      A ⟨J (x : E), hJdomA⟩ + D (J (x : E)) := rfl
+      A ⟨J (x : E), hJdomA⟩ + D (J (x : E)) := add_comm _ _
     _ = A ⟨J (x : E), hJdomA⟩ +
         (Eop (J (x : E)) - J (Eop (x : E))) := by rw [hDapply]
     _ = (A ⟨J (x : E), hJdomA⟩ + Eop (J (x : E))) -
@@ -720,15 +724,15 @@ theorem sinTwoTheta_addBounded_gauge_real
     (hEmem : N.Mem Eop) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS)
-        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (addBounded_isSelfAdjoint A hA Eop hEop) T hT)) ∧
+        (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) T hT)) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS)
-        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (addBounded_isSelfAdjoint A hA Eop hEop) T hT)) ≤
+        (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) T hT)) ≤
         2 * N.gaugeReal Eop := by
-  set V := realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-    (addBounded_isSelfAdjoint A hA Eop hEop) T hT with hVdef
+  set V := realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+    (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) T hT with hVdef
   set D : E →L[ℝ] E := reflectionPerturbation V Eop with hDdef
   have hD : D.IsSymmetric := reflectionPerturbation_isSelfAdjoint V Eop hEop
   have hDideal := reflectionPerturbation_mem_and_gauge_le

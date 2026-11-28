@@ -95,6 +95,14 @@ theorem beamRitzCompression_isSelfAdjoint (ε : ℝ) :
 
 /-! ## The trial block -/
 
+/-- On the trial subspace the perturbed beam acts by the perturbation alone: the free beam
+annihilates its kernel. -/
+theorem beamPerturbed_apply_of_mem_beamTrial (ε : ℝ) {x : BeamL2} (hx : x ∈ beamTrial)
+    (h : x ∈ beamOperator.domain) :
+    (beamPerturbed ε) ⟨x, h⟩ = beamPerturbation ε x := by
+  change beamPerturbation ε x + beamOperator ⟨x, h⟩ = beamPerturbation ε x
+  rw [beamOperator_apply_trial hx h, add_zero]
+
 /-- **The Rayleigh--Ritz trial block of the Section 9 example.**  The trial subspace
 is the affine plane, the compression is `beamRitzCompression`, and the residual is
 the part of `(A + ε t)|_Z` orthogonal to `Z`. -/
@@ -106,20 +114,12 @@ def beamTrialBlock (ε : ℝ) : BoundedCompressionTrialBlock (beamPerturbed ε) 
   operator_apply x := by
     rw [beamRitzCompression_coe]
     congr 1
-    have hker : beamOperator ⟨(x : BeamL2), beamTrial_le_domain x.2⟩ = 0 :=
-      beamOperator_apply_trial x.2 _
     show beamResidual ε x = _
-    rw [show (beamPerturbed ε) ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
-        = beamOperator ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
-          + beamPerturbation ε (x : BeamL2) from rfl, hker, zero_add]
+    rw [beamPerturbed_apply_of_mem_beamTrial ε x.property]
     rfl
   residual := beamResidual ε - beamTrialIncl ∘L beamRitzCompression ε
   residual_apply x := by
-    have hker : beamOperator ⟨(x : BeamL2), beamTrial_le_domain x.2⟩ = 0 :=
-      beamOperator_apply_trial x.2 _
-    rw [show (beamPerturbed ε) ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
-        = beamOperator ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
-          + beamPerturbation ε (x : BeamL2) from rfl, hker, zero_add]
+    rw [beamPerturbed_apply_of_mem_beamTrial ε x.property]
     rfl
 
 /-- Evaluating the trial block's residual. -/
@@ -394,7 +394,7 @@ theorem beamPerturbed_form_nonneg (ε : ℝ) (hε : 0 ≤ ε)
   have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2
   have hsplit : (beamPerturbed ε) x
       = beamOperator ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
-    rfl
+    add_comm _ _
   rw [hsplit, inner_add_left, Complex.add_re]
   have h1 : 0 ≤ (⟪beamOperator ⟨(x : BeamL2), hxdom⟩, (x : BeamL2)⟫_ℂ).re :=
     beamShiftedFormData.beam_nonnegative ⟨(x : BeamL2), hxdom⟩
@@ -598,15 +598,6 @@ abbrev beamLowFiveHundred (ε : ℝ) : Submodule ℂ BeamL2 :=
 theorem span_singleton_le_beamTrial {v : BeamL2} (hv : v ∈ beamTrial) :
     (ℂ ∙ v) ≤ beamTrial :=
   (Submodule.span_singleton_le_iff_mem _ _).mpr hv
-
-/-- On the trial subspace the perturbed beam acts by the perturbation alone: the free beam
-annihilates its kernel. -/
-theorem beamPerturbed_apply_of_mem_beamTrial (ε : ℝ) {x : BeamL2} (hx : x ∈ beamTrial)
-    (h : x ∈ beamOperator.domain) :
-    (beamPerturbed ε) ⟨x, h⟩ = beamPerturbation ε x := by
-  rw [show (beamPerturbed ε) ⟨x, h⟩
-      = beamOperator ⟨x, h⟩ + beamPerturbation ε x from rfl,
-    beamOperator_apply_trial hx h, zero_add]
 
 /-- **The one-dimensional Rayleigh--Ritz trial block at a unit Ritz vector.**  The
 compression is the scalar `a = ⟪v, ε t v⟫` and the residual is the single Ritz column. -/

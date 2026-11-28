@@ -73,17 +73,17 @@ theorem theorem8_2_branch_maximalAngle_lt_unbounded_smallPerturbation_complex
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ)
     (hgapHalf : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) (δ / 2))
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) (δ / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (hsmall : 2 * ‖Hop‖ ≤ Real.sqrt 2 / 2 * δ) :
     TauCeti.DavisKahanExt.maximalAngle P Q < Real.pi / 4 := by

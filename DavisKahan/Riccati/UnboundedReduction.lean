@@ -91,8 +91,8 @@ the block action into an equation in `T`. -/
     (x : H.A0.domain) :
     WithLp.fst ((unboundedBlockOperatorCore H)
       (unboundedBlockGraphDomainVector H X hdom x)) =
-        H.A0 x + H.B01 (X (x : E0)) := by
-  rfl
+        H.A0 x + H.B01 (X (x : E0)) :=
+  unboundedBlockOperatorCore_apply_fst H _
 
 /-- Second coordinate of the block operator on a graph vector. -/
 @[simp] theorem unboundedBlockOperatorCore_graphVector_snd
@@ -101,8 +101,8 @@ the block action into an equation in `T`. -/
     (x : H.A0.domain) :
     WithLp.snd ((unboundedBlockOperatorCore H)
       (unboundedBlockGraphDomainVector H X hdom x)) =
-        H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) := by
-  rfl
+        H.A1 ⟨X (x : E0), hdom x⟩ + H.B10 (x : E0) :=
+  unboundedBlockOperatorCore_apply_snd H _
 
 /-- Pointwise coordinate form of the strong unbounded Riccati equation. -/
 theorem strongSolvesRiccati_iff_pointwise

@@ -84,12 +84,12 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike_probe
     {P Q : Submodule 𝕜 E} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) δ) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
     N.Mem Hop →
@@ -150,7 +150,7 @@ theorem sinTwoTheta_complete_whereDefinedUIN_rclike_production_probe
         δ * N.gaugeReal (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ≤
           2 * N.gaugeReal R) ∧
     (∀ Hop : E →L[𝕜] E, Hop.IsSymmetric →
-      T = TauCeti.LinearPMap.addBounded A Hop →
+      T = (Hop.toLinearMap +ᵥ A) →
       N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
       N.Mem Hop →
         δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤

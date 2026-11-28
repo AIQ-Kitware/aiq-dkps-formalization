@@ -124,13 +124,13 @@ theorem norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ) :
     δ * ‖TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q‖ ≤ 2 * ‖Hop‖ := by
   set N : NormalizedUnitaryInvariantNorm.{0, v} ℂ :=
     kyFanNormalizedUnitaryInvariantNorm (𝕜 := ℂ) 1 one_pos with hN
@@ -202,13 +202,13 @@ theorem theorem8_2_branch_maximalAngle_lt_of_small_perturbation_unbounded_comple
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ)
     (hclosed : P.projectionGap Q ≤ Real.sqrt 2 / 2)
     (hcross : DavisKahan.CrossedDefectsEquivalent Q P)
     (hsmall : ‖Hop‖ < δ / 2) :

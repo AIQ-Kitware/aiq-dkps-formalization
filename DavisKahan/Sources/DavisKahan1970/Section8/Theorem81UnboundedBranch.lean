@@ -35,6 +35,9 @@ the unbounded half already proved; nothing here re-derives it.
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open scoped InnerProductSpace
 
 namespace TauCeti
@@ -216,8 +219,8 @@ variable {A : H →ₗ.[ℂ] H} {Hop : H →L[ℂ] H} {P : Submodule ℂ H}
 /-- The perturbed operator of Theorem 8.1. -/
 theorem isSelfAdjoint_perturbed (hA : IsSelfAdjoint A)
     (hH : Hop.IsSymmetric) :
-    IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-  DavisKahan.addBounded_isSelfAdjoint A hA Hop hH
+    IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+  isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hH)
 
 /-- **Theorem 8.1's branch carries the printed ordered form bounds, at unbounded
 scope.**
@@ -233,19 +236,19 @@ theorem theorem8_1_canonicalBranchUnbounded_form
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ alpha * ‖(x : H)‖ ^ 2)
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
-    (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain,
+    (∀ x : (Hop.toLinearMap +ᵥ A).domain,
         (x : H) ∈ canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha →
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : H)⟫_ℂ ≤
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : H)⟫_ℂ ≤
           alpha * ‖(x : H)‖ ^ 2) ∧
-      ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain,
+      ∀ x : (Hop.toLinearMap +ᵥ A).domain,
         (x : H) ∈ (canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha)ᗮ →
         (alpha + delta) * ‖(x : H)‖ ^ 2 ≤
-          RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : H)⟫_ℂ := by
+          RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : H)⟫_ℂ := by
   have hHsa : IsSelfAdjoint Hop :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hH
   have hrep : ∀ lam ∈ Set.Ioo alpha (alpha + delta),
       ((lam : ℝ) : ℂ) ∉ _root_.LinearPMap.spectrum
-        (TauCeti.LinearPMap.addBounded A Hop) := by
+        (Hop.toLinearMap +ᵥ A) := by
     intro lam hlam
     exact DavisKahan.notMem_spectrum_addBounded_of_offDiagonal_form_gap A Hop P hA hHsa
       hredP hPhigh hPperpLow hHP hHPperp hlam
@@ -272,16 +275,16 @@ theorem theorem8_1_canonicalBranchUnbounded_printed
       (alpha + delta) * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
-    _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop)
+    _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A)
         (canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha) ∧
-      (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain,
+      (∀ x : (Hop.toLinearMap +ᵥ A).domain,
         (x : H) ∈ canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha →
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : H)⟫_ℂ ≤
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : H)⟫_ℂ ≤
           alpha * ‖(x : H)‖ ^ 2) ∧
-      (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain,
+      (∀ x : (Hop.toLinearMap +ᵥ A).domain,
         (x : H) ∈ (canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha)ᗮ →
         (alpha + delta) * ‖(x : H)‖ ^ 2 ≤
-          RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : H)⟫_ℂ) ∧
+          RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : H)⟫_ℂ) ∧
       TauCeti.DavisKahanExt.maximalAngle P
         (canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha)
         ≤ Real.pi / 4 := by
@@ -323,21 +326,20 @@ theorem theorem8_1_maximalAngle_le_of_spectrumIn_unbounded
       (TauCeti.LinearPMap.reducingRestriction A Pᗮ hredPperp)
       ⊆ Set.Ici (alpha + delta))
     {M : Submodule ℂ H} [M.HasOrthogonalProjection]
-    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M)
+    (hM : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) M)
     (hMspec : _root_.LinearPMap.realSpectrum
-      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) M hM)
+      (TauCeti.LinearPMap.reducingRestriction (Hop.toLinearMap +ᵥ A) M hM)
       ⊆ Set.Iic alpha)
     (hMperpSpec : _root_.LinearPMap.realSpectrum
-      (TauCeti.LinearPMap.reducingRestriction (TauCeti.LinearPMap.addBounded A Hop) Mᗮ
+      (TauCeti.LinearPMap.reducingRestriction (Hop.toLinearMap +ᵥ A) Mᗮ
         hM.orthogonal) ⊆ Set.Ici (alpha + delta))
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
     TauCeti.DavisKahanExt.maximalAngle P M ≤ Real.pi / 4 := by
   have hredP : _root_.LinearPMap.IsReducing A P := by
     simpa only [Submodule.orthogonal_orthogonal] using hredPperp.orthogonal
-  have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-    DavisKahan.addBounded_isSelfAdjoint A hA Hop
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hHsa)
+  have hB : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA hHsa
   exact DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed
     A Hop P M hA hHsa hredPperp hM.orthogonal
     (fun x hx => DavisKahan.re_inner_le_of_reducingRestriction_realSpectrum_subset_Iic

@@ -12,6 +12,9 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransp
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -117,7 +120,7 @@ theorem sinTwoTheta_from_shared_reducing_setup
         δ * N.gaugeReal (sourceDirectedSinTwoThetaOperator P Q) ≤
           2 * N.gaugeReal R) ∧
     (∀ Hop : H →L[𝕜] H, Hop.IsSymmetric →
-      T = TauCeti.LinearPMap.addBounded A Hop →
+      T = (Hop.toLinearMap +ᵥ A) →
       N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
       N.Mem Hop →
         δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -324,12 +327,12 @@ theorem sinTwoTheta_from_printed_separation
     (hEmem : N.Mem Eop) :
     N.Mem (DavisKahan1970.sourceDirectedSinTwoThetaOperator
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
-        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+        (DavisKahan.selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ∧
       δ * N.gauge (DavisKahan1970.sourceDirectedSinTwoThetaOperator
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
-        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        (DavisKahan.selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ≤
         2 * N.gauge Eop := by
   rw [DavisKahan1970.sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator,
     TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_complex]
@@ -358,12 +361,12 @@ theorem sinTwoTheta_from_halfInfinite_separation
     (hEmem : N.Mem Eop) :
     N.Mem (DavisKahan1970.sourceDirectedSinTwoThetaOperator
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
-        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+        (DavisKahan.selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ∧
       δ * N.gauge (DavisKahan1970.sourceDirectedSinTwoThetaOperator
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
-        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        (DavisKahan.selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ≤
         2 * N.gauge Eop := by
   rw [DavisKahan1970.sourceDirectedSinTwoThetaOperator_eq_directedSinTwoAngleOperator,
     TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator_complex]
@@ -397,7 +400,7 @@ theorem tanTwoTheta_from_reducingSubspace
     (hB : TauCeti.IsOddFor
       (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hVred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A B) V)
+      (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain,
       (x : E) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
@@ -448,7 +451,7 @@ theorem tanTwoTheta_from_reducingSubspaces_rclike
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor U B)
     (hVred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A B) V)
+      (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U →
       RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →

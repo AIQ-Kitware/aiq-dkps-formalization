@@ -20,6 +20,9 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransp
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -231,7 +234,7 @@ theorem sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
     (hUred : _root_.LinearPMap.IsReducing A U)
     (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hint : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A (DavisKahan.reflectionPerturbation V Eop))
+      ((DavisKahan.reflectionPerturbation V Eop).toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : H), hmem x⟩ =
         V.reflectionOperator (A x))
     {δ : ℝ} (hδ : 0 < δ)
@@ -247,19 +250,19 @@ theorem sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
   have hDsa : D.IsSymmetric :=
     DavisKahan.reflectionPerturbation_isSelfAdjoint V Eop hEop
   have hDideal := reflectionPerturbation_normingMem_and_gauge_le N V Eop hEmem
-  have hBeq : TauCeti.LinearPMap.addBounded A D =
+  have hBeq : (D.toLinearMap +ᵥ A) =
       (A.conj V.reflection.toLinearEquiv) :=
     DavisKahan.addBounded_reflectionPerturbation_eq_unitaryConj V Eop hmem hint
-  have hBsa : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A D) :=
-    DavisKahan.addBounded_isSelfAdjoint A hA D hDsa
+  have hBsa : IsSelfAdjoint (D.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hDsa)
   obtain ⟨hmemD, hleD⟩ :=
     sinTheta_ambient_unitaryConj_projectorDifference_symmetricNorming N hA hBsa hUred
       V.reflection hBeq D rfl
       (by
         intro x hxA hxB
-        show A ⟨x, hxB⟩ + D x - A ⟨x, hxA⟩ = D x
+        show D x + A ⟨x, hxB⟩ - A ⟨x, hxA⟩ = D x
         have hxx : (⟨x, hxB⟩ : A.domain) = ⟨x, hxA⟩ := rfl
-        rw [hxx, add_sub_cancel_left])
+        rw [hxx, add_sub_cancel_right])
       hδ hgap hDideal.1
   exact ⟨hmemD, hleD.trans hDideal.2⟩
 
@@ -295,7 +298,7 @@ theorem sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
     (hUred : _root_.LinearPMap.IsReducing A U)
     (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hint : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A (DavisKahan.reflectionPerturbation V Eop))
+      ((DavisKahan.reflectionPerturbation V Eop).toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : H), hmem x⟩ =
         V.reflectionOperator (A x))
     {δ : ℝ} (hδ : 0 < δ)
@@ -355,7 +358,7 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : _root_.LinearPMap.IsReducing A U)
     (hVred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Eop) V)
+      (Eop.toLinearMap +ᵥ A) V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hUred)
@@ -381,7 +384,7 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
     {U V : Submodule ℂ Hc} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : _root_.LinearPMap.IsReducing A U)
     (hVred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Eop) V)
+      (Eop.toLinearMap +ᵥ A) V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hUred)
@@ -414,7 +417,7 @@ the theorem above to the data
 
 makes its gap hypothesis the printed one, because the blocks of `A + H` on `Q` are
 `Λ₀, Λ₁`; its perturbed operator is `(A + H) + (−H) = A`, which `P` reduces on the
-nose by `addBounded_neg_cancel`; its conclusion bounds `sin 2Θ(Q, P) = sin 2Θ(P, Q)`
+nose by `neg_vadd_vadd`; its conclusion bounds `sin 2Θ(Q, P) = sin 2Θ(P, Q)`
 by `sinTwoAngleOperator_comm`; and its right-hand side is `2 N(−H) = 2 N(H)` by
 `gauge_neg`. -/
 
@@ -432,28 +435,27 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ)
     (hHmem : N.Mem Hop) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
       δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
         2 * N.gauge Hop := by
   -- The perturbed operator of the reversed problem is `A` itself, on the nose.
-  have hcancel : TauCeti.LinearPMap.addBounded
-      (TauCeti.LinearPMap.addBounded A Hop) (-Hop) = A :=
-    TauCeti.LinearPMap.addBounded_neg_cancel A Hop
-  have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-    DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
+  have hcancel : ((-Hop).toLinearMap +ᵥ (Hop.toLinearMap +ᵥ A)) = A :=
+    neg_vadd_vadd Hop.toLinearMap A
+  have hAH : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hHop)
   have hnegHop : (-Hop).IsSymmetric := by
     intro x y
     simpa using congrArg Neg.neg (hHop x y)
   have hPred' : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A Hop) (-Hop)) P := by
+      ((-Hop).toLinearMap +ᵥ (Hop.toLinearMap +ᵥ A)) P := by
     rw [hcancel]; exact hPred
   have hmemneg : N.Mem (-Hop) := SymmetricNormingFunction.mem_neg N |>.mpr hHmem
   obtain ⟨hmem, hle⟩ :=
@@ -478,13 +480,13 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
     N.Mem Hop →
       δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -521,13 +523,13 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ)
     (hHmem : N.Mem Hop) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
       δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -545,7 +547,7 @@ theorem sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
     {U V : Submodule ℝ Er} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : _root_.LinearPMap.IsReducing A U)
     (hVred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Eop) V)
+      (Eop.toLinearMap +ᵥ A) V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hUred)
@@ -568,13 +570,13 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ)
     (hHmem : N.Mem Hop) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
       δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -599,13 +601,13 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_complex
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
     N.Mem Hop →
       δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -624,13 +626,13 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_real
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
     N.Mem Hop →
       δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -661,13 +663,13 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_complex
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ)
     (hHmem : N.Mem Hop) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
       δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -686,13 +688,13 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_normalizedUIN_real
     {P Q : Submodule ℝ Er} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ)
     (hHmem : N.Mem Hop) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
       δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -740,12 +742,12 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
     (hEmem : N.Mem Eop) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
-        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+        (DavisKahan.selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ∧
       δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
-        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        (DavisKahan.selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ≤
         2 * N.gauge Eop := by
   have hUred := DavisKahan.selfAdjointSpectralSubspace_reducing A hA B hB
   have hcompl : DavisKahan.selfAdjointSpectralSubspace A hA Bᶜ hB.compl =
@@ -767,16 +769,16 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
     sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
       (𝕜 := ℂ) (H := Hc) N hA Eop hEop
       (U := DavisKahan.selfAdjointSpectralSubspace A hA B hB)
-      (V := DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-        (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)
+      (V := DavisKahan.selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)
       hUred
       (DavisKahan.perturbedSpectralReflection_mem_domain A hA Eop hEop S hS)
       (DavisKahan.add_reflectionPerturbation_intertwines A hA Eop hEop S hS)
       hδ hgap' hEmem
   set X : Hc →L[ℂ] Hc :=
     ((DavisKahan.selfAdjointSpectralSubspace A hA B hB).map
-          ((DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-            (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S
+          ((DavisKahan.selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+            (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S
             hS).reflection.toLinearEquiv : Hc →ₗ[ℂ] Hc)).starProjection -
       (DavisKahan.selfAdjointSpectralSubspace A hA B hB).starProjection with hX
   obtain ⟨hiff, hgauge⟩ :=
@@ -884,12 +886,12 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
     (hEmem : N.Mem Eop) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA B hB)
-        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+        (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ∧
       δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA B hB)
-        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ≤
         2 * N.gauge Eop := by
   have hUred := realSelfAdjointSpectralSubspace_reducing A hA B hB
   have hcompl : realSelfAdjointSpectralSubspace A hA Bᶜ hB.compl =
@@ -907,8 +909,8 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
     sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
       (𝕜 := ℝ) (H := Er) N hA Eop hEop
       (U := realSelfAdjointSpectralSubspace A hA B hB)
-      (V := realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-        (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)
+      (V := realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)
       hUred
       (realPerturbedSpectralReflection_mem_domain A hA Eop hEop S hS)
       (real_add_reflectionPerturbation_intertwines A hA Eop hEop S hS)
@@ -917,8 +919,8 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
     SameApproximationSingularSequence.normingMem_iff_and_gauge_eq N
       (sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
         (realSelfAdjointSpectralSubspace A hA B hB)
-        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS))
+        (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS))
   rw [SymmetricNormingFunction.mem_complexify_iff,
     SymmetricNormingFunction.mem_complexify_iff] at hiff
   rw [SymmetricNormingFunction.gauge_complexify,

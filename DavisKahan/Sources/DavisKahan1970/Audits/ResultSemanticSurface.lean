@@ -333,7 +333,8 @@ calculus: the real calculus on `E →L[𝕜] E` is a theorem at every `RCLike` f
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_reducing_symmetricNorming_real
 -- The four steps of the role reversal.
-#check @TauCeti.LinearPMap.addBounded_neg_cancel
+#check @neg_vadd_vadd
+#check @LinearPMap.vadd_domain
 #check @TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm
 #check @TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg
 #check @TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg

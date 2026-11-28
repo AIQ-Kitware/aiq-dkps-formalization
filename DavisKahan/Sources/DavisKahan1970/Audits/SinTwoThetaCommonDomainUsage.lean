@@ -67,7 +67,7 @@ example (R : P →L[K] E)
 
 /-- Ambient use: the caller supplies no trial residual or bounded trial operator. -/
 example (Hop : E →L[K] E) (hHop : Hop.IsSymmetric)
-    (hEq : T = TauCeti.LinearPMap.addBounded A Hop)
+    (hEq : T = (Hop.toLinearMap +ᵥ A))
     (hAngle : N.Mem (Angle.sinTwoAngleOperator P Q)) (hMem : N.Mem Hop) :
     gap * N.gaugeReal (Angle.sinTwoAngleOperator P Q) ≤ 2 * N.gaugeReal Hop := by
   exact (sinTwoTheta_commonDomain_whereDefinedUIN_rclike

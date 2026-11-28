@@ -183,13 +183,13 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (M : Submodule ℂ H) [M.HasOrthogonalProjection]
-    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M)
+    (hM : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) M)
     (hMangle : maximalAngle P M ≤ Real.pi / 4) :
     M = canonicalLowBranchUnbounded (isSelfAdjoint_perturbed hA hH) alpha := by
   have hHsa : IsSelfAdjoint Hop :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hH
   have hPP : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
-  have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
+  have hB : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
     isSelfAdjoint_perturbed hA hH
   have hQred := canonicalLowBranchUnbounded_reduces hB alpha
   have hform := theorem8_1_canonicalBranchUnbounded_form (A := A) (Hop := Hop) (P := Pᗮ)
@@ -205,9 +205,9 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
     rw [TauCeti.DavisKahan.subspaceGap_orthogonal P M]
     exact hgapM
   have hQsp : (canonicalLowBranchUnbounded hB alpha).starProjection
-      = ((TauCeti.LinearPMap.addBounded A Hop).spectralPVM hB).proj
+      = ((Hop.toLinearMap +ᵥ A).spectralPVM hB).proj
         (Set.Iic alpha) measurableSet_Iic :=
-    ((TauCeti.LinearPMap.addBounded A Hop).spectralPVM hB).starProjection_range_proj
+    ((Hop.toLinearMap +ᵥ A).spectralPVM hB).starProjection_range_proj
       (Set.Iic alpha) measurableSet_Iic
   refine eq_of_starProjection_comm_of_crossed_trivial ?_ ?_ ?_
   · intro x
@@ -247,18 +247,18 @@ theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (M : Submodule ℂ H) [M.HasOrthogonalProjection]
-    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M) :
+    (hM : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) M) :
     maximalAngle P M ≤ Real.pi / 4 ↔
-      ((∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : H) ∈ M →
-          RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : H)⟫_ℂ ≤
+      ((∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : H) ∈ M →
+          RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : H)⟫_ℂ ≤
             alpha * ‖(x : H)‖ ^ 2) ∧
-        ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : H) ∈ Mᗮ →
+        ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : H) ∈ Mᗮ →
           (alpha + delta) * ‖(x : H)‖ ^ 2 ≤
-            RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : H)⟫_ℂ) := by
+            RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : H)⟫_ℂ) := by
   have hHsa : IsSelfAdjoint Hop :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hH
   have hPP : (Pᗮ)ᗮ = P := Submodule.orthogonal_orthogonal P
-  have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
+  have hB : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
     isSelfAdjoint_perturbed hA hH
   constructor
   · intro hangle

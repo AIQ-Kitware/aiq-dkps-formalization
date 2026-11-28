@@ -220,9 +220,9 @@ theorem isReducing_addBounded_pmap_iff
     {A : E →ₗ.[𝕜] E} (B : E →L[𝕜] E)
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection] :
     _root_.LinearPMap.IsReducing
-        (TauCeti.LinearPMap.addBounded (pmap (e := e) A) (clm (e := e) B))
+        ((clm (e := e) B).toLinearMap +ᵥ (pmap (e := e) A))
         (submodule (e := e) V) ↔
-      _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V := by
+      _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V := by
   rw [← pmap_addBounded]
   exact isReducing_pmap_iff (e := e) V
 

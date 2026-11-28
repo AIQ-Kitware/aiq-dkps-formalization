@@ -693,7 +693,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
     (hA : IsSelfAdjoint A)
     (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U →
       RCLike.re ⟪A x, (x : E)⟫_K ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -786,7 +786,7 @@ theorem sinTwoTheta_commonDomain_presentation_whereDefinedUIN_rclike
         gap * N.gaugeReal (sourceDirectedSinTwoThetaOperator P Q) ≤
           2 * N.gaugeReal R) ∧
     (∀ Hop : E →L[K] E, Hop.IsSymmetric ->
-      T = TauCeti.LinearPMap.addBounded A Hop ->
+      T = (Hop.toLinearMap +ᵥ A) ->
       N.Mem (Angle.sinTwoAngleOperator P Q) → N.Mem Hop ->
         gap * N.gaugeReal (Angle.sinTwoAngleOperator P Q) ≤ 2 * N.gaugeReal Hop) := by
   constructor
@@ -903,7 +903,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
     (hA : IsSelfAdjoint A)
     (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : Ec) ∈ U →
       RCLike.re ⟪A x, (x : Ec)⟫_ℂ ≤ a * ‖(x : Ec)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Ec) ∈ Uᗮ →
@@ -927,7 +927,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
     (hA : IsSelfAdjoint A)
     (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : Er) ∈ U →
       RCLike.re ⟪A x, (x : Er)⟫_ℝ ≤ a * ‖(x : Er)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Er) ∈ Uᗮ →
@@ -952,7 +952,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_com
     (hred : _root_.LinearPMap.IsReducing A U)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : Ec) ∈ U →
       RCLike.re ⟪A x, (x : Ec)⟫_ℂ ≤ a * ‖(x : Ec)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Ec) ∈ Uᗮ →
@@ -975,7 +975,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rea
     (hred : _root_.LinearPMap.IsReducing A U)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : Er) ∈ U →
       RCLike.re ⟪A x, (x : Er)⟫_ℝ ≤ a * ‖(x : Er)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Er) ∈ Uᗮ →

@@ -11,6 +11,9 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -55,7 +58,7 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
       A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+      (V.toLinearMap +ᵥ A) ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁ y))
     (hXiso : IsometricEmbedding X) (hF₁iso : IsometricEmbedding F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -68,8 +71,8 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
-    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
-    exact addBounded_isSelfAdjoint A hA V hV
+    change _root_.IsSelfAdjoint (V.toLinearMap +ᵥ A)
+    exact isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)
   have hVadj : N.Mem V.adjoint := N.adjoint_mem hVmem
   have hLeftMem : N.Mem (X.adjoint ∘L V.adjoint) :=
     N.comp_left_mem (E := H) (F := H) (G := F) X.adjoint hVadj
@@ -130,7 +133,7 @@ theorem sinTheta_addBounded_gauge_block_of_spectrum_gap
       A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+      (V.toLinearMap +ᵥ A) ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁ y))
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀ α)
@@ -143,8 +146,8 @@ theorem sinTheta_addBounded_gauge_block_of_spectrum_gap
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
-    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
-    exact addBounded_isSelfAdjoint A hA V hV
+    change _root_.IsSelfAdjoint (V.toLinearMap +ᵥ A)
+    exact isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)
   have hVadj : N.Mem V.adjoint := N.adjoint_mem hVmem
   have hLeftMem : N.Mem (X.adjoint ∘L V.adjoint) :=
     N.comp_left_mem (E := H) (F := H) (G := F) X.adjoint hVadj

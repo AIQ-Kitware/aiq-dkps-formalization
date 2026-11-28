@@ -976,7 +976,7 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex
     {A : Ea →ₗ.[ℂ] Ea} {B : Ea →L[ℂ] Ea} {a b : ℝ}
     (hA : IsSelfAdjoint A) (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : Ea) ∈ U →
       RCLike.re ⟪A x, (x : Ea)⟫_ℂ ≤ a * ‖(x : Ea)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Ea) ∈ Uᗮ →
@@ -1035,7 +1035,7 @@ theorem tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex
     {A : Ea →ₗ.[ℂ] Ea} {B : Ea →L[ℂ] Ea} {a b : ℝ}
     (hA : IsSelfAdjoint A) (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : Ea) ∈ U →
       RCLike.re ⟪A x, (x : Ea)⟫_ℂ ≤ a * ‖(x : Ea)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Ea) ∈ Uᗮ →

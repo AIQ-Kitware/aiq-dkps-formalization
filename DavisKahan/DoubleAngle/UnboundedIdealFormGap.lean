@@ -11,6 +11,9 @@ public import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -105,7 +108,7 @@ theorem sinTheta_addBounded_gauge_complex_block_of_formGap
       A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+      (V.toLinearMap +ᵥ A) ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁ y))
     (hF₁iso : IsometricEmbedding F₁)
     {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
@@ -115,8 +118,8 @@ theorem sinTheta_addBounded_gauge_complex_block_of_formGap
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
-    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
-    exact addBounded_isSelfAdjoint A hA V hV
+    change _root_.IsSelfAdjoint (V.toLinearMap +ᵥ A)
+    exact isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)
   have hResMem : N.Mem D.residual := by
     change N.Mem (V ∘L X)
     exact N.comp_right_mem X hVmem
@@ -153,7 +156,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap
       (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
@@ -183,13 +186,13 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap
   have hF₁dom : ∀ y : Λ.domain, F₁ (y : Uc) ∈ A.domain := fun y =>
     hJdom ⟨((y : Uc) : H), hUcdom y⟩
   have hF₁int : ∀ y : Λ.domain,
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Uc), hF₁dom y⟩ =
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩ =
         F₁ (Λ y) := by
     intro y
     have hAy : A ⟨((y : Uc) : H), hUcdom y⟩ = ((Λ y : Uc) : H) :=
       selfAdjointSpectralRestriction_inclusion_intertwines A hA Bᶜ hB.compl y
     calc
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Uc), hF₁dom y⟩
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩
           = J (A ⟨((y : Uc) : H), hUcdom y⟩) :=
             hJintertwines ⟨((y : Uc) : H), hUcdom y⟩
       _ = J ((Λ y : Uc) : H) := congrArg J hAy
@@ -305,7 +308,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_formGap
       (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
@@ -361,7 +364,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
@@ -389,14 +392,14 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
   have hF₁dom : ∀ y : Λ.domain, F₁ (y : Uc) ∈ A.domain := fun y =>
     hJdom ⟨((y : Uc) : H), hUcdom y⟩
   have hF₁int : ∀ y : Λ.domain,
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Uc), hF₁dom y⟩ =
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩ =
         F₁ (Λ y) := by
     intro y
     have hAy : A ⟨((y : Uc) : H), hUcdom y⟩ = ((Λ y : Uc) : H) :=
       (TauCeti.LinearPMap.coe_reducingRestriction_apply A Uᗮ hred.orthogonal
         (y : Uc) (hUcdom y)).symm
     calc
-      (TauCeti.LinearPMap.addBounded A R) ⟨F₁ (y : Uc), hF₁dom y⟩
+      (R.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩
           = J (A ⟨((y : Uc) : H), hUcdom y⟩) :=
             hJintertwines ⟨((y : Uc) : H), hUcdom y⟩
       _ = J ((Λ y : Uc) : H) := congrArg J hAy
@@ -522,15 +525,15 @@ theorem sinTwoTheta_addBounded_gauge_of_formGap
     (hEmem : N.Mem Eop) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+        (selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        (selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS)) ≤
         2 * N.gaugeReal Eop := by
-  set V := selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-    (addBounded_isSelfAdjoint A hA Eop hEop) S hS with hVdef
+  set V := selfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+    (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS with hVdef
   set D : H →L[ℂ] H := reflectionPerturbation V Eop with hDdef
   have hD : D.IsSymmetric := reflectionPerturbation_isSelfAdjoint V Eop hEop
   have hDideal := reflectionPerturbation_mem_and_gauge_le

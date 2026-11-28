@@ -1024,7 +1024,7 @@
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real",
-        "TauCeti.LinearPMap.addBounded_neg_cancel",
+        "neg_vadd_vadd",
         "TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm",
         "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg",
         "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg",
@@ -1342,7 +1342,7 @@
           "note": "The real sibling of the unperturbed-gap reading."
         },
         {
-          "declaration": "TauCeti.LinearPMap.addBounded_neg_cancel",
+          "declaration": "neg_vadd_vadd",
           "role": "source_correspondence",
           "note": "Step one of the role reversal: `(A + H) + (-H)` is `A` as a partial map, on the nose, so `P` reduces it without any domain bookkeeping."
         },
@@ -1569,7 +1569,7 @@
           "evidence": {
             "primary": "TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike",
             "correspondence": [
-              "TauCeti.LinearPMap.addBounded_neg_cancel",
+              "neg_vadd_vadd",
               "TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm",
               "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg",
               "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg",
@@ -1598,7 +1598,7 @@
           "evidence": {
             "primary": "TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike",
             "correspondence": [
-              "TauCeti.LinearPMap.addBounded_neg_cancel",
+              "neg_vadd_vadd",
               "TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm",
               "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg",
               "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg",

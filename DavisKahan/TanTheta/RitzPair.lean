@@ -276,26 +276,23 @@ omit [CompleteSpace H] in
 /-- **A subspace that reduces the perturbed operator gives a reflection
 intertwiner.**
 
-`_root_.LinearPMap.IsReducing (A.addBounded B) V` is the generic vocabulary
+`_root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V` is the generic vocabulary
 for "`V` reduces `A + B`", and `A + B` has exactly `A`'s domain, so the reflection
 `2 P_V - 1` preserves that domain.  Commutation is
 `TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace` read through
-`addBounded_apply`.
+`LinearPMap.vadd_apply`.
 
 This is the bridge that keeps the source theorem free of a competing reduction
 vocabulary: a caller holding a `_root_.LinearPMap.IsReducing` -- from a spectral subspace of the
 perturbed operator, say -- constructs nothing by hand. -/
 theorem ofReducesSubspace
     (h : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A B) V) :
+      (B.toLinearMap +ᵥ A) V) :
     ReflectionIntertwines A B V := by
   obtain ⟨hmaps, hcomm⟩ := reflection_commutes_of_reducesSubspace h
   refine ⟨hmaps, fun x => ?_⟩
-  have hx := hcomm x
-  simp only [TauCeti.LinearPMap.addBounded_apply] at hx
-  refine hx.trans ?_
-  have hsplit : ((TauCeti.LinearPMap.addBounded A B) x : H) = A x + B ((x : H)) := rfl
-  rw [hsplit, map_add]
+  simpa only [_root_.LinearPMap.vadd_apply, ContinuousLinearMap.coe_coe, map_add, add_comm]
+    using hcomm x
 
 end ReflectionIntertwines
 

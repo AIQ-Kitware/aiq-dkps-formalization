@@ -21,6 +21,9 @@ public import ForTauCeti.MeasureTheory.MulLpAlgebra
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -647,12 +650,12 @@ theorem beamPerturbation_isSelfAdjoint (ε : ℝ) :
 multiplication by `ε t`. -/
 @[expose]
 def beamPerturbed (ε : ℝ) : BeamL2 →ₗ.[ℂ] BeamL2 :=
-  TauCeti.LinearPMap.addBounded beamOperator (beamPerturbation ε)
+  ((beamPerturbation ε).toLinearMap +ᵥ beamOperator)
 
 /-- The perturbed beam operator is self-adjoint. -/
 theorem beamPerturbed_isSelfAdjoint (ε : ℝ) : _root_.IsSelfAdjoint (beamPerturbed ε) :=
-  addBounded_isSelfAdjoint beamOperator beamOperator_isSelfAdjoint _
-    (beamPerturbation_isSelfAdjoint ε)
+  isSelfAdjoint_perturb_bounded beamOperator_isSelfAdjoint
+    (isSelfAdjoint_iff_isSymmetric.mpr (beamPerturbation_isSelfAdjoint ε))
 
 /-- The spectral set that isolates everything above the free-beam gap. -/
 def beamHighSet : Set ℝ := Set.Ici 500
@@ -2118,7 +2121,7 @@ theorem beamPerturbed_form_ge_of_mem_orthogonal (ε : ℝ) (hε : 0 ≤ ε)
   have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2
   have hsplit : (beamPerturbed ε) x
       = beamOperator ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
-    rfl
+    add_comm _ _
   rw [hsplit, inner_add_left, Complex.add_re]
   have h1 := beamOperator_form_ge_of_mem_orthogonal ⟨(x : BeamL2), hxdom⟩ hx
   have h2 := re_inner_beamPerturbation_nonneg ε hε (x : BeamL2)
@@ -2133,7 +2136,7 @@ theorem beamPerturbed_form_le_of_mem_beamTrial (ε : ℝ) (hε : 0 ≤ ε)
   have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2
   have hsplit : (beamPerturbed ε) x
       = beamOperator ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
-    rfl
+    add_comm _ _
   have hker : beamOperator ⟨(x : BeamL2), hxdom⟩ = 0 :=
     beamOperator_apply_trial hx hxdom
   have hres : beamPerturbation ε (x : BeamL2)

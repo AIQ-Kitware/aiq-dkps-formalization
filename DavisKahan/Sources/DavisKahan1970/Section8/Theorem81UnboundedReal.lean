@@ -34,6 +34,9 @@ the branch identification by `complexifySubmodule_injective`).
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open scoped InnerProductSpace
 
 namespace TauCeti
@@ -173,28 +176,27 @@ theorem theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (M : Submodule ℝ Er) [M.HasOrthogonalProjection]
-    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M) :
+    (hM : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) M) :
     TauCeti.DavisKahanExt.maximalAngle P M ≤ Real.pi / 4 ↔
-      ((∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Er) ∈ M →
-          ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : Er)⟫_ℝ ≤ alpha * ‖(x : Er)‖ ^ 2) ∧
-        ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : Er) ∈ Mᗮ →
+      ((∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : Er) ∈ M →
+          ⟪(Hop.toLinearMap +ᵥ A) x, (x : Er)⟫_ℝ ≤ alpha * ‖(x : Er)‖ ^ 2) ∧
+        ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : Er) ∈ Mᗮ →
           (alpha + delta) * ‖(x : Er)‖ ^ 2 ≤
-            ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : Er)⟫_ℝ) := by
+            ⟪(Hop.toLinearMap +ᵥ A) x, (x : Er)⟫_ℝ) := by
   classical
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
   have hHC : (complexify Hop).IsSymmetric :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hH
-  have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
-      (complexify Hop)
-      = TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A Hop) :=
+  have hsum : ((complexify Hop).toLinearMap +ᵥ (TauCeti.LinearPMap.complexifyReal A))
+      = TauCeti.LinearPMap.complexifyReal (Hop.toLinearMap +ᵥ A) :=
     (TauCeti.DavisKahan1970.complexifyReal_addBounded A Hop).symm
   have hredPperpC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)ᗮ := by
     simpa only [complexifySubmodule_orthogonal] using
       TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hredPperp
   have hMC : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
+      ((complexify Hop).toLinearMap +ᵥ (TauCeti.LinearPMap.complexifyReal A))
       (complexifySubmodule M) := by
     rw [hsum]
     exact TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hM
@@ -279,33 +281,32 @@ theorem theorem8_1_canonicalBranchUnbounded_printed_real
       (alpha + delta) * ‖(x : Er)‖ ^ 2 ≤ ⟪A x, (x : Er)⟫_ℝ)
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
-    _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop)
+    _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A)
         (canonicalLowBranchUnboundedReal
-          (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha) ∧
-      (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain,
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hH)) alpha) ∧
+      (∀ x : (Hop.toLinearMap +ᵥ A).domain,
         (x : Er) ∈ canonicalLowBranchUnboundedReal
-            (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha →
-        ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : Er)⟫_ℝ ≤
+            (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hH)) alpha →
+        ⟪(Hop.toLinearMap +ᵥ A) x, (x : Er)⟫_ℝ ≤
           alpha * ‖(x : Er)‖ ^ 2) ∧
-      (∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain,
+      (∀ x : (Hop.toLinearMap +ᵥ A).domain,
         (x : Er) ∈ (canonicalLowBranchUnboundedReal
-            (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha)ᗮ →
+            (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hH)) alpha)ᗮ →
         (alpha + delta) * ‖(x : Er)‖ ^ 2 ≤
-          ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : Er)⟫_ℝ) ∧
+          ⟪(Hop.toLinearMap +ᵥ A) x, (x : Er)⟫_ℝ) ∧
       TauCeti.DavisKahanExt.maximalAngle P
         (canonicalLowBranchUnboundedReal
-          (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hH)) alpha)
         ≤ Real.pi / 4 := by
   classical
-  have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-    DavisKahan.addBounded_isSelfAdjoint A hA Hop hH
+  have hB : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hH)
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
   have hHC : (complexify Hop).IsSymmetric :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hH
-  have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
-      (complexify Hop)
-      = TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A Hop) :=
+  have hsum : ((complexify Hop).toLinearMap +ᵥ (TauCeti.LinearPMap.complexifyReal A))
+      = TauCeti.LinearPMap.complexifyReal (Hop.toLinearMap +ᵥ A) :=
     (TauCeti.DavisKahan1970.complexifyReal_addBounded A Hop).symm
   have hredPperpC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)ᗮ := by
@@ -327,9 +328,9 @@ theorem theorem8_1_canonicalBranchUnbounded_printed_real
     exact canonicalLowBranchUnbounded_congr hsum _ _ alpha
   refine ⟨canonicalLowBranchUnboundedReal_reduces hB alpha, ?_, ?_, ?_⟩
   · exact re_inner_le_of_complexifyReal_le_of_eq
-      (A := TauCeti.LinearPMap.addBounded A Hop) hsum hbranch hconc.2.1
+      (A := (Hop.toLinearMap +ᵥ A)) hsum hbranch hconc.2.1
   · exact le_re_inner_of_le_complexifyReal_of_eq
-      (A := TauCeti.LinearPMap.addBounded A Hop) hsum hbranch hconc.2.2.1
+      (A := (Hop.toLinearMap +ᵥ A)) hsum hbranch hconc.2.2.1
   · exact maximalAngle_le_of_complexifySubmodule_le rfl hbranch hconc.2.2.2
 
 /-- **Theorem 8.1's uniqueness of the branch, at unbounded ambient scope over a
@@ -350,27 +351,26 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta)
     (M : Submodule ℝ Er) [M.HasOrthogonalProjection]
-    (hM : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) M)
+    (hM : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) M)
     (hMangle : TauCeti.DavisKahanExt.maximalAngle P M ≤ Real.pi / 4) :
     M = canonicalLowBranchUnboundedReal
-      (DavisKahan.addBounded_isSelfAdjoint A hA Hop hH) alpha := by
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hH)) alpha := by
   classical
-  have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-    DavisKahan.addBounded_isSelfAdjoint A hA Hop hH
+  have hB : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hH)
   have hAC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
   have hHC : (complexify Hop).IsSymmetric :=
     (TauCeti.RealComplexification.complexify_isSymmetric_iff Hop).mpr hH
-  have hsum : TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A)
-      (complexify Hop)
-      = TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A Hop) :=
+  have hsum : ((complexify Hop).toLinearMap +ᵥ (TauCeti.LinearPMap.complexifyReal A))
+      = TauCeti.LinearPMap.complexifyReal (Hop.toLinearMap +ᵥ A) :=
     (TauCeti.DavisKahan1970.complexifyReal_addBounded A Hop).symm
   have hredPperpC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)ᗮ := by
     simpa only [complexifySubmodule_orthogonal] using
       TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hredPperp
   have hMC : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify Hop))
+      ((complexify Hop).toLinearMap +ᵥ (TauCeti.LinearPMap.complexifyReal A))
       (complexifySubmodule M) := by
     rw [hsum]
     exact TauCeti.DavisKahan1970.reducesSubspace_complexifyReal hM

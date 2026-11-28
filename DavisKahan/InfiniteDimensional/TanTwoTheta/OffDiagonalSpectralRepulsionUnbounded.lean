@@ -44,6 +44,8 @@ boundedness of `A`.
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+
 namespace TauCeti
 namespace DavisKahan
 
@@ -157,7 +159,7 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     {lam : ℝ} (hlam : lam ∈ Set.Ioo a b) :
     ((lam : ℝ) : ℂ) ∉ _root_.LinearPMap.spectrum
-      (TauCeti.LinearPMap.addBounded A Hop) := by
+      (Hop.toLinearMap +ᵥ A) := by
   obtain ⟨hla, hlb⟩ := hlam
   set ε : ℝ := min (lam - a) (b - lam) with hεdef
   have hε : 0 < ε := lt_min (by linarith) (by linarith)
@@ -189,20 +191,19 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     rw [e1, e2] at h
     exact h
   have hskew := re_inner_reflection_comp_offDiagonal_eq_zero Hop U hH hHU hHUperp
-  have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-    TauCeti.DavisKahan.addBounded_isSelfAdjoint A hA Hop
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH)
-  have hcoer : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain,
+  have hAH : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA hH
+  have hcoer : ∀ x : (Hop.toLinearMap +ᵥ A).domain,
       ε * ‖(x : E)‖ ^ 2 ≤
-        (⟪U.reflectionOperator (TauCeti.LinearPMap.addBounded A Hop x -
+        (⟪U.reflectionOperator ((Hop.toLinearMap +ᵥ A) x -
           ((lam : ℝ) : ℂ) • (x : E)), (x : E)⟫_ℂ).re := by
     intro x
     have hx : ((x : E)) ∈ A.domain := x.2
-    have hsplit : TauCeti.LinearPMap.addBounded A Hop x -
+    have hsplit : (Hop.toLinearMap +ᵥ A) x -
         ((lam : ℝ) : ℂ) • (x : E)
         = (A ⟨(x : E), hx⟩ - ((lam : ℝ) : ℂ) • (x : E)) + Hop (x : E) := by
-      have hap : TauCeti.LinearPMap.addBounded A Hop x
-          = A ⟨(x : E), hx⟩ + Hop (x : E) := rfl
+      have hap : (Hop.toLinearMap +ᵥ A) x
+          = A ⟨(x : E), hx⟩ + Hop (x : E) := add_comm _ _
       rw [hap]
       abel
     rw [hsplit, map_add, inner_add_left]

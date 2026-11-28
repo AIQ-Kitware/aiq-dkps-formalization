@@ -26,6 +26,9 @@ equivalence between the two norm classes.
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open scoped InnerProductSpace
 attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
@@ -152,14 +155,14 @@ private theorem exists_modified_reference_of_commonDomain_residual
       IsSelfAdjoint A' ∧
       A'.restrict (_root_.LinearPMap.isInvariant_iff.mp hP'.isInvariant) =
         A.restrict (_root_.LinearPMap.isInvariant_iff.mp hP.isInvariant) ∧
-      TauCeti.LinearPMap.addBounded A' K = T := by
-  let A' := TauCeti.LinearPMap.addBounded T (-K)
+      (K.toLinearMap +ᵥ A') = T := by
+  let A' := ((-K).toLinearMap +ᵥ T)
   have hKneg : (-K).IsSymmetric := by
     intro x y
     change ⟪-K x, y⟫_𝕜 = ⟪x, -K y⟫_𝕜
     rw [inner_neg_left, inner_neg_right]
     exact congrArg Neg.neg (hK x y)
-  have hA' : IsSelfAdjoint A' := DavisKahan.addBounded_isSelfAdjoint T hT (-K) hKneg
+  have hA' : IsSelfAdjoint A' := isSelfAdjoint_perturb_bounded hT (isSelfAdjoint_iff_isSymmetric.mpr hKneg)
   have hPdomT : ∀ p : P, (p : E) ∈ T.domain := by
     intro p
     rw [hdom]
@@ -171,7 +174,7 @@ private theorem exists_modified_reference_of_commonDomain_residual
     exact hPdom p
   have hagree : ∀ p : P, A' ⟨(p : E), hPdom' p⟩ = A ⟨(p : E), hPdom p⟩ := by
     intro p
-    change T ⟨(p : E), hPdomT p⟩ + (-K) (p : E) = A ⟨(p : E), hPdom p⟩
+    change (-K) (p : E) + T ⟨(p : E), hPdomT p⟩ = A ⟨(p : E), hPdom p⟩
     rw [hres p (hPdomT p), neg_apply, hcol p]
     abel
   have hP' : _root_.LinearPMap.IsReducing A' P := by
@@ -192,8 +195,9 @@ private theorem exists_modified_reference_of_commonDomain_residual
       apply Subtype.ext
       rw [LinearPMap.coe_restrict_apply, LinearPMap.coe_restrict_apply]
       exact hagree p
-  · change TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded T (-K)) K = T
-    simpa only [neg_neg] using (TauCeti.LinearPMap.addBounded_neg_cancel T (-K))
+  · change (K.toLinearMap +ᵥ ((-K).toLinearMap +ᵥ T)) = T
+    simpa only [ContinuousLinearMap.toLinearMap_neg, neg_neg]
+      using neg_vadd_vadd (-K.toLinearMap) T
 
 /-- **Davis--Kahan 1970, Theorem 8.2, residual alternative over `ℂ`.**
 
@@ -243,15 +247,15 @@ theorem theorem8_2_residual_commonDomain_normalizedUIN_complex
     exists_normPreserving_symmetric_column_completion_complex R hsym
   obtain ⟨A', hPred', hA', hrestrict, htotal⟩ :=
     exists_modified_reference_of_commonDomain_residual hT hdom hPred hPdom R hres K hK hcol
-  have hQred' : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A' K) Q := by
+  have hQred' : _root_.LinearPMap.IsReducing (K.toLinearMap +ᵥ A') Q := by
     rw [htotal]
     exact hQred
   have hQspec' : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A' K).restrict
+      ((K.toLinearMap +ᵥ A').restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred'.isInvariant))
       ⊆ Set.Icc beta alpha := by simpa only [htotal] using hQspec
   have hQperp' : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A' K).restrict
+      ((K.toLinearMap +ᵥ A').restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred'.orthogonal.isInvariant))
       ⊆ bandExterior beta alpha delta := by simpa only [htotal] using hQperp
   have hPspec' : _root_.LinearPMap.realSpectrum (A'.restrict
@@ -327,15 +331,15 @@ theorem theorem8_2_residual_commonDomain_normalizedUIN_real
     exists_normPreserving_symmetric_column_completion_real R hsym
   obtain ⟨A', hPred', hA', hrestrict, htotal⟩ :=
     exists_modified_reference_of_commonDomain_residual hT hdom hPred hPdom R hres K hK hcol
-  have hQred' : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A' K) Q := by
+  have hQred' : _root_.LinearPMap.IsReducing (K.toLinearMap +ᵥ A') Q := by
     rw [htotal]
     exact hQred
   have hQspec' : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A' K).restrict
+      ((K.toLinearMap +ᵥ A').restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred'.isInvariant))
       ⊆ Set.Icc beta alpha := by simpa only [htotal] using hQspec
   have hQperp' : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A' K).restrict
+      ((K.toLinearMap +ᵥ A').restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred'.orthogonal.isInvariant))
       ⊆ bandExterior beta alpha delta := by simpa only [htotal] using hQperp
   have hPspec' : _root_.LinearPMap.realSpectrum (A'.restrict

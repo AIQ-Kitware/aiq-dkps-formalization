@@ -23,6 +23,9 @@ domain.
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open scoped InnerProductSpace
 open Set
 
@@ -59,12 +62,12 @@ theorem section7_sinTwoTheta_ideal
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-        (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
+      (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ∧
     delta * N.gaugeReal (sinTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-        (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
+      (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) ≤
       2 * N.gaugeReal E := by
   exact sinTwoTheta_addBounded_gauge_of_spectrum_gap
     N A hA E hE B S hB hS hba hdelta hBlow hBhigh hBcomplSpec hEmem
@@ -95,21 +98,21 @@ theorem section7_tanTwoTheta_ideal
     (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-        (addBounded_isSelfAdjoint A hA E hE) S hS)) :
+      (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) :
     N.Mem (tanTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-        (addBounded_isSelfAdjoint A hA E hE) S hS) hquarter) ∧
+      (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS) hquarter) ∧
     delta * N.gaugeReal (tanTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-        (addBounded_isSelfAdjoint A hA E hE) S hS) hquarter) ≤
+      (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS) hquarter) ≤
       (2 * N.gaugeReal E) /
         (1 - 2 * Submodule.directedProjectionGap
           (selfAdjointSpectralSubspace A hA B hB)
-          (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-            (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2) := by
+          (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+            (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS) ^ 2) := by
   exact tanTwoTheta_addBounded_gauge_of_spectrum_gap
     N A hA E hE B S hB hS hba hdelta hBlow hBhigh hBcomplSpec hEmem hquarter
 

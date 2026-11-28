@@ -14,6 +14,9 @@ public import Mathlib.Tactic
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -76,7 +79,7 @@ noncomputable def shiftedOperator
 noncomputable def beamOperator
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →ₗ.[𝕜] H :=
-  TauCeti.LinearPMap.addBounded D.shiftedOperator (-(1 : H →L[𝕜] H))
+  ((-(1 : H →L[𝕜] H)).toLinearMap +ᵥ D.shiftedOperator)
 
 /-- The domain of the shifted beam operator is the form domain. -/
 @[simp] theorem beamOperator_domain
@@ -89,9 +92,9 @@ noncomputable def beamOperator
     (x : D.beamOperator.domain) :
     D.beamOperator x =
       D.shiftedOperator x - (x : H) := by
-  change D.shiftedOperator x + -(x : H) =
+  change -(x : H) + D.shiftedOperator x =
     D.shiftedOperator x - (x : H)
-  rw [sub_eq_add_neg]
+  rw [sub_eq_add_neg, add_comm]
 
 /-- Form-space representative of a vector in the shifted operator domain. -/
 @[expose]
@@ -182,9 +185,8 @@ beam is self-adjoint. -/
 theorem beamOperator_isSelfAdjoint
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     _root_.IsSelfAdjoint D.beamOperator := by
-  exact addBounded_isSelfAdjoint
-    D.shiftedOperator D.shiftedOperator_isSelfAdjoint
-    (-(1 : H →L[𝕜] H)) negIdentity_isSelfAdjointOperator
+  exact isSelfAdjoint_perturb_bounded D.shiftedOperator_isSelfAdjoint
+    (isSelfAdjoint_iff_isSymmetric.mpr negIdentity_isSelfAdjointOperator)
 
 /-- Compact form embedding gives compact graph embedding of the shifted
 operator. -/

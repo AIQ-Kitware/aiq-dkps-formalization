@@ -57,6 +57,9 @@ everywhere-defined bounded realization
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open scoped InnerProductSpace
 attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
 
@@ -98,10 +101,9 @@ theorem sourceResidual_eq_sub_ritzBlock {A : H →ₗ.[𝕜] H} {Hop : H →L[�
     (hPdom : ∀ v : P, (v : H) ∈ A.domain)
     (hRitz : ∀ v : P, ((M v : P) : H) = A ⟨(v : H), hPdom v⟩) (v : P) :
     sourceResidual Hop P v
-      = TauCeti.LinearPMap.addBounded A Hop ⟨(v : H), hPdom v⟩ - ((M v : P) : H) := by
-  rw [TauCeti.LinearPMap.addBounded_apply, hRitz v]
-  show Hop (v : H) = A ⟨(v : H), hPdom v⟩ + Hop (v : H) - A ⟨(v : H), hPdom v⟩
-  abel
+      = (Hop.toLinearMap +ᵥ A) ⟨(v : H), hPdom v⟩ - ((M v : P) : H) := by
+  rw [_root_.LinearPMap.vadd_apply, hRitz v]
+  exact (add_sub_cancel_right _ _).symm
 
 end Residual
 
@@ -224,13 +226,13 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_complex
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
         ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
@@ -262,13 +264,13 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_real
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
         ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
@@ -305,13 +307,13 @@ theorem theorem8_2_residual_sourceExact_unbounded_complex
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
         ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
@@ -324,18 +326,18 @@ theorem theorem8_2_residual_sourceExact_unbounded_complex
         delta * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ≤
           2 * N.gauge (sourceResidual Hop P)) ∧
       sourceFullAngleLtC P Q (Real.pi / 4) := by
-  have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-    DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
+  have hAH : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hHop)
   have hgap : FormBoundedSylvesterGap
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) delta :=
     .intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)
   -- the Ritz block is supplied by the central-spectrum hypothesis, not by the caller
   obtain ⟨hPdom, M, hRitz⟩ :=
     exists_ritzBlock_of_realSpectrum_subset_Icc_complex hA hPred (by linarith) hPspec
-  have hres : ∀ v : P, TauCeti.LinearPMap.addBounded A Hop ⟨(v : Hc), hPdom v⟩
+  have hres : ∀ v : P, (Hop.toLinearMap +ᵥ A) ⟨(v : Hc), hPdom v⟩
       = sourceResidual Hop P v + ((M v : P) : Hc) := by
     intro v
     rw [sourceResidual_eq_sub_ritzBlock hPdom hRitz v]
@@ -361,13 +363,13 @@ theorem theorem8_2_residual_sourceExact_unbounded_real
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
         ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
@@ -380,18 +382,18 @@ theorem theorem8_2_residual_sourceExact_unbounded_real
         delta * N.gauge (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator P Q) ≤
           2 * N.gauge (sourceResidual Hop P)) ∧
       sourceFullAngleLtR P Q (Real.pi / 4) := by
-  have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-    DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
+  have hAH : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hHop)
   have hgap : FormBoundedSylvesterGap
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) delta :=
     .intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)
   -- the Ritz block is supplied by the central-spectrum hypothesis, not by the caller
   obtain ⟨hPdom, M, hRitz⟩ :=
     exists_ritzBlock_of_realSpectrum_subset_Icc_real hA hPred (by linarith) hPspec
-  have hres : ∀ v : P, TauCeti.LinearPMap.addBounded A Hop ⟨(v : Er), hPdom v⟩
+  have hres : ∀ v : P, (Hop.toLinearMap +ᵥ A) ⟨(v : Er), hPdom v⟩
       = sourceResidual Hop P v + ((M v : P) : Er) := by
     intro v
     rw [sourceResidual_eq_sub_ritzBlock hPdom hRitz v]

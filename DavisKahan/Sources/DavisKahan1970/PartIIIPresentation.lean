@@ -309,8 +309,14 @@ alias bounded_inverse_defect_norm :=
   TauCeti.ContinuousLinearMap.norm_one_sub_inverse_one_add
 
 /-! ## Unbounded and form theorems -/
-alias unbounded_boundedPerturbation_selfAdjoint_spectra :=
-  DavisKahan.addBounded_isSelfAdjoint
+/-- A bounded symmetric perturbation preserves self-adjointness on the original domain. -/
+theorem unbounded_boundedPerturbation_selfAdjoint_spectra
+    {𝕜 H : Type*} [RCLike 𝕜] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
+    [CompleteSpace H] (A : H →ₗ.[𝕜] H) (hA : IsSelfAdjoint A)
+    (V : H →L[𝕜] H) (hV : V.IsSymmetric) :
+    IsSelfAdjoint (V.toLinearMap +ᵥ A) :=
+  _root_.LinearPMap.isSelfAdjoint_perturb_bounded hA
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hV)
 alias unbounded_spectralRestriction :=
   DavisKahan.selfAdjointSpectralRestriction
 alias unbounded_spectralRestriction_selfAdjoint :=

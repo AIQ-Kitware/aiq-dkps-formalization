@@ -11,6 +11,9 @@ public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -149,10 +152,10 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
     (Eop : H →L[𝕜] H)
     (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hint : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A (reflectionPerturbation V Eop))
+      ((reflectionPerturbation V Eop).toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : H), hmem x⟩ =
         V.reflectionOperator (A x)) :
-    TauCeti.LinearPMap.addBounded A (reflectionPerturbation V Eop) =
+    ((reflectionPerturbation V Eop).toLinearMap +ᵥ A) =
       (A.conj V.reflection.toLinearEquiv) := by
   -- Use the public reflection identity to express domain preservation and intertwining.
   have hrefl : ∀ y : H, V.reflectionOperator y = V.reflection y :=
@@ -161,11 +164,10 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
     intro y hy
     have h := hmem ⟨y, hy⟩
     rwa [hrefl] at h
-  have hdomain : (TauCeti.LinearPMap.addBounded A
-      (reflectionPerturbation V Eop)).domain =
+  have hdomain : ((reflectionPerturbation V Eop).toLinearMap +ᵥ A).domain =
       (A.conj V.reflection.toLinearEquiv).domain := by
     ext y
-    rw [TauCeti.LinearPMap.addBounded_domain,
+    rw [_root_.LinearPMap.vadd_domain,
       _root_.LinearPMap.mem_conj_domain_iff]
     refine ⟨fun hy => hmem' y hy, fun hy => ?_⟩
     have hy' : V.reflection y ∈ A.domain := hy
@@ -175,15 +177,15 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
   intro y hy hz
   have hJy : V.reflection y ∈ A.domain := hmem' y hy
   have hcongr : (⟨y, hy⟩ :
-      (TauCeti.LinearPMap.addBounded A (reflectionPerturbation V Eop)).domain) =
+      ((reflectionPerturbation V Eop).toLinearMap +ᵥ A).domain) =
       ⟨V.reflectionOperator (((⟨V.reflection y, hJy⟩ : A.domain)) : H),
         hmem ⟨V.reflection y, hJy⟩⟩ :=
     Subtype.ext (by
       change y = V.reflectionOperator (V.reflection y)
       rw [hrefl]
       exact (V.reflection_reflection y).symm)
-  calc (TauCeti.LinearPMap.addBounded A (reflectionPerturbation V Eop)) ⟨y, hy⟩
-      = (TauCeti.LinearPMap.addBounded A (reflectionPerturbation V Eop))
+  calc ((reflectionPerturbation V Eop).toLinearMap +ᵥ A) ⟨y, hy⟩
+      = ((reflectionPerturbation V Eop).toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (((⟨V.reflection y, hJy⟩ : A.domain)) : H),
             hmem ⟨V.reflection y, hJy⟩⟩ := by rw [hcongr]
     _ = V.reflectionOperator (A ⟨V.reflection y, hJy⟩) :=
@@ -214,7 +216,7 @@ theorem addBounded_reflectionPerturbation_intertwines_of_commutes
       A ⟨V.reflectionOperator (x : H), hmem x⟩ + E (V.reflectionOperator (x : H)) =
         V.reflectionOperator (A x) + V.reflectionOperator (E (x : H)))
     (x : A.domain) :
-    (TauCeti.LinearPMap.addBounded A (reflectionPerturbation V E))
+    ((reflectionPerturbation V E).toLinearMap +ᵥ A)
         ⟨V.reflectionOperator (x : H), hmem x⟩ = V.reflectionOperator (A x) := by
   set J : H →L[𝕜] H := V.reflectionOperator with hJ
   have hreflection (y : H) : V.reflection y = J y :=
@@ -233,9 +235,10 @@ theorem addBounded_reflectionPerturbation_intertwines_of_commutes
         rw [hreflection (J (x : H)), hreflection (E (J (J (x : H))))]
       _ = E (J (x : H)) - J (E (x : H)) := by rw [hJJ]
   calc
-    (TauCeti.LinearPMap.addBounded A (reflectionPerturbation V E))
+    ((reflectionPerturbation V E).toLinearMap +ᵥ A)
         ⟨J (x : H), hmem x⟩
-        = A ⟨J (x : H), hmem x⟩ + reflectionPerturbation V E (J (x : H)) := rfl
+        = A ⟨J (x : H), hmem x⟩ + reflectionPerturbation V E (J (x : H)) :=
+          add_comm _ _
     _ = A ⟨J (x : H), hmem x⟩ + (E (J (x : H)) - J (E (x : H))) := by rw [hDapply]
     _ = (A ⟨J (x : H), hmem x⟩ + E (J (x : H))) - J (E (x : H)) := by abel
     _ = (J (A x) + J (E (x : H))) - J (E (x : H)) := by rw [hcomm x]
@@ -726,11 +729,11 @@ theorem perturbedSpectralReflection_mem_domain
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
-    (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-      (addBounded_isSelfAdjoint A hA E hE) S hS).reflectionOperator (x : H) ∈
+    (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS).reflectionOperator (x : H) ∈
       A.domain := by
-  let C := TauCeti.LinearPMap.addBounded A E
-  let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
+  let C := (E.toLinearMap +ᵥ A)
+  let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)
   let xc : C.domain := ⟨(x : H), by simp [C]⟩
   have h := spectralReflection_mem_domain C hC S hS xc
   simpa [C] using h
@@ -742,17 +745,17 @@ theorem add_reflectionPerturbation_intertwines
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
-    let C := TauCeti.LinearPMap.addBounded A E
-    let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
+    let C := (E.toLinearMap +ᵥ A)
+    let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)
     let V := selfAdjointSpectralSubspace C hC S hS
     let J := V.reflectionOperator
     let D := reflectionPerturbation V E
-    (TauCeti.LinearPMap.addBounded A D)
+    (D.toLinearMap +ᵥ A)
         ⟨J (x : H), perturbedSpectralReflection_mem_domain
           A hA E hE S hS x⟩ = J (A x) := by
   dsimp only
-  let C := TauCeti.LinearPMap.addBounded A E
-  let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
+  let C := (E.toLinearMap +ᵥ A)
+  let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)
   let V := selfAdjointSpectralSubspace C hC S hS
   let J := V.reflectionOperator
   let D := reflectionPerturbation V E
@@ -768,11 +771,11 @@ theorem add_reflectionPerturbation_intertwines
       A ⟨J (x : H), hJdomA⟩ + E (J (x : H)) =
           C
             ⟨J (x : H), spectralReflection_mem_domain C hC S hS xc⟩ := by
-        rfl
+        exact add_comm _ _
       _ = J (C xc) := by
         simpa only [J, V] using hcommC
       _ = J (A x + E (x : H)) := by
-        rfl
+        exact congrArg J (add_comm _ _)
   have hJJ : J (J (x : H)) = (x : H) := by
     simpa only [J, Submodule.reflectionOperator_apply_eq_reflection] using
       V.reflection_reflection (x : H)
@@ -792,11 +795,11 @@ theorem add_reflectionPerturbation_intertwines
       _ = E (J (x : H)) - J (E (x : H)) := by
         rw [hJJ]
   calc
-    (TauCeti.LinearPMap.addBounded A D)
+    (D.toLinearMap +ᵥ A)
         ⟨J (x : H), perturbedSpectralReflection_mem_domain
           A hA E hE S hS x⟩ =
       A ⟨J (x : H), hJdomA⟩ + D (J (x : H)) := by
-        rfl
+        exact add_comm _ _
     _ = A ⟨J (x : H), hJdomA⟩ +
         (E (J (x : H)) - J (E (x : H))) := by
       rw [hDapply]

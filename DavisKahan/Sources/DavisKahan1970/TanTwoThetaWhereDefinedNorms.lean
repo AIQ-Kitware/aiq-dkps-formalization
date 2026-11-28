@@ -81,7 +81,7 @@ theorem tanTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex
     {A : Ea →ₗ.[ℂ] Ea} {B : Ea →L[ℂ] Ea} {a b : ℝ}
     (hA : IsSelfAdjoint A) (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : Ea) ∈ U →
       RCLike.re ⟪A x, (x : Ea)⟫_ℂ ≤ a * ‖(x : Ea)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Ea) ∈ Uᗮ →
@@ -165,7 +165,7 @@ theorem tanTwoTheta_directed_unboundedResidual_whereDefinedUIN_real
     (hA : _root_.IsSelfAdjoint A)
     (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b) :
@@ -199,7 +199,7 @@ theorem tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_comp
     (V : Submodule ℂ E) [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A) (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -232,7 +232,7 @@ theorem tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A) (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U →
       RCLike.re ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →

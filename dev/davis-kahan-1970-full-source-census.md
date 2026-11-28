@@ -629,7 +629,7 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_complex`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_real`
-- `TauCeti.LinearPMap.addBounded_neg_cancel`
+- `neg_vadd_vadd`
 - `TauCeti.DavisKahan.Angle.sinTwoAngleOperator_comm`
 - `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge_neg`
 - `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.mem_neg`
@@ -656,7 +656,7 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_directed`
 - `TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike`
-- `TauCeti.LinearPMap.addBounded_domain`
+- `LinearPMap.vadd_domain`
 
 **Curated source/Lean review:**
 

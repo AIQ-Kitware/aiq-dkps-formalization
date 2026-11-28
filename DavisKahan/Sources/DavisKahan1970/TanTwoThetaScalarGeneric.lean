@@ -79,7 +79,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     (hA : IsSelfAdjoint A)
     (hred : _root_.LinearPMap.IsReducing A U)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U →
       RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -104,7 +104,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     have hB' : TauCeti.IsOddFor U' B' :=
       (ScalarTransport.isOddFor_clm_iff (e := e) U B).2 hB
     have hVred' : _root_.LinearPMap.IsReducing
-        (TauCeti.LinearPMap.addBounded A' B') V' :=
+        (B'.toLinearMap +ᵥ A') V' :=
       (ScalarTransport.isReducing_addBounded_pmap_iff (e := e) B V).2
         hV
     let hV' : DavisKahan.ReflectionIntertwines A' B' V' :=
@@ -177,7 +177,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     have hB' : TauCeti.IsOddFor U' B' :=
       (ScalarTransport.isOddFor_clm_iff (e := e) U B).2 hB
     have hVred' : _root_.LinearPMap.IsReducing
-        (TauCeti.LinearPMap.addBounded A' B') V' :=
+        (B'.toLinearMap +ᵥ A') V' :=
       (ScalarTransport.isReducing_addBounded_pmap_iff (e := e) B V).2
         hV
     let hV' : DavisKahan.ReflectionIntertwines A' B' V' :=
@@ -253,7 +253,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     (hred : _root_.LinearPMap.IsReducing A U)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U →
       RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →
@@ -277,7 +277,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     have hB' : TauCeti.IsOddFor U' B' :=
       (ScalarTransport.isOddFor_clm_iff (e := e) U B).2 hB
     have hVred' : _root_.LinearPMap.IsReducing
-        (TauCeti.LinearPMap.addBounded A' B') V' :=
+        (B'.toLinearMap +ᵥ A') V' :=
       (ScalarTransport.isReducing_addBounded_pmap_iff (e := e) B V).2
         hV
     let hV' : DavisKahan.ReflectionIntertwines A' B' V' :=
@@ -330,7 +330,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     have hB' : TauCeti.IsOddFor U' B' :=
       (ScalarTransport.isOddFor_clm_iff (e := e) U B).2 hB
     have hVred' : _root_.LinearPMap.IsReducing
-        (TauCeti.LinearPMap.addBounded A' B') V' :=
+        (B'.toLinearMap +ᵥ A') V' :=
       (ScalarTransport.isReducing_addBounded_pmap_iff (e := e) B V).2
         hV
     let hV' : DavisKahan.ReflectionIntertwines A' B' V' :=
@@ -382,7 +382,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_presentation_rcl
     (hred : _root_.LinearPMap.IsReducing A U)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor U B)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V)
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V)
     (hUa : ∀ x : A.domain, (x : E) ∈ U →
       RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ →

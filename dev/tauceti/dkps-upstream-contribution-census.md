@@ -1,5 +1,36 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 bounded perturbations of partial maps
+
+DKPS now writes an ambient bounded perturbation as `V.toLinearMap +ᵥ A`,
+using Mathlib's action on partial maps. The domain is definitionally
+`A.domain` and the pointwise sum agrees with the former `addBounded`
+definition by commutativity. The paper's role-reversal proof uses
+`neg_vadd_vadd`. Bounded Kato–Rellich is the accepted
+`LinearPMap.isSelfAdjoint_perturb_bounded` from #13871 (SA-C54), with
+Mathlib's symmetry-to-self-adjointness equivalence at the existing
+symmetric-operator hypotheses.
+[#13871](https://github.com/TauCetiProject/TauCeti/pull/13871)
+
+The accepted proof came through the DKPS port with Spectra provenance.
+The original DKPS declarations are recorded at `887f5daae9edaad6d5e22186241930a2f1d2cffc`
+in `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean` and
+`DavisKahan/SinTheta/BoundedPerturbation.lean` (Jon Crall and OpenAI
+GPT-5.6 Thinking, Kitware 2026, Apache-2.0). The Part III presentation
+and its source evidence retain the real and complex Hilbert-space scope.
+
+The continuation proof uses Mathlib's `add_vadd` and `zero_vadd` in place
+of its local composition and zero lemmas. Their original statements are in
+`DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean`
+and `DavisKahan/SpectralTheory/UnboundedBandLipschitz.lean` at the same revision.
+
+The focused build (12,233 jobs), default build (22,788 jobs), and combined
+Challenge and paper audit build (22,498 jobs) passed without warnings. All
+17 available comparator signatures matched, and the source census resolved
+all 1,573 declaration references against `DavisKahan.All`. The local name
+scanner flags `neg_vadd_vadd` and `LinearPMap.vadd_domain` as new findings.
+Lean resolves both imported names in the paper's semantic-surface audit.
+
 ## November 27 partial-map conjugation and closed graphs
 
 The Riccati graph rotation and the real and complex paper arguments use

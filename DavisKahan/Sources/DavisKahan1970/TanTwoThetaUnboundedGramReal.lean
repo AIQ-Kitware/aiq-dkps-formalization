@@ -437,14 +437,14 @@ omit [CompleteSpace E] [U.HasOrthogonalProjection] in
 `A + B` has `A`'s domain and acts coordinatewise, and so does its
 complexification, so the two ways of forming `(A + B)_ℂ` agree on the nose. -/
 theorem complexifyReal_addBounded (A : E →ₗ.[ℝ] E) (B : E →L[ℝ] E) :
-    TauCeti.LinearPMap.complexifyReal (TauCeti.LinearPMap.addBounded A B) =
-      TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify B) := by
+    TauCeti.LinearPMap.complexifyReal (B.toLinearMap +ᵥ A) =
+      ((complexify B).toLinearMap +ᵥ (TauCeti.LinearPMap.complexifyReal A)) := by
   refine _root_.LinearPMap.ext rfl ?_
   intro z hf hg
   refine RealComplexification.ext ?_ ?_
-  · change A ⟨re z, hg.1⟩ + B (re z) = A ⟨re z, hg.1⟩ + re (complexify B z)
+  · change B (re z) + A ⟨re z, hg.1⟩ = re (complexify B z) + A ⟨re z, hg.1⟩
     rw [re_complexify]
-  · change A ⟨im z, hg.2⟩ + B (im z) = A ⟨im z, hg.2⟩ + im (complexify B z)
+  · change B (im z) + A ⟨im z, hg.2⟩ = im (complexify B z) + A ⟨im z, hg.2⟩
     rw [im_complexify]
 
 omit [CompleteSpace E] in
@@ -452,9 +452,9 @@ omit [CompleteSpace E] in
 This is the transport of the paper's "`V` reduces `A + H`" hypothesis. -/
 theorem reducesSubspace_addBounded_complexifyReal
     {V : Submodule ℝ E} [V.HasOrthogonalProjection]
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A B) V) :
+    (hV : _root_.LinearPMap.IsReducing (B.toLinearMap +ᵥ A) V) :
     _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.complexifyReal A) (complexify B))
+      ((complexify B).toLinearMap +ᵥ (TauCeti.LinearPMap.complexifyReal A))
       (complexifySubmodule V) := by
   rw [← complexifyReal_addBounded]
   exact reducesSubspace_complexifyReal hV

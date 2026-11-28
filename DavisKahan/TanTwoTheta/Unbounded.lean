@@ -11,6 +11,9 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -77,21 +80,21 @@ theorem tanTwoTheta_addBounded_of_spectrum_gap
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-        (addBounded_isSelfAdjoint A hA E hE) S hS)) :
+      (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) :
     ‖directedTanTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)
         hquarter‖ ≤
       (2 * ‖E‖ / δ) /
         (1 - 2 * Submodule.directedProjectionGap
           (selfAdjointSpectralSubspace A hA B hB)
-          (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-            (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2) := by
+          (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+            (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS) ^ 2) := by
   let U := selfAdjointSpectralSubspace A hA B hB
-  let V := selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-    (addBounded_isSelfAdjoint A hA E hE) S hS
+  let V := selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+    (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS
   have hsin : δ * ‖directedSinTwoAngleOperatorC U V‖ ≤ 2 * ‖E‖ :=
     sinTwoTheta_addBounded_of_spectrum_gap
       A hA E hE B S hB hS hβα hδ hBlow hBhigh hBcomplSpec
@@ -120,18 +123,18 @@ theorem tanTwoTheta_addBounded_of_intervalExterior
     (hBcomplDisj : Bᶜ ∩ Set.Ioo (β - δ) (α + δ) = ∅)
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-        (addBounded_isSelfAdjoint A hA E hE) S hS)) :
+      (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)) :
     ‖directedTanTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-          (addBounded_isSelfAdjoint A hA E hE) S hS)
+        (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS)
         hquarter‖ ≤
       (2 * ‖E‖ / δ) /
         (1 - 2 * Submodule.directedProjectionGap
           (selfAdjointSpectralSubspace A hA B hB)
-          (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
-            (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2) := by
+          (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
+            (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS) ^ 2) := by
   obtain ⟨hBlow, hBhigh⟩ :=
     selfAdjointSpectralRestriction_semibounded_of_subset_Icc
       A hA B hB hBsub

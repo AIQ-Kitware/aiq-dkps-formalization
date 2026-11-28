@@ -15,6 +15,9 @@ public import Mathlib.Tactic
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -165,12 +168,12 @@ theorem beamPerturbation_isSelfAdjoint (ε : ℝ) :
 /-- The perturbed real free beam `A + H`. -/
 @[expose]
 def beamPerturbed (ε : ℝ) : BeamL2 →ₗ.[ℝ] BeamL2 :=
-  TauCeti.LinearPMap.addBounded beamOperator (beamPerturbation ε)
+  ((beamPerturbation ε).toLinearMap +ᵥ beamOperator)
 
 /-- The perturbed real free beam is self-adjoint. -/
 theorem beamPerturbed_isSelfAdjoint (ε : ℝ) : _root_.IsSelfAdjoint (beamPerturbed ε) :=
-  addBounded_isSelfAdjoint beamOperator beamOperator_isSelfAdjoint
-    (beamPerturbation ε) (beamPerturbation_isSelfAdjoint ε)
+  isSelfAdjoint_perturb_bounded beamOperator_isSelfAdjoint
+    (isSelfAdjoint_iff_isSymmetric.mpr (beamPerturbation_isSelfAdjoint ε))
 
 /-! ## Continuous representatives and affine moments -/
 

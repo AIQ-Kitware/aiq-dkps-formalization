@@ -132,7 +132,7 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
       (lam : ℂ) ∉ _root_.LinearPMap.spectrum A) :
     ((c : ℝ) : ℂ) ∉
-      _root_.LinearPMap.spectrum (TauCeti.LinearPMap.addBounded A K) := by
+      _root_.LinearPMap.spectrum (K.toLinearMap +ᵥ A) := by
   rw [_root_.LinearPMap.mem_spectrum_iff, not_not]
   have hgap' : ∀ t : ℝ, |t - c| < s → (t : ℂ) ∉ A.spectrum := by
     intro t ht hspec
@@ -181,12 +181,12 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
   · exact (hright (V y)).choose
   · obtain ⟨hmem, hsolve⟩ := hright (V y)
     show ((c : ℝ) : ℂ) • (R ∘L V) y -
-      (TauCeti.LinearPMap.addBounded A K) ⟨(R ∘L V) y, _⟩ = y
-    have hadd : (TauCeti.LinearPMap.addBounded A K)
-        (⟨R (V y), hmem⟩ : (TauCeti.LinearPMap.addBounded A K).domain)
-        = A ⟨R (V y), hmem⟩ + K (R (V y)) := rfl
+      (K.toLinearMap +ᵥ A) ⟨(R ∘L V) y, _⟩ = y
+    have hadd : (K.toLinearMap +ᵥ A)
+        (⟨R (V y), hmem⟩ : (K.toLinearMap +ᵥ A).domain)
+        = A ⟨R (V y), hmem⟩ + K (R (V y)) := add_comm _ _
     show ((c : ℝ) : ℂ) • R (V y) -
-      (TauCeti.LinearPMap.addBounded A K) ⟨R (V y), hmem⟩ = y
+      (K.toLinearMap +ᵥ A) ⟨R (V y), hmem⟩ = y
     rw [hadd]
     have hstep : ((c : ℝ) : ℂ) • R (V y) - A ⟨R (V y), hmem⟩ = V y := hsolve
     have : ((c : ℝ) : ℂ) • R (V y) - (A ⟨R (V y), hmem⟩ + K (R (V y)))
@@ -196,10 +196,10 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
       linear_combination (norm := module) hstep
     rw [this, hUV y]
   · have hxA : ((x : H)) ∈ A.domain := x.2
-    have hadd : (TauCeti.LinearPMap.addBounded A K) x
-        = A ⟨(x : H), hxA⟩ + K (x : H) := rfl
+    have hadd : (K.toLinearMap +ᵥ A) x
+        = A ⟨(x : H), hxA⟩ + K (x : H) := add_comm _ _
     show (R ∘L V) (((c : ℝ) : ℂ) • (x : H) -
-      (TauCeti.LinearPMap.addBounded A K) x) = (x : H)
+      (K.toLinearMap +ᵥ A) x) = (x : H)
     rw [hadd]
     have hw : R (((c : ℝ) : ℂ) • (x : H) - A ⟨(x : H), hxA⟩) = (x : H) :=
       hleft ⟨(x : H), hxA⟩
@@ -229,7 +229,7 @@ theorem spectrum_addBounded_subset_of_gap
     (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A →
       lam ∈ Set.Icc beta alpha ∪ {x : ℝ | x ≤ beta - delta ∨ alpha + delta ≤ x}) :
     ∀ lam : ℝ,
-      (lam : ℂ) ∈ _root_.LinearPMap.spectrum (TauCeti.LinearPMap.addBounded A K) →
+      (lam : ℂ) ∈ _root_.LinearPMap.spectrum (K.toLinearMap +ᵥ A) →
       lam ∈ Set.Icc (beta - gam) (alpha + gam) ∪
         {x : ℝ | x ≤ beta - gam - (delta - 2 * gam) ∨
           alpha + gam + (delta - 2 * gam) ≤ x} := by

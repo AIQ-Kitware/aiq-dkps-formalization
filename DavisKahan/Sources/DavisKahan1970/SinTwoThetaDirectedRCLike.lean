@@ -30,6 +30,9 @@ public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -84,7 +87,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
       (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant)) δ)
     (hJdom : ∀ x : A.domain, W.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A D)
+      (D.toLinearMap +ᵥ A)
           ⟨W.reflectionOperator (x : H), hJdom x⟩ =
         W.reflectionOperator (A x))
     (hDmem : N.Mem D) :
@@ -111,14 +114,14 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
   have hF₁dom : ∀ y : Λ.domain, F₁ (y : Uc) ∈ A.domain := fun y =>
     hJdom ⟨((y : Uc) : H), hUcdom y⟩
   have hF₁int : ∀ y : Λ.domain,
-      (TauCeti.LinearPMap.addBounded A D) ⟨F₁ (y : Uc), hF₁dom y⟩ =
+      (D.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩ =
         F₁ (Λ y) := by
     intro y
     have hAy : A ⟨((y : Uc) : H), hUcdom y⟩ = ((Λ y : Uc) : H) :=
       (_root_.LinearPMap.coe_restrict_apply
         (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant) _).symm
     calc
-      (TauCeti.LinearPMap.addBounded A D) ⟨F₁ (y : Uc), hF₁dom y⟩
+      (D.toLinearMap +ᵥ A) ⟨F₁ (y : Uc), hF₁dom y⟩
           = J (A ⟨((y : Uc) : H), hUcdom y⟩) :=
             hJintertwines ⟨((y : Uc) : H), hUcdom y⟩
       _ = J ((Λ y : Uc) : H) := congrArg J hAy
@@ -421,17 +424,17 @@ theorem sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
     {P Q : Submodule 𝕜 H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {M : P →L[𝕜] P} {R : P →L[𝕜] H}
-    (hPdom : ∀ p : P, (p : H) ∈ (TauCeti.LinearPMap.addBounded A Hop).domain)
+    (hPdom : ∀ p : P, (p : H) ∈ (Hop.toLinearMap +ᵥ A).domain)
     (hres : ∀ p : P,
-      (TauCeti.LinearPMap.addBounded A Hop) ⟨(p : H), hPdom p⟩ =
+      (Hop.toLinearMap +ᵥ A) ⟨(p : H), hPdom p⟩ =
         R p + ((M p : P) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) δ) :
     (N.Mem (Angle.directedSinTwoAngleOperator P Q) →
       N.Mem R →
@@ -441,8 +444,8 @@ theorem sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
       N.Mem Hop →
         δ * N.gaugeReal (Angle.sinTwoAngleOperator P Q) ≤
           2 * N.gaugeReal Hop) := by
-  have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-    addBounded_isSelfAdjoint A hA Hop hHop
+  have hAH : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hHop)
   refine ⟨?_, ?_⟩
   · exact sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
       N hAH hQred hPdom hres hδ hgap

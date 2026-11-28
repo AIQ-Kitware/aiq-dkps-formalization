@@ -439,6 +439,36 @@
   ],
   "records": [
     {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed and DavisKahan.SinTheta.BoundedPerturbation",
+      "source_declarations": [
+        "TauCeti.LinearPMap.addBounded",
+        "TauCeti.LinearPMap.addBounded_domain",
+        "TauCeti.LinearPMap.addBounded_apply",
+        "TauCeti.LinearPMap.addBounded_neg_cancel",
+        "TauCeti.DavisKahan.addBounded_isSelfAdjoint",
+        "TauCeti.DavisKahan.addBounded_zero",
+        "TauCeti.DavisKahan1970.Section8.addBounded_addBounded"
+      ],
+      "original_source_anchor": "887f5daae9edaad6d5e22186241930a2f1d2cffc:ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean and 887f5daae9edaad6d5e22186241930a2f1d2cffc:DavisKahan/SinTheta/BoundedPerturbation.lean",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0. The accepted bounded self-adjointness proof has the Spectra ancestry documented in #13871.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions",
+      "final_declarations": [
+        "LinearPMap.vadd_domain",
+        "LinearPMap.vadd_apply",
+        "neg_vadd_vadd",
+        "add_vadd",
+        "zero_vadd",
+        "LinearPMap.isSelfAdjoint_perturb_bounded"
+      ],
+      "roadmap_targets": [
+        "SA-C54"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/13871",
+      "integration": "b73f7898d5854ded5adbc9fa738a8f150c039724",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "The Mathlib action of ambient linear maps gives the same domain and pointwise sum. Ambient bounded perturbations use that action directly, including in the paper statements. The symmetric perturbation premise converts to self-adjointness using Mathlib. TauCeti provides the bounded Kato–Rellich theorem through the DKPS and Spectra port. The domain-defined perturbation in the same port has the separate SA-C52 scope."
+    },
+    {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed and DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation",
       "source_declarations": [
         "TauCeti.LinearPMap.pullbackDomain",

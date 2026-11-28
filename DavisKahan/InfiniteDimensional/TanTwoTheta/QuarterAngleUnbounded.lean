@@ -51,6 +51,8 @@ inverse `G = C⁻¹` that Section 6.2 supplies.  Writing `S = A + H − c`,
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+
 namespace TauCeti
 namespace DavisKahan
 
@@ -85,31 +87,30 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
     (hred : _root_.LinearPMap.IsReducing A U)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hV : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
-    (hVhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ V →
+    (hVhigh : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ V →
       b * ‖(x : E)‖ ^ 2 ≤
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
-    (hVperpLow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Vᗮ →
-      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ)
+    (hVperpLow : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Vᗮ →
+      RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ ≤
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
     ∀ y : E, y ≠ 0 → 0 < RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
       + U.reflectionOperator * V.reflectionOperator) y, y⟫_ℂ := by
   classical
-  set Aop : E →ₗ.[ℂ] E := TauCeti.LinearPMap.addBounded A Hop with hAopdef
+  set Aop : E →ₗ.[ℂ] E := (Hop.toLinearMap +ᵥ A) with hAopdef
   set J : E →L[ℂ] E := U.reflectionOperator with hJdef
   set K : E →L[ℂ] E := V.reflectionOperator with hKdef
   set c : ℝ := (a + b) / 2 with hcdef
   set δ : ℝ := (b - a) / 2 with hδdef
   have hδpos : 0 < δ := by rw [hδdef]; linarith
   have hAop : IsSelfAdjoint Aop :=
-    TauCeti.DavisKahan.addBounded_isSelfAdjoint A hA Hop
-      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH)
+    isSelfAdjoint_perturb_bounded hA hH
   -- the two coercivity statements
   have hcoerU : ∀ x : Aop.domain,
       δ * ‖(x : E)‖ ^ 2 ≤
@@ -124,7 +125,7 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
     simp only [ContinuousLinearMap.comp_apply] at hskew
     have hsplit : Aop x - ((c : ℝ) : ℂ) • (x : E)
         = (A ⟨(x : E), hx⟩ - ((c : ℝ) : ℂ) • (x : E)) + Hop (x : E) := by
-      have hap : Aop x = A ⟨(x : E), hx⟩ + Hop (x : E) := rfl
+      have hap : Aop x = A ⟨(x : E), hx⟩ + Hop (x : E) := add_comm _ _
       rw [hap]
       abel
     rw [hsplit, map_add, inner_add_left, map_add]
@@ -150,16 +151,10 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
       exact TauCeti.DavisKahan.star_reflectionOperator_complex V
     conv_lhs => rw [← hKsa]
     rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
-  have hRI : ReflectionIntertwines A Hop V := ReflectionIntertwines.ofReducesSubspace hV
-  have hKdom : ∀ x : Aop.domain, K (x : E) ∈ Aop.domain := fun x => hRI.mapsDomain ⟨(x : E), x.2⟩
-  have hKcomm : ∀ x : Aop.domain, Aop ⟨K (x : E), hKdom x⟩ = K (Aop x) := by
-    intro x
-    have hx := hRI.commutes ⟨(x : E), x.2⟩
-    have hl : Aop ⟨K (x : E), hKdom x⟩ = A ⟨K (x : E), hRI.mapsDomain ⟨(x : E), x.2⟩⟩
-        + Hop (K (x : E)) := rfl
-    have hr : K (Aop x) = K (A ⟨(x : E), x.2⟩ + Hop (x : E)) := rfl
-    rw [hl, hr, map_add]
-    simpa [hKdef] using hx
+  have hreflection := reflection_commutes_of_reducesSubspace hV
+  have hKdom : ∀ x : Aop.domain, K (x : E) ∈ Aop.domain := hreflection.1
+  have hKcomm : ∀ x : Aop.domain, Aop ⟨K (x : E), hKdom x⟩ = K (Aop x) :=
+    hreflection.2
   have hsym : TauCeti.LinearPMap.IsSymmetric Aop :=
     TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hAop
   -- the bounded inverse of `C = K (Aop - c)`
@@ -378,16 +373,16 @@ theorem norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
     (hred : _root_.LinearPMap.IsReducing A U)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hV : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
-    (hVhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ V →
+    (hVhigh : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ V →
       b * ‖(x : E)‖ ^ 2 ≤
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
-    (hVperpLow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Vᗮ →
-      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ)
+    (hVperpLow : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Vᗮ →
+      RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ ≤
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
@@ -414,16 +409,16 @@ theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
     (hred : _root_.LinearPMap.IsReducing A U)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hV : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
-    (hVhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ V →
+    (hVhigh : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ V →
       b * ‖(x : E)‖ ^ 2 ≤
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
-    (hVperpLow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Vᗮ →
-      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ)
+    (hVperpLow : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Vᗮ →
+      RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ ≤
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
@@ -443,16 +438,16 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
     (hred : _root_.LinearPMap.IsReducing A U)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hV : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
-    (hVhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ V →
+    (hVhigh : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ V →
       b * ‖(x : E)‖ ^ 2 ≤
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
-    (hVperpLow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Vᗮ →
-      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ)
+    (hVperpLow : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Vᗮ →
+      RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ ≤
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
@@ -470,16 +465,16 @@ theorem subspaceGap_le_of_orderedFormGap_unbounded
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
     (hred : _root_.LinearPMap.IsReducing A U)
-    (hV : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) V)
+    (hV : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) V)
     (hUhigh : ∀ x : A.domain, (x : E) ∈ U →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hUperpLow : ∀ x : A.domain, (x : E) ∈ Uᗮ →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
-    (hVhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ V →
+    (hVhigh : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ V →
       b * ‖(x : E)‖ ^ 2 ≤
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
-    (hVperpLow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Vᗮ →
-      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ)
+    (hVperpLow : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Vᗮ →
+      RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ ≤
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
@@ -497,17 +492,17 @@ theorem subspaceGap_le_of_orderedFormGap_unbounded_printed
     {alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
     (hredP : _root_.LinearPMap.IsReducing A Pᗮ)
-    (hQ : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
+    (hQ : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) Qᗮ)
     (hPlow : ∀ x : A.domain, (x : E) ∈ P →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ alpha * ‖(x : E)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : E) ∈ Pᗮ →
       (alpha + delta) * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
-    (hQlow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Q →
-      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+    (hQlow : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Q →
+      RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ ≤
         alpha * ‖(x : E)‖ ^ 2)
-    (hQhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Qᗮ →
+    (hQhigh : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Qᗮ →
       (alpha + delta) * ‖(x : E)‖ ^ 2 ≤
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ)
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
     P.projectionGap Q ≤ Real.sqrt 2 / 2 := by
@@ -552,17 +547,17 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed
     {alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
     (hredP : _root_.LinearPMap.IsReducing A Pᗮ)
-    (hQ : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
+    (hQ : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) Qᗮ)
     (hPlow : ∀ x : A.domain, (x : E) ∈ P →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ alpha * ‖(x : E)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : E) ∈ Pᗮ →
       (alpha + delta) * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
-    (hQlow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Q →
-      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+    (hQlow : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Q →
+      RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ ≤
         alpha * ‖(x : E)‖ ^ 2)
-    (hQhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Qᗮ →
+    (hQhigh : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Qᗮ →
       (alpha + delta) * ‖(x : E)‖ ^ 2 ≤
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ)
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
     TauCeti.DavisKahanExt.maximalAngle P Q ≤ Real.pi / 4 := by
@@ -603,17 +598,17 @@ theorem norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed
     {alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint Hop)
     (hredP : _root_.LinearPMap.IsReducing A Pᗮ)
-    (hQ : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A Hop) Qᗮ)
+    (hQ : _root_.LinearPMap.IsReducing (Hop.toLinearMap +ᵥ A) Qᗮ)
     (hPlow : ∀ x : A.domain, (x : E) ∈ P →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ alpha * ‖(x : E)‖ ^ 2)
     (hPhigh : ∀ x : A.domain, (x : E) ∈ Pᗮ →
       (alpha + delta) * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
-    (hQlow : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Q →
-      RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ ≤
+    (hQlow : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Q →
+      RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ ≤
         alpha * ‖(x : E)‖ ^ 2)
-    (hQhigh : ∀ x : (TauCeti.LinearPMap.addBounded A Hop).domain, (x : E) ∈ Qᗮ →
+    (hQhigh : ∀ x : (Hop.toLinearMap +ᵥ A).domain, (x : E) ∈ Qᗮ →
       (alpha + delta) * ‖(x : E)‖ ^ 2 ≤
-        RCLike.re ⟪TauCeti.LinearPMap.addBounded A Hop x, (x : E)⟫_ℂ)
+        RCLike.re ⟪(Hop.toLinearMap +ᵥ A) x, (x : E)⟫_ℂ)
     (hHP : ∀ x ∈ P, Hop x ∈ Pᗮ) (hHPperp : ∀ x ∈ Pᗮ, Hop x ∈ P)
     (hdelta : 0 < delta) :
     ∀ y : E, y ≠ 0 →

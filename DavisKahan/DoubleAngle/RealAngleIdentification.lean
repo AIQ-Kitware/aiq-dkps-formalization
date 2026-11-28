@@ -11,6 +11,9 @@ public import DavisKahan.Geometry.Polar.DirectRotationReal
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -189,7 +192,7 @@ theorem sinTwoTheta_reflectionResidual_opNorm_real
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (TauCeti.LinearPMap.addBounded A R)
+      (R.toLinearMap +ᵥ A)
           ⟨V.reflectionOperator (x : E), hJdom x⟩ =
         V.reflectionOperator (A x)) :
     δ * ‖sinTwoAngleOperatorR
@@ -222,8 +225,8 @@ theorem sinTwoTheta_addBounded_opNorm_real
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
     δ * ‖sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA S hS)
-        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
-          (addBounded_isSelfAdjoint A hA Eop hEop) T hT)‖ ≤ 2 * ‖Eop‖ := by
+        (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) T hT)‖ ≤ 2 * ‖Eop‖ := by
   have h := sinTwoTheta_addBounded_gauge_real A hA Eop hEop
     ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ 1 Nat.one_pos

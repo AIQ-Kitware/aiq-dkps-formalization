@@ -95,7 +95,7 @@ theorem commonDomain_trialReflection_intertwines
       T (⟨(p : E), hp⟩) =
         A (⟨(p : E), by rw [← hdom]; exact hp⟩) + R p)
     (x : T.domain) :
-    (TauCeti.LinearPMap.addBounded T ((-2 : K) • trialOffDiagonalPart P 0 R))
+    (((-2 : K) • trialOffDiagonalPart P 0 R).toLinearMap +ᵥ T)
       (⟨P.reflectionOperator (x : E), commonDomain_reflection_mem hdom hP x⟩) =
         P.reflectionOperator (T x) := by
   let C : E →L[K] E := trialOffDiagonalBlock P 0 R
@@ -209,8 +209,8 @@ theorem commonDomain_trialReflection_intertwines
         (2 : K) • (⟨P.starProjection (x : E), hproj x⟩ : T.domain) - x := by
     apply Subtype.ext
     simp [Submodule.reflectionOperator_apply]
-  change T (⟨P.reflectionOperator (x : E), commonDomain_reflection_mem hdom hP x⟩) +
-      ((-2 : K) • trialOffDiagonalPart P 0 R) (P.reflectionOperator (x : E)) = _
+  change ((-2 : K) • trialOffDiagonalPart P 0 R) (P.reflectionOperator (x : E)) +
+      T ⟨P.reflectionOperator (x : E), commonDomain_reflection_mem hdom hP x⟩ = _
   rw [hsplit, LinearPMap.map_sub, LinearPMap.map_smul, smul_apply, hdefect,
     Submodule.reflectionOperator_apply]
   module
@@ -364,7 +364,7 @@ theorem sinTwoTheta_commonDomain_whereDefinedUIN_rclike
       N.Mem (Angle.directedSinTwoAngleOperator P Q) → N.Mem R ->
         gap * N.gaugeReal (Angle.directedSinTwoAngleOperator P Q) ≤ 2 * N.gaugeReal R) ∧
     (∀ Hop : E →L[K] E, Hop.IsSymmetric ->
-      T = TauCeti.LinearPMap.addBounded A Hop ->
+      T = (Hop.toLinearMap +ᵥ A) ->
       N.Mem (Angle.sinTwoAngleOperator P Q) → N.Mem Hop ->
         gap * N.gaugeReal (Angle.sinTwoAngleOperator P Q) ≤ 2 * N.gaugeReal Hop) := by
   constructor

@@ -51,7 +51,7 @@ is there.  The registered witness once had it on the *unperturbed* blocks, and t
 inventory called that the printed hypothesis.
 
 The restatement below is what fails if the gap argument moves back to `A` and `P`:
-`hgap` is built from `reducingRestriction (addBounded A Hop) Q`. -/
+`hgap` is built from `reducingRestriction (Hop.toLinearMap +ᵥ A) Q`. -/
 /-- The ambient `sin 2Θ` gap hypothesis is read on the *perturbed* blocks of
 `A + H` at `Q`, which is where (1.3) puts it. -/
 theorem ambient_sinTwoTheta_gap_is_on_the_perturbed_blocks
@@ -62,13 +62,13 @@ theorem ambient_sinTwoTheta_gap_is_on_the_perturbed_blocks
     {P Q : Submodule ℂ H} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Q hQred)
+        (Hop.toLinearMap +ᵥ A) Q hQred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ)
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ)
     (hHmem : N.Mem Hop) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ∧
       δ * N.gauge (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -86,8 +86,8 @@ theorem addBounded_cancellation_is_on_the_nose
     {𝕜 : Type*} [RCLike 𝕜] {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (A : H →ₗ.[𝕜] H) (V : H →L[𝕜] H) :
-    TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A V) (-V) = A :=
-  TauCeti.LinearPMap.addBounded_neg_cancel A V
+    ((-V).toLinearMap +ᵥ (V.toLinearMap +ᵥ A)) = A :=
+  neg_vadd_vadd V.toLinearMap A
 
 /-- The ambient `sin 2Θ` operator is symmetric in its pair of subspaces. -/
 theorem ambient_sinTwoTheta_is_symmetric_in_the_pair

@@ -40,11 +40,11 @@ omit [CompleteSpace H] in
 theorem graph_bound_original_of_addBounded
     (A : H →ₗ.[𝕜] H)
     (V : H →L[𝕜] H)
-    (x : ℕ → (TauCeti.LinearPMap.addBounded A V).domain)
+    (x : ℕ → (V.toLinearMap +ᵥ A).domain)
     {C : ℝ}
     (hC : ∀ n,
       ‖(x n : H)‖ ^ 2 +
-        ‖(TauCeti.LinearPMap.addBounded A V) (x n)‖ ^ 2 ≤ C) :
+        ‖(V.toLinearMap +ᵥ A) (x n)‖ ^ 2 ≤ C) :
     ∃ D : ℝ, ∀ n,
       ‖(x n : H)‖ ^ 2 + ‖A (x n)‖ ^ 2 ≤ D := by
   change ℕ → A.domain at x
@@ -52,22 +52,22 @@ theorem graph_bound_original_of_addBounded
   refine ⟨S ^ 2 + ((1 + ‖V‖) * S) ^ 2, ?_⟩
   intro n
   have hx : ‖(x n : H)‖ ≤ S :=
-    ambient_values_bounded_of_graph_bound (TauCeti.LinearPMap.addBounded A V) x hC n
-  have hsum : ‖(TauCeti.LinearPMap.addBounded A V) (x n)‖ ≤ S :=
-    operator_values_bounded_of_graph_bound (TauCeti.LinearPMap.addBounded A V) x hC n
+    ambient_values_bounded_of_graph_bound (V.toLinearMap +ᵥ A) x hC n
+  have hsum : ‖(V.toLinearMap +ᵥ A) (x n)‖ ≤ S :=
+    operator_values_bounded_of_graph_bound (V.toLinearMap +ᵥ A) x hC n
   have hVx : ‖V (x n : H)‖ ≤ ‖V‖ * S :=
     (V.le_opNorm (x n : H)).trans
       (mul_le_mul_of_nonneg_left hx (norm_nonneg V))
   have hAeq : A (x n) =
-      (TauCeti.LinearPMap.addBounded A V) (x n) - V (x n : H) := by
+      (V.toLinearMap +ᵥ A) (x n) - V (x n : H) := by
     change A (x n) =
-      (A (x n) + V (x n : H)) - V (x n : H)
+      (V (x n : H) + A (x n)) - V (x n : H)
     abel
   have hAx : ‖A (x n)‖ ≤ (1 + ‖V‖) * S := by
     rw [hAeq]
     calc
-      ‖(TauCeti.LinearPMap.addBounded A V) (x n) - V (x n : H)‖
-          ≤ ‖(TauCeti.LinearPMap.addBounded A V) (x n)‖ + ‖V (x n : H)‖ :=
+      ‖(V.toLinearMap +ᵥ A) (x n) - V (x n : H)‖
+          ≤ ‖(V.toLinearMap +ᵥ A) (x n)‖ + ‖V (x n : H)‖ :=
         norm_sub_le _ _
       _ ≤ S + ‖V‖ * S := add_le_add hsum hVx
       _ = (1 + ‖V‖) * S := by ring
@@ -92,8 +92,8 @@ theorem graph_bound_addBounded_of_original
       ‖(x n : H)‖ ^ 2 + ‖A (x n)‖ ^ 2 ≤ C) :
     ∃ D : ℝ, ∀ n,
       ‖(x n : H)‖ ^ 2 +
-        ‖(TauCeti.LinearPMap.addBounded A V) (x n)‖ ^ 2 ≤ D := by
-  change ℕ → (TauCeti.LinearPMap.addBounded A V).domain at x
+        ‖(V.toLinearMap +ᵥ A) (x n)‖ ^ 2 ≤ D := by
+  change ℕ → (V.toLinearMap +ᵥ A).domain at x
   let S := Real.sqrt (max C 0)
   refine ⟨S ^ 2 + ((1 + ‖V‖) * S) ^ 2, ?_⟩
   intro n
@@ -104,21 +104,21 @@ theorem graph_bound_addBounded_of_original
   have hVx : ‖V (x n : H)‖ ≤ ‖V‖ * S :=
     (V.le_opNorm (x n : H)).trans
       (mul_le_mul_of_nonneg_left hx (norm_nonneg V))
-  have hsum : ‖(TauCeti.LinearPMap.addBounded A V) (x n)‖ ≤
+  have hsum : ‖(V.toLinearMap +ᵥ A) (x n)‖ ≤
       (1 + ‖V‖) * S := by
-    change ‖A (x n) + V (x n : H)‖ ≤
+    change ‖V (x n : H) + A (x n)‖ ≤
       (1 + ‖V‖) * S
     calc
-      ‖A (x n) + V (x n : H)‖
-          ≤ ‖A (x n)‖ + ‖V (x n : H)‖ := norm_add_le _ _
-      _ ≤ S + ‖V‖ * S := add_le_add hAx hVx
+      ‖V (x n : H) + A (x n)‖
+          ≤ ‖V (x n : H)‖ + ‖A (x n)‖ := norm_add_le _ _
+      _ ≤ ‖V‖ * S + S := add_le_add hVx hAx
       _ = (1 + ‖V‖) * S := by ring
   have hS : 0 ≤ S := Real.sqrt_nonneg _
   have hfac : 0 ≤ (1 + ‖V‖) * S :=
     mul_nonneg (by positivity) hS
   have hx_sq : ‖(x n : H)‖ ^ 2 ≤ S ^ 2 :=
     (sq_le_sq₀ (norm_nonneg _) hS).2 hx
-  have hsum_sq : ‖(TauCeti.LinearPMap.addBounded A V) (x n)‖ ^ 2 ≤
+  have hsum_sq : ‖(V.toLinearMap +ᵥ A) (x n)‖ ^ 2 ≤
       ((1 + ‖V‖) * S) ^ 2 :=
     (sq_le_sq₀ (norm_nonneg _) hfac).2 hsum
   exact add_le_add hx_sq hsum_sq
@@ -129,7 +129,7 @@ theorem graphCompact_addBounded
     (A : H →ₗ.[𝕜] H)
     (V : H →L[𝕜] H)
     (hA : SequentiallyCompactGraphEmbedding A) :
-    SequentiallyCompactGraphEmbedding (TauCeti.LinearPMap.addBounded A V) := by
+    SequentiallyCompactGraphEmbedding (V.toLinearMap +ᵥ A) := by
   intro x hx
   obtain ⟨C, hC⟩ := hx
   obtain ⟨D, hD⟩ := graph_bound_original_of_addBounded A V x hC
@@ -141,7 +141,7 @@ compactness of the original operator. -/
 theorem graphCompact_of_addBounded
     (A : H →ₗ.[𝕜] H)
     (V : H →L[𝕜] H)
-    (hAV : SequentiallyCompactGraphEmbedding (TauCeti.LinearPMap.addBounded A V)) :
+    (hAV : SequentiallyCompactGraphEmbedding (V.toLinearMap +ᵥ A)) :
     SequentiallyCompactGraphEmbedding A := by
   intro x hx
   obtain ⟨C, hC⟩ := hx
@@ -153,7 +153,7 @@ omit [CompleteSpace H] in
 theorem graphCompact_addBounded_iff
     (A : H →ₗ.[𝕜] H)
     (V : H →L[𝕜] H) :
-    SequentiallyCompactGraphEmbedding (TauCeti.LinearPMap.addBounded A V) ↔
+    SequentiallyCompactGraphEmbedding (V.toLinearMap +ᵥ A) ↔
       SequentiallyCompactGraphEmbedding A := by
   constructor
   · exact graphCompact_of_addBounded A V

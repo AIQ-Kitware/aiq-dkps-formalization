@@ -141,14 +141,13 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
   -- shift both blocks by the center
   set c𝕜 : 𝕜 := (((α + β) / 2 : ℝ) : 𝕜) with hc𝕜
   set A' : E →ₗ.[𝕜] E :=
-    TauCeti.LinearPMap.addBounded A
-      (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) with hA'def
+    ((-(c𝕜 • ContinuousLinearMap.id 𝕜 E)).toLinearMap +ᵥ A) with hA'def
   have hA'apply : ∀ x : A.domain,
       A' x = A x - c𝕜 • (x : E) := by
     intro x
-    change A x + (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) (x : E) =
+    change (-(c𝕜 • ContinuousLinearMap.id 𝕜 E)) (x : E) + A x =
       A x - c𝕜 • (x : E)
-    simp [sub_eq_add_neg]
+    simp [sub_eq_add_neg, add_comm]
   have hEq' : _root_.LinearPMap.SylvesterEquation
       A' (S.toLinearMap.toPMap ⊤) X C := by
     refine ⟨fun x => hEqT.mapsTo_domain x, fun x => ?_⟩
@@ -172,15 +171,10 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     (⟨J, hdom, ?_, ?_⟩ : TauCeti.LinearPMap.HasBoundedEverywhereInverse A') S hr0 hδ
     hJnorm hSnorm hEq' hC
   · intro y
-    change A ⟨J y, hdom y⟩ + -(c𝕜 • J y) = y
-    have h := hright y
-    rw [sub_eq_add_neg] at h
-    exact h
+    exact (hA'apply ⟨J y, hdom y⟩).trans (hright y)
   · intro x
-    change J (A x + -(c𝕜 • (x : E))) = (x : E)
-    have h := hleft x
-    rw [sub_eq_add_neg] at h
-    exact h
+    rw [hA'apply]
+    exact hleft x
 
 end Sylvester
 end DavisKahan

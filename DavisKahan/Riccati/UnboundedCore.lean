@@ -68,9 +68,7 @@ coupling to the diagonal direct sum. -/
 noncomputable abbrev unboundedBlockOperatorCore
     (H : UnboundedBlockData (𝕜 := 𝕜) (E0 := E0) (E1 := E1)) :
     WithLp 2 (E0 × E1) →ₗ.[𝕜] WithLp 2 (E0 × E1) :=
-  TauCeti.LinearPMap.addBounded
-    (TauCeti.LinearPMap.directSum H.A0 H.A1)
-    (unboundedOffDiagonalCoupling H.B01 H.B10)
+  ((unboundedOffDiagonalCoupling H.B01 H.B10).toLinearMap +ᵥ (TauCeti.LinearPMap.directSum H.A0 H.A1))
 
 /-- The block operator keeps the direct-sum domain unchanged: the coupling is
 bounded and everywhere defined, so only the diagonal partial maps constrain the
@@ -96,7 +94,8 @@ from the second coordinate. -/
     (z : (unboundedBlockOperatorCore H).domain) :
     WithLp.fst (unboundedBlockOperatorCore H z) =
       H.A0 (TauCeti.LinearPMap.directSumDomainFst H.A0 H.A1 z) +
-        H.B01 (WithLp.snd (z : WithLp 2 (E0 × E1))) := rfl
+        H.B01 (WithLp.snd (z : WithLp 2 (E0 × E1))) :=
+  add_comm _ _
 
 /-- Second coordinate of the block action. -/
 @[simp] theorem unboundedBlockOperatorCore_apply_snd
@@ -104,7 +103,8 @@ from the second coordinate. -/
     (z : (unboundedBlockOperatorCore H).domain) :
     WithLp.snd (unboundedBlockOperatorCore H z) =
       H.A1 (TauCeti.LinearPMap.directSumDomainSnd H.A0 H.A1 z) +
-        H.B10 (WithLp.fst (z : WithLp 2 (E0 × E1))) := rfl
+        H.B10 (WithLp.fst (z : WithLp 2 (E0 × E1))) :=
+  add_comm _ _
 
 end DavisKahanExt
 end TauCeti

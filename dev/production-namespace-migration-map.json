@@ -3117,7 +3117,7 @@
   "TauCeti.DavisKahan.Experimental.absOp_mem_polarRange": "ContinuousLinearMap.modulus_apply_mem_polarInitial",
   "TauCeti.DavisKahan.Experimental.absOp_nonneg": "ContinuousLinearMap.modulus_nonneg",
   "TauCeti.DavisKahan.Experimental.abs_principalHalfPhase_of_abs_eq_one": "TauCeti.DavisKahan.abs_principalHalfPhase_of_abs_eq_one",
-  "TauCeti.DavisKahan.Experimental.addBounded_isSelfAdjoint": "TauCeti.DavisKahan.addBounded_isSelfAdjoint",
+  "TauCeti.DavisKahan.Experimental.addBounded_isSelfAdjoint": "",
   "TauCeti.DavisKahan.Experimental.add_four_cancel_complex": "TauCeti.DavisKahan.add_four_cancel_complex",
   "TauCeti.DavisKahan.Experimental.add_reflectionPerturbation_intertwines": "TauCeti.DavisKahan.add_reflectionPerturbation_intertwines",
   "TauCeti.DavisKahan.Experimental.add_self_cancel_complex": "TauCeti.DavisKahan.add_self_cancel_complex",

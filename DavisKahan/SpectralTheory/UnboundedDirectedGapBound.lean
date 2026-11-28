@@ -25,6 +25,9 @@ bound.
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 namespace TauCeti
 namespace DavisKahan1970
 namespace Section8
@@ -56,41 +59,40 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
     {P Q : Submodule ℂ Hc} [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A Hop) Qᗮ hQred.orthogonal) δ) :
+        (Hop.toLinearMap +ᵥ A) Qᗮ hQred.orthogonal) δ) :
     δ * P.directedProjectionGap Q ≤ ‖Hop‖ := by
   classical
-  have hB : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
-    DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
+  have hB : IsSelfAdjoint (Hop.toLinearMap +ᵥ A) :=
+    isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hHop)
   have hA0 : IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A P hPred) :=
     by simpa only [TauCeti.LinearPMap.reducingRestriction_eq_restrict] using
       hPred.isSelfAdjoint_restrict hA
   have hX : DavisKahan.IsometricEmbedding (P.subtypeL : P →L[ℂ] Hc) := fun _ => rfl
   have hXdom : ∀ x : (TauCeti.LinearPMap.reducingRestriction A P hPred).domain,
-      (P.subtypeL (x : P) : Hc) ∈ (TauCeti.LinearPMap.addBounded A Hop).domain := by
+      (P.subtypeL (x : P) : Hc) ∈ (Hop.toLinearMap +ᵥ A).domain := by
     intro x
     exact (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A P hPred _).mp x.2
   have hReq : ∀ x : (TauCeti.LinearPMap.reducingRestriction A P hPred).domain,
-      (TauCeti.LinearPMap.addBounded A Hop) ⟨P.subtypeL (x : P), hXdom x⟩ -
+      (Hop.toLinearMap +ᵥ A) ⟨P.subtypeL (x : P), hXdom x⟩ -
           P.subtypeL ((TauCeti.LinearPMap.reducingRestriction A P hPred) x) =
         (Hop ∘L (P.subtypeL : P →L[ℂ] Hc)) (x : P) := by
     intro x
     have hxA : ((x : P) : Hc) ∈ A.domain :=
       (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A P hPred _).mp x.2
-    rw [TauCeti.LinearPMap.addBounded_apply]
-    change A ⟨((x : P) : Hc), hxA⟩ + Hop ((x : P) : Hc) -
+    change Hop ((x : P) : Hc) + A ⟨((x : P) : Hc), hxA⟩ -
       ((TauCeti.LinearPMap.reducingRestriction A P hPred x : P) : Hc) = Hop ((x : P) : Hc)
     rw [TauCeti.LinearPMap.coe_reducingRestriction_apply A P hPred (x : P) hxA]
-    abel
+    exact add_sub_cancel_right _ _
   have key := DavisKahan.ExactSinTheta.sinTheta_unbounded_complex_reducingSubspace
     ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ 1 one_pos
         gauge_adjoint := (OperatorIdealFamily.kyFan ℂ 1 one_pos).gauge_adjoint }))
-    (TauCeti.LinearPMap.addBounded A Hop) hB.dense_domain hB.isClosed hB Q hQred
+    (Hop.toLinearMap +ᵥ A) hB.dense_domain hB.isClosed hB Q hQred
     (TauCeti.LinearPMap.reducingRestriction A P hPred)
     hA0.dense_domain hA0.isClosed hA0
     (P.subtypeL : P →L[ℂ] Hc) (Hop ∘L (P.subtypeL : P →L[ℂ] Hc)) hX hXdom hReq hδ hgap

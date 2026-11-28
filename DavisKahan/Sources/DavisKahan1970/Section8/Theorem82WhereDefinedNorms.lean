@@ -37,13 +37,13 @@ theorem theorem8_2_perturbation_whereDefinedUIN_unbounded_complex
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
         ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
@@ -117,13 +117,13 @@ theorem theorem8_2_perturbation_whereDefinedUIN_unbounded_real
     {alpha beta delta : ℝ} (hdelta : 0 < delta) (hab : beta ≤ alpha)
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing
-      (TauCeti.LinearPMap.addBounded A Hop) Q)
+      (Hop.toLinearMap +ᵥ A) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+      ((Hop.toLinearMap +ᵥ A).restrict
         (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
         ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum

@@ -10,6 +10,9 @@ public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -258,18 +261,18 @@ theorem norm_beamRitzOffDiagonal_le (ε : ℝ) :
 deleting its off-diagonal blocks relative to the trial splitting. -/
 @[expose]
 def beamComparison (ε : ℝ) : BeamL2 →ₗ.[ℂ] BeamL2 :=
-  TauCeti.LinearPMap.addBounded beamOperator (beamRitzDiagonal ε)
+  ((beamRitzDiagonal ε).toLinearMap +ᵥ beamOperator)
 
 /-- `Â` is self-adjoint: it is the self-adjoint free beam plus a bounded symmetric
 operator. -/
 theorem beamComparison_isSelfAdjoint (ε : ℝ) : _root_.IsSelfAdjoint (beamComparison ε) :=
-  addBounded_isSelfAdjoint beamOperator beamOperator_isSelfAdjoint _
-    (beamRitzDiagonal_isSelfAdjoint ε)
+  isSelfAdjoint_perturb_bounded beamOperator_isSelfAdjoint
+    (isSelfAdjoint_iff_isSymmetric.mpr (beamRitzDiagonal_isSelfAdjoint ε))
 
 /-- `Â` acts as the free beam plus the diagonal block of the perturbation. -/
 theorem beamComparison_apply (ε : ℝ) {x : BeamL2} (hx : x ∈ beamOperator.domain) :
     (beamComparison ε) ⟨x, hx⟩
-      = beamOperator ⟨x, hx⟩ + beamRitzDiagonal ε x := rfl
+      = beamOperator ⟨x, hx⟩ + beamRitzDiagonal ε x := add_comm _ _
 
 /-- `Â + B = A + ε t`: deleting the off-diagonal blocks and restoring them. -/
 theorem beamComparison_add_offDiagonal (ε : ℝ) {x : BeamL2}
@@ -277,7 +280,7 @@ theorem beamComparison_add_offDiagonal (ε : ℝ) {x : BeamL2}
     (beamComparison ε) ⟨x, hx⟩ + beamRitzOffDiagonal ε x
       = (beamPerturbed ε) ⟨x, hx⟩ := by
   have h2 : (beamPerturbed ε) ⟨x, hx⟩
-      = beamOperator ⟨x, hx⟩ + beamPerturbation ε x := rfl
+      = beamOperator ⟨x, hx⟩ + beamPerturbation ε x := add_comm _ _
   have h3 : beamRitzOffDiagonal ε x
       = beamPerturbation ε x - beamRitzDiagonal ε x :=
     congrArg (fun f : BeamL2 →L[ℂ] BeamL2 => f x) (beamRitzOffDiagonal_eq ε)

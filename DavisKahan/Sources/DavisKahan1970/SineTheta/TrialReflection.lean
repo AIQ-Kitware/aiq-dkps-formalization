@@ -349,7 +349,7 @@ theorem trialReflection_intertwines
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     (x : A.domain) :
-    (TauCeti.LinearPMap.addBounded A ((-2 : 𝕜) • trialOffDiagonalPart V M R))
+    (((-2 : 𝕜) • trialOffDiagonalPart V M R).toLinearMap +ᵥ A)
         ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ =
       V.reflectionOperator (A x) := by
   -- the reflected vector, as a domain element
@@ -360,12 +360,12 @@ theorem trialReflection_intertwines
           starProjection_mem_domain hVdom (x : H)⟩ : A.domain) - x := by
     apply Subtype.ext
     simp [Submodule.reflectionOperator_apply V (x : H)]
-  have hadd : (TauCeti.LinearPMap.addBounded A ((-2 : 𝕜) • trialOffDiagonalPart V M R))
+  have hadd : (((-2 : 𝕜) • trialOffDiagonalPart V M R).toLinearMap +ᵥ A)
         ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ =
       A
           ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ +
         ((-2 : 𝕜) • trialOffDiagonalPart V M R) (V.reflectionOperator (x : H)) :=
-    rfl
+    add_comm _ _
   have h1 : A
         ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ =
       (2 : 𝕜) • trialCompression V M R (x : H) - A x := by

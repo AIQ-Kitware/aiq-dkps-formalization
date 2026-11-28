@@ -12,6 +12,9 @@ public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -20,7 +23,7 @@ open TauCeti.DavisKahan.Sylvester
 This module removes two pieces of provisional plumbing from the route to the
 classical unbounded perturbation statement.
 
-First, Spectra's bounded Kato--Rellich theorem proves that `A + V`, on the
+First, TauCeti's bounded Kato–Rellich theorem proves that `A + V`, on the
 original domain of a self-adjoint closed operator `A`, is self-adjoint whenever
 `V` is bounded and self-adjoint.
 
@@ -48,23 +51,6 @@ variable {H F G : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
 
-/-- Bounded Kato--Rellich: a bounded self-adjoint perturbation of a self-adjoint
-partial map is self-adjoint on the same domain. -/
-theorem addBounded_isSelfAdjoint
-    (A : H →ₗ.[𝕜] H)
-    (hA : IsSelfAdjoint A)
-    (V : H →L[𝕜] H) (hV : V.IsSymmetric) :
-    _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V) := by
-  have hV' : _root_.IsSelfAdjoint V :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hV
-  have hadd : TauCeti.LinearPMap.addBounded A V = V.toLinearMap +ᵥ A := by
-    refine LinearPMap.ext_iff.mpr ⟨rfl, ?_⟩
-    intro x hx hy
-    change A ⟨x, hx⟩ + V x = V x + A ⟨x, hy⟩
-    exact add_comm _ _
-  rw [hadd]
-  exact _root_.LinearPMap.isSelfAdjoint_perturb_bounded hA hV'
-
 /-- Package a bounded perturbation and two invariant block embeddings as the
 paper-shaped unbounded residual data.  The residual identity is automatic and
 has residual `V ∘ X`. -/
@@ -79,10 +65,10 @@ noncomputable def boundedPerturbationSinThetaData
       A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+      (V.toLinearMap +ᵥ A) ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁ y)) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := H) (F := F) (G := G) where
-  A := TauCeti.LinearPMap.addBounded A V
+  A := (V.toLinearMap +ᵥ A)
   A₀ := A₀
   Λ₁ := Λ₁
   X := X
@@ -93,11 +79,10 @@ noncomputable def boundedPerturbationSinThetaData
   residual_eq := by
     intro x
     change
-      (A ⟨X (x : F), hXdom x⟩ + V (X (x : F))) -
+      (V (X (x : F)) + A ⟨X (x : F), hXdom x⟩) -
           X (A₀ x) =
         V (X (x : F))
-    rw [hXintertwines x]
-    abel
+    rw [hXintertwines x, add_sub_cancel_right]
   intertwines := hF₁intertwines
 
 end ScalarGeneric
@@ -146,7 +131,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap
       A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+      (V.toLinearMap +ᵥ A) ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁ y))
     (hXnorm : ‖X‖ ≤ 1) (hF₁norm : ‖F₁‖ ≤ 1)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -157,8 +142,8 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
-    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
-    exact addBounded_isSelfAdjoint A hA V hV
+    change _root_.IsSelfAdjoint (V.toLinearMap +ᵥ A)
+    exact isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)
   have hraw := sinTheta_unbounded_opNorm_of_spectrum_gap D hD hA₀ hΛ₁
     hβα hδ hA₀low hA₀high hΛspec
   have hraw' :
@@ -182,7 +167,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
       A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+      (V.toLinearMap +ᵥ A) ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁ y))
     (hXiso : IsometricEmbedding X) (hF₁iso : IsometricEmbedding F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -204,21 +189,21 @@ noncomputable def spectralBoundedPerturbationSinThetaData
     (B T : Set ℝ) (hB : MeasurableSet B) (hT : MeasurableSet T) :
     UnboundedSinThetaData (𝕜 := ℂ) (E := H)
       (F := selfAdjointSpectralSubspace A hA B hB)
-      (G := selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A V)
-        (addBounded_isSelfAdjoint A hA V hV) T hT) :=
+      (G := selfAdjointSpectralSubspace (V.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT) :=
   boundedPerturbationSinThetaData A V
     (selfAdjointSpectralRestriction A hA B hB)
-    (selfAdjointSpectralRestriction (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralRestriction (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
     (selfAdjointSpectralSubspaceInclusion A hA B hB)
-    (selfAdjointSpectralSubspaceInclusion (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralSubspaceInclusion (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
     (selfAdjointSpectralRestriction_inclusion_mem_domain A hA B hB)
     (selfAdjointSpectralRestriction_inclusion_intertwines A hA B hB)
-    (selfAdjointSpectralRestriction_inclusion_mem_domain (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
-    (selfAdjointSpectralRestriction_inclusion_intertwines (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralRestriction_inclusion_mem_domain (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
+    (selfAdjointSpectralRestriction_inclusion_intertwines (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
 
 /-- Genuine spectral-subspace specialization of the unbounded
 bounded-perturbation sine-theta estimate.  The remaining hypotheses are now
@@ -235,30 +220,30 @@ theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
       (selfAdjointSpectralRestriction A hA B hB) α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ _root_.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction (TauCeti.LinearPMap.addBounded A V)
-          (addBounded_isSelfAdjoint A hA V hV) T hT)) :
+        (selfAdjointSpectralRestriction (V.toLinearMap +ᵥ A)
+          (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)) :
     δ * ‖(selfAdjointSpectralSubspaceInclusion A hA B hB).adjoint ∘L
-      selfAdjointSpectralSubspaceInclusion (TauCeti.LinearPMap.addBounded A V)
-        (addBounded_isSelfAdjoint A hA V hV) T hT‖ ≤ ‖V‖ := by
+      selfAdjointSpectralSubspaceInclusion (V.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT‖ ≤ ‖V‖ := by
   exact sinTheta_addBounded_opNorm_of_spectrum_gap_isometric A hA V hV
     (selfAdjointSpectralRestriction A hA B hB)
     (selfAdjointSpectralRestriction_isSelfAdjoint A hA B hB)
-    (selfAdjointSpectralRestriction (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
-    (selfAdjointSpectralRestriction_isSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralRestriction (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
+    (selfAdjointSpectralRestriction_isSelfAdjoint (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
     (selfAdjointSpectralSubspaceInclusion A hA B hB)
-    (selfAdjointSpectralSubspaceInclusion (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralSubspaceInclusion (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
     (selfAdjointSpectralRestriction_inclusion_mem_domain A hA B hB)
     (selfAdjointSpectralRestriction_inclusion_intertwines A hA B hB)
-    (selfAdjointSpectralRestriction_inclusion_mem_domain (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
-    (selfAdjointSpectralRestriction_inclusion_intertwines (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralRestriction_inclusion_mem_domain (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
+    (selfAdjointSpectralRestriction_inclusion_intertwines (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
     (selfAdjointSpectralSubspaceInclusion_isometric A hA B hB)
-    (selfAdjointSpectralSubspaceInclusion_isometric (TauCeti.LinearPMap.addBounded A V)
-      (addBounded_isSelfAdjoint A hA V hV) T hT)
+    (selfAdjointSpectralSubspaceInclusion_isometric (V.toLinearMap +ᵥ A)
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT)
     hβα hδ hA₀low hA₀high hΛspec
 
 
@@ -274,14 +259,14 @@ theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_intervalExterior
     (hBsub : B ⊆ Set.Icc β α)
     (hTdisj : T ∩ Set.Ioo (β - δ) (α + δ) = ∅) :
     δ * ‖(selfAdjointSpectralSubspaceInclusion A hA B hB).adjoint ∘L
-      selfAdjointSpectralSubspaceInclusion (TauCeti.LinearPMap.addBounded A V)
-        (addBounded_isSelfAdjoint A hA V hV) T hT‖ ≤ ‖V‖ := by
+      selfAdjointSpectralSubspaceInclusion (V.toLinearMap +ᵥ A)
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV)) T hT‖ ≤ ‖V‖ := by
   obtain ⟨hA₀low, hA₀high⟩ :=
     selfAdjointSpectralRestriction_semibounded_of_subset_Icc
       A hA B hB hBsub
   have hΛspec :=
     selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
-      (TauCeti.LinearPMap.addBounded A V) (addBounded_isSelfAdjoint A hA V hV)
+      (V.toLinearMap +ᵥ A) (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hV))
       T hT hTdisj
   exact sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
     A hA V hV B T hB hT hβα hδ hA₀low hA₀high hΛspec

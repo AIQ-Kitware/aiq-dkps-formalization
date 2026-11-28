@@ -117,11 +117,11 @@ theorem isReducing_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E)
 
 /-- The transport commutes with adding a bounded operator. -/
 theorem pmap_addBounded (A : E →ₗ.[𝕜] E) (T : E →L[𝕜] E) :
-    pmap (e := e) (LinearPMap.addBounded A T) =
-      LinearPMap.addBounded (pmap (e := e) A) (clm (e := e) T) := by
+    pmap (e := e) (T.toLinearMap +ᵥ A) =
+      ((clm (e := e) T).toLinearMap +ᵥ (pmap (e := e) A)) := by
   refine LinearPMap.ext rfl ?_
   intro x hf hg
-  simp only [pmap_apply, LinearPMap.addBounded_apply]
+  simp only [pmap_apply, _root_.LinearPMap.vadd_apply]
   rfl
 
 end ScalarTransport

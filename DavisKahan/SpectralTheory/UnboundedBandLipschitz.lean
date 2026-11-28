@@ -65,7 +65,7 @@ theorem at the operator norm. -/
 theorem directedGap_bandSubspace_le
     {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (K : H →L[ℂ] H) (hK : K.IsSymmetric)
-    (hAB : B = TauCeti.LinearPMap.addBounded A K)
+    (hAB : B = (K.toLinearMap +ᵥ A))
     {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
     (_hAspec : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ bandExterior l r d)
@@ -73,14 +73,14 @@ theorem directedGap_bandSubspace_le
       Set.Icc l r ∪ bandExterior l r d) :
     d * Submodule.directedProjectionGap (bandSubspace hA l r) (bandSubspace hB l r) ≤ ‖K‖ := by
   subst hAB
-  have hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A K)
+  have hQred : _root_.LinearPMap.IsReducing (K.toLinearMap +ᵥ A)
       (bandSubspace hB l r) := reducesSubspace_bandSubspace hB l r
   have hperp : (bandSubspace hB l r)ᗮ =
-      (((TauCeti.LinearPMap.addBounded A K).spectralPVM hB).proj
+      (((K.toLinearMap +ᵥ A).spectralPVM hB).proj
         (bandExterior l r d) (measurableSet_bandExterior l r d)).range :=
     (specRange_bandExterior_eq_orthogonal hB hlr hd hBspec).symm
   have hgap := formBoundedSylvesterGap_band_exterior (A := A)
-    (B := TauCeti.LinearPMap.addBounded A K) hA hB hlr
+    (B := (K.toLinearMap +ᵥ A)) hA hB hlr
     (W := bandSubspace hA l r) (W' := (bandSubspace hB l r)ᗮ)
     rfl hperp (reducesSubspace_bandSubspace hA l r) hQred.orthogonal
   exact TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex
@@ -94,7 +94,7 @@ reverse one is the same theorem applied to `A = B + (−K)`. -/
 theorem subspaceGap_bandSubspace_le
     {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (K : H →L[ℂ] H) (hK : K.IsSymmetric)
-    (hAB : B = TauCeti.LinearPMap.addBounded A K)
+    (hAB : B = (K.toLinearMap +ᵥ A))
     {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
     (hAspec : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ bandExterior l r d)
@@ -106,9 +106,9 @@ theorem subspaceGap_bandSubspace_le
     have h : ⟪K x, y⟫_ℂ = ⟪x, K y⟫_ℂ := hK x y
     show ⟪-(K x), y⟫_ℂ = ⟪x, -(K y)⟫_ℂ
     rw [inner_neg_left, inner_neg_right, h]
-  have hBA : A = TauCeti.LinearPMap.addBounded B (-K) := by
+  have hBA : A = ((-K).toLinearMap +ᵥ B) := by
     rw [hAB]
-    exact (TauCeti.LinearPMap.addBounded_neg_cancel A K).symm
+    exact (neg_vadd_vadd K.toLinearMap A).symm
   have h1 := directedGap_bandSubspace_le hA hB K hK hAB hlr hd hAspec hBspec
   have h2 := directedGap_bandSubspace_le hB hA (-K) hnegK hBA hlr hd hBspec hAspec
   rw [norm_neg] at h2
@@ -209,15 +209,6 @@ is not needed: the uniqueness of the spectral splitting is delivered by the
 `sin Θ` theorem itself. -/
 
 omit [CompleteSpace H] in
-/-- Adding the zero perturbation changes nothing. -/
-theorem addBounded_zero (A : H →ₗ.[ℂ] H) :
-    TauCeti.LinearPMap.addBounded A (0 : H →L[ℂ] H) = A := by
-  refine LinearPMap.ext rfl ?_
-  intro x y hxy
-  simp only [TauCeti.LinearPMap.addBounded_apply, zero_apply, add_zero]
-  rfl
-
-omit [CompleteSpace H] in
 /-- A vanishing directed gap is a subspace inclusion. -/
 theorem le_of_directedGap_eq_zero (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -242,11 +233,11 @@ complement; then `P ≤ W`.  The proof is the unbounded `sin Θ` theorem at zero
 perturbation.
 
 `B` and `hAB` are the standard device for feeding `A` to a theorem stated about
-`addBounded A K`: a caller passes `B := A` and `(addBounded_zero A).symm`, and
+`(K.toLinearMap +ᵥ A)`: a caller passes `B := A` and `(zero_vadd _ A).symm`, and
 `subst` puts the goal in the shape the estimate consumes. -/
 theorem le_of_band_exterior_spectra
     {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
-    (hAB : B = TauCeti.LinearPMap.addBounded A (0 : H →L[ℂ] H))
+    (hAB : B = ((0 : H →L[ℂ] H).toLinearMap +ᵥ A))
     {P W : Submodule ℂ H} [P.HasOrthogonalProjection] [W.HasOrthogonalProjection]
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hWred : _root_.LinearPMap.IsReducing B W)
@@ -264,7 +255,7 @@ theorem le_of_band_exterior_spectra
   have hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A P hPred)
       (TauCeti.LinearPMap.reducingRestriction
-        (TauCeti.LinearPMap.addBounded A (0 : H →L[ℂ] H)) Wᗮ hWred.orthogonal) d :=
+        ((0 : H →L[ℂ] H).toLinearMap +ᵥ A) Wᗮ hWred.orthogonal) d :=
     .intervalExterior hlr (Or.inl ⟨hPspec, hWspec⟩)
   have hle := TauCeti.DavisKahan1970.Section8.directedGap_le_of_reducingGap_unbounded_complex
     hA (0 : H →L[ℂ] H) hzero hPred hWred hd hgap

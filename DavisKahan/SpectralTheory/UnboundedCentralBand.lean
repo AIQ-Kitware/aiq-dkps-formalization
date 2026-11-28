@@ -298,7 +298,7 @@ theorem realSpectrum_addBounded_subset_of_gap
     (hgam : ‖K‖ ≤ gam) (hgamlt : 2 * gam < delta)
     (hgap : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc beta alpha ∪ bandExterior beta alpha delta) :
-    _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.addBounded A K) ⊆
+    _root_.LinearPMap.realSpectrum (K.toLinearMap +ᵥ A) ⊆
       Set.Icc (beta - gam) (alpha + gam) ∪
         bandExterior (beta - gam) (alpha + gam) (delta - 2 * gam) := by
   intro lam hlam

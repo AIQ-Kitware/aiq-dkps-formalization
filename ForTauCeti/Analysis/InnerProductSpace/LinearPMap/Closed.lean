@@ -15,8 +15,8 @@ public import TauCeti.LinearAlgebra.LinearPMap.Conj
 # Domain-aware infrastructure for partial linear maps
 
 Reusable algebra for unbounded operators represented canonically by Mathlib's
-`LinearPMap`: domain transport, extension, symmetry, graph norms, relative
-bounds, and elementary real resolvent predicates.
+`LinearPMap`: domain transport, extension, symmetry, inverse bounds,
+and elementary real resolvent predicates.
 
 The declarations deliberately take raw partial maps.  Closedness, dense domain,
 and self-adjointness are separate hypotheses supplied by the theorem that needs
@@ -543,40 +543,6 @@ theorem isSymmetric_of_isSelfAdjoint [CompleteSpace E] {A : E →ₗ.[𝕜] E}
   rw [LinearPMap.isSelfAdjoint_def.mp hA] at hformal
   intro x y
   exact hformal x y
-
-/-- Add a bounded ambient perturbation to a partial map on its original
-domain.  Closedness remains a separate property of the resulting map. -/
--- `@[expose]` here is deliberate and minimal: the `_apply` lemma below cannot be
--- *stated* without `.domain` reducing, since it indexes its argument by this map's
--- domain and applies the underlying map to it. That is the `api-design` rubric's own
--- carve-out — a consumer that must unfold — not the blanket exposure it rejects.
-@[expose]
-noncomputable def addBounded (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
-    E →ₗ.[𝕜] E where
-  domain := A.domain
-  toFun := A.toFun + V.toLinearMap.domRestrict A.domain
-
-/-- A bounded perturbation leaves the domain unchanged — `V` is everywhere
-defined, so `A + V` is defined exactly where `A` is.  This is what makes
-perturbation arguments comparable on the nose rather than up to a domain
-inclusion. -/
-@[simp] theorem addBounded_domain (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
-    (TauCeti.LinearPMap.addBounded A V).domain = A.domain := (rfl)
-/-- The perturbed map acts by `A x + V x`. -/
-@[simp] theorem addBounded_apply (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E)
-    (x : (TauCeti.LinearPMap.addBounded A V).domain) :
-    TauCeti.LinearPMap.addBounded A V x = A x + V (x : E) := (rfl)
-/-- **A bounded perturbation is undone by its negation, on the nose.**
-
-`addBounded` leaves the domain alone, so `(A + V) + (-V)` is `A` as a partial map
-rather than merely an extension of it.  This is what lets a theorem stated with
-the roles of the unperturbed and perturbed operators exchanged be applied without
-any domain bookkeeping. -/
-@[simp] theorem addBounded_neg_cancel (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) :
-    TauCeti.LinearPMap.addBounded (TauCeti.LinearPMap.addBounded A V) (-V) = A := by
-  refine LinearPMap.ext rfl fun x hf hg => ?_
-  change A ⟨x, hf⟩ + V x + (-V) x = A ⟨x, hg⟩
-  simp
 
 /-- A bounded left inverse for the real shift of a partial map. -/
 @[expose]

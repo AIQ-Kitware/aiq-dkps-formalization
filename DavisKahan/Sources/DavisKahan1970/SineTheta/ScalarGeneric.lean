@@ -14,6 +14,9 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariant
 
 public section
 
+open _root_.LinearPMap (isSelfAdjoint_perturb_bounded)
+open _root_.ContinuousLinearMap (isSelfAdjoint_iff_isSymmetric)
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -151,7 +154,7 @@ theorem sinTheta_addBounded_gauge_block_of_formGap_rclike
       A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (TauCeti.LinearPMap.addBounded A Vop) ⟨F₁ (y : G), hF₁dom y⟩ =
+      (Vop.toLinearMap +ᵥ A) ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁ y))
     (hF₁iso : IsometricEmbedding F₁)
     {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
@@ -162,8 +165,8 @@ theorem sinTheta_addBounded_gauge_block_of_formGap_rclike
   let D := boundedPerturbationSinThetaData A Vop A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
   have hD : _root_.IsSelfAdjoint D.A := by
-    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Vop)
-    exact addBounded_isSelfAdjoint A hA Vop hVop
+    change _root_.IsSelfAdjoint (Vop.toLinearMap +ᵥ A)
+    exact isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hVop)
   have hResMem : N.Mem D.residual := by
     change N.Mem (Vop ∘L X)
     exact N.comp_right_mem X hVmem
