@@ -121,7 +121,8 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
         (E := ScalarTransport e E) (U := U') (A := A') (B := B') (a := a) (b := b)
         N V' hA' hred'
         hB' hV' hUa' hUb' hab hRmem'
-    let T' : U' →L[ℝ] U'ᗮ := reflectionTangentCorner U' V'.reflectionOperator
+    let T' : U' →L[ℝ] U'ᗮ :=
+      reflectionTangentCorner U' (V'.reflection : ScalarTransport e E →L[ℝ] ScalarTransport e E)
     let T : U →L[𝕜] Uᗮ :=
       DavisKahan.TanTheta.scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) U T'
     have hsine : ∀ n : ℕ,
@@ -194,7 +195,8 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
         (G := ScalarTransport e E) (U := U') (A := A') (B := B') (a := a) (b := b)
         N V' hA' hred'
         hB' hV' hUa' hUb' hab hRmem'
-    let T' : U' →L[ℂ] U'ᗮ := reflectionTangentCorner U' V'.reflectionOperator
+    let T' : U' →L[ℂ] U'ᗮ :=
+      reflectionTangentCorner U' (V'.reflection : ScalarTransport e E →L[ℂ] ScalarTransport e E)
     let T : U →L[𝕜] Uᗮ :=
       DavisKahan.TanTheta.scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) U T'
     have hsine : ∀ n : ℕ,

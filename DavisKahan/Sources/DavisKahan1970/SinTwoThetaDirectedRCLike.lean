@@ -85,11 +85,11 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     (hgap : FormBoundedSylvesterGap
       (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant))
       (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant)) δ)
-    (hJdom : ∀ x : A.domain, W.reflectionOperator (x : H) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (W.reflection : H →L[𝕜] H) (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (D.toLinearMap +ᵥ A)
-          ⟨W.reflectionOperator (x : H), hJdom x⟩ =
-        W.reflectionOperator (A x))
+          ⟨(W.reflection : H →L[𝕜] H) (x : H), hJdom x⟩ =
+        (W.reflection : H →L[𝕜] H) (A x))
     (hDmem : N.Mem D) :
     N.Mem (sinTwoThetaIdealBlock U W) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock U W) ≤
@@ -98,7 +98,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
   set Uc := (Uᗮ : Submodule 𝕜 H) with hUc
   set A₀ := A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant) with hA₀def
   set Λ := A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant) with hΛdef
-  set J : H →L[𝕜] H := W.reflectionOperator with hJ
+  set J : H →L[𝕜] H := (W.reflection : H →L[𝕜] H) with hJ
   set X : U →L[𝕜] H := U.subtypeL with hX
   set F₁ : Uc →L[𝕜] H := J ∘L Uc.subtypeL with hF₁
   have hXdom : ∀ x : A₀.domain, X (x : U) ∈ A.domain := fun x =>
@@ -142,7 +142,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
       rw [Submodule.adjoint_subtypeL]
       rfl
     have hadj : F₁.adjoint = Uc.subtypeL.adjoint ∘L J := by
-      rw [hF₁, ContinuousLinearMap.adjoint_comp, hJ, adjoint_reflectionOperator W]
+      rw [hF₁, ContinuousLinearMap.adjoint_comp, hJ, (W.isSelfAdjoint_reflection).adjoint_eq]
     have hsymm : W.reflection.symm = W.reflection := W.reflection_symm
     change J (Uc.subtypeL (F₁.adjoint x)) = _
     rw [hadj]
@@ -152,7 +152,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     change J (Uc.starProjection (J x)) =
       W.reflection (Uc.starProjection (W.reflection.symm x))
     rw [hsymm]
-    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
+    simp only [hJ, LinearIsometryEquiv.coe_coe'']
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N U
     (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)) F₁ hF₁iso hFproj hraw.1
@@ -164,12 +164,12 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
       exact congrArg (fun q : Uc => (q : H))
         (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self z)
     have hJJ : (J ∘L J : H →L[𝕜] H) = ContinuousLinearMap.id 𝕜 H :=
-      Submodule.reflectionOperator_involutive W
+      W.reflection_mul_self
     calc F₁.adjoint ∘L F₁
         = (Uc.subtypeL.adjoint ∘L J.adjoint) ∘L (J ∘L Uc.subtypeL) := by
           rw [hF₁, ContinuousLinearMap.adjoint_comp]
       _ = Uc.subtypeL.adjoint ∘L (J ∘L J) ∘L Uc.subtypeL := by
-          rw [hJ, adjoint_reflectionOperator W]
+          rw [hJ, (W.isSelfAdjoint_reflection).adjoint_eq]
           rfl
       _ = Uc.subtypeL.adjoint ∘L Uc.subtypeL := by
           rw [hJJ, ContinuousLinearMap.id_comp]

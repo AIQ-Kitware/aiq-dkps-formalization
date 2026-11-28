@@ -339,8 +339,8 @@ private theorem kyFan_reflectionDisplacement_le
     ((conjByIsometryEquiv V.reflection A - A).kyFanGauge k : ℝ) ≤
       2 * ((B - A).kyFanGauge k : ℝ) := by
   have hdefect : conjByIsometryEquiv V.reflection A - A =
-      V.reflectionOperator ∘L (A - B) ∘L
-          V.reflectionOperator - (A - B) := by
+      (V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L
+          (V.reflection : E →L[ℂ] E) - (A - B) := by
     rw [conjByReflection_sub_eq_reflectionDefect,
       reflectionDefect_eq_perturbationDefect A B V hV]
   have hAB : ((A - B).kyFanGauge k : ℝ) =
@@ -349,25 +349,25 @@ private theorem kyFan_reflectionDisplacement_le
         nnNorm_neg, nnNorm_one, one_mul]
   have h0 : 0 ≤ ((A - B).kyFanGauge k : ℝ) :=
     (NNReal.coe_nonneg _)
-  have h1 : ‖(V.reflectionOperator : E →L[ℂ] E)‖ ≤ 1 := by
-    exact_mod_cast Submodule.norm_reflectionOperator_le_one V
-  have hconj : ((V.reflectionOperator ∘L (A - B) ∘L
-        V.reflectionOperator).kyFanGauge k : ℝ) ≤
+  have h1 : ‖(V.reflection : E →L[ℂ] E)‖ ≤ 1 := by
+    exact_mod_cast V.reflection.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hconj : (((V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L
+        (V.reflection : E →L[ℂ] E)).kyFanGauge k : ℝ) ≤
       ((A - B).kyFanGauge k : ℝ) := by
     refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le _ _ _ k))).trans ?_
-    calc ‖(V.reflectionOperator : E →L[ℂ] E)‖ *
+    calc ‖(V.reflection : E →L[ℂ] E)‖ *
           ((A - B).kyFanGauge k : ℝ) *
-          ‖(V.reflectionOperator : E →L[ℂ] E)‖
+          ‖(V.reflection : E →L[ℂ] E)‖
         ≤ 1 * ((A - B).kyFanGauge k : ℝ) * 1 := by
           gcongr
       _ = ((A - B).kyFanGauge k : ℝ) := by ring
-  have hsplit : ((V.reflectionOperator ∘L (A - B) ∘L
-        V.reflectionOperator - (A - B)).kyFanGauge k : ℝ) ≤
-      ((V.reflectionOperator ∘L (A - B) ∘L
-          V.reflectionOperator).kyFanGauge k : ℝ) +
+  have hsplit : (((V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L
+        (V.reflection : E →L[ℂ] E) - (A - B)).kyFanGauge k : ℝ) ≤
+      (((V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L
+          (V.reflection : E →L[ℂ] E)).kyFanGauge k : ℝ) +
         ((A - B).kyFanGauge k : ℝ) := by
     have h := NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_add_le
-      (V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator) (-(A - B)) k)
+      ((V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L (V.reflection : E →L[ℂ] E)) (-(A - B)) k)
     rwa [← sub_eq_add_neg, ← neg_one_smul ℂ, ContinuousLinearMap.kyFanGauge_smul,
         nnNorm_neg, nnNorm_one, one_mul] at h
   rw [hdefect]

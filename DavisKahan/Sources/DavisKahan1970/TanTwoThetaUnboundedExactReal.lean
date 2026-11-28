@@ -490,7 +490,7 @@ tangent are all supplied by the library, and no pole certificate is asked for. -
 reducing subspace rather than a reflection witness.**
 
 `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real` with
-`Z = V.reflectionOperator`
+`Z = (V.reflection : E →L[ℝ] E)`
 and with `Z` self-adjoint and involutive supplied by the library. -/
 theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real
     (N : SymmetricNormingFunction)
@@ -511,19 +511,19 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symm
     (hab : a < b) (hBmem : N.Mem B) :
     IsUnit
         ((TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic).diagBlock
-            (V.reflectionOperator) *
+            ((V.reflection : E →L[ℝ] E)) *
           (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic).diagBlock
-            (V.reflectionOperator)) ∧
+            ((V.reflection : E →L[ℝ] E))) ∧
       N.Mem (unboundedReflectionTangent
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)
-        (V.reflectionOperator)) ∧
+        ((V.reflection : E →L[ℝ] E))) ∧
       (b - a) * N.gauge (unboundedReflectionTangent
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)
-        (V.reflectionOperator)) ≤
+        ((V.reflection : E →L[ℝ] E))) ≤
         2 * N.gauge B :=
   tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real N hA hBsa hB
-    (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V)
-    (TauCeti.DavisKahan.reflectionOperator_mul_self_complex V)
+    (Submodule.isSelfAdjoint_reflection V)
+    (Submodule.reflection_mul_self V)
     hV.mapsDomain hV.commutes hUa hUb hab hBmem
 
 /-- **The real pole exclusion.**
@@ -539,13 +539,13 @@ operator and its complexification have the same real spectrum, so the complex st
 transfers verbatim. -/
 theorem cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq_real
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (h : IsUnit (U.diagBlock V.reflectionOperator *
-      U.diagBlock V.reflectionOperator)) :
+    (h : IsUnit (U.diagBlock (V.reflection : E →L[ℝ] E) *
+      U.diagBlock (V.reflection : E →L[ℝ] E))) :
     ∀ t ∈ spectrum ℝ (angleOperatorR U V), Real.cos (2 * t) ≠ 0 := by
   have hC : IsUnit ((complexifySubmodule U).diagBlock
-      (complexifySubmodule V).reflectionOperator *
+      ((complexifySubmodule V).reflection : _ →L[ℂ] _) *
       (complexifySubmodule U).diagBlock
-        (complexifySubmodule V).reflectionOperator) := by
+        ((complexifySubmodule V).reflection : _ →L[ℂ] _)) := by
     rw [← TauCeti.DavisKahan.complexify_reflectionOperator, diagonalPart_complexifySubmodule,
       ← TauCeti.DavisKahan.complexify_mul,
       TauCeti.RealComplexification.isUnit_complexify_iff]
@@ -776,34 +776,35 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
     (hRmem : N.Mem (blockCompression Uᗮ U B)) :
     (∀ n : ℕ, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       (∀ n : ℕ,
-        ((reflectionTangentCorner U V.reflectionOperator).singularValue n : ℝ) =
+        ((reflectionTangentCorner U (V.reflection : E →L[ℝ] E)).singularValue n : ℝ) =
           Real.tan (Real.arcsin
             (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ)))) ∧
-      N.Mem (reflectionTangentCorner U V.reflectionOperator) ∧
-      (b - a) * N.gauge (reflectionTangentCorner U V.reflectionOperator) ≤
+      N.Mem (reflectionTangentCorner U (V.reflection : E →L[ℝ] E)) ∧
+      (b - a) * N.gauge (reflectionTangentCorner U (V.reflection : E →L[ℝ] E)) ≤
         2 * N.gauge (blockCompression Uᗮ U B) := by
   classical
-  have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
-  have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
+  have hZsa := Submodule.isSelfAdjoint_reflection V
+  have hZ2 := Submodule.reflection_mul_self V
   obtain ⟨hCC, hmem, hle⟩ :=
     tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real hA hred hB
       hZsa hZ2 hV.mapsDomain hV.commutes hUa hUb hab N hRmem
   have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
-  have hZsaC : IsSelfAdjoint (complexify V.reflectionOperator) :=
+  have hZsaC : IsSelfAdjoint (complexify (V.reflection : E →L[ℝ] E)) :=
     (complexify_isSelfAdjoint_iff _).2 hZsa
-  have hZ2C : complexify V.reflectionOperator * complexify V.reflectionOperator = 1 := by
+  have hZ2C : complexify (V.reflection : E →L[ℝ] E) * complexify (V.reflection : E →L[ℝ] E) = 1
+    := by
     rw [← complexify_mul, hZ2, complexify_one]
   have hS1C : ‖(complexifySubmodule U).offDiagBlock
-      (complexify V.reflectionOperator)‖ < 1 :=
+      (complexify (V.reflection : E →L[ℝ] E))‖ < 1 :=
     norm_offDiagonalPart_lt_one_reducing_exact hAc (reducesSubspace_complexifyReal hred)
       (isOddFor_complexifySubmodule hB) hZsaC hZ2C
       (mapsDomainTo_complexifyReal hV.mapsDomain)
       (complexified_reducing_commutation hV.mapsDomain hV.commutes)
       (re_inner_complexifyReal_le_of_forall_mem hUa)
       (le_re_inner_complexifyReal_of_forall_mem_orthogonal hUb) hab
-  have hrefl : complexify V.reflectionOperator =
-      (complexifySubmodule V).reflectionOperator :=
+  have hrefl : complexify (V.reflection : E →L[ℝ] E) =
+      ((complexifySubmodule V).reflection : _ →L[ℂ] _) :=
     DavisKahan.complexify_reflectionOperator V
   -- the directed sine corner and the ideal block, over `ℂ`
   have hsameC := (fun gaugeIndex => congrArg NNReal.toReal
@@ -822,26 +823,24 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
   -- the tangent corner's approximation numbers are the real ones
   have hcorner : ∀ n : ℕ,
       ((reflectionTangentCorner (complexifySubmodule U)
-          (complexify V.reflectionOperator)).singularValue n : ℝ) =
-        ((reflectionTangentCorner U V.reflectionOperator).singularValue n : ℝ) := by
+          (complexify (V.reflection : E →L[ℝ] E))).singularValue n : ℝ) =
+        ((reflectionTangentCorner U (V.reflection : E →L[ℝ] E)).singularValue n : ℝ) := by
     intro n
     rw [reflectionTangentCorner, reflectionTangentCorner,
-      unboundedReflectionTangent_complexifySubmodule U V.reflectionOperator hCC]
+      unboundedReflectionTangent_complexifySubmodule U (V.reflection : E →L[ℝ] E) hCC]
     exact approximationSingularValue_directedCorner_complexify U
-      (unboundedReflectionTangent U V.reflectionOperator) n
+      (unboundedReflectionTangent U (V.reflection : E →L[ℝ] E)) n
+  rw [hrefl] at hS1C
   refine ⟨fun n => ?_, fun n => ?_, hmem, hle⟩
   · rw [← hblock n, ← hsameC n]
     exact lt_of_le_of_lt
       ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm (reflectionSineCorner (complexifySubmodule U)
-        (complexifySubmodule V).reflectionOperator) n)))
-      (lt_of_le_of_lt norm_reflectionSineCorner_le (hrefl ▸ hS1C))
+        ((complexifySubmodule V).reflection : _ →L[ℂ] _)) n)))
+      (lt_of_le_of_lt norm_reflectionSineCorner_le hS1C)
   · rw [← hcorner n, ← hblock n, ← hsameC n, hrefl]
-    have hZsaC' : IsSelfAdjoint (complexifySubmodule V).reflectionOperator := hrefl ▸ hZsaC
-    have hZ2C' : (complexifySubmodule V).reflectionOperator *
-        (complexifySubmodule V).reflectionOperator = 1 := hrefl ▸ hZ2C
-    have hS1C' : ‖(complexifySubmodule U).offDiagBlock
-        (complexifySubmodule V).reflectionOperator‖ < 1 := hrefl ▸ hS1C
-    exact approximationNumber_reflectionTangentCorner hZsaC' hZ2C' hS1C' n
+    exact approximationNumber_reflectionTangentCorner
+      (complexifySubmodule V).isSelfAdjoint_reflection
+      (complexifySubmodule V).reflection_mul_self hS1C n
 
 end DirectedReducingReal
 
@@ -855,8 +854,9 @@ the off-diagonal block of the reflection through `V`, relative to `U`, has the s
 norm before and after complexification. -/
 theorem norm_offDiagonalPart_reflectionOperator_complexifySubmodule
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖(complexifySubmodule U).offDiagBlock (complexifySubmodule V).reflectionOperator‖ =
-      ‖U.offDiagBlock V.reflectionOperator‖ := by
+    ‖(complexifySubmodule U).offDiagBlock
+      ((complexifySubmodule V).reflection : _ →L[ℂ] _)‖ =
+      ‖U.offDiagBlock (V.reflection : E →L[ℝ] E)‖ := by
   rw [← DavisKahan.complexify_reflectionOperator, offDiagonalPart_complexifySubmodule,
     norm_complexify]
 
@@ -876,12 +876,13 @@ complexified pair, so the identity is the complex one read through
 `complexify_sinTwoThetaIdealBlock` and `approximationSingularValue_complexify`. -/
 theorem approximationNumber_tanTwoDirectedCornerR
     (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1) (n : ℕ) :
+    (hS1 : ‖U.offDiagBlock (V.reflection : E →L[ℝ] E)‖ < 1) (n : ℕ) :
     ((tanTwoDirectedCornerR U V).singularValue n : ℝ) =
       Real.tan (Real.arcsin
         (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ))) := by
   have hS1C : ‖(complexifySubmodule U).offDiagBlock
-      (complexifySubmodule V).reflectionOperator‖ < 1 := by
+      ((complexifySubmodule V).reflection : _ →L[ℂ] _)‖ <
+        1 := by
     rwa [norm_offDiagonalPart_reflectionOperator_complexifySubmodule]
   have hblock : ((DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
         (complexifySubmodule V)).singularValue n : ℝ) =
@@ -965,11 +966,11 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_real
       (complexifySubmodule U) (complexifySubmodule V) N hAc hredC hBC hVC hUaC hUbC hab hRmemC
   -- the pole exclusion, read back over `ℝ`
   have hV' := DavisKahan.ReflectionIntertwines.ofReducesSubspace hVC
-  have hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1 := by
+  have hS1 : ‖U.offDiagBlock (V.reflection : E →L[ℝ] E)‖ < 1 := by
     rw [← norm_offDiagonalPart_reflectionOperator_complexifySubmodule]
     exact norm_offDiagonalPart_lt_one_reducing_exact hAc hredC hBC
-      (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator _)
-      (TauCeti.DavisKahan.reflectionOperator_mul_self_complex _)
+      (Submodule.isSelfAdjoint_reflection _)
+      (Submodule.reflection_mul_self _)
       hV'.mapsDomain hV'.commutes hUaC hUbC hab
   -- the doubled sine's singular values are the real ones
   have hblock : ∀ n : ℕ,
@@ -1057,11 +1058,11 @@ theorem tanTwoTheta_directed_unboundedResidual_normalizedUIN_real
       (complexifySubmodule U) (complexifySubmodule V) N hAc hredC hBC hVC hUaC hUbC hab hRmemC
   -- the pole exclusion, read back over `ℝ`
   have hV' := DavisKahan.ReflectionIntertwines.ofReducesSubspace hVC
-  have hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1 := by
+  have hS1 : ‖U.offDiagBlock (V.reflection : E →L[ℝ] E)‖ < 1 := by
     rw [← norm_offDiagonalPart_reflectionOperator_complexifySubmodule]
     exact norm_offDiagonalPart_lt_one_reducing_exact hAc hredC hBC
-      (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator _)
-      (TauCeti.DavisKahan.reflectionOperator_mul_self_complex _)
+      (Submodule.isSelfAdjoint_reflection _)
+      (Submodule.reflection_mul_self _)
       hV'.mapsDomain hV'.commutes hUaC hUbC hab
   have hblock : ∀ n : ℕ,
       ((DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)

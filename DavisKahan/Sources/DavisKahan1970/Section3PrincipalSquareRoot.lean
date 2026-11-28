@@ -63,11 +63,11 @@ private theorem principalSquareRoot_positiveDiagonalBlocks
     (hT : DavisKahan.IsDirectRotation U V T) :
     (U.starProjection * T * U.starProjection).IsPositive ∧
       (Uᗮ.starProjection * T * Uᗮ.starProjection).IsPositive := by
-  have hintR : T * U.reflectionOperator = V.reflectionOperator * T := by
+  have hintR : T * (U.reflection : H →L[ℂ] H) = (V.reflection : H →L[ℂ] H) * T := by
     rw [DavisKahan.reflectionOperator_eq_projection_add_projection_sub_one U,
       DavisKahan.reflectionOperator_eq_projection_add_projection_sub_one V,
       mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul, hT.intertwines]
-  have hconj : U.reflectionOperator * T * U.reflectionOperator = star T :=
+  have hconj : (U.reflection : H →L[ℂ] H) * T * (U.reflection : H →L[ℂ] H) = star T :=
     DavisKahan.reflection_conjugate_eq_star_of_sq_of_intertwines
       U V T hroot.unitary_mem hroot.square_eq hintR
   have hsource_sa : IsSelfAdjoint (U.starProjection * T * U.starProjection) := by
@@ -75,15 +75,15 @@ private theorem principalSquareRoot_positiveDiagonalBlocks
       (isSelfAdjoint_starProjection U).star_eq]
     calc
       U.starProjection * star T * U.starProjection =
-          U.starProjection * (U.reflectionOperator * T * U.reflectionOperator) *
+          U.starProjection * ((U.reflection : H →L[ℂ] H) * T * (U.reflection : H →L[ℂ] H)) *
             U.starProjection := by rw [hconj]
-      _ = (U.starProjection * U.reflectionOperator) * T *
-            (U.reflectionOperator * U.starProjection) := by
+      _ = (U.starProjection * (U.reflection : H →L[ℂ] H)) * T *
+            ((U.reflection : H →L[ℂ] H) * U.starProjection) := by
           simp only [mul_assoc]
       _ = U.starProjection * T * U.starProjection := by
           rw [projection_mul_reflectionOperator_self U,
             reflectionOperator_mul_projection_self U]
-  have hRsub : U.reflectionOperator = U.starProjection - Uᗮ.starProjection := by
+  have hRsub : (U.reflection : H →L[ℂ] H) = U.starProjection - Uᗮ.starProjection := by
     rw [DavisKahan.reflectionOperator_eq_projection_add_projection_sub_one U]
     have hsum : U.starProjection + Uᗮ.starProjection = (1 : H →L[ℂ] H) := by
       apply ContinuousLinearMap.ext
@@ -92,10 +92,10 @@ private theorem principalSquareRoot_positiveDiagonalBlocks
         U.starProjection_add_starProjection_orthogonal x
     rw [← hsum]
     abel
-  have hPcR : Uᗮ.starProjection * U.reflectionOperator = -Uᗮ.starProjection := by
+  have hPcR : Uᗮ.starProjection * (U.reflection : H →L[ℂ] H) = -Uᗮ.starProjection := by
     rw [hRsub, mul_sub, DavisKahan.complementaryProjection_mul_projection U,
       DavisKahan.complementaryProjection_sq U, zero_sub]
-  have hRPc : U.reflectionOperator * Uᗮ.starProjection = -Uᗮ.starProjection := by
+  have hRPc : (U.reflection : H →L[ℂ] H) * Uᗮ.starProjection = -Uᗮ.starProjection := by
     rw [hRsub, sub_mul, DavisKahan.projection_mul_complementaryProjection U,
       DavisKahan.complementaryProjection_sq U, zero_sub]
   have hcomplement_sa : IsSelfAdjoint (Uᗮ.starProjection * T * Uᗮ.starProjection) := by
@@ -103,10 +103,10 @@ private theorem principalSquareRoot_positiveDiagonalBlocks
       (isSelfAdjoint_starProjection Uᗮ).star_eq]
     calc
       Uᗮ.starProjection * star T * Uᗮ.starProjection =
-          Uᗮ.starProjection * (U.reflectionOperator * T * U.reflectionOperator) *
+          Uᗮ.starProjection * ((U.reflection : H →L[ℂ] H) * T * (U.reflection : H →L[ℂ] H)) *
             Uᗮ.starProjection := by rw [hconj]
-      _ = (Uᗮ.starProjection * U.reflectionOperator) * T *
-            (U.reflectionOperator * Uᗮ.starProjection) := by
+      _ = (Uᗮ.starProjection * (U.reflection : H →L[ℂ] H)) * T *
+            ((U.reflection : H →L[ℂ] H) * Uᗮ.starProjection) := by
           simp only [mul_assoc]
       _ = (-Uᗮ.starProjection) * T * (-Uᗮ.starProjection) := by rw [hPcR, hRPc]
       _ = Uᗮ.starProjection * T * Uᗮ.starProjection := by noncomm_ring

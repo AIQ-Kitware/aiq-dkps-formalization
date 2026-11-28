@@ -243,9 +243,10 @@ Davis--Kahan double-angle statements are about. -/
 omit [CompleteSpace E] in
 /-- The transport carries the reflection operator of a subspace. -/
 @[simp] theorem reflectionOperator_clm (S : Submodule 𝕜 E) [S.HasOrthogonalProjection] :
-    (submodule (e := e) S).reflectionOperator = clm (e := e) S.reflectionOperator := by
-  rw [Submodule.reflectionOperator_eq_two_smul_sub_id,
-    Submodule.reflectionOperator_eq_two_smul_sub_id, two_smul, two_smul, starProjection_clm,
+    ((submodule (e := e) S).reflection : ScalarTransport e E →L[𝕂] ScalarTransport e E) =
+      clm (e := e) (S.reflection : E →L[𝕜] E) := by
+  rw [Submodule.coe_reflection,
+    Submodule.coe_reflection, two_smul, two_smul, starProjection_clm,
     clm_sub, clm_add]
   rfl
 

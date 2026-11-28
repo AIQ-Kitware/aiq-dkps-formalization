@@ -37,7 +37,7 @@ theorem norm_canonicalIntertwiner_sub_eq_projectionGap
     [M.HasOrthogonalProjection] :
     ‖spectraCanonicalIntertwiner K L - spectraCanonicalIntertwiner K M‖ = L.projectionGap M := by
   have hfactor : spectraCanonicalIntertwiner K L - spectraCanonicalIntertwiner K M =
-      (L.starProjection - M.starProjection) * K.reflectionOperator := by
+      (L.starProjection - M.starProjection) * (K.reflection : E →L[ℂ] E) := by
     calc
       _ = (spectraCanonicalIntertwiner K L - 1) -
           (spectraCanonicalIntertwiner K M - 1) := by abel
@@ -46,11 +46,6 @@ theorem norm_canonicalIntertwiner_sub_eq_projectionGap
         congr 1
         abel
   rw [hfactor, Submodule.projectionGap_def]
-  have href : K.reflectionOperator = (K.reflection : E →L[ℂ] E) := by
-    apply ContinuousLinearMap.ext
-    intro x
-    exact Submodule.reflectionOperator_apply_eq_reflection K x
-  rw [href]
   change ‖(L.starProjection - M.starProjection) * (K.reflection : E →L[ℂ] E)‖ = _
   exact ContinuousLinearMap.opNorm_mul_linearIsometryEquiv _ _
 

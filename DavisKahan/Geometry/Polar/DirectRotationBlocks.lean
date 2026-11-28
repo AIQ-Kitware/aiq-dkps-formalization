@@ -396,7 +396,7 @@ theorem re_inner_halmosCosineSq_sub_half_nonneg_of_source
 omit [CompleteSpace H] in
 /-- The reflection through a subspace fixes its own projection, on the left. -/
 theorem reflectionOperator_mul_projection_self :
-    V.reflectionOperator * V.starProjection = V.starProjection := by
+    (V.reflection : H →L[ℂ] H) * V.starProjection = V.starProjection := by
   rw [reflectionOperator_eq_projection_add_projection_sub_one V]
   have hPV2 := projection_sq V
   noncomm_ring [hPV2]
@@ -404,7 +404,7 @@ theorem reflectionOperator_mul_projection_self :
 omit [CompleteSpace H] in
 /-- The reflection through a subspace fixes its own projection, on the right. -/
 theorem projection_mul_reflectionOperator_self :
-    V.starProjection * V.reflectionOperator = V.starProjection := by
+    V.starProjection * (V.reflection : H →L[ℂ] H) = V.starProjection := by
   rw [reflectionOperator_eq_projection_add_projection_sub_one V]
   have hPV2 := projection_sq V
   noncomm_ring [hPV2]
@@ -432,20 +432,20 @@ conjugate of the reflection through `U` by the reflection through `V`.
 Since the mirror image has projection `R_V P_U R_V`, its reflection
 `2 P - 1` equals `R_V (2 P_U - 1) R_V = R_V R_U R_V`. -/
 theorem reflectionOperator_reflectedSubspace :
-    Submodule.reflectionOperator (reflectedSubspace V U)
-      = V.reflectionOperator * U.reflectionOperator * V.reflectionOperator := by
-  have hRR : V.reflectionOperator * V.reflectionOperator = 1 :=
-    reflectionOperator_mul_self_complex V
+    ((reflectedSubspace V U).reflection : H →L[ℂ] H)
+      = (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) * (V.reflection : H →L[ℂ] H) := by
+  have hRR : (V.reflection : H →L[ℂ] H) * (V.reflection : H →L[ℂ] H) = 1 :=
+    Submodule.reflection_mul_self V
   have hPVref : Submodule.starProjection (reflectedSubspace V U)
-      = V.reflectionOperator * U.starProjection * V.reflectionOperator :=
+      = (V.reflection : H →L[ℂ] H) * U.starProjection * (V.reflection : H →L[ℂ] H) :=
     starProjection_reflectedSubspace V U
   rw [reflectionOperator_eq_projection_add_projection_sub_one (reflectedSubspace V U),
       reflectionOperator_eq_projection_add_projection_sub_one U, hPVref]
-  have expand : V.reflectionOperator * (U.starProjection + U.starProjection - 1)
-      * V.reflectionOperator
-      = V.reflectionOperator * U.starProjection * V.reflectionOperator
-        + V.reflectionOperator * U.starProjection * V.reflectionOperator
-        - V.reflectionOperator * V.reflectionOperator := by noncomm_ring
+  have expand : (V.reflection : H →L[ℂ] H) * (U.starProjection + U.starProjection - 1)
+      * (V.reflection : H →L[ℂ] H)
+      = (V.reflection : H →L[ℂ] H) * U.starProjection * (V.reflection : H →L[ℂ] H)
+        + (V.reflection : H →L[ℂ] H) * U.starProjection * (V.reflection : H →L[ℂ] H)
+        - (V.reflection : H →L[ℂ] H) * (V.reflection : H →L[ℂ] H) := by noncomm_ring
   rw [expand, hRR]
 
 /-- The canonical intertwiner and the Halmos cosine square carry the same

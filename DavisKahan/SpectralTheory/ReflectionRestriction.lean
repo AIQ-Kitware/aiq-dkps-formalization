@@ -150,16 +150,16 @@ it in both, and the pointwise intertwining then determines the action. -/
 theorem addBounded_reflectionPerturbation_eq_unitaryConj
     {A : H →ₗ.[𝕜] H} (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
     (Eop : H →L[𝕜] H)
-    (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hmem : ∀ x : A.domain, (V.reflection : H →L[𝕜] H) (x : H) ∈ A.domain)
     (hint : ∀ x : A.domain,
       ((reflectionPerturbation V Eop).toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hmem x⟩ =
-        V.reflectionOperator (A x)) :
+          ⟨(V.reflection : H →L[𝕜] H) (x : H), hmem x⟩ =
+        (V.reflection : H →L[𝕜] H) (A x)) :
     ((reflectionPerturbation V Eop).toLinearMap +ᵥ A) =
       (A.conj V.reflection.toLinearEquiv) := by
   -- Use the public reflection identity to express domain preservation and intertwining.
-  have hrefl : ∀ y : H, V.reflectionOperator y = V.reflection y :=
-    Submodule.reflectionOperator_apply_eq_reflection V
+  have hrefl : ∀ y : H, (V.reflection : H →L[𝕜] H) y = V.reflection y :=
+    fun _ => rfl
   have hmem' : ∀ y : H, y ∈ A.domain → V.reflection y ∈ A.domain := by
     intro y hy
     have h := hmem ⟨y, hy⟩
@@ -178,17 +178,17 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
   have hJy : V.reflection y ∈ A.domain := hmem' y hy
   have hcongr : (⟨y, hy⟩ :
       ((reflectionPerturbation V Eop).toLinearMap +ᵥ A).domain) =
-      ⟨V.reflectionOperator (((⟨V.reflection y, hJy⟩ : A.domain)) : H),
+      ⟨(V.reflection : H →L[𝕜] H) (((⟨V.reflection y, hJy⟩ : A.domain)) : H),
         hmem ⟨V.reflection y, hJy⟩⟩ :=
     Subtype.ext (by
-      change y = V.reflectionOperator (V.reflection y)
+      change y = (V.reflection : H →L[𝕜] H) (V.reflection y)
       rw [hrefl]
       exact (V.reflection_reflection y).symm)
   calc ((reflectionPerturbation V Eop).toLinearMap +ᵥ A) ⟨y, hy⟩
       = ((reflectionPerturbation V Eop).toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (((⟨V.reflection y, hJy⟩ : A.domain)) : H),
+          ⟨(V.reflection : H →L[𝕜] H) (((⟨V.reflection y, hJy⟩ : A.domain)) : H),
             hmem ⟨V.reflection y, hJy⟩⟩ := by rw [hcongr]
-    _ = V.reflectionOperator (A ⟨V.reflection y, hJy⟩) :=
+    _ = (V.reflection : H →L[𝕜] H) (A ⟨V.reflection y, hJy⟩) :=
         hint ⟨V.reflection y, hJy⟩
     _ = (A.conj V.reflection.toLinearEquiv) ⟨y, hz⟩ := by
       simp only [_root_.LinearPMap.conj_apply, LinearIsometryEquiv.coe_toLinearEquiv,
@@ -211,18 +211,18 @@ subspace of the perturbed operator, spectral or not, can use it. -/
 theorem addBounded_reflectionPerturbation_intertwines_of_commutes
     {A : H →ₗ.[𝕜] H} (E : H →L[𝕜] H)
     (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
-    (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hmem : ∀ x : A.domain, (V.reflection : H →L[𝕜] H) (x : H) ∈ A.domain)
     (hcomm : ∀ x : A.domain,
-      A ⟨V.reflectionOperator (x : H), hmem x⟩ + E (V.reflectionOperator (x : H)) =
-        V.reflectionOperator (A x) + V.reflectionOperator (E (x : H)))
+      A ⟨(V.reflection : H →L[𝕜] H) (x : H), hmem x⟩ + E ((V.reflection : H →L[𝕜] H) (x : H)) =
+        (V.reflection : H →L[𝕜] H) (A x) + (V.reflection : H →L[𝕜] H) (E (x : H)))
     (x : A.domain) :
     ((reflectionPerturbation V E).toLinearMap +ᵥ A)
-        ⟨V.reflectionOperator (x : H), hmem x⟩ = V.reflectionOperator (A x) := by
-  set J : H →L[𝕜] H := V.reflectionOperator with hJ
+        ⟨(V.reflection : H →L[𝕜] H) (x : H), hmem x⟩ = (V.reflection : H →L[𝕜] H) (A x) := by
+  set J : H →L[𝕜] H := (V.reflection : H →L[𝕜] H) with hJ
   have hreflection (y : H) : V.reflection y = J y :=
-    (Submodule.reflectionOperator_apply_eq_reflection V y).symm
+    rfl
   have hJJ : J (J (x : H)) = (x : H) := by
-    simpa only [J, Submodule.reflectionOperator_apply_eq_reflection] using
+    simpa only [J, LinearIsometryEquiv.coe_coe''] using
       V.reflection_reflection (x : H)
   have hDapply : reflectionPerturbation V E (J (x : H)) =
       E (J (x : H)) - J (E (x : H)) := by
@@ -253,7 +253,7 @@ variable {H : Type v}
 noncomputable def boundedReflectionDefect
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     (A : H →L[ℂ] H) : H →L[ℂ] H :=
-  V.reflectionOperator ∘L A ∘L V.reflectionOperator - A
+  (V.reflection : H →L[ℂ] H) ∘L A ∘L (V.reflection : H →L[ℂ] H) - A
 
 omit [CompleteSpace H] in
 /-- The reflection defect is minus twice the sum of the two off-diagonal
@@ -265,11 +265,11 @@ theorem boundedReflectionDefect_eq_neg_two_smul_offdiag
       (-2 : ℂ) • (Vᗮ.starProjection ∘L A ∘L V.starProjection +
         V.starProjection ∘L A ∘L Vᗮ.starProjection) := by
   ext x
-  show V.reflectionOperator (A (V.reflectionOperator x)) - A x =
+  show (V.reflection : H →L[ℂ] H) (A ((V.reflection : H →L[ℂ] H) x)) - A x =
     (-2 : ℂ) • (Vᗮ.starProjection (A (V.starProjection x)) +
       V.starProjection (A (Vᗮ.starProjection x)))
-  rw [Submodule.reflectionOperator_apply,
-    Submodule.reflectionOperator_apply,
+  rw [Submodule.reflection_apply_smul,
+    Submodule.reflection_apply_smul,
     Submodule.starProjection_orthogonal' V]
   simp only [map_sub, map_smul, sub_apply, one_apply_eq_self]
   module
@@ -554,13 +554,13 @@ theorem subspaceGap_map_reflection
       ‖boundedReflectionDefect V U.starProjection‖ := by
   have hreflection :
       boundedUnitaryConjugate V.reflection U.starProjection =
-        V.reflectionOperator ∘L U.starProjection ∘L
-          V.reflectionOperator := by
+        (V.reflection : H →L[ℂ] H) ∘L U.starProjection ∘L
+          (V.reflection : H →L[ℂ] H) := by
     ext x
     change V.reflection (U.starProjection (V.reflection.symm x)) =
-      V.reflectionOperator (U.starProjection (V.reflectionOperator x))
+      (V.reflection : H →L[ℂ] H) (U.starProjection ((V.reflection : H →L[ℂ] H) x))
     rw [Submodule.reflection_symm]
-    simp only [Submodule.reflectionOperator_apply_eq_reflection]
+    simp only [LinearIsometryEquiv.coe_coe'']
   have h : U.starProjection -
       (U.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection =
       -(boundedReflectionDefect V U.starProjection) := by
@@ -667,13 +667,13 @@ the self-adjoint operator. -/
 theorem spectralReflection_mem_domain
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
-    (selfAdjointSpectralSubspace A hA B hB).reflectionOperator (x : H) ∈
+    ((selfAdjointSpectralSubspace A hA B hB).reflection : H →L[ℂ] H) (x : H) ∈
       A.domain := by
   let U := selfAdjointSpectralSubspace A hA B hB
   have hP : U.starProjection (x : H) ∈ A.domain := by
     rw [← selfAdjointSpectralProjection_eq_starProjection A hA B hB]
     exact selfAdjointSpectralProjection_mem_domain A hA hB x
-  rw [Submodule.reflectionOperator_apply]
+  rw [Submodule.reflection_apply_smul]
   exact A.domain.sub_mem (A.domain.smul_mem (2 : ℂ) hP) x.property
 
 /-- Reflection through a genuine spectral range commutes with the
@@ -682,9 +682,9 @@ theorem selfAdjoint_apply_spectralReflection
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
     A
-        ⟨(selfAdjointSpectralSubspace A hA B hB).reflectionOperator (x : H),
+        ⟨((selfAdjointSpectralSubspace A hA B hB).reflection : H →L[ℂ] H) (x : H),
           spectralReflection_mem_domain A hA B hB x⟩ =
-      (selfAdjointSpectralSubspace A hA B hB).reflectionOperator
+      ((selfAdjointSpectralSubspace A hA B hB).reflection : H →L[ℂ] H)
         (A x) := by
   let U := selfAdjointSpectralSubspace A hA B hB
   have hP : U.starProjection (x : H) ∈ A.domain := by
@@ -692,11 +692,11 @@ theorem selfAdjoint_apply_spectralReflection
     exact selfAdjointSpectralProjection_mem_domain A hA hB x
   let px : A.domain := ⟨U.starProjection (x : H), hP⟩
   have hreflect :
-      (⟨U.reflectionOperator (x : H),
+      (⟨(U.reflection : H →L[ℂ] H) (x : H),
         spectralReflection_mem_domain A hA B hB x⟩ : A.domain) =
         (2 : ℂ) • px - x := by
     apply Subtype.ext
-    exact Submodule.reflectionOperator_apply U (x : H)
+    exact Submodule.reflection_apply_smul U (x : H)
   have hproj :
       selfAdjointSpectralProjection A hA B hB = U.starProjection := by
     simpa [U] using
@@ -720,7 +720,7 @@ theorem selfAdjoint_apply_spectralReflection
       _ = U.starProjection (A x) := by
         rw [hproj]
   rw [hreflect, LinearPMap.map_sub, LinearPMap.map_smul,
-    Submodule.reflectionOperator_apply, hPcomm]
+    Submodule.reflection_apply_smul, hPcomm]
 
 /-- For a perturbed operator `C = A + E`, reflection through a spectral range
 of `C` preserves the original domain, because `C` and `A` have the same
@@ -730,7 +730,8 @@ theorem perturbedSpectralReflection_mem_domain
     (E : H →L[ℂ] H) (hE : E.IsSymmetric)
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
     (selfAdjointSpectralSubspace (E.toLinearMap +ᵥ A)
-      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)) S hS).reflectionOperator (x : H) ∈
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE))
+        S hS).reflection (x : H) ∈
       A.domain := by
   let C := (E.toLinearMap +ᵥ A)
   let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)
@@ -748,7 +749,7 @@ theorem add_reflectionPerturbation_intertwines
     let C := (E.toLinearMap +ᵥ A)
     let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)
     let V := selfAdjointSpectralSubspace C hC S hS
-    let J := V.reflectionOperator
+    let J := (V.reflection : H →L[ℂ] H)
     let D := reflectionPerturbation V E
     (D.toLinearMap +ᵥ A)
         ⟨J (x : H), perturbedSpectralReflection_mem_domain
@@ -757,7 +758,7 @@ theorem add_reflectionPerturbation_intertwines
   let C := (E.toLinearMap +ᵥ A)
   let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hE)
   let V := selfAdjointSpectralSubspace C hC S hS
-  let J := V.reflectionOperator
+  let J := (V.reflection : H →L[ℂ] H)
   let D := reflectionPerturbation V E
   have hJdomA : J (x : H) ∈ A.domain := by
     simpa [J, V, C] using
@@ -777,10 +778,10 @@ theorem add_reflectionPerturbation_intertwines
       _ = J (A x + E (x : H)) := by
         exact congrArg J (add_comm _ _)
   have hJJ : J (J (x : H)) = (x : H) := by
-    simpa only [J, Submodule.reflectionOperator_apply_eq_reflection] using
+    simpa only [J, LinearIsometryEquiv.coe_coe''] using
       V.reflection_reflection (x : H)
   have hreflection (y : H) : V.reflection y = J y :=
-    (Submodule.reflectionOperator_apply_eq_reflection V y).symm
+    rfl
   have hDapply : D (J (x : H)) = E (J (x : H)) - J (E (x : H)) := by
     calc
       D (J (x : H)) =

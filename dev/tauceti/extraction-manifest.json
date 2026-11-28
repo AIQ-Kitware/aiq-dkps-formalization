@@ -4880,19 +4880,21 @@
       ],
       "current_namespace": "Submodule",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjectionBlocks",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Projection.Block",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "partially upstreamed: Tau Ceti owns the canonical diagonal/off-diagonal block operators and their core algebra; this staging module retains only the listed donor-specific extensions",
+      "provenance_class": "partially upstreamed: native Mathlib reflections, independently submitted TauCeti projection-block operators, and reflection laws from the DKPS-derived complex quarter-angle submission",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace"
+        "TauCeti.Analysis.InnerProductSpace.InvariantSubspace",
+        "TauCeti.Analysis.InnerProductSpace.Projection.Block"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap"
       ],
       "status": "staged-partial",
-      "upstream_pr": null,
+      "upstream_pr": "#14109; #27804",
+      "migration_note": "November 27: retire the Submodule.reflectionOperator definition and its old-name API. Use the bounded-operator coercion of native Mathlib Submodule.reflection, its fixing, norm and surjectivity facts, LinearIsometry.norm_toContinuousLinearMap_le and LinearIsometryEquiv.coe_coe''. Use Submodule.coe_reflection, commute_reflection_iff and the accepted reducing-subspace projection commutator for the operator formula and commutation. Projection blocks and reflection commutation are PA-C01–C12 integration #14109 b4b0f0f893f5b923b56607eb81d4b293c3696d30, by tauceti-ai-for-science. Its integration already identifies Mathlib as the owner of the reflection construction. The same roadmap target is shared; no proof descent is asserted for #14109. Bounded-operator involution, self-adjointness and unitarity come from our DKPS-derived SSP-C31 #27804 993a5a824395596d7c3d4e178aa62a8a8e82c167. This also retires the exact star, adjoint, unitary and multiplicative involution duplicates in DavisKahan/InfiniteDimensional/DoubleAngle.lean, DavisKahan/DoubleAngle/UnboundedIdeal.lean and DavisKahan/Geometry/Polar/DirectRotation.lean. Original projection-block donor at df036cd, pre-retirement DKPS b7e6479a5477326299c7bbdaa9079d61cbac7938, Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0. Scalar-generic reflections and the basic block identities still apply without ambient completeness; adjoints and unitary algebra have their original complete ambient scope. Mathlib ContinuousLinearMap.opNorm_linearIsometryEquiv_comp and opNorm_comp_linearIsometryEquiv replace norm_reflection_comp and norm_comp_reflection. The DKPS-derived #13866 (7bbe813acf610ee6db4caba078b9c4facf357b90) isometric invariance of singular values replaces sameApproximationSingularValues_comp_reflection_right and _left in the Section 6 projection blocks, anchored at DKPS b7e6479a5 (Jon Crall/OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0). The block numerical-range, complexification and domain-aware conclusions remain local. The historical source_declarations list records provenance.",
       "accepted_upstream_declarations": [
         "diagBlock",
         "offDiagBlock",
@@ -4912,6 +4914,10 @@
         "two_smul_diagBlock",
         "two_smul_offDiagBlock",
         "commute_reflection_iff",
+        "coe_reflection",
+        "reflection_mul_self",
+        "isSelfAdjoint_reflection",
+        "reflection_mem_unitary",
         "offDiagBlock_eq_zero_iff",
         "diagBlock_eq_self_iff"
       ]

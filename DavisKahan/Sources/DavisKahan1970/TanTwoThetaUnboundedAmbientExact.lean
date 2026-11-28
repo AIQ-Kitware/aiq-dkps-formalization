@@ -552,8 +552,8 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
     tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorming_complex
-      hA hred hB (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V)
-      (TauCeti.DavisKahan.reflectionOperator_mul_self_complex V)
+      hA hred hB (Submodule.isSelfAdjoint_reflection V)
+      (Submodule.reflection_mul_self V)
       hV.mapsDomain hV.commutes hUa hUb hab N hBsa hBmem
   have hcos := DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
     U V hunit
@@ -575,11 +575,11 @@ reflection intertwines the perturbed operator -- and they belong to the subspace
 not to a caller-built operator.
 
 `ReflectionIntertwines A B V` carries exactly those two, and the theorem below
-takes the reducing subspace `V`, builds `Z = V.reflectionOperator` internally, and
+takes the reducing subspace `V`, builds `Z = (V.reflection : G →L[ℂ] G)` internally, and
 supplies the two structural facts itself.
 
 What is *not* internalized here is the conclusion: it still names
-`unboundedReflectionTangent U (V.reflectionOperator)`, the block tangent, rather
+`unboundedReflectionTangent U ((V.reflection : G →L[ℂ] G))`, the block tangent, rather
 than the paper's canonical double-angle tangent.  Bringing it to the canonical
 object needs the tan-2Θ analogue of
 `DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers`, which is not
@@ -588,7 +588,8 @@ proved here. -/
 /-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form, taking the reducing
 subspace rather than a reflection witness.**
 
-`tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` with `Z = V.reflectionOperator`
+`tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` with `Z =
+  (V.reflection : G →L[ℂ] G)`
 and with `Z` self-adjoint and involutive supplied by the library. -/
 theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex
     (N : SymmetricNormingFunction)
@@ -609,19 +610,19 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symm
     (hab : a < b) (hBmem : N.Mem B) :
     IsUnit
         ((((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock
-            (V.reflectionOperator) *
+            ((V.reflection : G →L[ℂ] G)) *
           (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock
-            (V.reflectionOperator)) ∧
+            ((V.reflection : G →L[ℂ] G))) ∧
       N.Mem (unboundedReflectionTangent
         (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)
-        (V.reflectionOperator)) ∧
+        ((V.reflection : G →L[ℂ] G))) ∧
       (b - a) * N.gauge (unboundedReflectionTangent
         (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)
-        (V.reflectionOperator)) ≤
+        ((V.reflection : G →L[ℂ] G))) ≤
         2 * N.gauge B :=
   tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex N hA hBsa hB
-    (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V)
-    (TauCeti.DavisKahan.reflectionOperator_mul_self_complex V)
+    (Submodule.isSelfAdjoint_reflection V)
+    (Submodule.reflection_mul_self V)
     hV.mapsDomain hV.commutes hUa hUb hab hBmem
 
 /-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form, on the paper's angle
@@ -745,7 +746,7 @@ attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjectio
 /-- **The canonical directed tangent corner IS the paper's directed corner.**
 
 The Section 2 directed `tan 2Θ` theorems conclude on
-`reflectionTangentCorner U V.reflectionOperator`, while Davis and Kahan state the
+`reflectionTangentCorner U (V.reflection : Ea →L[ℂ] Ea)`, while Davis and Kahan state the
 bound on the directed `tan 2Θ₀` object, whose block spelling is the `U → Uᗮ`
 corner of the paper's own double-angle representative.  Hostile review asked for
 registered evidence that these are the same thing rather than prose asserting
@@ -764,7 +765,7 @@ which is what the source-facing bound needs. -/
 theorem reflectionTangentCorner_reflection_eq_tanTwoBlockCompression
     (hinv : IsUnit ((1 : Ea →L[ℂ] Ea) - 2 *
       (projectorDifference U V * projectorDifference U V))) :
-    reflectionTangentCorner U V.reflectionOperator
+    reflectionTangentCorner U (V.reflection : Ea →L[ℂ] Ea)
       = blockCompression Uᗮ U (tanTwoBlockRepresentative U V) := by
   unfold reflectionTangentCorner
   rw [TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq U V hinv,
@@ -795,7 +796,7 @@ theorem tanTwoDirectedCornerC_sameApproximationSingularSequence_reflectionTangen
     ContinuousLinearMap.SameSingularValues
       (projectionBlock Uᗮ U
         (2 * (projectorDifference U V * doubleSecant U V)))
-      (reflectionTangentCorner U V.reflectionOperator) := by
+      (reflectionTangentCorner U (V.reflection : Ea →L[ℂ] Ea)) := by
   rw [reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv,
     tanTwoBlockRepresentative, blockCompression_diagonalPair]
   exact projectionBlock_same_compression Uᗮ U _
@@ -827,16 +828,16 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_blockCompression_symmetr
     N.Mem (blockCompression Uᗮ U (tanTwoBlockRepresentative U V)) ∧
       (b - a) * N.gauge (blockCompression Uᗮ U (tanTwoBlockRepresentative U V)) ≤
         2 * N.gauge (blockCompression Uᗮ U B) := by
-  have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
-  have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
-  have hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1 :=
+  have hZsa := Submodule.isSelfAdjoint_reflection V
+  have hZ2 := Submodule.reflection_mul_self V
+  have hS1 : ‖U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea)‖ < 1 :=
     norm_offDiagonalPart_lt_one_reducing_exact hA hred hB hZsa hZ2 hV.mapsDomain
       hV.commutes hUa hUb hab
-  have hsq : ‖U.offDiagBlock V.reflectionOperator *
-      U.offDiagBlock V.reflectionOperator‖ < 1 := by
-    have h := norm_mul_le (U.offDiagBlock V.reflectionOperator)
-      (U.offDiagBlock V.reflectionOperator)
-    nlinarith [norm_nonneg (U.offDiagBlock V.reflectionOperator)]
+  have hsq : ‖U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea) *
+      U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea)‖ < 1 := by
+    have h := norm_mul_le (U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea))
+      (U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea))
+    nlinarith [norm_nonneg (U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea))]
   have hinv := TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V
     (isUnit_diagonalPart_sq hZ2 hsq)
   obtain ⟨-, -, hmem, hle⟩ :=
@@ -923,21 +924,21 @@ ambient spelling; `approximationNumber_reflectionTangentCorner` and
 `hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock` read
 off the singular values. -/
 theorem approximationNumber_tanTwoDirectedCorner
-    (hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1) (n : ℕ) :
+    (hS1 : ‖U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea)‖ < 1) (n : ℕ) :
     ((projectionBlock Uᗮ U
         (2 * (projectorDifference U V * doubleSecant U V))).singularValue n : ℝ) =
       Real.tan (Real.arcsin
         (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ))) := by
-  have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
-  have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
-  have hsq : ‖U.offDiagBlock V.reflectionOperator *
-      U.offDiagBlock V.reflectionOperator‖ < 1 := by
-    have h := norm_mul_le (U.offDiagBlock V.reflectionOperator)
-      (U.offDiagBlock V.reflectionOperator)
-    nlinarith [norm_nonneg (U.offDiagBlock V.reflectionOperator)]
+  have hZsa := Submodule.isSelfAdjoint_reflection V
+  have hZ2 := Submodule.reflection_mul_self V
+  have hsq : ‖U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea) *
+      U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea)‖ < 1 := by
+    have h := norm_mul_le (U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea))
+      (U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea))
+    nlinarith [norm_nonneg (U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea))]
   have hinv := TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V
     (isUnit_diagonalPart_sq hZ2 hsq)
-  have hcorner : reflectionTangentCorner U V.reflectionOperator =
+  have hcorner : reflectionTangentCorner U (V.reflection : Ea →L[ℂ] Ea) =
       blockCompression Uᗮ U (2 * (projectorDifference U V * doubleSecant U V)) := by
     rw [reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv,
       tanTwoBlockRepresentative, blockCompression_diagonalPair]
@@ -994,19 +995,19 @@ theorem tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex
         2 * N.gauge (projectionBlock Uᗮ U B) := by
   have hV' : DavisKahan.ReflectionIntertwines A B V :=
     DavisKahan.ReflectionIntertwines.ofReducesSubspace hV
-  have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
-  have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
-  have hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1 :=
+  have hZsa := Submodule.isSelfAdjoint_reflection V
+  have hZ2 := Submodule.reflection_mul_self V
+  have hS1 : ‖U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea)‖ < 1 :=
     norm_offDiagonalPart_lt_one_reducing_exact hA hred hB hZsa hZ2 hV'.mapsDomain
       hV'.commutes hUa hUb hab
-  have hsq : ‖U.offDiagBlock V.reflectionOperator *
-      U.offDiagBlock V.reflectionOperator‖ < 1 := by
-    have h := norm_mul_le (U.offDiagBlock V.reflectionOperator)
-      (U.offDiagBlock V.reflectionOperator)
-    nlinarith [norm_nonneg (U.offDiagBlock V.reflectionOperator)]
+  have hsq : ‖U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea) *
+      U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea)‖ < 1 := by
+    have h := norm_mul_le (U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea))
+      (U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea))
+    nlinarith [norm_nonneg (U.offDiagBlock (V.reflection : Ea →L[ℂ] Ea))]
   have hinv := TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V
     (isUnit_diagonalPart_sq hZ2 hsq)
-  have hcorner : reflectionTangentCorner U V.reflectionOperator =
+  have hcorner : reflectionTangentCorner U (V.reflection : Ea →L[ℂ] Ea) =
       blockCompression Uᗮ U (2 * (projectorDifference U V * doubleSecant U V)) := by
     rw [reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv,
       tanTwoBlockRepresentative, blockCompression_diagonalPair]

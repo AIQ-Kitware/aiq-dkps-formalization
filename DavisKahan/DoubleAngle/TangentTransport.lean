@@ -382,12 +382,12 @@ Together with `gram_unboundedReflectionTangent` this says the tangent is
 theorem starProjection_offDiagonal_sq_reflection
     (U V : Submodule ℂ Ec) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     U.starProjection *
-        (U.offDiagBlock V.reflectionOperator *
-          U.offDiagBlock V.reflectionOperator) * U.starProjection
+        (U.offDiagBlock (V.reflection : Ec →L[ℂ] Ec) *
+          U.offDiagBlock (V.reflection : Ec →L[ℂ] Ec)) * U.starProjection
       = directedSinTwoAngleOperatorC U V * directedSinTwoAngleOperatorC U V := by
   rw [corner_offDiagonalPart_sq]
-  have hRR : V.reflectionOperator * V.reflectionOperator = 1 :=
-    V.reflectionOperator_involutive
+  have hRR : (V.reflection : Ec →L[ℂ] Ec) * (V.reflection : Ec →L[ℂ] Ec) = 1 :=
+    V.reflection_mul_self
   have hcompl : Uᗮ.starProjection = (1 : Ec →L[ℂ] Ec) - U.starProjection :=
     orthogonal_eq U
   have hangle : directedSinTwoAngleOperatorC U V * directedSinTwoAngleOperatorC U V
@@ -396,21 +396,21 @@ theorem starProjection_offDiagonal_sq_reflection
       directedSinAngleOperatorC_mul_self]
   rw [hangle, starProjection_orthogonal_eq (reflectedU U V), starProjection_reflectedU,
     hcompl]
-  have hRform : (2 : Ec →L[ℂ] Ec) * V.starProjection - 1 = V.reflectionOperator := by
-    rw [V.reflectionOperator_eq_two_smul_sub_id]
+  have hRform : (2 : Ec →L[ℂ] Ec) * V.starProjection - 1 = (V.reflection : Ec →L[ℂ] Ec) := by
+    rw [V.coe_reflection]
     ext x
     simp [two_smul]
   rw [hRform]
   have hpp : U.starProjection * U.starProjection = U.starProjection := proj_sq U
-  calc U.starProjection * V.reflectionOperator *
-        ((1 : Ec →L[ℂ] Ec) - U.starProjection) * V.reflectionOperator *
+  calc U.starProjection * (V.reflection : Ec →L[ℂ] Ec) *
+        ((1 : Ec →L[ℂ] Ec) - U.starProjection) * (V.reflection : Ec →L[ℂ] Ec) *
           U.starProjection
-      = U.starProjection * (V.reflectionOperator * V.reflectionOperator) *
+      = U.starProjection * ((V.reflection : Ec →L[ℂ] Ec) * (V.reflection : Ec →L[ℂ] Ec)) *
             U.starProjection
-        - U.starProjection * V.reflectionOperator * U.starProjection *
-            V.reflectionOperator * U.starProjection := by noncomm_ring
+        - U.starProjection * (V.reflection : Ec →L[ℂ] Ec) * U.starProjection *
+            (V.reflection : Ec →L[ℂ] Ec) * U.starProjection := by noncomm_ring
     _ = U.starProjection * ((1 : Ec →L[ℂ] Ec) -
-            V.reflectionOperator * U.starProjection * V.reflectionOperator) *
+            (V.reflection : Ec →L[ℂ] Ec) * U.starProjection * (V.reflection : Ec →L[ℂ] Ec)) *
           U.starProjection := by
         rw [hRR]; noncomm_ring
 
@@ -427,7 +427,7 @@ variable (U V : Submodule ℂ Ec) [U.HasOrthogonalProjection] [V.HasOrthogonalPr
 omit [CompleteSpace Ec] in
 /-- The off-diagonal block of the reflection in `V`, in corner form. -/
 theorem offDiagonalPart_reflection_eq :
-    U.offDiagBlock V.reflectionOperator
+    U.offDiagBlock (V.reflection : Ec →L[ℂ] Ec)
       = 2 * (((1 : Ec →L[ℂ] Ec) - U.starProjection) *
             projectorDifference U V * U.starProjection
           + U.starProjection * projectorDifference U V *
@@ -435,10 +435,10 @@ theorem offDiagonalPart_reflection_eq :
   have hp : U.starProjection * U.starProjection = U.starProjection := proj_sq U
   have hQ : projectorDifference U V = V.starProjection - U.starProjection := rfl
   rw [Submodule.offDiagBlock_eq_sub_diagBlock, Submodule.diagBlock_def,
-    Submodule.reflectionOperator_eq_two_smul_sub_id V]
+    Submodule.coe_reflection V]
   simp only [two_smul, Submodule.starProjection_orthogonal',
     show ∀ f g : Ec →L[ℂ] Ec, f ∘L g = f * g from fun _ _ => rfl]
-  rw [hQ, ← ContinuousLinearMap.one_def]
+  rw [hQ]
   noncomm_ring [hp]
 
 omit [CompleteSpace Ec] in
@@ -452,7 +452,7 @@ theorem tanTwoBlockRepresentative_mul_signedCosTwo
     (hinv : IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
       projectorDifference U V))) :
     tanTwoBlockRepresentative U V * signedCosTwo U V
-      = U.offDiagBlock V.reflectionOperator := by
+      = U.offDiagBlock (V.reflection : Ec →L[ℂ] Ec) := by
   have hsec : doubleSecant U V * signedCosTwo U V = 1 :=
     Ring.inverse_mul_cancel _ hinv
   rw [tanTwoBlockRepresentative_eq hinv, offDiagonalPart_reflection_eq]
@@ -479,43 +479,36 @@ unitarily invariant norm can see. -/
 theorem unboundedReflectionTangent_reflection_eq
     (hinv : IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
       projectorDifference U V))) :
-    unboundedReflectionTangent U V.reflectionOperator
-      = tanTwoBlockRepresentative U V * U.reflectionOperator := by
-  have hRU : U.reflectionOperator * U.reflectionOperator = 1 :=
-    U.reflectionOperator_involutive
+    unboundedReflectionTangent U (V.reflection : Ec →L[ℂ] Ec)
+      = tanTwoBlockRepresentative U V * (U.reflection : Ec →L[ℂ] Ec) := by
+  have hRU : (U.reflection : Ec →L[ℂ] Ec) * (U.reflection : Ec →L[ℂ] Ec) = 1 :=
+    U.reflection_mul_self
   have hK : signedCosTwo U V = (1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
       projectorDifference U V) := rfl
   have hKunit : IsUnit (signedCosTwo U V) := by rw [hK]; exact hinv
-  have hdiag : U.diagBlock V.reflectionOperator
-      = U.reflectionOperator * signedCosTwo U V :=
+  have hdiag : U.diagBlock (V.reflection : Ec →L[ℂ] Ec)
+      = (U.reflection : Ec →L[ℂ] Ec) * signedCosTwo U V :=
     diagonalPart_reflection_eq_reflection_mul_signedCosTwo
-  have hoff : U.offDiagBlock V.reflectionOperator
+  have hoff : U.offDiagBlock (V.reflection : Ec →L[ℂ] Ec)
       = tanTwoBlockRepresentative U V * signedCosTwo U V :=
     (tanTwoBlockRepresentative_mul_signedCosTwo U V hinv).symm
   -- the signed cosine commutes with the reflection in `U`
   have hKP : signedCosTwo U V * U.starProjection
       = U.starProjection * signedCosTwo U V := signedCosTwo_comm_starProjection
-  have hKR : signedCosTwo U V * U.reflectionOperator
-      = U.reflectionOperator * signedCosTwo U V := by
-    rw [Submodule.reflectionOperator_eq_two_smul_sub_id U]
-    have h2 : ((2 : ℂ) • U.starProjection - ContinuousLinearMap.id ℂ Ec)
-        = 2 * U.starProjection - 1 := by ext x; simp [two_smul]
-    rw [h2, mul_sub, sub_mul, mul_one, one_mul]
-    have h2c : signedCosTwo U V * (2 * U.starProjection)
-        = 2 * (signedCosTwo U V * U.starProjection) := by noncomm_ring
-    rw [h2c, hKP]
-    noncomm_ring
+  have hKR : signedCosTwo U V * (U.reflection : Ec →L[ℂ] Ec)
+      = (U.reflection : Ec →L[ℂ] Ec) * signedCosTwo U V :=
+    (U.commute_reflection_iff.mpr hKP.symm).eq.symm
   -- the diagonal block squares to the signed cosine squared
-  have hCC : U.diagBlock V.reflectionOperator * U.diagBlock V.reflectionOperator
+  have hCC : U.diagBlock (V.reflection : Ec →L[ℂ] Ec) * U.diagBlock (V.reflection : Ec →L[ℂ] Ec)
       = signedCosTwo U V * signedCosTwo U V := by
     rw [hdiag]
-    calc U.reflectionOperator * signedCosTwo U V *
-          (U.reflectionOperator * signedCosTwo U V)
-        = U.reflectionOperator * (signedCosTwo U V * U.reflectionOperator) *
+    calc (U.reflection : Ec →L[ℂ] Ec) * signedCosTwo U V *
+          ((U.reflection : Ec →L[ℂ] Ec) * signedCosTwo U V)
+        = (U.reflection : Ec →L[ℂ] Ec) * (signedCosTwo U V * (U.reflection : Ec →L[ℂ] Ec)) *
             signedCosTwo U V := by noncomm_ring
-      _ = U.reflectionOperator * (U.reflectionOperator * signedCosTwo U V) *
+      _ = (U.reflection : Ec →L[ℂ] Ec) * ((U.reflection : Ec →L[ℂ] Ec) * signedCosTwo U V) *
             signedCosTwo U V := by rw [hKR]
-      _ = U.reflectionOperator * U.reflectionOperator *
+      _ = (U.reflection : Ec →L[ℂ] Ec) * (U.reflection : Ec →L[ℂ] Ec) *
             (signedCosTwo U V * signedCosTwo U V) := by noncomm_ring
       _ = signedCosTwo U V * signedCosTwo U V := by rw [hRU, one_mul]
   have hKKunit : IsUnit (signedCosTwo U V * signedCosTwo U V) := hKunit.mul hKunit
@@ -535,15 +528,15 @@ theorem unboundedReflectionTangent_reflection_eq
   rw [unboundedReflectionTangent, hCC, hoff, hdiag]
   calc tanTwoBlockRepresentative U V * signedCosTwo U V *
         Ring.inverse (signedCosTwo U V * signedCosTwo U V) *
-          (U.reflectionOperator * signedCosTwo U V)
+          ((U.reflection : Ec →L[ℂ] Ec) * signedCosTwo U V)
       = tanTwoBlockRepresentative U V * (signedCosTwo U V *
           Ring.inverse (signedCosTwo U V * signedCosTwo U V) *
-            (signedCosTwo U V * U.reflectionOperator)) := by
+            (signedCosTwo U V * (U.reflection : Ec →L[ℂ] Ec))) := by
         rw [← hKR]; noncomm_ring
     _ = tanTwoBlockRepresentative U V * ((signedCosTwo U V *
           Ring.inverse (signedCosTwo U V * signedCosTwo U V) *
-            signedCosTwo U V) * U.reflectionOperator) := by noncomm_ring
-    _ = tanTwoBlockRepresentative U V * U.reflectionOperator := by
+            signedCosTwo U V) * (U.reflection : Ec →L[ℂ] Ec)) := by noncomm_ring
+    _ = tanTwoBlockRepresentative U V * (U.reflection : Ec →L[ℂ] Ec) := by
         rw [hKinv, one_mul]
 
 /-! ### The pole hypothesis is a consequence, not an assumption
@@ -561,18 +554,18 @@ omit [CompleteSpace Ec] in
 `U.diagBlock J_V = J_U · (1 - 2(P_V - P_U)²)` with `J_U` a self-adjoint
 involution, hence a unit; and `IsUnit (C · C)` gives `IsUnit C` in any monoid. -/
 theorem isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
-    (h : IsUnit (U.diagBlock V.reflectionOperator *
-      U.diagBlock V.reflectionOperator)) :
+    (h : IsUnit (U.diagBlock (V.reflection : Ec →L[ℂ] Ec) *
+      U.diagBlock (V.reflection : Ec →L[ℂ] Ec))) :
     IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
       projectorDifference U V)) := by
-  have hC : IsUnit (U.diagBlock V.reflectionOperator) := by
+  have hC : IsUnit (U.diagBlock (V.reflection : Ec →L[ℂ] Ec)) := by
     rw [← pow_two] at h
     exact (isUnit_pow_iff two_ne_zero).mp h
-  have hJJ := TauCeti.DavisKahan.reflectionOperator_mul_self_complex U
-  have hJU : IsUnit U.reflectionOperator :=
-    ⟨⟨U.reflectionOperator, U.reflectionOperator, hJJ, hJJ⟩, rfl⟩
+  have hJJ := Submodule.reflection_mul_self U
+  have hJU : IsUnit (U.reflection : Ec →L[ℂ] Ec) :=
+    ⟨⟨(U.reflection : Ec →L[ℂ] Ec), (U.reflection : Ec →L[ℂ] Ec), hJJ, hJJ⟩, rfl⟩
   have hK : signedCosTwo U V
-      = U.reflectionOperator * U.diagBlock V.reflectionOperator := by
+      = (U.reflection : Ec →L[ℂ] Ec) * U.diagBlock (V.reflection : Ec →L[ℂ] Ec) := by
     rw [diagonalPart_reflection_eq_reflection_mul_signedCosTwo, ← mul_assoc, hJJ,
       one_mul]
   have hunit : IsUnit (signedCosTwo U V) := by rw [hK]; exact hJU.mul hC
@@ -585,8 +578,8 @@ Composition of `isUnit_signedCosTwo_of_isUnit_diagonalPart_sq` with
 what lets the source-facing `tan 2Θ` theorem state the paper's `|tan 2Θ|` without
 asking its caller for an independent pole certificate. -/
 theorem cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
-    (h : IsUnit (U.diagBlock V.reflectionOperator *
-      U.diagBlock V.reflectionOperator)) :
+    (h : IsUnit (U.diagBlock (V.reflection : Ec →L[ℂ] Ec) *
+      U.diagBlock (V.reflection : Ec →L[ℂ] Ec))) :
     ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0 :=
   cos_two_ne_zero_of_isUnit_one_sub_two_mul_projectorDifference_sq
     (isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V h)
@@ -602,22 +595,18 @@ transport. -/
 theorem sameApproximationSingularValues_unboundedReflectionTangent
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     ContinuousLinearMap.SameSingularValues
-      (unboundedReflectionTangent U V.reflectionOperator)
+      (unboundedReflectionTangent U (V.reflection : Ec →L[ℂ] Ec))
       (absTanTwoAngleOperatorC U V) := by
   have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
-  have hrefl : U.reflectionOperator
-      = U.reflection.toContinuousLinearEquiv.toContinuousLinearMap := by
-    ext x
-    exact Submodule.reflectionOperator_apply_eq_reflection U x
   have hcomp :
       (LinearIsometryEquiv.refl ℂ Ec).toContinuousLinearEquiv.toContinuousLinearMap ∘L
           tanTwoBlockRepresentative U V ∘L
-            U.reflection.toContinuousLinearEquiv.toContinuousLinearMap
-        = unboundedReflectionTangent U V.reflectionOperator := by
-    rw [unboundedReflectionTangent_reflection_eq U V hinv, hrefl]
+            (U.reflection : Ec →L[ℂ] Ec)
+        = unboundedReflectionTangent U (V.reflection : Ec →L[ℂ] Ec) := by
+    rw [unboundedReflectionTangent_reflection_eq U V hinv]
     ext x; rfl
   have h1 : ContinuousLinearMap.SameSingularValues
-      (unboundedReflectionTangent U V.reflectionOperator)
+      (unboundedReflectionTangent U (V.reflection : Ec →L[ℂ] Ec))
       (tanTwoBlockRepresentative U V) := by
     rw [← hcomp]
     exact ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
@@ -637,7 +626,7 @@ when the other does. -/
 theorem extendedGauge_unboundedReflectionTangent_complex
     (N : ExactSinTheta.SymmetricNormingFunction)
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
-    N.extendedGauge (unboundedReflectionTangent U V.reflectionOperator)
+    N.extendedGauge (unboundedReflectionTangent U (V.reflection : Ec →L[ℂ] Ec))
       = N.extendedGauge (absTanTwoAngleOperatorC U V) :=
   N.gauge_eq_of_sameApproximationSingularValues
     (sameApproximationSingularValues_unboundedReflectionTangent U V hcos)
@@ -670,17 +659,17 @@ complexification.  No second analytic proof is involved. -/
 theorem extendedGauge_unboundedReflectionTangent_real
     (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (N : ExactSinTheta.SymmetricNormingFunction)
-    (hCC : IsUnit (U.diagBlock V.reflectionOperator *
-      U.diagBlock V.reflectionOperator)) :
-    N.extendedGauge (unboundedReflectionTangent U V.reflectionOperator)
+    (hCC : IsUnit (U.diagBlock (V.reflection : Er →L[ℝ] Er) *
+      U.diagBlock (V.reflection : Er →L[ℝ] Er))) :
+    N.extendedGauge (unboundedReflectionTangent U (V.reflection : Er →L[ℝ] Er))
       = N.extendedGauge (absTanTwoAngleOperatorR U V) := by
-  have hZ : complexify V.reflectionOperator
-      = (complexifySubmodule V).reflectionOperator :=
+  have hZ : complexify (V.reflection : Er →L[ℝ] Er)
+      = ((complexifySubmodule V).reflection : _ →L[ℂ] _) :=
     complexify_reflectionOperator V
   have hCCc : IsUnit ((complexifySubmodule U).diagBlock
-        ((complexifySubmodule V).reflectionOperator) *
+        (((complexifySubmodule V).reflection : _ →L[ℂ] _)) *
       (complexifySubmodule U).diagBlock
-        ((complexifySubmodule V).reflectionOperator)) := by
+        (((complexifySubmodule V).reflection : _ →L[ℂ] _))) := by
     rw [← hZ, diagonalPart_complexifySubmodule, ← complexify_mul,
       isUnit_complexify_iff]
     exact hCC
@@ -689,11 +678,11 @@ theorem extendedGauge_unboundedReflectionTangent_real
   have htrans := extendedGauge_unboundedReflectionTangent_complex
     (complexifySubmodule U) (complexifySubmodule V) N hcos
   rw [← ExactSinTheta.SymmetricNormingFunction.extendedGauge_complexify N
-      (unboundedReflectionTangent U V.reflectionOperator),
+      (unboundedReflectionTangent U (V.reflection : Er →L[ℝ] Er)),
     ← ExactSinTheta.SymmetricNormingFunction.extendedGauge_complexify N
       (absTanTwoAngleOperatorR U V),
     complexify_absTanTwoAngleOperatorR,
-    ← unboundedReflectionTangent_complexifySubmodule U V.reflectionOperator hCC,
+    ← unboundedReflectionTangent_complexifySubmodule U (V.reflection : Er →L[ℝ] Er) hCC,
     hZ]
   exact htrans
 

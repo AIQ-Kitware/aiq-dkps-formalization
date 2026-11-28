@@ -21,8 +21,8 @@ subspace.  This module is independent of the Davis--Kahan theory.
   `df036cd`; the canonical diagonal and off-diagonal block operators have since
   been upstreamed to `TauCeti.Analysis.InnerProductSpace.Projection.Block`.
 * Extraction class: **partially upstreamed** — this module now contains only
-  donor-specific consequences and the reflection-operator adapter; it uses
-  Tau Ceti's canonical `diagBlock` and `offDiagBlock` definitions.
+  donor-specific consequences. Its operators are Mathlib's reflection
+  and Tau Ceti's `diagBlock` and `offDiagBlock`.
 * Original authors / copyright: Jon Crall, GPT 5.6 High; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** — the `ForTauCeti` import firewall admits only
@@ -59,11 +59,6 @@ theorem starProjection_congr_apply {p q : Submodule 𝕜 E}
     p.starProjection x = q.starProjection x := by
   rw [starProjection_congr h]
 
-/-- Reflection through an orthogonally complemented subspace. -/
-noncomputable def reflectionOperator (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] : E →L[𝕜] E :=
-  U.reflection.toLinearIsometry.toContinuousLinearMap
-
 /-- The operator has vanishing diagonal blocks relative to `U`. -/
 def IsOffDiagonal (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (A : E →L[𝕜] E) : Prop := U.diagBlock A = 0
@@ -97,101 +92,12 @@ theorem offDiagBlock_apply (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
   rw [offDiagBlock_eq_sub_diagBlock]
   simp only [sub_apply]
 
-/-- Pointwise formula for reflection. -/
-@[simp]
-theorem reflectionOperator_apply (U : Submodule 𝕜 E)
+/-- The pointwise reflection formula with scalar multiplication by `𝕜`. -/
+theorem reflection_apply_smul (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (x : E) :
-    U.reflectionOperator x = (2 : 𝕜) • U.starProjection x - x := by
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
-  change U.reflection x = (2 : 𝕜) • U.starProjection x - x
-  rw [Submodule.reflection_apply, ← Nat.cast_smul_eq_nsmul 𝕜]
-  norm_num
-
-/-- **Reflection fixes the subspace it reflects through.**
-
-The pointwise formula gives `2 • P x - x`, which is `x` exactly on `U`.  Stated
-separately because the useful form is the fixed-point one: a compression whose
-input is restricted to `U` does not see the reflection at all. -/
-theorem reflectionOperator_apply_of_mem (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] {x : E} (hx : x ∈ U) :
-    U.reflectionOperator x = x := by
-  change U.reflection x = x
-  exact Submodule.reflection_mem_subspace_eq_self hx
-
-/-- The bundled reflection operator is Mathlib's `Submodule.reflection`.  Stated
-because `reflectionOperator` is not exposed across module boundaries, so a
-consumer that needs the `LinearIsometryEquiv` -- to feed a naturality theorem
-that quantifies over unitaries, say -- cannot see that the two agree. -/
-theorem reflectionOperator_apply_eq_reflection (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (x : E) :
-    U.reflectionOperator x = U.reflection x := by
-  change U.reflection x = U.reflection x
-  rfl
-
-/-- Reflection is involutive. -/
-theorem reflectionOperator_involutive (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] :
-    U.reflectionOperator ∘L U.reflectionOperator =
-      ContinuousLinearMap.id 𝕜 E := by
-  ext x
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
-  change U.reflection (U.reflection x) = x
-  exact U.reflection_reflection x
-
-/-- **The reflection in operator form**: `J_U = 2 P_U - I`.
-
-The pointwise formula `reflectionOperator_apply` is what `simp` uses, but the
-two-projection algebra needs the operator identity, so that products of two
-reflections can be expanded by ring normalisation rather than by chasing
-vectors. -/
-theorem reflectionOperator_eq_two_smul_sub_id (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] :
-    U.reflectionOperator =
-      (2 : 𝕜) • U.starProjection - ContinuousLinearMap.id 𝕜 E := by
-  ext x
-  simp
-
-/-- Reflection preserves norms. -/
-theorem reflectionOperator_norm_map (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (x : E) :
-    ‖U.reflectionOperator x‖ = ‖x‖ := by
-  -- names the application so the norm bound applies to it directly.
-  change ‖U.reflection x‖ = ‖x‖
-  exact U.reflection.norm_map x
-
-/-- Reflection is onto. -/
-theorem reflectionOperator_surjective (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] : Function.Surjective U.reflectionOperator := by
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
-  change Function.Surjective U.reflection
-  exact U.reflection.surjective
-
-/-- Reflection has operator norm at most one. -/
-theorem norm_reflectionOperator_le_one (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] : ‖U.reflectionOperator‖ ≤ 1 := by
-  refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one ?_
-  intro x
-  -- names the application so the norm bound applies to it directly.
-  change ‖U.reflection x‖ ≤ 1 * ‖x‖
-  simpa only [one_mul] using le_of_eq (U.reflection.norm_map x)
-
-/-- A reducing operator commutes with the corresponding reflection. -/
-theorem reflectionOperator_comm_of_reduces
-    (A : E →L[𝕜] E) (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (hU : Submodule.IsReducing U A) :
-    U.reflectionOperator ∘L A = A ∘L U.reflectionOperator := by
-  ext x
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
-  change U.reflectionOperator (A x) = A (U.reflectionOperator x)
-  rw [reflectionOperator_apply, reflectionOperator_apply,
-    (show ∀ x, U.starProjection (A x) = A (U.starProjection x) from
-      fun x => DFunLike.congr_fun ((Submodule.isReducing_coe_iff_commute_starProjection (U := U)
-        (A := A)).mp hU).eq x),
-    map_sub, map_smul]
+    (U.reflection : E →L[𝕜] E) x = (2 : 𝕜) • U.starProjection x - x := by
+  change U.reflection x = _
+  rw [Submodule.reflection_apply, two_smul, two_smul]
 
 /-- Complementary projection as `I-P`, pointwise. -/
 @[simp]
@@ -235,10 +141,7 @@ theorem diagBlock_eq_self_of_reflectionConjugate (U : Submodule 𝕜 E)
     (hA : (U.reflection : E →L[𝕜] E) ∘L A ∘L (U.reflection : E →L[𝕜] E) = A) :
     U.diagBlock A = A := by
   let J : E →L[𝕜] E := U.reflection
-  have hJ : J * J = 1 := by
-    ext x
-    change U.reflection (U.reflection x) = x
-    exact U.reflection_reflection x
+  have hJ : J * J = 1 := U.reflection_mul_self
   have hA' : J * A * J = A := by
     change U.reflection ∘L A ∘L U.reflection = A
     exact hA
@@ -259,7 +162,7 @@ general operator says nothing about a mixed vector; commuting with the
 reflection is exactly what removes the cross term. -/
 theorem re_inner_apply_self_nonneg_of_reflectionConjugate (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] {A : E →L[𝕜] E}
-    (hA : U.reflectionOperator ∘L A ∘L U.reflectionOperator = A)
+    (hA : (U.reflection : E →L[𝕜] E) ∘L A ∘L (U.reflection : E →L[𝕜] E) = A)
     (hU : ∀ x ∈ U, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜)
     (hUperp : ∀ x ∈ Uᗮ, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) (x : E) :
     0 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by

@@ -273,12 +273,12 @@ own double-angle representative. -/
 theorem blockCompression_mul_reflectionOperator
     (Ω Γ : Submodule 𝕜 G) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K : G →L[𝕜] G) :
-    blockCompression Ω Γ (K * Γ.reflectionOperator)
+    blockCompression Ω Γ (K * (Γ.reflection : G →L[𝕜] G))
       = blockCompression Ω Γ K := by
   ext x
   simp only [blockCompression, ContinuousLinearMap.coe_comp, Function.comp_apply,
     mul_apply_eq_comp, Submodule.subtypeL_apply]
-  rw [Submodule.reflectionOperator_apply_of_mem Γ x.2]
+  rw [LinearIsometryEquiv.coe_coe'', Submodule.reflection_mem_subspace_eq_self x.2]
 
 /-- **A `Γ → Γᗮ` compression only sees the `Γᗮ ← Γ` block of a diagonal pair.**
 
@@ -523,12 +523,12 @@ In particular each principal angle is counted **once**, as the directed
 statement requires -- the ambient `unboundedReflectionTangent U J_V` counts it
 twice, which is why the directed clause must not be routed through it. -/
 theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
-    (reflectionSineCorner U V.reflectionOperator).SameSingularValues
+    (reflectionSineCorner U (V.reflection : H →L[ℂ] H)).SameSingularValues
       (DavisKahan.sinTwoThetaIdealBlock U V) := by
-  set J : H →L[ℂ] H := V.reflectionOperator with hJdef
+  set J : H →L[ℂ] H := (V.reflection : H →L[ℂ] H) with hJdef
   have hJsa : IsSelfAdjoint J :=
-    TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
-  have hJ2 : J * J = 1 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
+    Submodule.isSelfAdjoint_reflection V
+  have hJ2 : J * J = 1 := Submodule.reflection_mul_self V
   have hJJ : ∀ x, J (J x) = x := fun x => by
     have h := congrArg (fun T : H →L[ℂ] H => T x) hJ2
     simpa using h
@@ -559,7 +559,7 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
     rw [Submodule.reflection_symm]
     ext x
     simp only [ContinuousLinearMap.comp_apply, hJdef,
-      Submodule.reflectionOperator_apply_eq_reflection,
+      LinearIsometryEquiv.coe_coe'',
       LinearIsometry.coe_toContinuousLinearMap, LinearIsometryEquiv.coe_toLinearIsometry]
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n

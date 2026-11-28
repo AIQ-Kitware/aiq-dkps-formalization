@@ -93,35 +93,35 @@ theorem proposition3_4_isDirectRotation_complex
     sq_eq_spectraReflectionProduct U V W hunitary hintertwines
       hsp.isSelfAdjoint hcp.isSelfAdjoint hcrossed
   have hW2unit : W * W ∈ unitary (H →L[ℂ] H) := mul_mem hunitary hunitary
-  have hrefl : Submodule.reflectionOperator (reflectedSubspace U V) =
-      U.reflectionOperator * V.reflectionOperator * U.reflectionOperator :=
+  have hrefl : ((reflectedSubspace U V).reflection : H →L[ℂ] H) =
+      (U.reflection : H →L[ℂ] H) * (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) :=
     reflectionOperator_reflectedSubspace V U
-  have hRU : U.reflectionOperator * U.reflectionOperator = 1 :=
-    reflectionOperator_mul_self_complex U
+  have hRU : (U.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) = 1 :=
+    Submodule.reflection_mul_self U
   have hsq : (W * W) * (W * W) =
       spectraReflectionProduct (reflectedSubspace U V) V := by
     show (W * W) * (W * W) =
-      V.reflectionOperator * Submodule.reflectionOperator (reflectedSubspace U V)
+      (V.reflection : H →L[ℂ] H) * ((reflectedSubspace U V).reflection : H →L[ℂ] H)
     rw [hrefl, hWsq]
     noncomm_ring
   have hint : (W * W) * Submodule.starProjection (reflectedSubspace U V) =
       V.starProjection * (W * W) := by
     have hPref : Submodule.starProjection (reflectedSubspace U V) =
-        U.reflectionOperator * V.starProjection * U.reflectionOperator :=
+        (U.reflection : H →L[ℂ] H) * V.starProjection * (U.reflection : H →L[ℂ] H) :=
       starProjection_reflectedSubspace U V
     rw [hPref, hWsq]
     calc
-      V.reflectionOperator * U.reflectionOperator *
-          (U.reflectionOperator * V.starProjection * U.reflectionOperator) =
-        V.reflectionOperator * (U.reflectionOperator * U.reflectionOperator) *
-          (V.starProjection * U.reflectionOperator) := by noncomm_ring
-      _ = V.reflectionOperator * V.starProjection * U.reflectionOperator := by
+      (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) *
+          ((U.reflection : H →L[ℂ] H) * V.starProjection * (U.reflection : H →L[ℂ] H)) =
+        (V.reflection : H →L[ℂ] H) * ((U.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H)) *
+          (V.starProjection * (U.reflection : H →L[ℂ] H)) := by noncomm_ring
+      _ = (V.reflection : H →L[ℂ] H) * V.starProjection * (U.reflection : H →L[ℂ] H) := by
         rw [hRU, mul_one, mul_assoc]
-      _ = V.starProjection * U.reflectionOperator := by
+      _ = V.starProjection * (U.reflection : H →L[ℂ] H) := by
         rw [reflectionOperator_mul_projection_self V]
-      _ = (V.starProjection * V.reflectionOperator) * U.reflectionOperator := by
+      _ = (V.starProjection * (V.reflection : H →L[ℂ] H)) * (U.reflection : H →L[ℂ] H) := by
         rw [projection_mul_reflectionOperator_self V]
-      _ = V.starProjection * (V.reflectionOperator * U.reflectionOperator) := by
+      _ = V.starProjection * ((V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H)) := by
         rw [mul_assoc]
   have hhalf : ∀ x : H,
       0 ≤ RCLike.re ⟪x, halmosCosineSq U V x⟫_ℂ - ‖x‖ ^ 2 / 2 :=
@@ -168,36 +168,36 @@ theorem proposition3_4 (hacute : IsUniformlyAcute U V)
   set W := spectraDirectRotation U V hacute with hWdef
   have hWunit : W ∈ unitary (H →L[ℂ] H) := spectraDirectRotation_mem_unitary U V hacute
   have hTunit : W * W ∈ unitary (H →L[ℂ] H) := mul_mem hWunit hWunit
-  have hWsq : W * W = V.reflectionOperator * U.reflectionOperator :=
+  have hWsq : W * W = (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) :=
     spectraDirectRotation_sq U V hacute
-  have hrefl : Submodule.reflectionOperator (reflectedSubspace U V)
-      = U.reflectionOperator * V.reflectionOperator * U.reflectionOperator :=
+  have hrefl : ((reflectedSubspace U V).reflection : H →L[ℂ] H)
+      = (U.reflection : H →L[ℂ] H) * (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) :=
     reflectionOperator_reflectedSubspace V U
-  have hRU : U.reflectionOperator * U.reflectionOperator = 1 :=
-    reflectionOperator_mul_self_complex U
+  have hRU : (U.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) = 1 :=
+    Submodule.reflection_mul_self U
   have hsq : (W * W) * (W * W) = spectraReflectionProduct (reflectedSubspace U V) V := by
     show (W * W) * (W * W)
-      = V.reflectionOperator * Submodule.reflectionOperator (reflectedSubspace U V)
+      = (V.reflection : H →L[ℂ] H) * ((reflectedSubspace U V).reflection : H →L[ℂ] H)
     rw [hrefl, hWsq]
     noncomm_ring
   -- the printed `U²Q₋ = QU²`
   have hint : (W * W) * Submodule.starProjection (reflectedSubspace U V)
       = V.starProjection * (W * W) := by
     have hPref : Submodule.starProjection (reflectedSubspace U V)
-        = U.reflectionOperator * V.starProjection * U.reflectionOperator :=
+        = (U.reflection : H →L[ℂ] H) * V.starProjection * (U.reflection : H →L[ℂ] H) :=
       starProjection_reflectedSubspace U V
     rw [hPref, hWsq]
-    calc V.reflectionOperator * U.reflectionOperator *
-          (U.reflectionOperator * V.starProjection * U.reflectionOperator)
-        = V.reflectionOperator * (U.reflectionOperator * U.reflectionOperator) *
-            (V.starProjection * U.reflectionOperator) := by noncomm_ring
-      _ = V.reflectionOperator * V.starProjection * U.reflectionOperator := by
+    calc (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) *
+          ((U.reflection : H →L[ℂ] H) * V.starProjection * (U.reflection : H →L[ℂ] H))
+        = (V.reflection : H →L[ℂ] H) * ((U.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H)) *
+            (V.starProjection * (U.reflection : H →L[ℂ] H)) := by noncomm_ring
+      _ = (V.reflection : H →L[ℂ] H) * V.starProjection * (U.reflection : H →L[ℂ] H) := by
             rw [hRU, mul_one, mul_assoc]
-      _ = V.starProjection * U.reflectionOperator := by
+      _ = V.starProjection * (U.reflection : H →L[ℂ] H) := by
             rw [reflectionOperator_mul_projection_self V]
-      _ = (V.starProjection * V.reflectionOperator) * U.reflectionOperator := by
+      _ = (V.starProjection * (V.reflection : H →L[ℂ] H)) * (U.reflection : H →L[ℂ] H) := by
             rw [projection_mul_reflectionOperator_self V]
-      _ = V.starProjection * (V.reflectionOperator * U.reflectionOperator) := by
+      _ = V.starProjection * ((V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H)) := by
             rw [mul_assoc]
   have hre : ∀ x : H, 0 ≤ RCLike.re ⟪(W * W) x, x⟫_ℂ := by
     intro x
@@ -225,14 +225,14 @@ theorem proposition3_4_eq_directRotation (hacute : IsUniformlyAcute U V)
   set W := spectraDirectRotation U V hacute with hWdef
   have hWunit : W ∈ unitary (H →L[ℂ] H) := spectraDirectRotation_mem_unitary U V hacute
   have hTunit : W * W ∈ unitary (H →L[ℂ] H) := mul_mem hWunit hWunit
-  have hWsq : W * W = V.reflectionOperator * U.reflectionOperator :=
+  have hWsq : W * W = (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) :=
     spectraDirectRotation_sq U V hacute
-  have hrefl : Submodule.reflectionOperator (reflectedSubspace U V)
-      = U.reflectionOperator * V.reflectionOperator * U.reflectionOperator :=
+  have hrefl : ((reflectedSubspace U V).reflection : H →L[ℂ] H)
+      = (U.reflection : H →L[ℂ] H) * (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) :=
     reflectionOperator_reflectedSubspace V U
   have hsq : (W * W) * (W * W) = spectraReflectionProduct (reflectedSubspace U V) V := by
     show (W * W) * (W * W)
-      = V.reflectionOperator * Submodule.reflectionOperator (reflectedSubspace U V)
+      = (V.reflection : H →L[ℂ] H) * ((reflectedSubspace U V).reflection : H →L[ℂ] H)
     rw [hrefl, hWsq]
     noncomm_ring
   refine spectraDirectRotation_unique_of_sq (reflectedSubspace U V) V hacuteRef

@@ -62,20 +62,20 @@ private theorem starProjection_map_reflectionOperator
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E)).starProjection =
-      V.reflectionOperator ∘L U.starProjection ∘L V.reflectionOperator := by
+      (V.reflection : E →L[𝕜] E) ∘L U.starProjection ∘L (V.reflection : E →L[𝕜] E) := by
   rw [starProjection_map_unitary U V.reflection]
   unfold boundedUnitaryConjugate
   rw [Submodule.reflection_symm]
   ext x
-  simp only [ContinuousLinearMap.comp_apply, Submodule.reflectionOperator_apply_eq_reflection,
+  simp only [ContinuousLinearMap.comp_apply, LinearIsometryEquiv.coe_coe'',
       LinearIsometry.coe_toContinuousLinearMap, LinearIsometryEquiv.coe_toLinearIsometry]
 
 /-- The reflection defect of a self-adjoint operator is self-adjoint. -/
 private theorem isSelfAdjoint_reflectionDefect
     {S : E →L[𝕜] E} (hS : IsSelfAdjoint S) (V : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] : IsSelfAdjoint (reflectionDefect V S) := by
-  have hJ : IsSelfAdjoint (V.reflectionOperator : E →L[𝕜] E) :=
-    isSelfAdjoint_reflectionOperator V
+  have hJ : IsSelfAdjoint (V.reflection : E →L[𝕜] E) :=
+    Submodule.isSelfAdjoint_reflection V
   unfold reflectionDefect
   rw [IsSelfAdjoint, star_sub, hS.star_eq]
   congr 1
@@ -100,10 +100,10 @@ private theorem reflectedDefectBlocks_same
   have hperp : Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E) = Wᗮ :=
     Submodule.map_orthogonal_equiv U V.reflection
   have hWproj : W.starProjection =
-      V.reflectionOperator ∘L U.starProjection ∘L V.reflectionOperator :=
+      (V.reflection : E →L[𝕜] E) ∘L U.starProjection ∘L (V.reflection : E →L[𝕜] E) :=
     starProjection_map_reflectionOperator U V
   have hWperpProj : Wᗮ.starProjection =
-      V.reflectionOperator ∘L Uᗮ.starProjection ∘L V.reflectionOperator := by
+      (V.reflection : E →L[𝕜] E) ∘L Uᗮ.starProjection ∘L (V.reflection : E →L[𝕜] E) := by
     rw [← Submodule.starProjection_congr hperp]
     exact starProjection_map_reflectionOperator Uᗮ V
   have hB₀adj : (projectionBlock Wᗮ U D).adjoint =
@@ -113,11 +113,11 @@ private theorem reflectedDefectBlocks_same
       (isSelfAdjoint_starProjection Wᗮ).adjoint_eq,
       hDsa.adjoint_eq, (isSelfAdjoint_starProjection U).adjoint_eq]
     rfl
-  have hanti : V.reflectionOperator ∘L D = -(D ∘L V.reflectionOperator) :=
+  have hanti : (V.reflection : E →L[𝕜] E) ∘L D = -(D ∘L (V.reflection : E →L[𝕜] E)) :=
     reflectionOperator_comp_reflectionDefect V S
   have hblock : projectionBlock Wᗮᗮ Uᗮ D =
-      -(V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint ∘L
-        V.reflectionOperator) := by
+      -((V.reflection : E →L[𝕜] E) ∘L (projectionBlock Wᗮ U D).adjoint ∘L
+        (V.reflection : E →L[𝕜] E)) := by
     have hWW : Wᗮᗮ.starProjection = W.starProjection :=
       Submodule.starProjection_congr (Submodule.orthogonal_orthogonal W)
     rw [hB₀adj, projectionBlock, hWW, hWproj, hWperpProj]
@@ -134,21 +134,10 @@ private theorem reflectedDefectBlocks_same
   apply NNReal.eq
   rw [hblock, ← neg_one_smul 𝕜, ContinuousLinearMap.singularValue_smul,
     nnNorm_neg, nnNorm_one, one_mul]
-  have hright := sameApproximationSingularValues_comp_reflection_right V
-    (V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint)
-  have hleft := sameApproximationSingularValues_comp_reflection_left V
-    (projectionBlock Wᗮ U D).adjoint
-  calc
-    ((projectionBlock Wᗮ U D).singularValue n : ℝ) =
-        ((projectionBlock Wᗮ U D).adjoint.singularValue n : ℝ) :=
-      by rw [
-        ContinuousLinearMap.singularValue_adjoint]
-    _ = ((V.reflectionOperator ∘L
-          (projectionBlock Wᗮ U D).adjoint).singularValue n : ℝ) :=
-      ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hleft n))).symm
-    _ = ((V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint ∘L
-          V.reflectionOperator).singularValue n : ℝ) :=
-      ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hright n))).symm
+  rw [← ContinuousLinearMap.singularValue_adjoint (projectionBlock Wᗮ U D) n]
+  exact congrArg NNReal.toReal
+    ((projectionBlock Wᗮ U D).adjoint.singularValue_comp_linearIsometryEquiv
+      V.reflection V.reflection n).symm
 
 /-- The two off-diagonal blocks of a self-adjoint operator have the same
 complete singular sequence. -/

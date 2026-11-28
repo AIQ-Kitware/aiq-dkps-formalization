@@ -117,9 +117,9 @@ omit [CompleteSpace H] in
 /-- Reflection through `U` written in the projection algebra. -/
 theorem reflectionOperator_eq_projection_add_projection_sub_one
     (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
-    U.reflectionOperator = U.starProjection + U.starProjection - 1 := by
+    (U.reflection : H →L[𝕜] H) = U.starProjection + U.starProjection - 1 := by
   ext x
-  rw [Submodule.reflectionOperator_apply]
+  rw [Submodule.reflection_apply_smul]
   simp only [add_apply, sub_apply, one_apply_eq_self]
   module
 
@@ -130,14 +130,14 @@ theorem spectraCanonicalIntertwiner_sub_one
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraCanonicalIntertwiner U V - 1 =
-      (V.starProjection - U.starProjection) * U.reflectionOperator := by
+      (V.starProjection - U.starProjection) * (U.reflection : H →L[𝕜] H) := by
   change
     (V.starProjection * U.starProjection +
         Vᗮ.starProjection * Uᗮ.starProjection) - 1 =
-      (V.starProjection - U.starProjection) * U.reflectionOperator
+      (V.starProjection - U.starProjection) * (U.reflection : H →L[𝕜] H)
   rw [Submodule.starProjection_orthogonal' U,
     Submodule.starProjection_orthogonal' V]
-  rw [show U.reflectionOperator =
+  rw [show (U.reflection : H →L[𝕜] H) =
     U.starProjection + U.starProjection - 1 by
       exact reflectionOperator_eq_projection_add_projection_sub_one U]
   have hP : U.starProjection * U.starProjection = U.starProjection :=
@@ -153,11 +153,11 @@ theorem norm_spectraCanonicalIntertwiner_sub_one_le_gap
     ‖spectraCanonicalIntertwiner U V - 1‖ ≤ U.projectionGap V := by
   rw [spectraCanonicalIntertwiner_sub_one]
   calc
-    ‖(V.starProjection - U.starProjection) * U.reflectionOperator‖
-        ≤ ‖V.starProjection - U.starProjection‖ * ‖U.reflectionOperator‖ :=
+    ‖(V.starProjection - U.starProjection) * (U.reflection : H →L[𝕜] H)‖
+        ≤ ‖V.starProjection - U.starProjection‖ * ‖(U.reflection : H →L[𝕜] H)‖ :=
       norm_mul_le _ _
     _ ≤ ‖V.starProjection - U.starProjection‖ * 1 :=
-      mul_le_mul_of_nonneg_left (Submodule.norm_reflectionOperator_le_one U)
+      mul_le_mul_of_nonneg_left (U.reflection.toLinearIsometry.norm_toContinuousLinearMap_le)
         (norm_nonneg (V.starProjection - U.starProjection))
     _ = U.projectionGap V := by
       rw [mul_one, Submodule.projectionGap_def]
@@ -840,8 +840,8 @@ theorem spectraDirectRotation_intertwines_reflection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    spectraDirectRotation U V hacute * U.reflectionOperator =
-      V.reflectionOperator * spectraDirectRotation U V hacute := by
+    spectraDirectRotation U V hacute * (U.reflection : H →L[𝕜] H) =
+      (V.reflection : H →L[𝕜] H) * spectraDirectRotation U V hacute := by
   simp only [reflectionOperator_eq_projection_add_projection_sub_one,
     mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul,
     spectraDirectRotation_intertwines U V hacute]
@@ -852,8 +852,8 @@ theorem star_spectraDirectRotation_intertwines_reflection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    star (spectraDirectRotation U V hacute) * V.reflectionOperator =
-      U.reflectionOperator * star (spectraDirectRotation U V hacute) := by
+    star (spectraDirectRotation U V hacute) * (V.reflection : H →L[𝕜] H) =
+      (U.reflection : H →L[𝕜] H) * star (spectraDirectRotation U V hacute) := by
   simp only [reflectionOperator_eq_projection_add_projection_sub_one,
     mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul,
     star_spectraDirectRotation_intertwines U V hacute]
@@ -864,18 +864,18 @@ theorem spectraDirectRotation_conjugates_reflection
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    spectraDirectRotation U V hacute * U.reflectionOperator *
-        star (spectraDirectRotation U V hacute) = V.reflectionOperator := by
+    spectraDirectRotation U V hacute * (U.reflection : H →L[𝕜] H) *
+        star (spectraDirectRotation U V hacute) = (V.reflection : H →L[𝕜] H) := by
   calc
-    spectraDirectRotation U V hacute * U.reflectionOperator *
+    spectraDirectRotation U V hacute * (U.reflection : H →L[𝕜] H) *
         star (spectraDirectRotation U V hacute) =
-      (V.reflectionOperator * spectraDirectRotation U V hacute) *
+      ((V.reflection : H →L[𝕜] H) * spectraDirectRotation U V hacute) *
         star (spectraDirectRotation U V hacute) := by
           rw [spectraDirectRotation_intertwines_reflection U V hacute]
-    _ = V.reflectionOperator *
+    _ = (V.reflection : H →L[𝕜] H) *
         (spectraDirectRotation U V hacute *
           star (spectraDirectRotation U V hacute)) := by rw [mul_assoc]
-    _ = V.reflectionOperator := by
+    _ = (V.reflection : H →L[𝕜] H) := by
       rw [spectraDirectRotation_mul_star_self U V hacute, mul_one]
 
 /-- The adjoint of the acute Spectra direct rotation is onto. -/
@@ -963,35 +963,6 @@ theorem star_spectraDirectRotation_maps_orthogonalComplement
 
 /-! ## Reflection-product reduction for the square theorem -/
 
-/-- A subspace reflection is self-adjoint in the complex bounded-operator
-algebra. -/
-theorem star_reflectionOperator_complex
-    (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
-    star (U.reflectionOperator) = U.reflectionOperator := by
-  rw [reflectionOperator_eq_projection_add_projection_sub_one]
-  simp only [star_sub, star_add, star_one,
-    (isSelfAdjoint_starProjection U).star_eq]
-
-/-- A subspace reflection is a unitary element of the complex bounded-operator
-algebra. -/
-theorem reflectionOperator_mem_unitary_complex
-    (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
-    U.reflectionOperator ∈ unitary (H →L[𝕜] H) := by
-  have hstar : star (U.reflectionOperator) = U.reflectionOperator :=
-    star_reflectionOperator_complex U
-  have hinv : U.reflectionOperator * U.reflectionOperator = 1 := by
-    simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def] using
-      Submodule.reflectionOperator_involutive U
-  exact ⟨by rw [hstar, hinv], by rw [hstar, hinv]⟩
-
-omit [CompleteSpace H] in
-/-- Reflections square to the identity in the bounded-operator algebra. -/
-theorem reflectionOperator_mul_self_complex
-    (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] :
-    U.reflectionOperator * U.reflectionOperator = 1 := by
-  simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def] using
-    Submodule.reflectionOperator_involutive U
-
 omit [CompleteSpace H] in
 /-- Doubling identity: `C + C = 1 + Rᵥ Rᵤ`.  Because each reflection is degree
 one in a single projection, this expands with no idempotent reduction. -/
@@ -999,13 +970,13 @@ theorem spectraCanonicalIntertwiner_add_self
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraCanonicalIntertwiner U V + spectraCanonicalIntertwiner U V =
-      1 + V.reflectionOperator * U.reflectionOperator := by
+      1 + (V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H) := by
   change
     (V.starProjection * U.starProjection +
           Vᗮ.starProjection * Uᗮ.starProjection) +
         (V.starProjection * U.starProjection +
           Vᗮ.starProjection * Uᗮ.starProjection) =
-      1 + V.reflectionOperator * U.reflectionOperator
+      1 + (V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H)
   rw [reflectionOperator_eq_projection_add_projection_sub_one U,
     reflectionOperator_eq_projection_add_projection_sub_one V,
     Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V]
@@ -1040,10 +1011,10 @@ theorem spectraCanonicalIntertwiner_normal
     star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V =
       spectraCanonicalIntertwiner U V * star (spectraCanonicalIntertwiner U V) := by
   set C := spectraCanonicalIntertwiner U V with hCdef
-  set a := U.reflectionOperator with hadef
-  set b := V.reflectionOperator with hbdef
-  have hRU : a * a = 1 := reflectionOperator_mul_self_complex U
-  have hRV : b * b = 1 := reflectionOperator_mul_self_complex V
+  set a := (U.reflection : H →L[𝕜] H) with hadef
+  set b := (V.reflection : H →L[𝕜] H) with hbdef
+  have hRU : a * a = 1 := Submodule.reflection_mul_self U
+  have hRV : b * b = 1 := Submodule.reflection_mul_self V
   have hGG' : (b * a) * (a * b) = 1 := by
     rw [mul_assoc, ← mul_assoc a, hRU, one_mul, hRV]
   have hG'G : (a * b) * (b * a) = 1 := by
@@ -1052,7 +1023,7 @@ theorem spectraCanonicalIntertwiner_normal
   have hCs : star C + star C = 1 + a * b := by
     have h := congrArg star hC
     rwa [star_add, star_add, star_one, star_mul,
-      star_reflectionOperator_complex U, star_reflectionOperator_complex V] at h
+      (U.isSelfAdjoint_reflection).star_eq, (V.isSelfAdjoint_reflection).star_eq] at h
   refine add_four_cancel_complex ?_
   have e1 : star C * C + star C * C + star C * C + star C * C =
       (star C + star C) * (C + C) := by noncomm_ring
@@ -1076,17 +1047,17 @@ theorem spectraCanonicalIntertwiner_add_star
       star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V +
         star (spectraCanonicalIntertwiner U V) * spectraCanonicalIntertwiner U V := by
   set C := spectraCanonicalIntertwiner U V with hCdef
-  set a := U.reflectionOperator with hadef
-  set b := V.reflectionOperator with hbdef
-  have hRU : a * a = 1 := reflectionOperator_mul_self_complex U
-  have hRV : b * b = 1 := reflectionOperator_mul_self_complex V
+  set a := (U.reflection : H →L[𝕜] H) with hadef
+  set b := (V.reflection : H →L[𝕜] H) with hbdef
+  have hRU : a * a = 1 := Submodule.reflection_mul_self U
+  have hRV : b * b = 1 := Submodule.reflection_mul_self V
   have hG'G : (a * b) * (b * a) = 1 := by
     rw [mul_assoc, ← mul_assoc b, hRV, one_mul, hRU]
   have hC : C + C = 1 + b * a := spectraCanonicalIntertwiner_add_self U V
   have hCs : star C + star C = 1 + a * b := by
     have h := congrArg star hC
     rwa [star_add, star_add, star_one, star_mul,
-      star_reflectionOperator_complex U, star_reflectionOperator_complex V] at h
+      (U.isSelfAdjoint_reflection).star_eq, (V.isSelfAdjoint_reflection).star_eq] at h
   refine add_self_cancel_complex ?_
   have eL : (C + star C) + (C + star C) = (C + C) + (star C + star C) := by abel
   have eR : (star C * C + star C * C) + (star C * C + star C * C) =
@@ -1122,7 +1093,7 @@ factor. -/
 noncomputable abbrev spectraReflectionProduct
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
-  V.reflectionOperator * U.reflectionOperator
+  (V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H)
 
 /-- The ordered reflection product is unitary. -/
 theorem spectraReflectionProduct_mem_unitary
@@ -1130,8 +1101,8 @@ theorem spectraReflectionProduct_mem_unitary
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraReflectionProduct U V ∈ unitary (H →L[𝕜] H) :=
   (unitary (H →L[𝕜] H)).mul_mem
-    (reflectionOperator_mem_unitary_complex V)
-    (reflectionOperator_mem_unitary_complex U)
+    (Submodule.reflection_mem_unitary V)
+    (Submodule.reflection_mem_unitary U)
 
 omit [CompleteSpace H] in
 /-- Twice the canonical intertwiner is the identity plus the ordered
@@ -1147,11 +1118,11 @@ theorem spectraCanonicalIntertwiner_add_self_eq_one_add_reflectionProduct
         Vᗮ.starProjection * Uᗮ.starProjection) +
       (V.starProjection * U.starProjection +
         Vᗮ.starProjection * Uᗮ.starProjection) =
-      1 + V.reflectionOperator * U.reflectionOperator
-  rw [show V.reflectionOperator =
+      1 + (V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H)
+  rw [show (V.reflection : H →L[𝕜] H) =
       V.starProjection + V.starProjection - 1 by
         exact reflectionOperator_eq_projection_add_projection_sub_one V,
-    show U.reflectionOperator =
+    show (U.reflection : H →L[𝕜] H) =
       U.starProjection + U.starProjection - 1 by
         exact reflectionOperator_eq_projection_add_projection_sub_one U,
     Submodule.starProjection_orthogonal' U,
@@ -1168,14 +1139,14 @@ theorem spectraCanonicalIntertwiner_commute_reflectionProduct
   change
     (V.starProjection * U.starProjection +
         Vᗮ.starProjection * Uᗮ.starProjection) *
-      (V.reflectionOperator * U.reflectionOperator) =
-    (V.reflectionOperator * U.reflectionOperator) *
+      ((V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H)) =
+    ((V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H)) *
       (V.starProjection * U.starProjection +
         Vᗮ.starProjection * Uᗮ.starProjection)
-  rw [show V.reflectionOperator =
+  rw [show (V.reflection : H →L[𝕜] H) =
       V.starProjection + V.starProjection - 1 by
         exact reflectionOperator_eq_projection_add_projection_sub_one V,
-    show U.reflectionOperator =
+    show (U.reflection : H →L[𝕜] H) =
       U.starProjection + U.starProjection - 1 by
         exact reflectionOperator_eq_projection_add_projection_sub_one U,
     Submodule.starProjection_orthogonal' U,

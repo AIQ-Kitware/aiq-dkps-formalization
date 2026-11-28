@@ -1,5 +1,52 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native subspace reflections
+
+The local `Submodule.reflectionOperator` definition is retired. The
+reflection in each construction is Mathlib's `Submodule.reflection`.
+Composition, operator norms, and the bounded operator algebra use its
+continuous-linear-map coercion. This preserves the original scalar-generic
+scope, including orthogonally complemented subspaces of incomplete spaces.
+The isometric equivalence and involution are the Mathlib coverage for
+PA-C03 and PA-C04.
+[Mathlib reflection](https://github.com/leanprover-community/mathlib4/blob/31ce06eaadf4a200c0e1407c5f10953cf606b8f8/Mathlib/Analysis/InnerProductSpace/Projection/Reflection.lean)
+
+TauCeti #14109 by tauceti-ai-for-science supplied the operator formula
+`Submodule.coe_reflection` and `Submodule.commute_reflection_iff` for
+PA-C05 in the PA-C01–C12 block and gap contribution. Reducing-subspace
+callers combine the latter with the accepted projection commutator.
+Proof descent from the early DKPS donor to #14109 is unverified. Our
+accepted SSP-C31 submission #27804 supplied
+`Submodule.reflection_mul_self`, `Submodule.isSelfAdjoint_reflection`,
+and `Submodule.reflection_mem_unitary`. These replace the separate
+involution, adjoint, and unitary proofs used by the bounded and unbounded
+double-angle arguments.
+[#14109 integration](https://github.com/TauCetiProject/TauCeti/commit/b4b0f0f893f5b923b56607eb81d4b293c3696d30) ·
+[#27804 integration](https://github.com/TauCetiProject/TauCeti/commit/993a5a824395596d7c3d4e178aa62a8a8e82c167)
+
+Mathlib's operator norm invariance under isometries replaces the two
+reflection-specific norm proofs. Proposition 6.1 and the reflected
+defect doubling proof use the isometric singular-value invariance
+from our DKPS-derived #13866. This is the isometric-invariance
+prerequisite for OI-B72. It also covers the incomplete ambient space
+of Proposition 6.1.
+[#13866 integration](https://github.com/TauCetiProject/TauCeti/commit/7bbe813acf610ee6db4caba078b9c4facf357b90)
+
+The historical local declaration names are recorded in the extraction
+manifest. The projection-block donor is anchored at `df036cd` and its
+pre-retirement form at `b7e6479a5`, with credit to Jon Crall and GPT 5.6
+High, Kitware 2026, Apache-2.0. The block numerical-range argument,
+scalar transport, and domain-aware spectral reflection statements
+use the native representation. The pointwise scalar multiplication
+formula and the pointwise involution on the bounded operator coercion
+remain for proofs that rewrite in those forms.
+
+The focused build (10,519 jobs), full default build (22,804 jobs), and
+Challenge with the Section 3 and result semantic-surface audits
+(22,516 jobs) passed without warnings at TauCeti `007b3a1150`.
+All 1,572 source-census declaration references resolved. All 17 available
+comparator signatures matched.
+
 ## November 27 bounded trial residuals on the Sylvester operator
 
 The bounded invariant-pair residual and the general bounded trial residual

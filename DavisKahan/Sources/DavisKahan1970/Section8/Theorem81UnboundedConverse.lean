@@ -74,27 +74,15 @@ theorem starProjection_specProjection_comm_of_reduces
     Q.starProjection ((B.spectralPVM hB).proj S hS x)
       = (B.spectralPVM hB).proj S hS (Q.starProjection x) := by
   obtain ⟨hmaps, hcomm⟩ := TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace hQ
-  have hmaps' : ∀ z : B.domain, Q.reflection (z : H) ∈ B.domain := by
-    intro z
-    have h := hmaps z
-    rwa [Submodule.reflectionOperator_apply_eq_reflection] at h
-  have hint : ∀ z : B.domain, B ⟨Q.reflection (z : H), hmaps' z⟩ = Q.reflection (B z) := by
-    intro z
-    have heq : (⟨Q.reflection (z : H), hmaps' z⟩ : B.domain)
-        = ⟨Q.reflectionOperator (z : H), hmaps z⟩ :=
-      Subtype.ext (Submodule.reflectionOperator_apply_eq_reflection Q (z : H)).symm
-    rw [heq, hcomm z]
-    exact Submodule.reflectionOperator_apply_eq_reflection Q _
-  have hnat := TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines hB
-    Q.reflection hmaps' hint S hS x
-  have hnat' : Q.reflectionOperator ((B.spectralPVM hB).proj S hS x)
-      = (B.spectralPVM hB).proj S hS (Q.reflectionOperator x) := by
-    rw [Submodule.reflectionOperator_apply_eq_reflection,
-      Submodule.reflectionOperator_apply_eq_reflection]
-    exact hnat
-  rw [Submodule.reflectionOperator_apply, Submodule.reflectionOperator_apply, map_sub,
-    map_smul] at hnat'
-  exact smul_right_injective H (two_ne_zero) (sub_left_inj.mp hnat')
+  have hmaps' : ∀ z : B.domain, Q.reflection (z : H) ∈ B.domain := hmaps
+  have hint : ∀ z : B.domain, B ⟨Q.reflection (z : H), hmaps' z⟩ = Q.reflection (B z) := hcomm
+  have hnat : (Q.reflection : H →L[ℂ] H) ((B.spectralPVM hB).proj S hS x)
+      = (B.spectralPVM hB).proj S hS ((Q.reflection : H →L[ℂ] H) x) :=
+    TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines hB
+      Q.reflection hmaps' hint S hS x
+  rw [Submodule.reflection_apply_smul, Submodule.reflection_apply_smul, map_sub,
+    map_smul] at hnat
+  exact smul_right_injective H (two_ne_zero) (sub_left_inj.mp hnat)
 
 /-! ### Two pieces of projection geometry -/
 

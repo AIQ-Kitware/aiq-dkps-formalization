@@ -977,23 +977,10 @@ private theorem diagonalPart_nonacuteDirectRotation_displacementSquare_real
     congr 1
     rw [two_mul, mul_two]
   apply Submodule.diagBlock_eq_self_of_reflectionConjugate
-  have hJdef : (U.reflection : E →L[ℝ] E) = U.reflectionOperator := by
-    ext x
-    rw [Submodule.reflectionOperator_apply_eq_reflection]
-    rfl
-  rw [hJdef]
-  have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
-    rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
-      smul_mul_assoc, mul_smul_comm, hcomm]
-    rw [show (ContinuousLinearMap.id ℝ E) = 1 from rfl, mul_one, one_mul]
-  have hJJ : U.reflectionOperator * U.reflectionOperator = (1 : E →L[ℝ] E) :=
-    Submodule.reflectionOperator_involutive (𝕜 := ℝ) (E := E) U
-  calc
-    U.reflectionOperator ∘L A ∘L U.reflectionOperator =
-        U.reflectionOperator * (A * U.reflectionOperator) := rfl
-    _ = U.reflectionOperator * (U.reflectionOperator * A) := by rw [hAJ]
-    _ = (U.reflectionOperator * U.reflectionOperator) * A := by rw [mul_assoc]
-    _ = A := by rw [hJJ, one_mul]
+  have hAJ : Commute (U.reflection : E →L[ℝ] E) A :=
+    U.commute_reflection_iff.mpr hcomm.symm
+  change (U.reflection : E →L[ℝ] E) * (A * (U.reflection : E →L[ℝ] E)) = A
+  rw [← hAJ.eq, ← mul_assoc, U.reflection_mul_self, one_mul]
 
 /-- **Proposition 4.3 over `ℝ` at the exact matched-defect, nonacute scope.** -/
 theorem proposition4_3_nonacute_real

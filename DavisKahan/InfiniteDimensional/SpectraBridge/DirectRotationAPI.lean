@@ -69,7 +69,7 @@ theorem complexDirectRotation_unique
     (hacute : IsUniformlyAcute U V)
     (W : H →L[ℂ] H)
     (hWunit : W ∈ unitary (H →L[ℂ] H))
-    (hsq : W * W = V.reflectionOperator * U.reflectionOperator)
+    (hsq : W * W = (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H))
     (hre : ∀ x, 0 ≤ Complex.re ⟪W x, x⟫_ℂ) :
     W = complexDirectRotation U V hacute :=
   _root_.TauCeti.DavisKahan.spectraDirectRotation_unique_of_sq
@@ -239,8 +239,8 @@ theorem complexDirectRotation_intertwines_reflection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    complexDirectRotation U V hacute ∘L U.reflectionOperator =
-      V.reflectionOperator ∘L complexDirectRotation U V hacute := by
+    complexDirectRotation U V hacute ∘L (U.reflection : H →L[ℂ] H) =
+      (V.reflection : H →L[ℂ] H) ∘L complexDirectRotation U V hacute := by
   simpa only [ContinuousLinearMap.mul_def] using
     _root_.TauCeti.DavisKahan.spectraDirectRotation_intertwines_reflection
       U V hacute
@@ -250,8 +250,8 @@ theorem star_complexDirectRotation_intertwines_reflection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    star (complexDirectRotation U V hacute) ∘L V.reflectionOperator =
-      U.reflectionOperator ∘L star (complexDirectRotation U V hacute) := by
+    star (complexDirectRotation U V hacute) ∘L (V.reflection : H →L[ℂ] H) =
+      (U.reflection : H →L[ℂ] H) ∘L star (complexDirectRotation U V hacute) := by
   simpa only [ContinuousLinearMap.mul_def] using
     _root_.TauCeti.DavisKahan.star_spectraDirectRotation_intertwines_reflection
       U V hacute
@@ -262,8 +262,8 @@ theorem complexDirectRotation_conjugates_reflection
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsUniformlyAcute U V) :
-    (complexDirectRotation U V hacute ∘L U.reflectionOperator) ∘L
-        star (complexDirectRotation U V hacute) = V.reflectionOperator := by
+    (complexDirectRotation U V hacute ∘L (U.reflection : H →L[ℂ] H)) ∘L
+        star (complexDirectRotation U V hacute) = (V.reflection : H →L[ℂ] H) := by
   simpa only [ContinuousLinearMap.mul_def] using
     _root_.TauCeti.DavisKahan.spectraDirectRotation_conjugates_reflection
       U V hacute

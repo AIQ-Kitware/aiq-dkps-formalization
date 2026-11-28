@@ -89,10 +89,9 @@ omit [CompleteSpace E] in
 algebra. -/
 theorem reflectionOperator_eq_add_sub_one (V : Submodule ℂ E)
     [V.HasOrthogonalProjection] :
-    V.reflectionOperator =
+    (V.reflection : E →L[ℂ] E) =
       V.starProjection + V.starProjection - 1 := by
-  rw [Submodule.reflectionOperator_eq_two_smul_sub_id, two_smul]
-  rfl
+  rw [Submodule.coe_reflection, two_smul]
 
 omit [CompleteSpace E] in
 /-- The projection onto the reflected subspace `J_V U` is the conjugate
@@ -100,10 +99,10 @@ omit [CompleteSpace E] in
 theorem starProjection_map_reflection_eq (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection =
-      V.reflectionOperator * U.starProjection * V.reflectionOperator := by
+      (V.reflection : E →L[ℂ] E) * U.starProjection * (V.reflection : E →L[ℂ] E) := by
   refine ContinuousLinearMap.ext fun x => ?_
   rw [Submodule.starProjection_map_apply, Submodule.reflection_symm]
-  simp only [mul_apply_eq_comp, Submodule.reflectionOperator_apply_eq_reflection]
+  simp only [mul_apply_eq_comp, LinearIsometryEquiv.coe_coe'']
 
 section Identity
 
@@ -119,7 +118,7 @@ scalar identity `sin (2 arcsin s)² = 4 s² (1 - s²)`, the right by the algebra
 commutator identity for a pair of orthogonal projections. -/
 theorem directedSinTwoAngleOperatorC_eq_modulus_reflect :
     sinTwoAngleOperatorC U V =
-      (V.reflectionOperator * U.starProjection * V.reflectionOperator -
+      ((V.reflection : E →L[ℂ] E) * U.starProjection * (V.reflection : E →L[ℂ] E) -
         U.starProjection).modulus := by
   set P : E →L[ℂ] E := U.starProjection with hP
   set Q : E →L[ℂ] E := V.starProjection with hQ
@@ -135,8 +134,8 @@ theorem directedSinTwoAngleOperatorC_eq_modulus_reflect :
     rw [hsq, hDsa.star_eq]
   -- The right-hand Gram operator.
   have hgram :
-      ((V.reflectionOperator * P * V.reflectionOperator - P).adjoint ∘L
-          (V.reflectionOperator * P * V.reflectionOperator - P)) =
+      (((V.reflection : E →L[ℂ] E) * P * (V.reflection : E →L[ℂ] E) - P).adjoint ∘L
+          ((V.reflection : E →L[ℂ] E) * P * (V.reflection : E →L[ℂ] E) - P)) =
         (4 : ℂ) • (S * S - (S * S) * (S * S)) := by
     have h := TauCeti.gram_reflect_sub (P := P) (Q := Q)
       (Submodule.isIdempotentElem_starProjection U)

@@ -82,14 +82,14 @@ theorem exists_nonacuteDirectRotation_displacement_factor
         _ = R * (C + C) := by rw [hsum]
         _ = _ := by rw [mul_add, hRC]
     exact eq_sub_of_add_eq h
-  have hS : 1 - S = (K.starProjection - L.starProjection) * K.reflectionOperator := by
+  have hS : 1 - S = (K.starProjection - L.starProjection) * (K.reflection : H →L[𝕜] H) := by
     calc
       _ = -(S - 1) := by abel
-      _ = -((L.starProjection - K.starProjection) * K.reflectionOperator) :=
+      _ = -((L.starProjection - K.starProjection) * (K.reflection : H →L[𝕜] H)) :=
         congrArg Neg.neg (spectraCanonicalIntertwiner_sub_one K L)
       _ = _ := by rw [← neg_mul, neg_sub]
   have hmul : (1 - R) * (1 + R) =
-      (2 : 𝕜) • ((K.starProjection - L.starProjection) * K.reflectionOperator) := by
+      (2 : 𝕜) • ((K.starProjection - L.starProjection) * (K.reflection : H →L[𝕜] H)) := by
     calc
       _ = 1 - R * R := by noncomm_ring
       _ = (1 - S) + (1 - S) := by rw [hsq]; abel
@@ -97,7 +97,7 @@ theorem exists_nonacuteDirectRotation_displacement_factor
   let u := (isUnit_one_add_nonacuteDirectRotation K L J).unit
   have hu : (u : H →L[𝕜] H) = 1 + R :=
     (isUnit_one_add_nonacuteDirectRotation K L J).unit_spec
-  let B : H →L[𝕜] H := (2 : 𝕜) • (K.reflectionOperator * (↑u⁻¹ : H →L[𝕜] H))
+  let B : H →L[𝕜] H := (2 : 𝕜) • ((K.reflection : H →L[𝕜] H) * (↑u⁻¹ : H →L[𝕜] H))
   have hBbound : ‖B‖ ≤ Real.sqrt 2 := by
     apply B.opNorm_le_bound (Real.sqrt_nonneg 2)
     intro x
@@ -116,8 +116,8 @@ theorem exists_nonacuteDirectRotation_displacement_factor
       rw [← hxy, norm_add_sq (𝕜 := 𝕜), hRnorm]
       nlinarith
     have hBnorm : ‖B x‖ = 2 * ‖y‖ := by
-      change ‖(2 : 𝕜) • K.reflectionOperator y‖ = 2 * ‖y‖
-      rw [norm_smul, K.reflectionOperator_norm_map]
+      change ‖(2 : 𝕜) • (K.reflection : H →L[𝕜] H) y‖ = 2 * ‖y‖
+      rw [norm_smul, LinearIsometryEquiv.coe_coe'', K.reflection.norm_map]
       norm_num
     rw [hBnorm]
     apply (sq_le_sq₀ (by positivity) (by positivity)).mp
@@ -128,14 +128,14 @@ theorem exists_nonacuteDirectRotation_displacement_factor
   calc
     _ = (1 - R) * ((1 + R) * (↑u⁻¹ : H →L[𝕜] H)) := by rw [← hu, Units.mul_inv, mul_one]
     _ = ((1 - R) * (1 + R)) * (↑u⁻¹ : H →L[𝕜] H) := (mul_assoc _ _ _).symm
-    _ = ((2 : 𝕜) • ((K.starProjection - L.starProjection) * K.reflectionOperator)) *
+    _ = ((2 : 𝕜) • ((K.starProjection - L.starProjection) * (K.reflection : H →L[𝕜] H))) *
         (↑u⁻¹ : H →L[𝕜] H) := by rw [hmul]
     _ = _ := by
       ext x
       change (2 : 𝕜) • ((K.starProjection - L.starProjection)
-        (K.reflectionOperator ((↑u⁻¹ : H →L[𝕜] H) x))) =
+        ((K.reflection : H →L[𝕜] H) ((↑u⁻¹ : H →L[𝕜] H) x))) =
           (K.starProjection - L.starProjection)
-            ((2 : 𝕜) • K.reflectionOperator ((↑u⁻¹ : H →L[𝕜] H) x))
+            ((2 : 𝕜) • (K.reflection : H →L[𝕜] H) ((↑u⁻¹ : H →L[𝕜] H) x))
       rw [map_smul]
 
 /-- Universal quantitative comparison of completed canonical displacement

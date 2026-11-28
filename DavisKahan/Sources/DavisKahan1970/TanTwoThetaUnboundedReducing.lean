@@ -203,22 +203,23 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmet
     (hab : a < b) (hRmem : N.Mem (blockCompression Uᗮ U B)) :
     (∀ n : ℕ, ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) < 1) ∧
       (∀ n : ℕ,
-        ((reflectionTangentCorner U V.reflectionOperator).singularValue n : ℝ) =
+        ((reflectionTangentCorner U (V.reflection : G →L[ℂ] G)).singularValue n : ℝ) =
           Real.tan (Real.arcsin
             (((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ)))) ∧
-      N.Mem (reflectionTangentCorner U V.reflectionOperator) ∧
-      (b - a) * N.gauge (reflectionTangentCorner U V.reflectionOperator) ≤
+      N.Mem (reflectionTangentCorner U (V.reflection : G →L[ℂ] G)) ∧
+      (b - a) * N.gauge (reflectionTangentCorner U (V.reflection : G →L[ℂ] G)) ≤
         2 * N.gauge (blockCompression Uᗮ U B) := by
-  have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
-  have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
-  have hS1 : ‖U.offDiagBlock V.reflectionOperator‖ < 1 :=
+  have hZsa := Submodule.isSelfAdjoint_reflection V
+  have hZ2 := Submodule.reflection_mul_self V
+  have hS1 : ‖U.offDiagBlock (V.reflection : G →L[ℂ] G)‖ < 1 :=
     norm_offDiagonalPart_lt_one_reducing_exact hA hred hB hZsa hZ2 hV.mapsDomain
       hV.commutes hUa hUb hab
   have hsame := hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock U V
   have hcorner : ∀ n : ℕ,
-      ((reflectionSineCorner U V.reflectionOperator).singularValue n : ℝ) < 1 := fun n =>
+      ((reflectionSineCorner U (V.reflection : G →L[ℂ] G)).singularValue n : ℝ) < 1 := fun n =>
     lt_of_le_of_lt
-      ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm (reflectionSineCorner U V.reflectionOperator) n)))
+      (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm
+        (reflectionSineCorner U (V.reflection : G →L[ℂ] G)) n))
       (lt_of_le_of_lt norm_reflectionSineCorner_le hS1)
   obtain ⟨-, hmem, hle⟩ :=
     tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex hA hred hB

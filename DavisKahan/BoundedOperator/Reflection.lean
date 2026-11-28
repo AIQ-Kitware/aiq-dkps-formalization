@@ -27,24 +27,22 @@ variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 @[expose]
 noncomputable def reflectionDefect (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (A : E →L[𝕜] E) : E →L[𝕜] E :=
-  U.reflectionOperator ∘L A ∘L U.reflectionOperator - A
+  (U.reflection : E →L[𝕜] E) ∘L A ∘L (U.reflection : E →L[𝕜] E) - A
 
 omit [CompleteSpace E] in
 /-- The reflection defect anti-commutes with the reflection that defines it:
 `J (J A J - A) = -(J A J - A) J`. -/
 theorem reflectionOperator_comp_reflectionDefect
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (A : E →L[𝕜] E) :
-    U.reflectionOperator ∘L reflectionDefect U A =
-      -(reflectionDefect U A ∘L U.reflectionOperator) := by
+    (U.reflection : E →L[𝕜] E) ∘L reflectionDefect U A =
+      -(reflectionDefect U A ∘L (U.reflection : E →L[𝕜] E)) := by
   ext x
   have hinvol (y : E) :
-      U.reflectionOperator (U.reflectionOperator y) = y := by
-    have h := congrArg (fun T : E →L[𝕜] E => T y)
-      (Submodule.reflectionOperator_involutive U)
-    simpa only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply] using h
+      (U.reflection : E →L[𝕜] E) ((U.reflection : E →L[𝕜] E) y) = y :=
+    U.reflection_reflection y
   simp only [reflectionDefect, ContinuousLinearMap.comp_apply, sub_apply,
     neg_apply, map_sub]
-  rw [hinvol (A (U.reflectionOperator x)), hinvol x]
+  rw [hinvol (A ((U.reflection : E →L[𝕜] E) x)), hinvol x]
   rw [neg_sub]
 
 omit [CompleteSpace E] in
@@ -55,11 +53,11 @@ theorem reflectionDefect_eq_zero_of_reduces
     [U.HasOrthogonalProjection] (hU : Submodule.IsReducing U A) :
     reflectionDefect U A = 0 := by
   ext x
-  have hcomm := congrArg (fun T : E →L[𝕜] E => T (U.reflectionOperator x))
-    (Submodule.reflectionOperator_comm_of_reduces A U hU)
-  have hinvol := congrArg (fun T : E →L[𝕜] E => T x)
-    (Submodule.reflectionOperator_involutive U)
-  simp only [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply] at hcomm hinvol
+  have hcomm := congrArg (fun T : E →L[𝕜] E => T ((U.reflection : E →L[𝕜] E) x))
+    (U.commute_reflection_iff.mpr (Submodule.isReducing_coe_iff_commute_starProjection.mp hU)).eq
+  have hinvol : (U.reflection : E →L[𝕜] E) ((U.reflection : E →L[𝕜] E) x) = x :=
+    U.reflection_reflection x
+  simp only [mul_apply_eq_comp] at hcomm
   simp only [reflectionDefect, ContinuousLinearMap.comp_apply, sub_apply,
     zero_apply]
   rw [hcomm, hinvol, sub_self]
@@ -72,16 +70,16 @@ theorem reflectionDefect_eq_perturbationDefect
     (A B : E →L[𝕜] E) (V : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] (hV : Submodule.IsReducing V B) :
     reflectionDefect V A =
-      V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator - (A - B) := by
+      (V.reflection : E →L[𝕜] E) ∘L (A - B) ∘L (V.reflection : E →L[𝕜] E) - (A - B) := by
   have hB : reflectionDefect V B = 0 :=
     reflectionDefect_eq_zero_of_reduces B V hV
   unfold reflectionDefect at hB ⊢
   calc
-    V.reflectionOperator ∘L A ∘L V.reflectionOperator - A =
-        (V.reflectionOperator ∘L A ∘L V.reflectionOperator - A) -
-          (V.reflectionOperator ∘L B ∘L V.reflectionOperator - B) := by
+    (V.reflection : E →L[𝕜] E) ∘L A ∘L (V.reflection : E →L[𝕜] E) - A =
+        ((V.reflection : E →L[𝕜] E) ∘L A ∘L (V.reflection : E →L[𝕜] E) - A) -
+          ((V.reflection : E →L[𝕜] E) ∘L B ∘L (V.reflection : E →L[𝕜] E) - B) := by
       rw [hB, sub_zero]
-    _ = V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator - (A - B) := by
+    _ = (V.reflection : E →L[𝕜] E) ∘L (A - B) ∘L (V.reflection : E →L[𝕜] E) - (A - B) := by
       ext x
       simp only [ContinuousLinearMap.comp_apply, sub_apply, map_sub]
       abel
@@ -95,27 +93,28 @@ theorem norm_reflectionDefect_le_two_mul
     ‖reflectionDefect V A‖ ≤ 2 * ‖A - B‖ := by
   rw [reflectionDefect_eq_perturbationDefect A B V hV]
   have hconj :
-      ‖V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator‖ ≤
+      ‖(V.reflection : E →L[𝕜] E) ∘L (A - B) ∘L (V.reflection : E →L[𝕜] E)‖ ≤
         ‖A - B‖ := by
     calc
-      ‖V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator‖ ≤
-          ‖V.reflectionOperator‖ * ‖(A - B) ∘L V.reflectionOperator‖ :=
+      ‖(V.reflection : E →L[𝕜] E) ∘L (A - B) ∘L (V.reflection : E →L[𝕜] E)‖ ≤
+          ‖(V.reflection : E →L[𝕜] E)‖ * ‖(A - B) ∘L (V.reflection : E →L[𝕜] E)‖ :=
         ContinuousLinearMap.opNorm_comp_le _ _
-      _ ≤ ‖V.reflectionOperator‖ * (‖A - B‖ * ‖V.reflectionOperator‖) :=
+      _ ≤ ‖(V.reflection : E →L[𝕜] E)‖ * (‖A - B‖ * ‖(V.reflection : E →L[𝕜] E)‖) :=
         mul_le_mul_of_nonneg_left
           (ContinuousLinearMap.opNorm_comp_le _ _)
-          (norm_nonneg (V.reflectionOperator))
-      _ ≤ 1 * (‖A - B‖ * ‖V.reflectionOperator‖) :=
-        mul_le_mul_of_nonneg_right (Submodule.norm_reflectionOperator_le_one V) (by positivity)
+          (norm_nonneg ((V.reflection : E →L[𝕜] E)))
+      _ ≤ 1 * (‖A - B‖ * ‖(V.reflection : E →L[𝕜] E)‖) :=
+        mul_le_mul_of_nonneg_right V.reflection.toLinearIsometry.norm_toContinuousLinearMap_le
+          (by positivity)
       _ ≤ 1 * (‖A - B‖ * 1) :=
         mul_le_mul_of_nonneg_left
-          (mul_le_mul_of_nonneg_left (Submodule.norm_reflectionOperator_le_one V)
+          (mul_le_mul_of_nonneg_left V.reflection.toLinearIsometry.norm_toContinuousLinearMap_le
             (norm_nonneg (A - B)))
           zero_le_one
       _ = ‖A - B‖ := by ring
   calc
-    ‖V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator - (A - B)‖ ≤
-        ‖V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator‖ +
+    ‖(V.reflection : E →L[𝕜] E) ∘L (A - B) ∘L (V.reflection : E →L[𝕜] E) - (A - B)‖ ≤
+        ‖(V.reflection : E →L[𝕜] E) ∘L (A - B) ∘L (V.reflection : E →L[𝕜] E)‖ +
           ‖A - B‖ := norm_sub_le _ _
     _ ≤ ‖A - B‖ + ‖A - B‖ := add_le_add hconj le_rfl
     _ = 2 * ‖A - B‖ := by ring

@@ -115,7 +115,7 @@ theorem complement_compression_isPositive (h : IsSourceDirectRotation U V D) :
 
 /-- **Proposition 3.3's square identity**, for the source predicate. -/
 theorem sq_eq (h : IsSourceDirectRotation U V D) :
-    D * D = V.reflectionOperator * U.reflectionOperator :=
+    D * D = (V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H) :=
   sq_eq_reflectionProduct U V D h.unitary_mem h.intertwines
     h.source_compression_isSelfAdjoint h.complement_compression_isSelfAdjoint
     h.crossed_blocks
@@ -167,12 +167,12 @@ theorem absoluteValue_double_mul_self :
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) *
       (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) =
-      V.reflectionOperator * U.reflectionOperator +
-        U.reflectionOperator * V.reflectionOperator + 1 + 1 := by
+      (V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H) +
+        (U.reflection : H →L[𝕜] H) * (V.reflection : H →L[𝕜] H) + 1 + 1 := by
   have hAA := Proposition35.section3CanonicalAbsoluteValue_mul_self_eq_halmosCosineSq U V
-  have hRU : U.reflectionOperator = U.starProjection + U.starProjection - 1 :=
+  have hRU : (U.reflection : H →L[𝕜] H) = U.starProjection + U.starProjection - 1 :=
     reflectionOperator_eq_projection_add_projection_sub_one U
-  have hRV : V.reflectionOperator = V.starProjection + V.starProjection - 1 :=
+  have hRV : (V.reflection : H →L[𝕜] H) = V.starProjection + V.starProjection - 1 :=
     reflectionOperator_eq_projection_add_projection_sub_one V
   have hexpand : (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) +
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)) *
@@ -195,14 +195,14 @@ theorem IsSourceDirectRotation.add_star_eq_two_absoluteValue {D : H →L[𝕜] H
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) := by
   have hDs : D * star D = 1 := Unitary.mul_star_self_of_mem h.unitary_mem
   have hsD : star D * D = 1 := Unitary.star_mul_self_of_mem h.unitary_mem
-  have hstarsq : star D * star D = U.reflectionOperator * V.reflectionOperator := by
+  have hstarsq : star D * star D = (U.reflection : H →L[𝕜] H) * (V.reflection : H →L[𝕜] H) := by
     have hst := congrArg star h.sq_eq
-    rw [star_mul, star_mul, star_reflectionOperator_complex U,
-      star_reflectionOperator_complex V] at hst
+    rw [star_mul, star_mul, (U.isSelfAdjoint_reflection).star_eq,
+      (V.isSelfAdjoint_reflection).star_eq] at hst
     exact hst
   have hsq : (D + star D) * (D + star D) =
-      V.reflectionOperator * U.reflectionOperator +
-        U.reflectionOperator * V.reflectionOperator + 1 + 1 := by
+      (V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H) +
+        (U.reflection : H →L[𝕜] H) * (V.reflection : H →L[𝕜] H) + 1 + 1 := by
     have hstep : (D + star D) * (D + star D) =
         D * D + D * star D + (star D * D + star D * star D) := by noncomm_ring
     rw [hstep, h.sq_eq, hstarsq, hDs, hsD]

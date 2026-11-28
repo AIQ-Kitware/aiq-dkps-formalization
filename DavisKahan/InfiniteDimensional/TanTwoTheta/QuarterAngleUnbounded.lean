@@ -100,12 +100,12 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
-    ∀ y : E, y ≠ 0 → 0 < RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
-      + U.reflectionOperator * V.reflectionOperator) y, y⟫_ℂ := by
+    ∀ y : E, y ≠ 0 → 0 < RCLike.re ⟪((V.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E)
+      + (U.reflection : E →L[ℂ] E) * (V.reflection : E →L[ℂ] E)) y, y⟫_ℂ := by
   classical
   set Aop : E →ₗ.[ℂ] E := (Hop.toLinearMap +ᵥ A) with hAopdef
-  set J : E →L[ℂ] E := U.reflectionOperator with hJdef
-  set K : E →L[ℂ] E := V.reflectionOperator with hKdef
+  set J : E →L[ℂ] E := (U.reflection : E →L[ℂ] E) with hJdef
+  set K : E →L[ℂ] E := (V.reflection : E →L[ℂ] E) with hKdef
   set c : ℝ := (a + b) / 2 with hcdef
   set δ : ℝ := (b - a) / 2 with hδdef
   have hδpos : 0 < δ := by rw [hδdef]; linarith
@@ -138,17 +138,16 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
   -- the bounded inverse of the shifted operator
   obtain ⟨R, hRdom, hRleft, hRright, hRnorm⟩ :=
     TauCeti.DavisKahan.twoSidedShiftedInverseBound_of_coercive_comp hAop
-      (J := J) (by rw [hJdef]; exact Submodule.reflectionOperator_norm_map U) hδpos hcoerU
+      (J := J) (by rw [hJdef]; exact U.reflection.norm_map) hδpos hcoerU
   -- `K` is an involution and preserves the domain, commuting with the shift
   have hKK : ∀ y : E, K (K y) = y := by
     intro y
-    have := congrArg (fun T : E →L[ℂ] E => T y) (Submodule.reflectionOperator_involutive V)
-    simpa [hKdef] using this
+    simpa only [hKdef, LinearIsometryEquiv.coe_coe''] using V.reflection_reflection y
   have hKadj : ∀ y z : E, ⟪K y, z⟫_ℂ = ⟪y, K z⟫_ℂ := by
     intro y z
     have hKsa : star K = K := by
       rw [hKdef]
-      exact TauCeti.DavisKahan.star_reflectionOperator_complex V
+      exact (V.isSelfAdjoint_reflection).star_eq
     conv_lhs => rw [← hKsa]
     rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
   have hreflection := reflection_commutes_of_reducesSubspace hV
@@ -206,13 +205,12 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
   set W : E →L[ℂ] E := K ∘L J with hWdef
   have hJK : ∀ y : E, J (J y) = y := by
     intro y
-    have := congrArg (fun T : E →L[ℂ] E => T y) (Submodule.reflectionOperator_involutive U)
-    simpa [hJdef] using this
+    simpa only [hJdef, LinearIsometryEquiv.coe_coe''] using U.reflection_reflection y
   have hJadj : ∀ y z : E, ⟪J y, z⟫_ℂ = ⟪y, J z⟫_ℂ := by
     intro y z
     have hJsa : star J = J := by
       rw [hJdef]
-      exact TauCeti.DavisKahan.star_reflectionOperator_complex U
+      exact (U.isSelfAdjoint_reflection).star_eq
     conv_lhs => rw [← hJsa]
     rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
   have hWadj : ∀ y z : E, ⟪W y, z⟫_ℂ = ⟪y, J (K z)⟫_ℂ := by
@@ -347,15 +345,15 @@ theorem reflectionProduct_form_pos_of_orderedFormGap_unbounded
         mul_pos hδpos (pow_pos (norm_pos_iff.mpr hGy) 2)
       linarith [hXGquant y, hzero (G y)]
   intro y hy
-  have hXeq : V.reflectionOperator * U.reflectionOperator
-      + U.reflectionOperator * V.reflectionOperator = X := by
+  have hXeq : (V.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E)
+      + (U.reflection : E →L[ℂ] E) * (V.reflection : E →L[ℂ] E) = X := by
     rw [hXdef, hWdef, hJdef, hKdef]
     congr 1
     refine ContinuousLinearMap.ext fun z => ?_
     refine ext_inner_right ℂ fun w => ?_
     rw [ContinuousLinearMap.adjoint_inner_left]
-    change ⟪U.reflectionOperator (V.reflectionOperator z), w⟫_ℂ
-      = ⟪z, V.reflectionOperator (U.reflectionOperator w)⟫_ℂ
+    change ⟪(U.reflection : E →L[ℂ] E) ((V.reflection : E →L[ℂ] E) z), w⟫_ℂ
+      = ⟪z, (V.reflection : E →L[ℂ] E) ((U.reflection : E →L[ℂ] E) w)⟫_ℂ
     rw [← hJdef, ← hKdef, hJadj (K z) w, hKadj z (J w)]
   rw [hXeq]
   exact hXstrict y hy
@@ -422,8 +420,8 @@ theorem reflectionProduct_form_nonneg_of_orderedFormGap_unbounded
         a * ‖(x : E)‖ ^ 2)
     (hHU : ∀ x ∈ U, Hop x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, Hop x ∈ U)
     (hab : a < b) :
-    ∀ y : E, 0 ≤ RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
-      + U.reflectionOperator * V.reflectionOperator) y, y⟫_ℂ := by
+    ∀ y : E, 0 ≤ RCLike.re ⟪((V.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E)
+      + (U.reflection : E →L[ℂ] E) * (V.reflection : E →L[ℂ] E)) y, y⟫_ℂ := by
   intro y
   rcases eq_or_ne y 0 with rfl | hy
   · simp

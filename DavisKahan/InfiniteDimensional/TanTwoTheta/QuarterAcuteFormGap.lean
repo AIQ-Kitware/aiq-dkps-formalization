@@ -129,8 +129,8 @@ scope where `isQuarterAcute_of_orderedFormGap`'s strict bound does not. -/
 theorem subspaceGap_le_of_reflectionProduct_form_nonneg
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (h : ∀ x : E, 0 ≤ RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
-      + U.reflectionOperator * V.reflectionOperator) x, x⟫_ℂ) :
+    (h : ∀ x : E, 0 ≤ RCLike.re ⟪((V.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E)
+      + (U.reflection : E →L[ℂ] E) * (V.reflection : E →L[ℂ] E)) x, x⟫_ℂ) :
     U.projectionGap V ≤ Real.sqrt 2 / 2 := by
   obtain ⟨D, hDdef⟩ : ∃ D : E →L[ℂ] E, D = U.starProjection - V.starProjection := ⟨_, rfl⟩
   have hDstar : IsSelfAdjoint D := by
@@ -139,15 +139,12 @@ theorem subspaceGap_le_of_reflectionProduct_form_nonneg
   have hpoint : ∀ x : E, ‖D x‖ ^ 2 ≤ (1 / 2 : ℝ) * ‖x‖ ^ 2 := by
     intro x
     have hx := h x
-    have hreflect : V.reflectionOperator * U.reflectionOperator +
-        U.reflectionOperator * V.reflectionOperator =
+    have hreflect : (V.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E) +
+        (U.reflection : E →L[ℂ] E) * (V.reflection : E →L[ℂ] E) =
         (2 : ℂ) • (1 : E →L[ℂ] E) -
           (4 : ℂ) • ((U.starProjection - V.starProjection) *
-            (U.starProjection - V.starProjection)) := by
-      convert Submodule.reflection_mul_add_mul_reflection U V using 1
-      ext y
-      simp only [mul_apply_eq_comp, add_apply,
-          reflectionOperator_eq_reflection, LinearIsometryEquiv.coe_coe'']
+            (U.starProjection - V.starProjection)) :=
+      U.reflection_mul_add_mul_reflection V
     rw [hreflect, ← hDdef] at hx
     have hval : ((2 : ℂ) • (1 : E →L[ℂ] E) - (4 : ℂ) • (D * D)) x
         = (2 : ℂ) • x - (4 : ℂ) • D (D x) := by
@@ -186,8 +183,8 @@ which is exactly the distinction Section 8 turns on at unbounded scope. -/
 theorem norm_starProjection_sub_sq_lt_of_reflectionProduct_form_pos
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] {x : E}
-    (h : 0 < RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
-      + U.reflectionOperator * V.reflectionOperator) x, x⟫_ℂ) :
+    (h : 0 < RCLike.re ⟪((V.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E)
+      + (U.reflection : E →L[ℂ] E) * (V.reflection : E →L[ℂ] E)) x, x⟫_ℂ) :
     ‖U.starProjection x - V.starProjection x‖ ^ 2 < (1 / 2 : ℝ) * ‖x‖ ^ 2 := by
   obtain ⟨D, hDdef⟩ : ∃ D : E →L[ℂ] E, D = U.starProjection - V.starProjection := ⟨_, rfl⟩
   have hDstar : IsSelfAdjoint D := by
@@ -195,15 +192,12 @@ theorem norm_starProjection_sub_sq_lt_of_reflectionProduct_form_pos
     exact (isSelfAdjoint_starProjection U).sub (isSelfAdjoint_starProjection V)
   have hDx : D x = U.starProjection x - V.starProjection x := by rw [hDdef]; rfl
   have hx := h
-  have hreflect : V.reflectionOperator * U.reflectionOperator +
-        U.reflectionOperator * V.reflectionOperator =
+  have hreflect : (V.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E) +
+        (U.reflection : E →L[ℂ] E) * (V.reflection : E →L[ℂ] E) =
         (2 : ℂ) • (1 : E →L[ℂ] E) -
           (4 : ℂ) • ((U.starProjection - V.starProjection) *
-            (U.starProjection - V.starProjection)) := by
-      convert Submodule.reflection_mul_add_mul_reflection U V using 1
-      ext y
-      simp only [mul_apply_eq_comp, add_apply,
-          reflectionOperator_eq_reflection, LinearIsometryEquiv.coe_coe'']
+            (U.starProjection - V.starProjection)) :=
+      U.reflection_mul_add_mul_reflection V
   rw [hreflect, ← hDdef] at hx
   have hval : ((2 : ℂ) • (1 : E →L[ℂ] E) - (4 : ℂ) • (D * D)) x
       = (2 : ℂ) • x - (4 : ℂ) • D (D x) := by
@@ -228,8 +222,8 @@ theorem norm_starProjection_sub_sq_lt_of_reflectionProduct_form_pos
 theorem maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (h : ∀ x : E, 0 ≤ RCLike.re ⟪(V.reflectionOperator * U.reflectionOperator
-      + U.reflectionOperator * V.reflectionOperator) x, x⟫_ℂ) :
+    (h : ∀ x : E, 0 ≤ RCLike.re ⟪((V.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E)
+      + (U.reflection : E →L[ℂ] E) * (V.reflection : E →L[ℂ] E)) x, x⟫_ℂ) :
     TauCeti.DavisKahanExt.maximalAngle U V ≤ Real.pi / 4 := by
   have hle := subspaceGap_le_of_reflectionProduct_form_nonneg U V h
   have hpi : Real.arcsin (Real.sqrt 2 / 2) = Real.pi / 4 := by

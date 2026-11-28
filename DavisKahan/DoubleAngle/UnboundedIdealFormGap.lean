@@ -154,11 +154,11 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap
     (hgap : FormBoundedSylvesterGap
       (selfAdjointSpectralRestriction A hA B hB)
       (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : H →L[ℂ] H) (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : H →L[ℂ] H) (x : H), hJdom x⟩ =
+        (V.reflection : H →L[ℂ] H) (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB) V) ∧
@@ -171,7 +171,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap
   set Uc := selfAdjointSpectralSubspace A hA Bᶜ hB.compl with hUc
   set A₀ := selfAdjointSpectralRestriction A hA B hB with hA₀def
   set Λ := selfAdjointSpectralRestriction A hA Bᶜ hB.compl with hΛdef
-  set J : H →L[ℂ] H := V.reflectionOperator with hJ
+  set J : H →L[ℂ] H := (V.reflection : H →L[ℂ] H) with hJ
   set X : U →L[ℂ] H := U.subtypeL with hX
   set F₁ : Uc →L[ℂ] H := J ∘L Uc.subtypeL with hF₁
   -- domain and intertwining data for the exact block
@@ -215,7 +215,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap
       rw [Submodule.adjoint_subtypeL]
       rfl
     have hadj : F₁.adjoint = Uc.subtypeL.adjoint ∘L J := by
-      rw [hF₁, ContinuousLinearMap.adjoint_comp, hJ, adjoint_reflectionOperator V]
+      rw [hF₁, ContinuousLinearMap.adjoint_comp, hJ, (V.isSelfAdjoint_reflection).adjoint_eq]
     have hsymm : V.reflection.symm = V.reflection := V.reflection_symm
     change J (Uc.subtypeL (F₁.adjoint x)) = _
     rw [hadj]
@@ -225,7 +225,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap
     change J (Uc.starProjection (J x)) =
       V.reflection (Uc.starProjection (V.reflection.symm x))
     rw [hsymm]
-    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
+    simp only [hJ, LinearIsometryEquiv.coe_coe'']
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N U
     (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)) F₁ hF₁iso hFproj hraw.1
@@ -238,12 +238,12 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap
       exact congrArg (fun z : Uc => (z : H))
         (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self v)
     have hJJ : (J ∘L J : H →L[ℂ] H) = ContinuousLinearMap.id ℂ H :=
-      Submodule.reflectionOperator_involutive V
+      V.reflection_mul_self
     calc F₁.adjoint ∘L F₁
         = (Uc.subtypeL.adjoint ∘L J.adjoint) ∘L (J ∘L Uc.subtypeL) := by
           rw [hF₁, ContinuousLinearMap.adjoint_comp]
       _ = Uc.subtypeL.adjoint ∘L (J ∘L J) ∘L Uc.subtypeL := by
-          rw [hJ, adjoint_reflectionOperator V]
+          rw [hJ, (V.isSelfAdjoint_reflection).adjoint_eq]
           rfl
       _ = Uc.subtypeL.adjoint ∘L Uc.subtypeL := by
           rw [hJJ, ContinuousLinearMap.id_comp]
@@ -306,11 +306,11 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_formGap
     (hgap : FormBoundedSylvesterGap
       (selfAdjointSpectralRestriction A hA B hB)
       (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : H →L[ℂ] H) (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : H →L[ℂ] H) (x : H), hJdom x⟩ =
+        (V.reflection : H →L[ℂ] H) (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB) V) ∧
@@ -362,11 +362,11 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hred)
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : H →L[ℂ] H) (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : H →L[ℂ] H) (x : H), hJdom x⟩ =
+        (V.reflection : H →L[ℂ] H) (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock U V) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock U V) ≤
@@ -375,7 +375,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
   set Uc := (Uᗮ : Submodule ℂ H) with hUc
   set A₀ := TauCeti.LinearPMap.reducingRestriction A U hred with hA₀def
   set Λ := TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal with hΛdef
-  set J : H →L[ℂ] H := V.reflectionOperator with hJ
+  set J : H →L[ℂ] H := (V.reflection : H →L[ℂ] H) with hJ
   set X : U →L[ℂ] H := U.subtypeL with hX
   set F₁ : Uc →L[ℂ] H := J ∘L Uc.subtypeL with hF₁
   -- domain and intertwining data for the exact block
@@ -425,7 +425,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
       rw [Submodule.adjoint_subtypeL]
       rfl
     have hadj : F₁.adjoint = Uc.subtypeL.adjoint ∘L J := by
-      rw [hF₁, ContinuousLinearMap.adjoint_comp, hJ, adjoint_reflectionOperator V]
+      rw [hF₁, ContinuousLinearMap.adjoint_comp, hJ, (V.isSelfAdjoint_reflection).adjoint_eq]
     have hsymm : V.reflection.symm = V.reflection := V.reflection_symm
     change J (Uc.subtypeL (F₁.adjoint x)) = _
     rw [hadj]
@@ -435,7 +435,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
     change J (Uc.starProjection (J x)) =
       V.reflection (Uc.starProjection (V.reflection.symm x))
     rw [hsymm]
-    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
+    simp only [hJ, LinearIsometryEquiv.coe_coe'']
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N U
     (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)) F₁ hF₁iso hFproj hraw.1
@@ -448,12 +448,12 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
       exact congrArg (fun z : Uc => (z : H))
         (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self v)
     have hJJ : (J ∘L J : H →L[ℂ] H) = ContinuousLinearMap.id ℂ H :=
-      Submodule.reflectionOperator_involutive V
+      V.reflection_mul_self
     calc F₁.adjoint ∘L F₁
         = (Uc.subtypeL.adjoint ∘L J.adjoint) ∘L (J ∘L Uc.subtypeL) := by
           rw [hF₁, ContinuousLinearMap.adjoint_comp]
       _ = Uc.subtypeL.adjoint ∘L (J ∘L J) ∘L Uc.subtypeL := by
-          rw [hJ, adjoint_reflectionOperator V]
+          rw [hJ, (V.isSelfAdjoint_reflection).adjoint_eq]
           rfl
       _ = Uc.subtypeL.adjoint ∘L Uc.subtypeL := by
           rw [hJJ, ContinuousLinearMap.id_comp]

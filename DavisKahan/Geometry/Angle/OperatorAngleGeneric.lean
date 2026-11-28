@@ -583,22 +583,23 @@ theorem complexify_starProjection_map_reflection {F : Type v} [NormedAddCommGrou
         (complexifySubmodule U).starProjection := by
   have hconj : ∀ T : F →L[ℝ] F,
       _root_.TauCeti.DavisKahan.boundedUnitaryConjugate V.reflection T =
-        V.reflectionOperator ∘L T ∘L V.reflectionOperator :=
+        (V.reflection : F →L[ℝ] F) ∘L T ∘L (V.reflection : F →L[ℝ] F) :=
     fun _ => ContinuousLinearMap.ext fun _ => by
-      simp only [boundedUnitaryConjugate_apply, Submodule.reflectionOperator_apply_eq_reflection,
+      simp only [boundedUnitaryConjugate_apply, LinearIsometryEquiv.coe_coe'',
         ContinuousLinearMap.comp_apply, Submodule.reflection_symm]
   have hconjC : ∀ T : RealComplexification F →L[ℂ] RealComplexification F,
       _root_.TauCeti.DavisKahan.boundedUnitaryConjugate (complexifySubmodule V).reflection T =
-        (complexifySubmodule V).reflectionOperator ∘L T ∘L
-          (complexifySubmodule V).reflectionOperator :=
+        ((complexifySubmodule V).reflection : _ →L[ℂ] _) ∘L T ∘L
+          ((complexifySubmodule V).reflection : _ →L[ℂ] _) :=
     fun _ => ContinuousLinearMap.ext fun _ => by
-      simp only [boundedUnitaryConjugate_apply, Submodule.reflectionOperator_apply_eq_reflection,
+      simp only [boundedUnitaryConjugate_apply, LinearIsometryEquiv.coe_coe'',
         ContinuousLinearMap.comp_apply, Submodule.reflection_symm]
-  have hrefl : complexify V.reflectionOperator = (complexifySubmodule V).reflectionOperator := by
-    rw [Submodule.reflectionOperator_eq_two_smul_sub_id,
-      Submodule.reflectionOperator_eq_two_smul_sub_id, complexify_sub,
-      complexify_real_smul, complexify_id, starProjection_complexifySubmodule]
-    norm_num
+  have hrefl : complexify (V.reflection : F →L[ℝ] F) =
+    ((complexifySubmodule V).reflection : _ →L[ℂ] _) := by
+    rw [Submodule.coe_reflection,
+      Submodule.coe_reflection, two_smul, two_smul, complexify_sub,
+      complexify_add, (show complexify (1 : F →L[ℝ] F) = 1 from complexify_id),
+      starProjection_complexifySubmodule]
   rw [_root_.TauCeti.DavisKahan.starProjection_map_unitary U V.reflection,
     _root_.TauCeti.DavisKahan.starProjection_map_unitary (complexifySubmodule U)
       (complexifySubmodule V).reflection,

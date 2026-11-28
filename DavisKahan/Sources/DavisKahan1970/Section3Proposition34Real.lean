@@ -235,16 +235,13 @@ theorem proposition3_4_full_real
     sq_eq_spectraReflectionProduct CU CV WC hunitaryC hintertwinesC
       hsource_posC.isSelfAdjoint hcomplement_posC.isSelfAdjoint hcrossedC
 
-  have hrefl : CR.reflectionOperator =
-      CU.reflectionOperator * CV.reflectionOperator * CU.reflectionOperator := by
-    dsimp only [CR]
-    exact reflectionOperator_reflectedSubspace CV CU
-
-  have hRU : CU.reflectionOperator * CU.reflectionOperator = 1 :=
-    reflectionOperator_mul_self_complex CU
-
+  let JU : RealComplexification E →L[ℂ] RealComplexification E := CU.reflection
+  let JV : RealComplexification E →L[ℂ] RealComplexification E := CV.reflection
+  let JR : RealComplexification E →L[ℂ] RealComplexification E := CR.reflection
+  have hrefl : JR = JU * JV * JU := reflectionOperator_reflectedSubspace CV CU
+  change WC * WC = JV * JU at hWsq
   have hsqC : (WC * WC) * (WC * WC) = spectraReflectionProduct CR CV := by
-    show (WC * WC) * (WC * WC) = CV.reflectionOperator * CR.reflectionOperator
+    change (WC * WC) * (WC * WC) = JV * JR
     rw [hrefl, hWsq]
     noncomm_ring
 

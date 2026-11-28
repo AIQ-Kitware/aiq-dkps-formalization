@@ -71,8 +71,8 @@ omit [CompleteSpace E] in
 theorem commonDomain_reflection_mem
     (hdom : T.domain = A.domain)
     (hP : _root_.LinearPMap.IsReducing A P) (x : T.domain) :
-    P.reflectionOperator (x : E) ∈ T.domain := by
-  rw [Submodule.reflectionOperator_apply]
+    (P.reflection : E →L[K] E) (x : E) ∈ T.domain := by
+  rw [Submodule.reflection_apply_smul]
   exact T.domain.sub_mem
     (T.domain.smul_mem _ (commonDomain_projection_mem hdom hP x)) x.property
 
@@ -96,8 +96,8 @@ theorem commonDomain_trialReflection_intertwines
         A (⟨(p : E), by rw [← hdom]; exact hp⟩) + R p)
     (x : T.domain) :
     (((-2 : K) • trialOffDiagonalPart P 0 R).toLinearMap +ᵥ T)
-      (⟨P.reflectionOperator (x : E), commonDomain_reflection_mem hdom hP x⟩) =
-        P.reflectionOperator (T x) := by
+      (⟨(P.reflection : E →L[K] E) (x : E), commonDomain_reflection_mem hdom hP x⟩) =
+        (P.reflection : E →L[K] E) (T x) := by
   let C : E →L[K] E := trialOffDiagonalBlock P 0 R
   have hproj (y : T.domain) : P.starProjection (y : E) ∈ T.domain :=
     commonDomain_projection_mem hdom hP y
@@ -184,35 +184,36 @@ theorem commonDomain_trialReflection_intertwines
       T (⟨P.starProjection (x : E), hproj x⟩) - P.starProjection (T x) := by
     rw [hC x, hCstar x, Submodule.starProjection_orthogonal_apply, hTx, map_add]
     abel
-  have hPrefl : P.starProjection (P.reflectionOperator (x : E)) =
+  have hPrefl : P.starProjection ((P.reflection : E →L[K] E) (x : E)) =
       P.starProjection (x : E) := by
-    rw [Submodule.reflectionOperator_apply, map_sub, map_smul, hpp]
+    rw [Submodule.reflection_apply_smul, map_sub, map_smul, hpp]
     module
-  have hQrefl : P.orthogonal.starProjection (P.reflectionOperator (x : E)) =
+  have hQrefl : P.orthogonal.starProjection ((P.reflection : E →L[K] E) (x : E)) =
       -P.orthogonal.starProjection (x : E) := by
-    rw [Submodule.reflectionOperator_apply, map_sub, map_smul, hpzero]
+    rw [Submodule.reflection_apply_smul, map_sub, map_smul, hpzero]
     module
-  have hXrefl : C (P.reflectionOperator (x : E)) = C (x : E) := by
+  have hXrefl : C ((P.reflection : E →L[K] E) (x : E)) = C (x : E) := by
     change P.orthogonal.starProjection
-        (trialCompression P 0 R (P.starProjection (P.reflectionOperator (x : E)))) = _
+        (trialCompression P 0 R (P.starProjection ((P.reflection : E →L[K] E) (x : E)))) = _
     rw [hPrefl]
     rfl
-  have hXadjrefl : C.adjoint (P.reflectionOperator (x : E)) = -C.adjoint (x : E) := by
+  have hXadjrefl : C.adjoint ((P.reflection : E →L[K] E) (x : E)) = -C.adjoint (x : E) := by
     simp only [C, trialOffDiagonalBlock_adjoint, ContinuousLinearMap.comp_apply,
       hQrefl, map_neg]
-  have hdefect : trialOffDiagonalPart P 0 R (P.reflectionOperator (x : E)) =
+  have hdefect : trialOffDiagonalPart P 0 R ((P.reflection : E →L[K] E) (x : E)) =
       T (⟨P.starProjection (x : E), hproj x⟩) - P.starProjection (T x) := by
-    change C (P.reflectionOperator (x : E)) + C.adjoint (P.reflectionOperator (x : E)) = _
+    change C ((P.reflection : E →L[K] E) (x : E)) +
+      C.adjoint ((P.reflection : E →L[K] E) (x : E)) = _
     rw [hXrefl, hXadjrefl, ← sub_eq_add_neg, hcomm]
   have hsplit :
-      (⟨P.reflectionOperator (x : E), commonDomain_reflection_mem hdom hP x⟩ : T.domain) =
+      (⟨(P.reflection : E →L[K] E) (x : E), commonDomain_reflection_mem hdom hP x⟩ : T.domain) =
         (2 : K) • (⟨P.starProjection (x : E), hproj x⟩ : T.domain) - x := by
     apply Subtype.ext
-    simp [Submodule.reflectionOperator_apply]
-  change ((-2 : K) • trialOffDiagonalPart P 0 R) (P.reflectionOperator (x : E)) +
-      T ⟨P.reflectionOperator (x : E), commonDomain_reflection_mem hdom hP x⟩ = _
+    simp [Submodule.reflection_apply_smul]
+  change ((-2 : K) • trialOffDiagonalPart P 0 R) ((P.reflection : E →L[K] E) (x : E)) +
+      T ⟨(P.reflection : E →L[K] E) (x : E), commonDomain_reflection_mem hdom hP x⟩ = _
   rw [hsplit, LinearPMap.map_sub, LinearPMap.map_smul, smul_apply, hdefect,
-    Submodule.reflectionOperator_apply]
+    Submodule.reflection_apply_smul]
   module
 
 /-- The common-domain directed estimate, first in the existing block representation. -/

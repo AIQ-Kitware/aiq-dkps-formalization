@@ -152,15 +152,15 @@ theorem tanTwoTheta_ambient_unbounded_reducing_sineSequence_symmetricNorming_rea
       (b - a) * N.gauge (absTanTwoAngleOperatorR U V) ≤ 2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
     tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorming_real
-      hA hred hB (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V)
-      (TauCeti.DavisKahan.reflectionOperator_mul_self_complex V)
+      hA hred hB (Submodule.isSelfAdjoint_reflection V)
+      (Submodule.reflection_mul_self V)
       hV.mapsDomain hV.commutes hUa hUb hab N hBsa hBmem
   have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent_real U V N hunit
   -- the complexified pole exclusion, on the angle spectrum
   have hunitC : IsUnit ((complexifySubmodule U).diagBlock
-      (complexifySubmodule V).reflectionOperator *
+      ((complexifySubmodule V).reflection : _ →L[ℂ] _) *
       (complexifySubmodule U).diagBlock
-        (complexifySubmodule V).reflectionOperator) := by
+        ((complexifySubmodule V).reflection : _ →L[ℂ] _)) := by
     rw [← TauCeti.DavisKahan.complexify_reflectionOperator,
       diagonalPart_complexifySubmodule, ← Foundation.RealComplexification.complexify_mul,
       TauCeti.RealComplexification.isUnit_complexify_iff]

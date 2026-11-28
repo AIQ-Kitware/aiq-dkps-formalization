@@ -358,7 +358,7 @@ theorem gauge_two_sided_unitary
                   (norm_le_one_of_isUnitaryOperator hVinv) h0
             _ = I.gauge (U ∘L A ∘L V) := mul_one _
 
-/-- Pinching is contractive for every symmetric norm ideal. 
+/-- Pinching is contractive for every symmetric norm ideal.
 
 Lean proof route for a weaker agent:
 
@@ -379,20 +379,16 @@ theorem gauge_diagonalPart_le
     (A : E →L[𝕜] E) (hA : I.mem A) :
     I.mem (U.diagBlock A) ∧
       I.gauge (U.diagBlock A) ≤ I.gauge A := by
-  let J := U.reflectionOperator
-  have hR : J = (U.reflection : E →L[𝕜] E) := by
-    dsimp [J]
-    ext x
-    exact Submodule.reflectionOperator_apply_eq_reflection U x
+  let J := (U.reflection : E →L[𝕜] E)
   have hJ : TauCeti.LinearPMap.IsUnitaryOperator J :=
-    ⟨U.reflectionOperator_norm_map, U.reflectionOperator_surjective⟩
+    ⟨U.reflection.norm_map, U.reflection.surjective⟩
   have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
-    Submodule.reflectionOperator_involutive U
+    U.reflection_mul_self
   have hconjMem : I.mem (J ∘L A ∘L J) := I.ideal_mem J J hA
   have hconjGauge : I.gauge (J ∘L A ∘L J) = I.gauge A :=
     I.unitary_invariant J J A hJ hJ hJinv hJinv hA
   have hformula : (2 : 𝕜) • U.diagBlock A = A + J ∘L A ∘L J :=
-    by simpa [hR, ← Nat.cast_smul_eq_nsmul 𝕜] using
+    by simpa [J, ← Nat.cast_smul_eq_nsmul 𝕜] using
       (Submodule.two_smul_diagBlock U A)
   have hsumMem : I.mem (A + J ∘L A ∘L J) := I.add_mem hA hconjMem
   have hhalf : ((2 : 𝕜)⁻¹) • ((2 : 𝕜) • U.diagBlock A) =
@@ -408,7 +404,7 @@ theorem gauge_diagonalPart_le
   nlinarith
 
 /-- Off-diagonal extraction has norm at most one in the sharp symmetric-ideal
-form used by the double-angle theorems. 
+form used by the double-angle theorems.
 
 Lean proof route for a weaker agent:
 
@@ -429,22 +425,18 @@ theorem gauge_offDiagonalPart_le
     (A : E →L[𝕜] E) (hA : I.mem A) :
     I.mem (U.offDiagBlock A) ∧
       I.gauge (U.offDiagBlock A) ≤ I.gauge A := by
-  let J := U.reflectionOperator
-  have hR : J = (U.reflection : E →L[𝕜] E) := by
-    dsimp [J]
-    ext x
-    exact Submodule.reflectionOperator_apply_eq_reflection U x
+  let J := (U.reflection : E →L[𝕜] E)
   have hJ : TauCeti.LinearPMap.IsUnitaryOperator J :=
-    ⟨U.reflectionOperator_norm_map, U.reflectionOperator_surjective⟩
+    ⟨U.reflection.norm_map, U.reflection.surjective⟩
   have hJinv : J ∘L J = ContinuousLinearMap.id 𝕜 E :=
-    Submodule.reflectionOperator_involutive U
+    U.reflection_mul_self
   have hconjMem : I.mem (J ∘L A ∘L J) := I.ideal_mem J J hA
   have hnegConjMem : I.mem (-(J ∘L A ∘L J)) := by
     simpa using I.smul_mem (-1 : 𝕜) hconjMem
   have hconjGauge : I.gauge (J ∘L A ∘L J) = I.gauge A :=
     I.unitary_invariant J J A hJ hJ hJinv hJinv hA
   have hformula : (2 : 𝕜) • U.offDiagBlock A = A - J ∘L A ∘L J :=
-    by simpa [hR, ← Nat.cast_smul_eq_nsmul 𝕜] using
+    by simpa [J, ← Nat.cast_smul_eq_nsmul 𝕜] using
       (Submodule.two_smul_offDiagBlock U A)
   have hdiffMem : I.mem (A - J ∘L A ∘L J) := by
     simpa [sub_eq_add_neg] using I.add_mem hA hnegConjMem

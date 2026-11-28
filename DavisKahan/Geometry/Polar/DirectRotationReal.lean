@@ -244,11 +244,12 @@ omit [CompleteSpace E] in
 complexified subspace. -/
 @[simp]
 theorem complexify_reflectionOperator :
-    complexify U.reflectionOperator = (complexifySubmodule U).reflectionOperator := by
-  rw [Submodule.reflectionOperator_eq_two_smul_sub_id,
-    Submodule.reflectionOperator_eq_two_smul_sub_id, complexify_sub,
-    complexify_real_smul, complexify_id, starProjection_complexifySubmodule]
-  norm_num
+    complexify (U.reflection : E →L[ℝ] E) =
+      ((complexifySubmodule U).reflection : _ →L[ℂ] _)
+        := by
+  rw [Submodule.coe_reflection,
+    Submodule.coe_reflection, two_smul, two_smul, complexify_sub,
+    complexify_add, complexify_one, starProjection_complexifySubmodule]
 
 omit [CompleteSpace E] in
 /-- Complexification carries the real orthogonal projection to the projection
@@ -436,8 +437,8 @@ theorem directRotationR_maps_orthogonalComplement (hacute : IsUniformlyAcute U V
 
 /-- The real direct rotation intertwines the two reflections. -/
 theorem directRotationR_intertwines_reflection (hacute : IsUniformlyAcute U V) :
-    directRotationR U V hacute * U.reflectionOperator =
-      V.reflectionOperator * directRotationR U V hacute := by
+    directRotationR U V hacute * (U.reflection : E →L[ℝ] E) =
+      (V.reflection : E →L[ℝ] E) * directRotationR U V hacute := by
   refine complexify_injective ?_
   rw [complexify_mul, complexify_mul, complexify_directRotationR,
     complexify_reflectionOperator, complexify_reflectionOperator]
@@ -448,7 +449,7 @@ square of the real direct rotation is the ordered product of the two
 reflections. -/
 theorem directRotationR_sq (hacute : IsUniformlyAcute U V) :
     directRotationR U V hacute * directRotationR U V hacute =
-      V.reflectionOperator * U.reflectionOperator := by
+      (V.reflection : E →L[ℝ] E) * (U.reflection : E →L[ℝ] E) := by
   refine complexify_injective ?_
   rw [complexify_mul, complexify_mul, complexify_directRotationR,
     complexify_reflectionOperator, complexify_reflectionOperator]
@@ -504,7 +505,7 @@ orthogonal square root of the reflection product with nonnegative numerical
 range is the direct rotation. -/
 theorem directRotationR_unique_of_sq (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunit : W ∈ unitary (E →L[ℝ] E))
-    (hsq : W * W = V.reflectionOperator * U.reflectionOperator)
+    (hsq : W * W = (V.reflection : E →L[ℝ] E) * (U.reflection : E →L[ℝ] E))
     (hre : ∀ x, 0 ≤ ⟪W x, x⟫_ℝ) :
     W = directRotationR U V hacute := by
   refine complexify_injective ?_
@@ -520,8 +521,8 @@ orthogonal square roots of the reflection product that intertwine the two
 reflections. -/
 theorem directRotationR_unique_of_diagonalBlocks (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunit : W ∈ unitary (E →L[ℝ] E))
-    (hsq : W * W = V.reflectionOperator * U.reflectionOperator)
-    (hint : W * U.reflectionOperator = V.reflectionOperator * W)
+    (hsq : W * W = (V.reflection : E →L[ℝ] E) * (U.reflection : E →L[ℝ] E))
+    (hint : W * (U.reflection : E →L[ℝ] E) = (V.reflection : E →L[ℝ] E) * W)
     (hblockU : ∀ x ∈ U, 0 ≤ ⟪W x, x⟫_ℝ)
     (hblockUperp : ∀ x ∈ Uᗮ, 0 ≤ ⟪W x, x⟫_ℝ) :
     W = directRotationR U V hacute := by
@@ -542,8 +543,8 @@ theorem eq_directRotationR_iff_diagonalBlocks_nonneg (hacute : IsUniformlyAcute 
     (W : E →L[ℝ] E) :
     W = directRotationR U V hacute ↔
       W ∈ unitary (E →L[ℝ] E) ∧
-        W * W = V.reflectionOperator * U.reflectionOperator ∧
-        W * U.reflectionOperator = V.reflectionOperator * W ∧
+        W * W = (V.reflection : E →L[ℝ] E) * (U.reflection : E →L[ℝ] E) ∧
+        W * (U.reflection : E →L[ℝ] E) = (V.reflection : E →L[ℝ] E) * W ∧
         (∀ x ∈ U, 0 ≤ ⟪W x, x⟫_ℝ) ∧
         (∀ x ∈ Uᗮ, 0 ≤ ⟪W x, x⟫_ℝ) := by
   constructor

@@ -284,11 +284,11 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : H →L[ℂ] H) (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : H →L[ℂ] H) (x : H), hJdom x⟩ =
+        (V.reflection : H →L[ℂ] H) (A x))
     (hRmem : N.Mem R)
     (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
@@ -335,11 +335,11 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequal
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : H →L[ℂ] H) (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : H →L[ℂ] H) (x : H), hJdom x⟩ =
+        (V.reflection : H →L[ℂ] H) (A x))
     (hRmem : N.Mem R)
     (_hStrictDimension :
       Module.rank ℂ (selfAdjointSpectralSubspace A hA B hB) < Module.rank ℂ V)
@@ -446,11 +446,11 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real
     (hgap : FormBoundedSylvesterGap
       (realSelfAdjointSpectralRestriction A hA B hB)
       (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : Er →L[ℝ] Er) (x : Er) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : Er →L[ℝ] Er) (x : Er), hJdom x⟩ =
+        (V.reflection : Er →L[ℝ] Er) (A x))
     (hRmem : N.Mem R)
     (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
@@ -479,11 +479,11 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequal
     (hgap : FormBoundedSylvesterGap
       (realSelfAdjointSpectralRestriction A hA B hB)
       (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : Er →L[ℝ] Er) (x : Er) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : Er →L[ℝ] Er) (x : Er), hJdom x⟩ =
+        (V.reflection : Er →L[ℝ] Er) (A x))
     (hRmem : N.Mem R)
     (_hStrictDimension :
       Module.rank ℝ (realSelfAdjointSpectralSubspace A hA B hB) < Module.rank ℝ V)
@@ -525,11 +525,11 @@ theorem sinTwoTheta_directed_unboundedReflectionResidual_blockRepresentative_sym
     (hgap : FormBoundedSylvesterGap
       (realSelfAdjointSpectralRestriction A hA B hB)
       (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : Er →L[ℝ] Er) (x : Er) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : Er →L[ℝ] Er) (x : Er), hJdom x⟩ =
+        (V.reflection : Er →L[ℝ] Er) (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB) V) ∧

@@ -122,14 +122,14 @@ theorem sinTwoThetaIdealBlock_eq_comp
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     sinTwoThetaIdealBlock U V =
-      U.starProjection ∘L V.reflectionOperator ∘L Uᗮ.starProjection ∘L
-        V.reflectionOperator := by
+      U.starProjection ∘L (V.reflection : H →L[𝕜] H) ∘L Uᗮ.starProjection ∘L
+        (V.reflection : H →L[𝕜] H) := by
   rw [sinTwoThetaIdealBlock, starProjection_map_unitary Uᗮ V.reflection]
   refine ContinuousLinearMap.ext fun x => ?_
   change U.starProjection (V.reflection (Uᗮ.starProjection
       (V.reflection.symm x))) = _
   rw [V.reflection_symm]
-  simp only [ContinuousLinearMap.comp_apply, Submodule.reflectionOperator_apply_eq_reflection]
+  simp only [ContinuousLinearMap.comp_apply, LinearIsometryEquiv.coe_coe'']
 
 end ScalarGeneric
 
@@ -190,11 +190,11 @@ theorem sinTwoTheta_reflectionResidual_opNorm_real
     (hgap : FormBoundedSylvesterGap
       (realSelfAdjointSpectralRestriction A hA S hS)
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : E →L[ℝ] E) (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : E), hJdom x⟩ =
-        V.reflectionOperator (A x)) :
+          ⟨(V.reflection : E →L[ℝ] E) (x : E), hJdom x⟩ =
+        (V.reflection : E →L[ℝ] E) (A x)) :
     δ * ‖sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA S hS) V‖ ≤ ‖R‖ := by
   have h := sinTwoTheta_reflectionResidual_gauge_real A hA S hS

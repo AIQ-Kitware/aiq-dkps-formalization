@@ -56,27 +56,26 @@ theorem re_inner_reflection_comp_offDiagonal_eq_zero
     (hH : IsSelfAdjoint H)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ)
     (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) (x : E) :
-    RCLike.re ⟪(U.reflectionOperator ∘L H) x, x⟫_ℂ = 0 := by
-  have hJsa : IsSelfAdjoint (U.reflectionOperator) := by
+    RCLike.re ⟪((U.reflection : E →L[ℂ] E) ∘L H) x, x⟫_ℂ = 0 := by
+  have hJsa : IsSelfAdjoint ((U.reflection : E →L[ℂ] E)) := by
     rw [isSelfAdjoint_iff]
-    exact TauCeti.DavisKahan.star_reflectionOperator_complex U
+    exact (U.isSelfAdjoint_reflection).star_eq
   have hJsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hJsa
   have hHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH
   have hanti :
-      U.reflectionOperator (H x) = -(H (U.reflectionOperator x)) := by
-    rw [reflectionOperator_eq_reflection, reflectionOperator_eq_reflection]
+      (U.reflection : E →L[ℂ] E) (H x) = -(H ((U.reflection : E →L[ℂ] E) x)) := by
     exact DFunLike.congr_fun
       (U.reflection_mul_eq_neg_mul_of_maps_orthogonal H hHU hHUperp) x
-  have hw1 : ⟪U.reflectionOperator (H x), x⟫_ℂ
-      = ⟪H x, U.reflectionOperator x⟫_ℂ := hJsym _ _
-  have hw2 : ⟪U.reflectionOperator (H x), x⟫_ℂ
-      = -⟪U.reflectionOperator x, H x⟫_ℂ := by
+  have hw1 : ⟪(U.reflection : E →L[ℂ] E) (H x), x⟫_ℂ
+      = ⟪H x, (U.reflection : E →L[ℂ] E) x⟫_ℂ := hJsym _ _
+  have hw2 : ⟪(U.reflection : E →L[ℂ] E) (H x), x⟫_ℂ
+      = -⟪(U.reflection : E →L[ℂ] E) x, H x⟫_ℂ := by
     rw [hanti, inner_neg_left]
     congr 1
     exact hHsym _ _
-  have hsymRe : RCLike.re ⟪H x, U.reflectionOperator x⟫_ℂ
-      = RCLike.re ⟪U.reflectionOperator x, H x⟫_ℂ :=
-    inner_re_symm (H x) (U.reflectionOperator x)
+  have hsymRe : RCLike.re ⟪H x, (U.reflection : E →L[ℂ] E) x⟫_ℂ
+      = RCLike.re ⟪(U.reflection : E →L[ℂ] E) x, H x⟫_ℂ :=
+    inner_re_symm (H x) ((U.reflection : E →L[ℂ] E) x)
   have h1 := congrArg RCLike.re hw1
   have h2 := congrArg RCLike.re hw2
   rw [map_neg] at h2
@@ -127,7 +126,7 @@ theorem realSpectrum_add_offDiagonal_subset_exterior_of_form_gap
       (mul_le_mul_of_nonneg_right hεa (sq_nonneg ‖x‖))
   -- The reflected centred operator is coercive by `ε`.
   have hkey : ∀ x : E, ε * ‖x‖ ^ 2 ≤
-      RCLike.re ⟪(U.reflectionOperator ∘L
+      RCLike.re ⟪((U.reflection : E →L[ℂ] E) ∘L
         (A - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) x, x⟫_ℂ := by
     intro x
     have h := U.reflection_centered_form_lower A
@@ -138,23 +137,20 @@ theorem realSpectrum_add_offDiagonal_subset_exterior_of_form_gap
     have e1 : (lam - ε + (lam + ε)) / 2 = lam := by ring
     have e2 : (lam + ε - (lam - ε)) / 2 = ε := by ring
     rw [e1, e2] at h
-    have hJ : U.reflectionOperator = (U.reflection : E →L[ℂ] E) := by
-      ext y
-      simp only [reflectionOperator_eq_reflection, LinearIsometryEquiv.coe_coe'']
-    rw [hJ, ← ContinuousLinearMap.mul_def]
+    rw [← ContinuousLinearMap.mul_def]
     rw [_root_.ContinuousLinearMap.one_def] at h
     exact h
   have hskew := re_inner_reflection_comp_offDiagonal_eq_zero H U hH hHU hHUperp
   have hcoer : ∀ x : E, ε * ‖x‖ ^ 2 ≤
-      RCLike.re ⟪(U.reflectionOperator ∘L
+      RCLike.re ⟪((U.reflection : E →L[ℂ] E) ∘L
         ((A + H) - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) x, x⟫_ℂ := by
     intro x
     have hsplit :
-        (U.reflectionOperator ∘L
+        ((U.reflection : E →L[ℂ] E) ∘L
             ((A + H) - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) x =
-          (U.reflectionOperator ∘L
+          ((U.reflection : E →L[ℂ] E) ∘L
             (A - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) x +
-            (U.reflectionOperator ∘L H) x := by
+            ((U.reflection : E →L[ℂ] E) ∘L H) x := by
       simp only [ContinuousLinearMap.comp_apply, sub_apply,
         add_apply, smul_apply,
         ContinuousLinearMap.id_apply, ← map_add]
@@ -162,24 +158,24 @@ theorem realSpectrum_add_offDiagonal_subset_exterior_of_form_gap
       abel
     rw [hsplit, inner_add_left, map_add, hskew x, add_zero]
     exact hkey x
-  have hunit : IsUnit (U.reflectionOperator ∘L
+  have hunit : IsUnit ((U.reflection : E →L[ℂ] E) ∘L
       ((A + H) - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) :=
     _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
       (c := ⟨ε, by positivity⟩) hε
       (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
-  have hJJ : U.reflectionOperator * U.reflectionOperator = 1 :=
-    Submodule.reflectionOperator_involutive U
-  have hJunit : IsUnit (U.reflectionOperator : E →L[ℂ] E) :=
-    ⟨⟨U.reflectionOperator, U.reflectionOperator, hJJ, hJJ⟩, rfl⟩
+  have hJJ : (U.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E) = 1 :=
+    U.reflection_mul_self
+  have hJunit : IsUnit (U.reflection : E →L[ℂ] E) :=
+    ⟨⟨(U.reflection : E →L[ℂ] E), (U.reflection : E →L[ℂ] E), hJJ, hJJ⟩, rfl⟩
   have hTunit : IsUnit ((A + H) -
       ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) := by
     have h := hJunit.mul hunit
-    have hrw : U.reflectionOperator * (U.reflectionOperator ∘L
+    have hrw : (U.reflection : E →L[ℂ] E) * ((U.reflection : E →L[ℂ] E) ∘L
         ((A + H) - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) =
         (A + H) - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E := by
-      rw [show (U.reflectionOperator ∘L
+      rw [show ((U.reflection : E →L[ℂ] E) ∘L
           ((A + H) - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) =
-          U.reflectionOperator *
+          (U.reflection : E →L[ℂ] E) *
             ((A + H) - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E) from rfl,
         ← mul_assoc, hJJ, one_mul]
     rwa [hrw] at h

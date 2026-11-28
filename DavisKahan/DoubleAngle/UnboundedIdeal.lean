@@ -191,26 +191,11 @@ isometric embedding preserves isometry. -/
 theorem isometricEmbedding_reflection_comp
     (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
     {Y : G →L[𝕜] H} (hY : IsometricEmbedding Y) :
-    IsometricEmbedding (V.reflectionOperator ∘L Y) := by
+    IsometricEmbedding ((V.reflection : H →L[𝕜] H) ∘L Y) := by
   intro y
-  rw [ContinuousLinearMap.comp_apply, Submodule.reflectionOperator_apply_eq_reflection]
+  rw [ContinuousLinearMap.comp_apply, LinearIsometryEquiv.coe_coe'']
   rw [V.reflection.norm_map]
   exact hY y
-
-omit [CompleteSpace G] in
-/-- The reflection operator is its own adjoint. -/
-theorem adjoint_reflectionOperator (V : Submodule 𝕜 H)
-    [V.HasOrthogonalProjection] :
-    (V.reflectionOperator : H →L[𝕜] H).adjoint = V.reflectionOperator := by
-  have hP : IsSelfAdjoint (V.starProjection : H →L[𝕜] H) :=
-    isSelfAdjoint_starProjection V
-  have hform : (V.reflectionOperator : H →L[𝕜] H) =
-      (2 : 𝕜) • V.starProjection - 1 := by
-    ext x
-    simp [Submodule.reflectionOperator_apply]
-  refine IsSelfAdjoint.adjoint_eq ?_
-  rw [hform, IsSelfAdjoint, star_sub, star_smul, star_ofNat, hP.star_eq,
-    star_one]
 
 end ScalarGeneric
 
@@ -248,11 +233,11 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : H →L[ℂ] H) (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : H →L[ℂ] H) (x : H), hJdom x⟩ =
+        (V.reflection : H →L[ℂ] H) (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB) V) ∧
@@ -301,9 +286,9 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
       selfAdjointSpectralRestriction_inclusion_mem_domain
         A hA Bᶜ hB.compl z
     let za : A.domain := ⟨((z : Uc) : H), hzdom⟩
-    have hy : (y : H) = V.reflectionOperator (za : H) :=
+    have hy : (y : H) = (V.reflection : H →L[ℂ] H) (za : H) :=
       by
-        rw [Submodule.reflectionOperator_apply_eq_reflection]
+        rw [LinearIsometryEquiv.coe_coe'']
         exact (congrArg Subtype.val (e.apply_symm_apply (y : Wc))).symm
     change (y : H) ∈ A.domain
     rw [hy]
@@ -317,27 +302,27 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
       selfAdjointSpectralRestriction_inclusion_mem_domain
         A hA Bᶜ hB.compl z
     let za : A.domain := ⟨((z : Uc) : H), hzdom⟩
-    have hy : (y : H) = V.reflectionOperator (za : H) :=
+    have hy : (y : H) = (V.reflection : H →L[ℂ] H) (za : H) :=
       by
-        rw [Submodule.reflectionOperator_apply_eq_reflection]
+        rw [LinearIsometryEquiv.coe_coe'']
         exact (congrArg Subtype.val (e.apply_symm_apply (y : Wc))).symm
     have hsub :
         (⟨F₁ (y : Wc), hFdom y⟩ : (R.toLinearMap +ᵥ A).domain) =
-          ⟨V.reflectionOperator (za : H), hJdom za⟩ :=
+          ⟨(V.reflection : H →L[ℂ] H) (za : H), hJdom za⟩ :=
       Subtype.ext hy
     have hAint := selfAdjointSpectralRestriction_inclusion_intertwines
       A hA Bᶜ hB.compl z
     have hright :
-        V.reflectionOperator (A za) =
+        (V.reflection : H →L[ℂ] H) (A za) =
           F₁ (ΛJ y) := by
-      change V.reflectionOperator (A za) =
+      change (V.reflection : H →L[ℂ] H) (A za) =
         ((ΛJ y : Wc) : H)
       calc
-        V.reflectionOperator (A za) =
-            V.reflectionOperator (((Λ z : Uc) : H)) :=
-          congrArg V.reflectionOperator hAint
+        (V.reflection : H →L[ℂ] H) (A za) =
+            (V.reflection : H →L[ℂ] H) (((Λ z : Uc) : H)) :=
+          congrArg (V.reflection : H →L[ℂ] H) hAint
         _ = ((e (Λ z) : Wc) : H) := by
-          rw [Submodule.reflectionOperator_apply_eq_reflection]
+          rw [LinearIsometryEquiv.coe_coe'']
           rfl
         _ = ((ΛJ y : Wc) : H) := by
           exact congrArg Subtype.val
@@ -345,10 +330,10 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
     calc
       (R.toLinearMap +ᵥ A) ⟨F₁ (y : Wc), hFdom y⟩ =
           (R.toLinearMap +ᵥ A)
-            ⟨V.reflectionOperator (za : H), hJdom za⟩ := by
+            ⟨(V.reflection : H →L[ℂ] H) (za : H), hJdom za⟩ := by
         exact congrArg (fun q : (R.toLinearMap +ᵥ A).domain =>
           (R.toLinearMap +ᵥ A) q) hsub
-      _ = V.reflectionOperator (A za) := hJintertwines za
+      _ = (V.reflection : H →L[ℂ] H) (A za) := hJintertwines za
       _ = F₁ (ΛJ y) := hright
   have hXiso : IsometricEmbedding X := by
     intro x
@@ -466,11 +451,11 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : H →L[ℂ] H) (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : H →L[ℂ] H) (x : H), hJdom x⟩ =
+        (V.reflection : H →L[ℂ] H) (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB) V) ∧
@@ -657,11 +642,11 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : H →L[ℂ] H) (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A x)) :
+          ⟨(V.reflection : H →L[ℂ] H) (x : H), hJdom x⟩ =
+        (V.reflection : H →L[ℂ] H) (A x)) :
     δ * ‖directedSinTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB) V‖ ≤ ‖R‖ := by
   have : (TauCeti.SymmetricOperatorIdealFamily.opNorm.{0, v} ℂ).toOperatorIdealFamily.IsComplete := by

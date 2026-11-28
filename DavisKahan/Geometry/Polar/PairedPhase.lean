@@ -150,9 +150,9 @@ theorem nonacuteDirectRotation_apply_of_paired_phase_eigenvectors
     ring
   have hA2 := congrArg (fun B : E →L[ℂ] E => B v)
     (spectraCanonicalIntertwiner_add_self K L)
-  change A v + A v = v + L.reflectionOperator (K.reflectionOperator v) at hA2
-  rw [Submodule.reflectionOperator_apply_eq_reflection,
-    Submodule.reflectionOperator_apply_eq_reflection, hreflection] at hA2
+  change A v + A v = v + (L.reflection : E →L[ℂ] E) ((K.reflection : E →L[ℂ] E) v) at hA2
+  rw [LinearIsometryEquiv.coe_coe'',
+    LinearIsometryEquiv.coe_coe'', hreflection] at hA2
   have hsum : alpha + beta = 2 * theta := by dsimp [theta]; ring
   rw [hsum] at hA2
   have hright : v + Complex.exp (((2 * theta : ℝ) : ℂ) * Complex.I) • v =

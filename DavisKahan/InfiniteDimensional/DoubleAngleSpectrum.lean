@@ -196,13 +196,6 @@ section SinTwoTheta
 variable {𝕜 : Type*}
 
 omit [CompleteSpace E] in
-/-- The repo reflection operator agrees with Mathlib's reflection isometry. -/
-theorem reflectionOperator_eq_reflection (V : Submodule ℂ E)
-    [V.HasOrthogonalProjection] (x : E) :
-    (V.reflectionOperator : E →L[ℂ] E) x = V.reflection x := by
-  simp [Submodule.reflectionOperator_apply, Submodule.reflection_apply, two_smul]
-
-omit [CompleteSpace E] in
 /-- Conjugation by the reflection through `V` differs from the identity by
 the reflection defect. -/
 theorem conjByReflection_sub_eq_reflectionDefect (V : Submodule ℂ E)
@@ -211,9 +204,8 @@ theorem conjByReflection_sub_eq_reflectionDefect (V : Submodule ℂ E)
   unfold reflectionDefect
   ext x
   show V.reflection (A (V.reflection.symm x)) - A x =
-    V.reflectionOperator (A (V.reflectionOperator x)) - A x
-  rw [reflectionOperator_eq_reflection, reflectionOperator_eq_reflection,
-    Submodule.reflection_symm]
+    (V.reflection : E →L[ℂ] E) (A ((V.reflection : E →L[ℂ] E) x)) - A x
+  simp only [Submodule.reflection_symm, LinearIsometryEquiv.coe_coe'']
 
 /-- **The reflection-defect core of the `sin 2Θ` theorem.**  For a
 self-adjoint `A` with a genuine internal spectral configuration at the
@@ -354,11 +346,11 @@ theorem sinTwoTheta_spectrum_gauge
     rw [show A - B = -(B - A) from by abel]
     exact N.neg_mem hMem
   have hdefect2 : conjByIsometryEquiv V.reflection A - A =
-      V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator - (A - B) := by
+      (V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L (V.reflection : E →L[ℂ] E) - (A - B) := by
     rw [conjByReflection_sub_eq_reflectionDefect,
       reflectionDefect_eq_perturbationDefect A B V hV]
   have hMemConj : N.Mem
-      (V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator) :=
+      ((V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L (V.reflection : E →L[ℂ] E)) :=
     N.comp_mem _ _ hMemAB
   have hMemD : N.Mem (conjByIsometryEquiv V.reflection A - A) := by
     rw [hdefect2]
@@ -370,16 +362,16 @@ theorem sinTwoTheta_spectrum_gauge
       2 * N.gaugeReal (B - A) := by
     rw [hdefect2]
     have h1 : N.gaugeReal
-        (V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator - (A - B))
+        ((V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L (V.reflection : E →L[ℂ] E) - (A - B))
         ≤ N.gaugeReal
-            (V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator) +
+            ((V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L (V.reflection : E →L[ℂ] E)) +
           N.gaugeReal (A - B) := N.gaugeReal_sub_le hMemConj hMemAB
     have h2 : N.gaugeReal
-        (V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator) ≤
+        ((V.reflection : E →L[ℂ] E) ∘L (A - B) ∘L (V.reflection : E →L[ℂ] E)) ≤
         N.gaugeReal (A - B) :=
       N.gaugeReal_comp_le_of_contractions _ _ hMemAB
-        (Submodule.norm_reflectionOperator_le_one V)
-        (Submodule.norm_reflectionOperator_le_one V)
+        (V.reflection.toLinearIsometry.norm_toContinuousLinearMap_le)
+        (V.reflection.toLinearIsometry.norm_toContinuousLinearMap_le)
     rw [hgaugeAB] at h1 h2
     linarith
   have hmain := sinTheta_spectrum_gauge N hA hÃsa hU hŨred hd hab

@@ -232,11 +232,11 @@ theorem sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming
     (Eop : H →L[𝕜] H) (hEop : Eop.IsSymmetric)
     {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : _root_.LinearPMap.IsReducing A U)
-    (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hmem : ∀ x : A.domain, (V.reflection : H →L[𝕜] H) (x : H) ∈ A.domain)
     (hint : ∀ x : A.domain,
       ((DavisKahan.reflectionPerturbation V Eop).toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hmem x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : H →L[𝕜] H) (x : H), hmem x⟩ =
+        (V.reflection : H →L[𝕜] H) (A x))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hUred)
@@ -296,11 +296,11 @@ theorem sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
     (Eop : H →L[𝕜] H) (hEop : Eop.IsSymmetric)
     {U V : Submodule 𝕜 H} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hUred : _root_.LinearPMap.IsReducing A U)
-    (hmem : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hmem : ∀ x : A.domain, (V.reflection : H →L[𝕜] H) (x : H) ∈ A.domain)
     (hint : ∀ x : A.domain,
       ((DavisKahan.reflectionPerturbation V Eop).toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : H), hmem x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : H →L[𝕜] H) (x : H), hmem x⟩ =
+        (V.reflection : H →L[𝕜] H) (A x))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hUred)
@@ -322,7 +322,7 @@ theorem sinTwoTheta_ambient_unbounded_reflectionPair_symmetricNorming_rclike
 
 Printed Section 2 puts no spectral condition on the ambient subspaces: `P` reduces `A`
 and `Q` reduces `A + H`, and that is all.  The endpoint above takes the reduction of
-`A + H` in reflection form -- `V.reflectionOperator` preserves `dom A` and conjugates
+`A + H` in reflection form -- `(V.reflection : H →L[𝕜] H)` preserves `dom A` and conjugates
 `A` into `A + reflectionPerturbation V Eop` -- because that is the shape its proof
 consumes.  The two are the same hypothesis: `ReflectionIntertwines.ofReducesSubspace`
 turns "`V` reduces `A + Eop`" into the reflection form, and
@@ -829,21 +829,21 @@ theorem sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference
         (complexifySubmodule U).starProjection := by
     have hconj : ∀ T : Er →L[ℝ] Er,
         DavisKahan.boundedUnitaryConjugate V.reflection T =
-          V.reflectionOperator ∘L T ∘L V.reflectionOperator :=
+          (V.reflection : Er →L[ℝ] Er) ∘L T ∘L (V.reflection : Er →L[ℝ] Er) :=
       fun T => by
         apply ContinuousLinearMap.ext
         intro x
         simp only [DavisKahan.boundedUnitaryConjugate_apply, ContinuousLinearMap.comp_apply,
-          Submodule.reflectionOperator_apply_eq_reflection, Submodule.reflection_symm]
+          LinearIsometryEquiv.coe_coe'', Submodule.reflection_symm]
     have hconjC : ∀ T : RealComplexification Er →L[ℂ] RealComplexification Er,
         DavisKahan.boundedUnitaryConjugate (complexifySubmodule V).reflection T =
-          (complexifySubmodule V).reflectionOperator ∘L T ∘L
-            (complexifySubmodule V).reflectionOperator :=
+          ((complexifySubmodule V).reflection : _ →L[ℂ] _) ∘L T ∘L
+            ((complexifySubmodule V).reflection : _ →L[ℂ] _) :=
       fun T => by
         apply ContinuousLinearMap.ext
         intro x
         simp only [DavisKahan.boundedUnitaryConjugate_apply, ContinuousLinearMap.comp_apply,
-          Submodule.reflectionOperator_apply_eq_reflection, Submodule.reflection_symm]
+          LinearIsometryEquiv.coe_coe'', Submodule.reflection_symm]
     rw [DavisKahan.starProjection_map_unitary U V.reflection,
       DavisKahan.starProjection_map_unitary (complexifySubmodule U)
         (complexifySubmodule V).reflection,

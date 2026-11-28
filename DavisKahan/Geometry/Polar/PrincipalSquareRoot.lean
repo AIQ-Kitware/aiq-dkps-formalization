@@ -149,14 +149,14 @@ theorem sq_eq_reflectionProduct
       IsSelfAdjoint ((Uᗮ).starProjection * T * (Uᗮ).starProjection))
     (hcrossed : (Uᗮ).starProjection * T * U.starProjection =
       -star (U.starProjection * T * (Uᗮ).starProjection)) :
-    T * T = V.reflectionOperator * U.reflectionOperator := by
+    T * T = (V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H) := by
   obtain ⟨e11, e22, e12, e21⟩ := star_blocks_eq U T hsource_sa hcomplement_sa hcrossed
-  have hRsub : U.reflectionOperator = U.starProjection - (Uᗮ).starProjection := by
+  have hRsub : (U.reflection : H →L[𝕜] H) = U.starProjection - (Uᗮ).starProjection := by
     rw [reflectionOperator_eq_projection_add_projection_sub_one U,
       show (Uᗮ).starProjection = 1 - U.starProjection from
         Submodule.starProjection_orthogonal' U]
     abel
-  have hkey : U.reflectionOperator * star T * U.reflectionOperator = T := by
+  have hkey : (U.reflection : H →L[𝕜] H) * star T * (U.reflection : H →L[𝕜] H) = T := by
     rw [hRsub]
     have expand : (U.starProjection - (Uᗮ).starProjection) * star T
         * (U.starProjection - (Uᗮ).starProjection)
@@ -168,18 +168,18 @@ theorem sq_eq_reflectionProduct
     rw [expand, e11, e12, e21, e22]
     conv_rhs => rw [eq_sum_blocks U T]
     abel
-  have hTR : T * U.reflectionOperator = V.reflectionOperator * T := by
+  have hTR : T * (U.reflection : H →L[𝕜] H) = (V.reflection : H →L[𝕜] H) * T := by
     rw [reflectionOperator_eq_projection_add_projection_sub_one U,
       reflectionOperator_eq_projection_add_projection_sub_one V,
       mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul, hintertwines]
-  have hRV : V.reflectionOperator = T * U.reflectionOperator * star T := by
+  have hRV : (V.reflection : H →L[𝕜] H) = T * (U.reflection : H →L[𝕜] H) * star T := by
     have hTsT : T * star T = 1 := Unitary.mul_star_self_of_mem hunitary
-    calc V.reflectionOperator
-        = V.reflectionOperator * (T * star T) := by rw [hTsT, mul_one]
-      _ = V.reflectionOperator * T * star T := by rw [mul_assoc]
-      _ = T * U.reflectionOperator * star T := by rw [← hTR]
-  have hexp : V.reflectionOperator * U.reflectionOperator
-      = T * (U.reflectionOperator * star T * U.reflectionOperator) := by
+    calc (V.reflection : H →L[𝕜] H)
+        = (V.reflection : H →L[𝕜] H) * (T * star T) := by rw [hTsT, mul_one]
+      _ = (V.reflection : H →L[𝕜] H) * T * star T := by rw [mul_assoc]
+      _ = T * (U.reflection : H →L[𝕜] H) * star T := by rw [← hTR]
+  have hexp : (V.reflection : H →L[𝕜] H) * (U.reflection : H →L[𝕜] H)
+      = T * ((U.reflection : H →L[𝕜] H) * star T * (U.reflection : H →L[𝕜] H)) := by
     rw [hRV]; noncomm_ring
   rw [hexp, hkey]
 
@@ -362,9 +362,9 @@ theorem proposition3_3_principalSquareRoot_converse
   have hGneg : ∀ z, z ∈ halmosSourceDefect U V → spectraReflectionProduct U V z = -z := by
     intro z hz
     obtain ⟨hPz, hQz⟩ := projections_apply_of_mem_halmosSourceDefect hz
-    have hRU : U.reflectionOperator z = z := by
-      rw [Submodule.reflectionOperator_apply, hPz]; module
-    rw [mul_apply_eq_comp, hRU, Submodule.reflectionOperator_apply, hQz]
+    have hRU : (U.reflection : H →L[ℂ] H) z = z := by
+      rw [Submodule.reflection_apply_smul, hPz]; module
+    rw [mul_apply_eq_comp, hRU, Submodule.reflection_apply_smul, hQz]
     module
   -- X vanishes on ker A
   have hXker : ∀ x : H, A x = 0 → (T * U.starProjection - V.starProjection * T) x = 0 := by
@@ -615,9 +615,9 @@ omit [CompleteSpace H] in
 theorem reflectionProduct_apply_eq_neg_of_mem_source {z : H}
     (hz : z ∈ halmosSourceDefect U V) : spectraReflectionProduct U V z = -z := by
   obtain ⟨hPz, hQz⟩ := projections_apply_of_mem_halmosSourceDefect hz
-  have hRU : U.reflectionOperator z = z := by
-    rw [Submodule.reflectionOperator_apply, hPz]; module
-  rw [mul_apply_eq_comp, hRU, Submodule.reflectionOperator_apply, hQz]
+  have hRU : (U.reflection : H →L[ℂ] H) z = z := by
+    rw [Submodule.reflection_apply_smul, hPz]; module
+  rw [mul_apply_eq_comp, hRU, Submodule.reflection_apply_smul, hQz]
   module
 
 omit [CompleteSpace H] in
@@ -625,9 +625,9 @@ omit [CompleteSpace H] in
 theorem reflectionProduct_apply_eq_neg_of_mem_target {z : H}
     (hz : z ∈ halmosTargetDefect U V) : spectraReflectionProduct U V z = -z := by
   obtain ⟨hPz, hQz⟩ := projections_apply_of_mem_halmosTargetDefect hz
-  have hRU : U.reflectionOperator z = -z := by
-    rw [Submodule.reflectionOperator_apply, hPz]; module
-  rw [mul_apply_eq_comp, hRU, map_neg, Submodule.reflectionOperator_apply, hQz]
+  have hRU : (U.reflection : H →L[ℂ] H) z = -z := by
+    rw [Submodule.reflection_apply_smul, hPz]; module
+  rw [mul_apply_eq_comp, hRU, map_neg, Submodule.reflection_apply_smul, hQz]
   module
 
 omit [CompleteSpace H] in
@@ -636,9 +636,9 @@ intersection. -/
 theorem mem_halmosSourceDefect_of_reflectionProduct_apply_eq_neg {z : H} (hzU : z ∈ U)
     (hz : spectraReflectionProduct U V z = -z) : z ∈ halmosSourceDefect U V := by
   have hPz : U.starProjection z = z := U.starProjection_eq_self_iff.mpr hzU
-  have hRU : U.reflectionOperator z = z := by
-    rw [Submodule.reflectionOperator_apply, hPz]; module
-  rw [mul_apply_eq_comp, hRU, Submodule.reflectionOperator_apply] at hz
+  have hRU : (U.reflection : H →L[ℂ] H) z = z := by
+    rw [Submodule.reflection_apply_smul, hPz]; module
+  rw [mul_apply_eq_comp, hRU, Submodule.reflection_apply_smul] at hz
   have h0 : (2 : ℂ) • V.starProjection z = 0 := by
     have h := congrArg (fun w : H => w + z) hz
     simpa using h
@@ -651,19 +651,17 @@ intersection. -/
 theorem mem_halmosTargetDefect_of_reflectionProduct_apply_eq_neg {z : H} (hzV : z ∈ V)
     (hz : spectraReflectionProduct U V z = -z) : z ∈ halmosTargetDefect U V := by
   have hQz : V.starProjection z = z := V.starProjection_eq_self_iff.mpr hzV
-  have hJV : V.reflectionOperator z = z := by
-    rw [Submodule.reflectionOperator_apply, hQz]; module
-  have hinv := Submodule.reflectionOperator_involutive (𝕜 := ℂ) V
-  have h1 : V.reflectionOperator (U.reflectionOperator z) = -z := by
+  have hJV : (V.reflection : H →L[ℂ] H) z = z := by
+    rw [Submodule.reflection_apply_smul, hQz]; module
+  have h1 : (V.reflection : H →L[ℂ] H) ((U.reflection : H →L[ℂ] H) z) = -z := by
     rw [← mul_apply_eq_comp]; exact hz
-  have h2 : V.reflectionOperator (V.reflectionOperator (U.reflectionOperator z))
-      = U.reflectionOperator z := by
-    have h := congrArg (fun f : H →L[ℂ] H => f (U.reflectionOperator z)) hinv
-    simpa using h
-  have hJU : U.reflectionOperator z = -z := by
+  have h2 : (V.reflection : H →L[ℂ] H) ((V.reflection : H →L[ℂ] H) ((U.reflection : H →L[ℂ] H) z))
+      = (U.reflection : H →L[ℂ] H) z :=
+    V.reflection_reflection (U.reflection z)
+  have hJU : (U.reflection : H →L[ℂ] H) z = -z := by
     rw [h1, map_neg, hJV] at h2
     exact h2.symm
-  rw [Submodule.reflectionOperator_apply] at hJU
+  rw [Submodule.reflection_apply_smul] at hJU
   have h0 : (2 : ℂ) • U.starProjection z = 0 := by
     have h := congrArg (fun w : H => w + z) hJU
     simpa using h

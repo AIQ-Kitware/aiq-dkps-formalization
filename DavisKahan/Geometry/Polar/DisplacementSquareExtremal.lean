@@ -190,22 +190,10 @@ theorem diagonalPart_directRotation_displacementSquare (U V : Submodule ℂ H)
     congr 1
     rw [two_mul, mul_two]
   apply Submodule.diagBlock_eq_self_of_reflectionConjugate
-  have hJdef : (U.reflection : H →L[ℂ] H) = U.reflectionOperator := by
-    ext x
-    rw [Submodule.reflectionOperator_apply_eq_reflection]
-    rfl
-  rw [hJdef]
-  have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
-    rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
-      smul_mul_assoc, mul_smul_comm, hcomm]
-    rw [show (ContinuousLinearMap.id ℂ H) = 1 from rfl, mul_one, one_mul]
-  have hJJ : U.reflectionOperator * U.reflectionOperator = (1 : H →L[ℂ] H) :=
-    Submodule.reflectionOperator_involutive (𝕜 := ℂ) (E := H) U
-  calc U.reflectionOperator ∘L A ∘L U.reflectionOperator
-      = U.reflectionOperator * (A * U.reflectionOperator) := rfl
-    _ = U.reflectionOperator * (U.reflectionOperator * A) := by rw [hAJ]
-    _ = (U.reflectionOperator * U.reflectionOperator) * A := by rw [mul_assoc]
-    _ = A := by rw [hJJ, one_mul]
+  have hAJ : Commute (U.reflection : H →L[ℂ] H) A :=
+    U.commute_reflection_iff.mpr hcomm.symm
+  change (U.reflection : H →L[ℂ] H) * (A * (U.reflection : H →L[ℂ] H)) = A
+  rw [← hAJ.eq, ← mul_assoc, U.reflection_mul_self, one_mul]
 
 /-- The squared displacement of a completed nonacute direct rotation is the same affine image of
 the canonical positive cosine as in the acute case. -/
@@ -244,22 +232,10 @@ theorem diagonalPart_nonacuteDirectRotation_displacementSquare_complex (U V : Su
     congr 1
     rw [two_mul, mul_two]
   apply Submodule.diagBlock_eq_self_of_reflectionConjugate
-  have hJdef : (U.reflection : H →L[ℂ] H) = U.reflectionOperator := by
-    ext x
-    rw [Submodule.reflectionOperator_apply_eq_reflection]
-    rfl
-  rw [hJdef]
-  have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
-    rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
-      smul_mul_assoc, mul_smul_comm, hcomm]
-    rw [show (ContinuousLinearMap.id ℂ H) = 1 from rfl, mul_one, one_mul]
-  have hJJ : U.reflectionOperator * U.reflectionOperator = (1 : H →L[ℂ] H) :=
-    Submodule.reflectionOperator_involutive (𝕜 := ℂ) (E := H) U
-  calc U.reflectionOperator ∘L A ∘L U.reflectionOperator
-      = U.reflectionOperator * (A * U.reflectionOperator) := rfl
-    _ = U.reflectionOperator * (U.reflectionOperator * A) := by rw [hAJ]
-    _ = (U.reflectionOperator * U.reflectionOperator) * A := by rw [mul_assoc]
-    _ = A := by rw [hJJ, one_mul]
+  have hAJ : Commute (U.reflection : H →L[ℂ] H) A :=
+    U.commute_reflection_iff.mpr hcomm.symm
+  change (U.reflection : H →L[ℂ] H) * (A * (U.reflection : H →L[ℂ] H)) = A
+  rw [← hAJ.eq, ← mul_assoc, U.reflection_mul_self, one_mul]
 
 /-- **Infinite-dimensional Davis--Kahan Proposition 4.3, at Ky Fan scope.**
 

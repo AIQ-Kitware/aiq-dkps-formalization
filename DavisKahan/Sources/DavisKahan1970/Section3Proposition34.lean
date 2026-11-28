@@ -72,11 +72,11 @@ theorem positiveDiagonalBlocks_of_sq
     (hsq : T * T = spectraReflectionProduct K L) :
     (K.starProjection * T * K.starProjection).IsPositive ∧
       (Kᗮ.starProjection * T * Kᗮ.starProjection).IsPositive := by
-  have hintR : T * K.reflectionOperator = L.reflectionOperator * T := by
+  have hintR : T * (K.reflection : H →L[ℂ] H) = (L.reflection : H →L[ℂ] H) * T := by
     rw [DavisKahan.reflectionOperator_eq_projection_add_projection_sub_one K,
       DavisKahan.reflectionOperator_eq_projection_add_projection_sub_one L,
       mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul, hT.intertwines]
-  have hconj : K.reflectionOperator * T * K.reflectionOperator = star T :=
+  have hconj : (K.reflection : H →L[ℂ] H) * T * (K.reflection : H →L[ℂ] H) = star T :=
     DavisKahan.reflection_conjugate_eq_star_of_sq_of_intertwines
       K L T hT.unitary_mem hsq hintR
   have hsource_sa : IsSelfAdjoint (K.starProjection * T * K.starProjection) := by
@@ -84,15 +84,15 @@ theorem positiveDiagonalBlocks_of_sq
       (isSelfAdjoint_starProjection K).star_eq]
     calc
       K.starProjection * star T * K.starProjection =
-          K.starProjection * (K.reflectionOperator * T * K.reflectionOperator) *
+          K.starProjection * ((K.reflection : H →L[ℂ] H) * T * (K.reflection : H →L[ℂ] H)) *
             K.starProjection := by rw [hconj]
-      _ = (K.starProjection * K.reflectionOperator) * T *
-            (K.reflectionOperator * K.starProjection) := by
+      _ = (K.starProjection * (K.reflection : H →L[ℂ] H)) * T *
+            ((K.reflection : H →L[ℂ] H) * K.starProjection) := by
           simp only [mul_assoc]
       _ = K.starProjection * T * K.starProjection := by
           rw [projection_mul_reflectionOperator_self K,
             reflectionOperator_mul_projection_self K]
-  have hRsub : K.reflectionOperator = K.starProjection - Kᗮ.starProjection := by
+  have hRsub : (K.reflection : H →L[ℂ] H) = K.starProjection - Kᗮ.starProjection := by
     rw [DavisKahan.reflectionOperator_eq_projection_add_projection_sub_one K]
     have hsum : K.starProjection + Kᗮ.starProjection = (1 : H →L[ℂ] H) := by
       apply ContinuousLinearMap.ext
@@ -101,10 +101,10 @@ theorem positiveDiagonalBlocks_of_sq
         K.starProjection_add_starProjection_orthogonal x
     rw [← hsum]
     abel
-  have hPcR : Kᗮ.starProjection * K.reflectionOperator = -Kᗮ.starProjection := by
+  have hPcR : Kᗮ.starProjection * (K.reflection : H →L[ℂ] H) = -Kᗮ.starProjection := by
     rw [hRsub, mul_sub, DavisKahan.complementaryProjection_mul_projection K,
       DavisKahan.complementaryProjection_sq K, zero_sub]
-  have hRPc : K.reflectionOperator * Kᗮ.starProjection = -Kᗮ.starProjection := by
+  have hRPc : (K.reflection : H →L[ℂ] H) * Kᗮ.starProjection = -Kᗮ.starProjection := by
     rw [hRsub, sub_mul, DavisKahan.projection_mul_complementaryProjection K,
       DavisKahan.complementaryProjection_sq K, zero_sub]
   have hcomplement_sa : IsSelfAdjoint (Kᗮ.starProjection * T * Kᗮ.starProjection) := by
@@ -112,10 +112,10 @@ theorem positiveDiagonalBlocks_of_sq
       (isSelfAdjoint_starProjection Kᗮ).star_eq]
     calc
       Kᗮ.starProjection * star T * Kᗮ.starProjection =
-          Kᗮ.starProjection * (K.reflectionOperator * T * K.reflectionOperator) *
+          Kᗮ.starProjection * ((K.reflection : H →L[ℂ] H) * T * (K.reflection : H →L[ℂ] H)) *
             Kᗮ.starProjection := by rw [hconj]
-      _ = (Kᗮ.starProjection * K.reflectionOperator) * T *
-            (K.reflectionOperator * Kᗮ.starProjection) := by
+      _ = (Kᗮ.starProjection * (K.reflection : H →L[ℂ] H)) * T *
+            ((K.reflection : H →L[ℂ] H) * Kᗮ.starProjection) := by
           simp only [mul_assoc]
       _ = (-Kᗮ.starProjection) * T * (-Kᗮ.starProjection) := by rw [hPcR, hRPc]
       _ = Kᗮ.starProjection * T * Kᗮ.starProjection := by noncomm_ring
@@ -209,15 +209,15 @@ theorem proposition3_4_full_complex
   have hWsq : W * W = spectraReflectionProduct U V :=
     sq_eq_spectraReflectionProduct U V W hunitary hintertwines
       hsource_pos.isSelfAdjoint hcomplement_pos.isSelfAdjoint hcrossed
-  have hrefl : (reflectedSubspace U V).reflectionOperator =
-      U.reflectionOperator * V.reflectionOperator * U.reflectionOperator :=
+  have hrefl : ((reflectedSubspace U V).reflection : H →L[ℂ] H) =
+      (U.reflection : H →L[ℂ] H) * (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) :=
     reflectionOperator_reflectedSubspace V U
-  have hRU : U.reflectionOperator * U.reflectionOperator = 1 :=
-    reflectionOperator_mul_self_complex U
+  have hRU : (U.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) = 1 :=
+    Submodule.reflection_mul_self U
   have hsq : (W * W) * (W * W) =
       spectraReflectionProduct (reflectedSubspace U V) V := by
     show (W * W) * (W * W) =
-      V.reflectionOperator * (reflectedSubspace U V).reflectionOperator
+      (V.reflection : H →L[ℂ] H) * ((reflectedSubspace U V).reflection : H →L[ℂ] H)
     rw [hrefl, hWsq]
     noncomm_ring
   have hpos := positiveDiagonalBlocks_of_sq (reflectedSubspace U V) V (W * W)
@@ -243,7 +243,7 @@ source and target subspaces.  The natural reflected pair is `Uref = U`,
 `Vref = reflectedSubspace V U`, for which `spectraDirectRotation U V hacute`
 squared is the ordered reflection product `R_V R_U = spectraReflectionProduct U V`
 (see `spectraDirectRotation_sq`).  Because
-`reflectionOperator (reflectedSubspace V U) = R_V R_U R_V`, the reflection product
+`R_{R_V U} = R_V R_U R_V`, the reflection product
 of the reflected pair is `(R_V R_U) ^ 2`, so `R_V R_U` is a unitary square root of
 it; the accretive branch is the direct rotation between the reflected subspaces.
 
@@ -296,12 +296,12 @@ theorem proposition3_4_square_is_reflected_directRotation
   have hGsq : spectraReflectionProduct U V * spectraReflectionProduct U V
       = spectraReflectionProduct U (reflectedSubspace V U) := by
     show spectraReflectionProduct U V * spectraReflectionProduct U V
-      = Submodule.reflectionOperator (reflectedSubspace V U) * U.reflectionOperator
+      = ((reflectedSubspace V U).reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H)
     rw [reflectionOperator_reflectedSubspace U V]
-    show (V.reflectionOperator * U.reflectionOperator)
-        * (V.reflectionOperator * U.reflectionOperator)
-      = V.reflectionOperator * U.reflectionOperator * V.reflectionOperator
-        * U.reflectionOperator
+    show ((V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H))
+        * ((V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H))
+      = (V.reflection : H →L[ℂ] H) * (U.reflection : H →L[ℂ] H) * (V.reflection : H →L[ℂ] H)
+        * (U.reflection : H →L[ℂ] H)
     noncomm_ring
   have hGre : ∀ x, 0 ≤ Complex.re ⟪spectraReflectionProduct U V x, x⟫_ℂ :=
     re_inner_reflectionProduct_nonneg U V hhalf

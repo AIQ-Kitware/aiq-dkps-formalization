@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
@@ -59,12 +60,12 @@ theorem two_smul_diagonalPair_eq_add_reflections
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (K : E →L[𝕜] E) :
     (2 : 𝕜) • diagonalPair U V K =
-      K + U.reflectionOperator ∘L K ∘L V.reflectionOperator := by
+      K + (U.reflection : E →L[𝕜] E) ∘L K ∘L (V.reflection : E →L[𝕜] E) := by
   ext x
   simp only [diagonalPair, ContinuousLinearMap.comp_apply, add_apply,
     smul_apply]
   simp_rw [Submodule.starProjection_orthogonal_apply,
-    Submodule.reflectionOperator_apply]
+    Submodule.reflection_apply_smul]
   simp only [map_sub, map_smul]
   module
 
@@ -91,18 +92,18 @@ theorem diagonalPair_gauge_le
   have hB : N.Mem (diagonalPair U V K) :=
     diagonalPair_mem N U V hK
   have hJ : N.Mem
-      (U.reflectionOperator ∘L K ∘L V.reflectionOperator) :=
-    N.comp_mem U.reflectionOperator V.reflectionOperator hK
+      ((U.reflection : E →L[𝕜] E) ∘L K ∘L (V.reflection : E →L[𝕜] E)) :=
+    N.comp_mem (U.reflection : E →L[𝕜] E) (V.reflection : E →L[𝕜] E) hK
   have hJle :
-      N.gaugeReal (U.reflectionOperator ∘L K ∘L V.reflectionOperator) ≤
+      N.gaugeReal ((U.reflection : E →L[𝕜] E) ∘L K ∘L (V.reflection : E →L[𝕜] E)) ≤
         N.gaugeReal K :=
     N.gaugeReal_comp_le_of_contractions _ _ hK
-      (Submodule.norm_reflectionOperator_le_one U)
-      (Submodule.norm_reflectionOperator_le_one V)
+      (U.reflection.toLinearIsometry.norm_toContinuousLinearMap_le)
+      (V.reflection.toLinearIsometry.norm_toContinuousLinearMap_le)
   have hsum : N.gaugeReal
-      (K + U.reflectionOperator ∘L K ∘L V.reflectionOperator) ≤
+      (K + (U.reflection : E →L[𝕜] E) ∘L K ∘L (V.reflection : E →L[𝕜] E)) ≤
         N.gaugeReal K + N.gaugeReal
-          (U.reflectionOperator ∘L K ∘L V.reflectionOperator) :=
+          ((U.reflection : E →L[𝕜] E) ∘L K ∘L (V.reflection : E →L[𝕜] E)) :=
     N.gaugeReal_add_le hK hJ
   have htwo : N.gaugeReal ((2 : 𝕜) • diagonalPair U V K) =
       2 * N.gaugeReal (diagonalPair U V K) := by
@@ -164,80 +165,6 @@ theorem diagonalPair_normingGauge_le
     (N.extendedGauge K).toReal
   exact (ENNReal.toReal_le_toReal hB hK).mpr hle
 
-omit [CompleteSpace E] in
-/-- Right composition with a subspace reflection preserves every approximation
-singular value. -/
-theorem sameApproximationSingularValues_comp_reflection_right
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (A : E →L[𝕜] E) :
-    ContinuousLinearMap.SameSingularValues
-      (A ∘L U.reflectionOperator) A := by
-  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
-  intro n
-  apply NNReal.eq
-  have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
-    exact_mod_cast Submodule.norm_reflectionOperator_le_one U
-  have hright (T : E →L[𝕜] E) :
-      ((T ∘L U.reflectionOperator).singularValue n : ℝ) ≤
-        (T.singularValue n : ℝ) :=
-    calc ((T ∘L U.reflectionOperator).singularValue n : ℝ)
-        ≤ (T.singularValue n : ℝ) *
-            ‖(U.reflectionOperator : E →L[𝕜] E)‖ :=
-          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right T _ n))
-      _ ≤ (T.singularValue n : ℝ) * 1 := by
-        exact mul_le_mul_of_nonneg_left hnn ((T.singularValue n).coe_nonneg)
-      _ = (T.singularValue n : ℝ) := mul_one _
-  have hcomp :
-      (A ∘L U.reflectionOperator) ∘L U.reflectionOperator = A := by
-    rw [ContinuousLinearMap.comp_assoc, U.reflectionOperator_involutive,
-      ContinuousLinearMap.comp_id]
-  have key : ((A ∘L U.reflectionOperator).singularValue n : ℝ)
-      = (A.singularValue n : ℝ) := by
-    refine le_antisymm (hright A) ?_
-    calc (A.singularValue n : ℝ)
-        = (((A ∘L U.reflectionOperator) ∘L
-            U.reflectionOperator).singularValue n : ℝ) := by rw [hcomp]
-      _ ≤ ((A ∘L U.reflectionOperator).singularValue n : ℝ) :=
-          hright (A ∘L U.reflectionOperator)
-  exact key
-
-omit [CompleteSpace E] in
-/-- Left composition with a subspace reflection preserves every approximation
-singular value. -/
-theorem sameApproximationSingularValues_comp_reflection_left
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (A : E →L[𝕜] E) :
-    ContinuousLinearMap.SameSingularValues
-      (U.reflectionOperator ∘L A) A := by
-  apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
-  intro n
-  apply NNReal.eq
-  have hnn : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 := by
-    exact_mod_cast Submodule.norm_reflectionOperator_le_one U
-  have hleft (T : E →L[𝕜] E) :
-      ((U.reflectionOperator ∘L T).singularValue n : ℝ) ≤
-        (T.singularValue n : ℝ) :=
-    calc ((U.reflectionOperator ∘L T).singularValue n : ℝ)
-        ≤ ‖(U.reflectionOperator : E →L[𝕜] E)‖ *
-            (T.singularValue n : ℝ) :=
-          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left _ T n))
-      _ ≤ 1 * (T.singularValue n : ℝ) := by
-        exact mul_le_mul_of_nonneg_right hnn ((T.singularValue n).coe_nonneg)
-      _ = (T.singularValue n : ℝ) := one_mul _
-  have hcomp :
-      U.reflectionOperator ∘L (U.reflectionOperator ∘L A) = A := by
-    rw [← ContinuousLinearMap.comp_assoc, U.reflectionOperator_involutive,
-      ContinuousLinearMap.id_comp]
-  have key : ((U.reflectionOperator ∘L A).singularValue n : ℝ)
-      = (A.singularValue n : ℝ) := by
-    refine le_antisymm (hleft A) ?_
-    calc (A.singularValue n : ℝ)
-        = ((U.reflectionOperator ∘L
-            (U.reflectionOperator ∘L A)).singularValue n : ℝ) := by rw [hcomp]
-      _ ≤ ((U.reflectionOperator ∘L A).singularValue n : ℝ) :=
-          hleft (U.reflectionOperator ∘L A)
-  exact key
-
 /-- Sum of the two cross-projection blocks appearing in Proposition 6.1. -/
 @[expose]
 def crossSineSum (U V : Submodule 𝕜 E)
@@ -252,11 +179,11 @@ theorem crossSineSum_eq_projectionDiff_comp_reflection
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     crossSineSum U V =
-      (V.starProjection - U.starProjection) ∘L V.reflectionOperator := by
+      (V.starProjection - U.starProjection) ∘L (V.reflection : E →L[𝕜] E) := by
   ext x
   simp only [crossSineSum, ContinuousLinearMap.comp_apply, add_apply,
     sub_apply]
-  rw [Submodule.reflectionOperator_apply]
+  rw [Submodule.reflection_apply_smul]
   simp_rw [Submodule.starProjection_orthogonal_apply]
   simp only [map_sub, map_smul]
   have hVidem : V.starProjection (V.starProjection x) = V.starProjection x :=
@@ -275,7 +202,12 @@ theorem crossSineSum_same_projectionDiff
     ContinuousLinearMap.SameSingularValues
       (crossSineSum U V) (V.starProjection - U.starProjection) := by
   rw [crossSineSum_eq_projectionDiff_comp_reflection]
-  exact sameApproximationSingularValues_comp_reflection_right V _
+  let T := V.starProjection - U.starProjection
+  have h := T.sameSingularValues_comp_linearIsometryEquiv V.reflection
+    (LinearIsometryEquiv.refl 𝕜 E)
+  change ((ContinuousLinearMap.id 𝕜 E) ∘L T ∘L (V.reflection : E →L[𝕜] E)).SameSingularValues
+    T at h
+  rwa [ContinuousLinearMap.id_comp] at h
 
 end
 

@@ -305,7 +305,7 @@ theorem sinTheta_residual
         projection_comp_opNorm_le Uᗮ _
   simpa [hY] using hbound.trans hC
 
-/-- One-sided perturbation theorem for spectral subspaces. 
+/-- One-sided perturbation theorem for spectral subspaces.
 
 Lean proof route for a weaker agent:
 
@@ -369,7 +369,7 @@ theorem sinTheta_perturbation
   rw [directedGap_eq_restrictedBlock_norm U V] at h2
   exact h2
 
-/-- Symmetric projector-difference form requiring both mixed gaps. 
+/-- Symmetric projector-difference form requiring both mixed gaps.
 
 Lean proof route for a weaker agent:
 
@@ -407,7 +407,7 @@ theorem sinTheta_symmetric
   exact max_le h1 h2
 
 /-- General separated-spectrum form with the optimal universal `π / 2`
-Sylvester constant. 
+Sylvester constant.
 
 Lean proof route for a weaker agent:
 
@@ -761,13 +761,13 @@ theorem projectionCross_eq_reflectionPinch
     (R : E →L[𝕜] E) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     R ∘L V.starProjection - U.starProjection ∘L R =
-      ((2 : 𝕜)⁻¹) • (R ∘L V.reflectionOperator - U.reflectionOperator ∘L R) := by
-  have hU : (U.reflectionOperator : E →L[𝕜] E) =
-      (2 : 𝕜) • U.starProjection - ContinuousLinearMap.id 𝕜 E :=
-    Submodule.reflectionOperator_eq_two_smul_sub_id U
-  have hV : (V.reflectionOperator : E →L[𝕜] E) =
-      (2 : 𝕜) • V.starProjection - ContinuousLinearMap.id 𝕜 E :=
-    Submodule.reflectionOperator_eq_two_smul_sub_id V
+      ((2 : 𝕜)⁻¹) • (R ∘L (V.reflection : E →L[𝕜] E) - (U.reflection : E →L[𝕜] E) ∘L R) := by
+  have hU : (U.reflection : E →L[𝕜] E) =
+      (2 : 𝕜) • U.starProjection - ContinuousLinearMap.id 𝕜 E := by
+    simpa only [two_smul, ContinuousLinearMap.one_def] using U.coe_reflection
+  have hV : (V.reflection : E →L[𝕜] E) =
+      (2 : 𝕜) • V.starProjection - ContinuousLinearMap.id 𝕜 E := by
+    simpa only [two_smul, ContinuousLinearMap.one_def] using V.coe_reflection
   rw [hU, hV]
   ext x
   simp only [ContinuousLinearMap.coe_comp, Function.comp_apply,
@@ -788,53 +788,53 @@ theorem SymmetricNormIdeal.gauge_projectionCross_le
     (hR : I.mem R) :
     I.mem (R ∘L V.starProjection - U.starProjection ∘L R) ∧
       I.gauge (R ∘L V.starProjection - U.starProjection ∘L R) ≤ I.gauge R := by
-  have hJU : ‖(U.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 :=
-    Submodule.norm_reflectionOperator_le_one U
-  have hJV : ‖(V.reflectionOperator : E →L[𝕜] E)‖ ≤ 1 :=
-    Submodule.norm_reflectionOperator_le_one V
+  have hJU : ‖(U.reflection : E →L[𝕜] E)‖ ≤ 1 :=
+    U.reflection.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hJV : ‖(V.reflection : E →L[𝕜] E)‖ ≤ 1 :=
+    V.reflection.toLinearIsometry.norm_toContinuousLinearMap_le
   -- `R J_V` and `J_U R` are ideal members with gauge at most `gauge R`.
-  have hrightMem : I.mem (R ∘L V.reflectionOperator) := by
-    have := I.ideal_mem (ContinuousLinearMap.id 𝕜 E) V.reflectionOperator hR
+  have hrightMem : I.mem (R ∘L (V.reflection : E →L[𝕜] E)) := by
+    have := I.ideal_mem (ContinuousLinearMap.id 𝕜 E) (V.reflection : E →L[𝕜] E) hR
     simpa using this
-  have hleftMem : I.mem (U.reflectionOperator ∘L R) := by
-    have := I.ideal_mem U.reflectionOperator (ContinuousLinearMap.id 𝕜 E) hR
+  have hleftMem : I.mem ((U.reflection : E →L[𝕜] E) ∘L R) := by
+    have := I.ideal_mem (U.reflection : E →L[𝕜] E) (ContinuousLinearMap.id 𝕜 E) hR
     simpa using this
-  have hrightGauge : I.gauge (R ∘L V.reflectionOperator) ≤ I.gauge R := by
-    have hb := I.ideal_bound (ContinuousLinearMap.id 𝕜 E) V.reflectionOperator hR
+  have hrightGauge : I.gauge (R ∘L (V.reflection : E →L[𝕜] E)) ≤ I.gauge R := by
+    have hb := I.ideal_bound (ContinuousLinearMap.id 𝕜 E) (V.reflection : E →L[𝕜] E) hR
     simp only [ContinuousLinearMap.id_comp] at hb
     refine hb.trans ?_
     have h0 : 0 ≤ I.gauge R := I.nonneg hR
     have hid : ‖ContinuousLinearMap.id 𝕜 E‖ ≤ 1 := ContinuousLinearMap.norm_id_le
     calc ‖ContinuousLinearMap.id 𝕜 E‖ * I.gauge R *
-          ‖(V.reflectionOperator : E →L[𝕜] E)‖
+          ‖(V.reflection : E →L[𝕜] E)‖
         ≤ 1 * I.gauge R * 1 := by gcongr
       _ = I.gauge R := by ring
-  have hleftGauge : I.gauge (U.reflectionOperator ∘L R) ≤ I.gauge R := by
-    have hb := I.ideal_bound U.reflectionOperator (ContinuousLinearMap.id 𝕜 E) hR
+  have hleftGauge : I.gauge ((U.reflection : E →L[𝕜] E) ∘L R) ≤ I.gauge R := by
+    have hb := I.ideal_bound (U.reflection : E →L[𝕜] E) (ContinuousLinearMap.id 𝕜 E) hR
     simp only [ContinuousLinearMap.comp_id] at hb
     refine hb.trans ?_
     have h0 : 0 ≤ I.gauge R := I.nonneg hR
     have hid : ‖ContinuousLinearMap.id 𝕜 E‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-    calc ‖(U.reflectionOperator : E →L[𝕜] E)‖ * I.gauge R *
+    calc ‖(U.reflection : E →L[𝕜] E)‖ * I.gauge R *
           ‖ContinuousLinearMap.id 𝕜 E‖
         ≤ 1 * I.gauge R * 1 := by gcongr
       _ = I.gauge R := by ring
-  have hnegMem : I.mem (-(U.reflectionOperator ∘L R)) := by
+  have hnegMem : I.mem (-((U.reflection : E →L[𝕜] E) ∘L R)) := by
     simpa using I.smul_mem (-1 : 𝕜) hleftMem
-  have hnegGauge : I.gauge (-(U.reflectionOperator ∘L R)) =
-      I.gauge (U.reflectionOperator ∘L R) := by
+  have hnegGauge : I.gauge (-((U.reflection : E →L[𝕜] E) ∘L R)) =
+      I.gauge ((U.reflection : E →L[𝕜] E) ∘L R) := by
     have h := I.gauge_smul (-1 : 𝕜) hleftMem
     simpa using h
-  have hdiffMem : I.mem (R ∘L V.reflectionOperator - U.reflectionOperator ∘L R) := by
+  have hdiffMem : I.mem (R ∘L (V.reflection : E →L[𝕜] E) - (U.reflection : E →L[𝕜] E) ∘L R) := by
     have := I.add_mem hrightMem hnegMem
     simpa [sub_eq_add_neg] using this
   have hdiffGauge :
-      I.gauge (R ∘L V.reflectionOperator - U.reflectionOperator ∘L R) ≤
+      I.gauge (R ∘L (V.reflection : E →L[𝕜] E) - (U.reflection : E →L[𝕜] E) ∘L R) ≤
         I.gauge R + I.gauge R := by
     have ht := I.triangle hrightMem hnegMem
     rw [hnegGauge] at ht
-    have hrw : R ∘L V.reflectionOperator + -(U.reflectionOperator ∘L R) =
-        R ∘L V.reflectionOperator - U.reflectionOperator ∘L R := by
+    have hrw : R ∘L (V.reflection : E →L[𝕜] E) + -((U.reflection : E →L[𝕜] E) ∘L R) =
+        R ∘L (V.reflection : E →L[𝕜] E) - (U.reflection : E →L[𝕜] E) ∘L R := by
       rw [sub_eq_add_neg]
     rw [hrw] at ht
     linarith

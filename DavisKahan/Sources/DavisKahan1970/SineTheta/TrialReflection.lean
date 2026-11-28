@@ -334,8 +334,8 @@ theorem reflectionDefect_trialOffDiagonalPart :
 /-- The reflection through the trial subspace preserves the domain. -/
 theorem reflectionOperator_mem_domain
     (hVdom : ∀ v : V, (v : H) ∈ A.domain) (x : A.domain) :
-    V.reflectionOperator (x : H) ∈ A.domain := by
-  rw [Submodule.reflectionOperator_apply]
+    (V.reflection : H →L[𝕜] H) (x : H) ∈ A.domain := by
+  rw [Submodule.reflection_apply_smul]
   exact A.domain.sub_mem (A.domain.smul_mem _ (starProjection_mem_domain hVdom _))
     x.property
 
@@ -350,56 +350,56 @@ theorem trialReflection_intertwines
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     (x : A.domain) :
     (((-2 : 𝕜) • trialOffDiagonalPart V M R).toLinearMap +ᵥ A)
-        ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ =
-      V.reflectionOperator (A x) := by
+        ⟨(V.reflection : H →L[𝕜] H) (x : H), reflectionOperator_mem_domain hVdom x⟩ =
+      (V.reflection : H →L[𝕜] H) (A x) := by
   -- the reflected vector, as a domain element
   have hsplit :
-      (⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ :
+      (⟨(V.reflection : H →L[𝕜] H) (x : H), reflectionOperator_mem_domain hVdom x⟩ :
           A.domain) =
         (2 : 𝕜) • (⟨V.starProjection (x : H),
           starProjection_mem_domain hVdom (x : H)⟩ : A.domain) - x := by
     apply Subtype.ext
-    simp [Submodule.reflectionOperator_apply V (x : H)]
+    simp [Submodule.reflection_apply_smul V (x : H)]
   have hadd : (((-2 : 𝕜) • trialOffDiagonalPart V M R).toLinearMap +ᵥ A)
-        ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ =
+        ⟨(V.reflection : H →L[𝕜] H) (x : H), reflectionOperator_mem_domain hVdom x⟩ =
       A
-          ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ +
-        ((-2 : 𝕜) • trialOffDiagonalPart V M R) (V.reflectionOperator (x : H)) :=
+          ⟨(V.reflection : H →L[𝕜] H) (x : H), reflectionOperator_mem_domain hVdom x⟩ +
+        ((-2 : 𝕜) • trialOffDiagonalPart V M R) ((V.reflection : H →L[𝕜] H) (x : H)) :=
     add_comm _ _
   have h1 : A
-        ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ =
+        ⟨(V.reflection : H →L[𝕜] H) (x : H), reflectionOperator_mem_domain hVdom x⟩ =
       (2 : 𝕜) • trialCompression V M R (x : H) - A x := by
     rw [hsplit, LinearPMap.map_sub, LinearPMap.map_smul,
       apply_starProjection_eq_trialCompression hVdom hres (x : H)]
-  have h2 : V.reflectionOperator (A x) =
+  have h2 : (V.reflection : H →L[𝕜] H) (A x) =
       (2 : 𝕜) • (trialCompression V M R).adjoint (x : H) - A x := by
-    rw [Submodule.reflectionOperator_apply,
+    rw [Submodule.reflection_apply_smul,
       starProjection_apply_eq_trialCompression_adjoint hA hVdom hres x]
-  have hPrefl : V.starProjection (V.reflectionOperator (x : H)) =
+  have hPrefl : V.starProjection ((V.reflection : H →L[𝕜] H) (x : H)) =
       V.starProjection (x : H) := by
-    rw [Submodule.reflectionOperator_apply, map_sub, map_smul, proj_proj V]
+    rw [Submodule.reflection_apply_smul, map_sub, map_smul, proj_proj V]
     module
-  have hQrefl : Vᗮ.starProjection (V.reflectionOperator (x : H)) =
+  have hQrefl : Vᗮ.starProjection ((V.reflection : H →L[𝕜] H) (x : H)) =
       -Vᗮ.starProjection (x : H) := by
-    rw [Submodule.reflectionOperator_apply, map_sub, map_smul, projPerp_proj V]
+    rw [Submodule.reflection_apply_smul, map_sub, map_smul, projPerp_proj V]
     module
-  have hXrefl : trialOffDiagonalBlock V M R (V.reflectionOperator (x : H)) =
+  have hXrefl : trialOffDiagonalBlock V M R ((V.reflection : H →L[𝕜] H) (x : H)) =
       trialOffDiagonalBlock V M R (x : H) := by
     rw [trialOffDiagonalBlock_apply, hPrefl, ← trialOffDiagonalBlock_apply]
   have hXadjrefl :
-      (trialOffDiagonalBlock V M R).adjoint (V.reflectionOperator (x : H)) =
+      (trialOffDiagonalBlock V M R).adjoint ((V.reflection : H →L[𝕜] H) (x : H)) =
         -(trialOffDiagonalBlock V M R).adjoint (x : H) := by
     rw [trialOffDiagonalBlock_adjoint_apply, hQrefl, map_neg, map_neg,
       ← trialOffDiagonalBlock_adjoint_apply]
-  have hdefect : trialOffDiagonalPart V M R (V.reflectionOperator (x : H)) =
+  have hdefect : trialOffDiagonalPart V M R ((V.reflection : H →L[𝕜] H) (x : H)) =
       trialCompression V M R (x : H) -
         (trialCompression V M R).adjoint (x : H) := by
-    show trialOffDiagonalBlock V M R (V.reflectionOperator (x : H)) +
-      (trialOffDiagonalBlock V M R).adjoint (V.reflectionOperator (x : H)) = _
+    show trialOffDiagonalBlock V M R ((V.reflection : H →L[𝕜] H) (x : H)) +
+      (trialOffDiagonalBlock V M R).adjoint ((V.reflection : H →L[𝕜] H) (x : H)) = _
     rw [hXrefl, hXadjrefl, ← sub_eq_add_neg,
       trialOffDiagonalBlock_sub_adjoint_apply hA hVdom hres (x : H)]
   have h3 : ((-2 : 𝕜) • trialOffDiagonalPart V M R)
-        (V.reflectionOperator (x : H)) =
+        ((V.reflection : H →L[𝕜] H) (x : H)) =
       (2 : 𝕜) • (trialCompression V M R).adjoint (x : H) -
         (2 : 𝕜) • trialCompression V M R (x : H) := by
     rw [smul_apply, hdefect]

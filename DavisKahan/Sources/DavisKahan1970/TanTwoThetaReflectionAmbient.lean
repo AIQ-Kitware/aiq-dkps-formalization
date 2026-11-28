@@ -200,13 +200,13 @@ reflection through `U` times the signed doubled cosine.  Squaring therefore
 removes the harmless reflection factor. -/
 theorem diagonalPart_reflection_eq_reflection_mul_signedCosTwo
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    U.diagBlock V.reflectionOperator = U.reflectionOperator * signedCosTwo U V := by
+    U.diagBlock (V.reflection : E →L[ℂ] E) = (U.reflection : E →L[ℂ] E) * signedCosTwo U V := by
   unfold signedCosTwo
   rw [Submodule.diagBlock_def,
-    Submodule.reflectionOperator_eq_two_smul_sub_id U,
-    Submodule.reflectionOperator_eq_two_smul_sub_id V]
+    Submodule.coe_reflection U,
+    Submodule.coe_reflection V]
   simp only [two_smul, Submodule.starProjection_orthogonal', comp_eq_mul_reflection]
-  rw [projectorDifference, ← ContinuousLinearMap.one_def]
+  rw [projectorDifference]
   have hp := starProjection_idem_reflection U
   have hq := starProjection_idem_reflection V
   simp only [two_mul, mul_add, add_mul, mul_sub, sub_mul, one_mul, mul_one,
@@ -423,7 +423,7 @@ private theorem bounded_reflection_equation_on_U
     (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hcommZ : Z ∘L (A + H) = (A + H) ∘L Z)
     (hNL : N * L = U.offDiagBlock Z)
-    (hdiag : U.diagBlock Z = U.reflectionOperator * N)
+    (hdiag : U.diagBlock Z = (U.reflection : E →L[ℂ] E) * N)
     (hNU : ∀ x ∈ U, N x ∈ U)
     (hNUperp : ∀ x ∈ Uᗮ, N x ∈ Uᗮ)
     (x : E) (hx : x ∈ U) :
@@ -472,16 +472,16 @@ private theorem bounded_reflection_equation_on_U
   have hCx : C x = N x := by
     have h := congrArg (fun T : E →L[ℂ] E => T x) hdiag
     simp only [mul_apply_eq_comp] at h
-    have hreflect : U.reflectionOperator (N x) = N x := by
-      rw [Submodule.reflectionOperator_apply,
+    have hreflect : (U.reflection : E →L[ℂ] E) (N x) = N x := by
+      rw [Submodule.reflection_apply_smul,
         Submodule.starProjection_eq_self_iff.mpr (hNU x hx)]
       module
     exact h.trans hreflect
   have hCHx : C (H x) = -N (H x) := by
     have h := congrArg (fun T : E →L[ℂ] E => T (H x)) hdiag
     simp only [mul_apply_eq_comp] at h
-    have hreflect : U.reflectionOperator (N (H x)) = -N (H x) := by
-      rw [Submodule.reflectionOperator_apply,
+    have hreflect : (U.reflection : E →L[ℂ] E) (N (H x)) = -N (H x) := by
+      rw [Submodule.reflection_apply_smul,
         (U.starProjection_apply_eq_zero_iff).mpr (hNUperp (H x) hHxU)]
       module
     exact h.trans hreflect
@@ -659,9 +659,8 @@ private theorem reflection_block_data
     have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
     have hAHsa := hA.add hH
     have hAHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAHsa
-    have hVred : Submodule.IsReducing V (A + H) :=
-      (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAHsym _).mpr hAplusH_V
-    have hcommZ := Submodule.reflectionOperator_comm_of_reduces (A + H) V hVred
+    have hcommZ := (LinearMap.IsSymmetric.commute_reflection (U := V) (A := A + H)
+      hAHsym hAplusH_V).eq
     -- Reduce the projected reflection identity to the explicit `N * L` blocks.
     have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero hcos
     have hp := starProjection_idem_reflection U
@@ -758,18 +757,18 @@ private theorem reflection_block_data
               U.starProjection * projectorDifference U V *
                 (1 - U.starProjection)) * signedCosTwo U V := by
       rw [mul_add, add_mul, hXlower, hXupper]
-    have hoff : U.offDiagBlock V.reflectionOperator =
+    have hoff : U.offDiagBlock (V.reflection : E →L[ℂ] E) =
         2 * ((1 - U.starProjection) * projectorDifference U V * U.starProjection +
           U.starProjection * projectorDifference U V *
             (1 - U.starProjection)) := by
       rw [Submodule.offDiagBlock_eq_sub_diagBlock, Submodule.diagBlock_def,
-        Submodule.reflectionOperator_eq_two_smul_sub_id V]
+        Submodule.coe_reflection V]
       simp only [two_smul, Submodule.starProjection_orthogonal', comp_eq_mul_reflection]
-      rw [hQ, ← ContinuousLinearMap.one_def]
+      rw [hQ]
       noncomm_ring [hp]
-    have hNL : N * L = U.offDiagBlock V.reflectionOperator := by
+    have hNL : N * L = U.offDiagBlock (V.reflection : E →L[ℂ] E) := by
       change signedCosTwo U V * tanTwoBlockRepresentative U V =
-        U.offDiagBlock V.reflectionOperator
+        U.offDiagBlock (V.reflection : E →L[ℂ] E)
       rw [tanTwoBlockRepresentative_eq hinv, hoff]
       calc
         signedCosTwo U V *
@@ -798,8 +797,8 @@ private theorem reflection_block_data
                     U.starProjection +
                   U.starProjection * projectorDifference U V *
                     (1 - U.starProjection)) := by rw [hNR, mul_one]
-    have hdiag : U.diagBlock V.reflectionOperator =
-        U.reflectionOperator * N := by
+    have hdiag : U.diagBlock (V.reflection : E →L[ℂ] E) =
+        (U.reflection : E →L[ℂ] E) * N := by
       simpa only [N] using
         (diagonalPart_reflection_eq_reflection_mul_signedCosTwo (U := U) (V := V))
     have hEq := bounded_reflection_equation_on_U hA hAU hHU hHUperp
@@ -870,23 +869,20 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
       change A (x : E) ∈ Uᗮ
       exact hAUperp _ hx
   have hBodd : TauCeti.IsOddFor U H := ⟨hHU, hHUperp⟩
-  let Z : E →L[ℂ] E := V.reflectionOperator
+  let Z : E →L[ℂ] E := (V.reflection : E →L[ℂ] E)
   have hZsa : IsSelfAdjoint Z := by
-    simpa only [Z] using isSelfAdjoint_reflectionOperator V
-  have hZ2 : Z * Z = 1 := by
-    dsimp [Z]
-    rw [ContinuousLinearMap.mul_def, Submodule.reflectionOperator_involutive,
-      ← ContinuousLinearMap.one_def]
+    simpa only [Z] using Submodule.isSelfAdjoint_reflection V
+  have hZ2 : Z * Z = 1 :=
+    V.reflection_mul_self
   have hZdom : TauCeti.LinearPMap.MapsDomainTo Ap Ap Z := by
     intro x
     exact Submodule.mem_top
   have hAHsa : IsSelfAdjoint (A + H) := hA.add hH
   have hAHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAHsa
-  have hVred : Submodule.IsReducing V (A + H) :=
-    (LinearMap.IsSymmetric.isReducing_iff_mem_invtSubmodule hAHsym _).mpr hAplusH_V
-  have hcomm : V.reflectionOperator ∘L (A + H) =
-      (A + H) ∘L V.reflectionOperator :=
-    Submodule.reflectionOperator_comm_of_reduces (A + H) V hVred
+  have hcomm : (V.reflection : E →L[ℂ] E) ∘L (A + H) =
+      (A + H) ∘L (V.reflection : E →L[ℂ] E) :=
+    (LinearMap.IsSymmetric.commute_reflection (U := V) (A := A + H)
+      hAHsym hAplusH_V).eq
   have hZcomm : ∀ x : Ap.domain,
       Ap ⟨Z (x : E), hZdom x⟩ + H (Z (x : E)) =
         Z (Ap x) + Z (H (x : E)) := by
@@ -943,27 +939,26 @@ private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
     rw [hrewrite]
     exact ⟨Units.oneSub _ hSS, rfl⟩
   let N : E →L[ℂ] E := signedCosTwo U V
-  have hdiag : U.diagBlock Z = U.reflectionOperator * N := by
+  have hdiag : U.diagBlock Z = (U.reflection : E →L[ℂ] E) * N := by
     simpa only [Z, N] using
       (diagonalPart_reflection_eq_reflection_mul_signedCosTwo (U := U) (V := V))
   have hNP : N * U.starProjection = U.starProjection * N := by
     simpa only [N] using signedCosTwo_comm_starProjection (U := U) (V := V)
-  have hJN : U.reflectionOperator * N = N * U.reflectionOperator := by
-    rw [Submodule.reflectionOperator_eq_two_smul_sub_id U]
+  have hJN : (U.reflection : E →L[ℂ] E) * N = N * (U.reflection : E →L[ℂ] E) := by
+    rw [Submodule.coe_reflection U]
     simp only [two_smul]
     noncomm_ring [hNP]
-  have hJ2 : U.reflectionOperator * U.reflectionOperator = 1 := by
-    rw [ContinuousLinearMap.mul_def, Submodule.reflectionOperator_involutive,
-      ← ContinuousLinearMap.one_def]
+  have hJ2 : (U.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E) = 1 :=
+    U.reflection_mul_self
   have hdiagSq : U.diagBlock Z * U.diagBlock Z = N * N := by
     rw [hdiag]
     calc
-      (U.reflectionOperator * N) * (U.reflectionOperator * N) =
-          U.reflectionOperator * (N * U.reflectionOperator) * N := by
+      ((U.reflection : E →L[ℂ] E) * N) * ((U.reflection : E →L[ℂ] E) * N) =
+          (U.reflection : E →L[ℂ] E) * (N * (U.reflection : E →L[ℂ] E)) * N := by
             simp only [mul_assoc]
-      _ = U.reflectionOperator * (U.reflectionOperator * N) * N := by
+      _ = (U.reflection : E →L[ℂ] E) * ((U.reflection : E →L[ℂ] E) * N) * N := by
             rw [← hJN]
-      _ = (U.reflectionOperator * U.reflectionOperator) * N * N := by
+      _ = ((U.reflection : E →L[ℂ] E) * (U.reflection : E →L[ℂ] E)) * N * N := by
             simp only [mul_assoc]
       _ = N * N := by
             rw [hJ2, one_mul]

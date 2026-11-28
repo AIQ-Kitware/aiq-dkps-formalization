@@ -82,7 +82,7 @@ theorem reflected_centered_form_lower_pmap
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
     (x : A.domain) :
     (b - a) / 2 * ‖(x : E)‖ ^ 2 ≤
-      RCLike.re ⟪U.reflectionOperator
+      RCLike.re ⟪(U.reflection : E →L[ℂ] E)
         (A x - (((a + b) / 2 : ℝ) : ℂ) • (x : E)), (x : E)⟫_ℂ := by
   set c : ℂ := (((a + b) / 2 : ℝ) : ℂ) with hcdef
   have hpm : U.starProjection (x : E) ∈ A.domain :=
@@ -105,13 +105,13 @@ theorem reflected_centered_form_lower_pmap
       = (A p - c • (p : E)) + (A m - c • (m : E)) := by
     rw [← hAsum, ← hsum]
     module
-  have hJu : U.reflectionOperator (A p - c • (p : E)) = A p - c • (p : E) :=
-    Submodule.reflectionOperator_apply_of_mem U hu
-  have hJv : U.reflectionOperator (A m - c • (m : E)) = -(A m - c • (m : E)) := by
-    rw [Submodule.reflectionOperator_apply,
+  have hJu : (U.reflection : E →L[ℂ] E) (A p - c • (p : E)) = A p - c • (p : E) :=
+    Submodule.reflection_mem_subspace_eq_self hu
+  have hJv : (U.reflection : E →L[ℂ] E) (A m - c • (m : E)) = -(A m - c • (m : E)) := by
+    rw [Submodule.reflection_apply_smul,
       (Submodule.starProjection_apply_eq_zero_iff U).mpr hv]
     module
-  have hrefl : U.reflectionOperator (A x - c • (x : E))
+  have hrefl : (U.reflection : E →L[ℂ] E) (A x - c • (x : E))
       = (A p - c • (p : E)) - (A m - c • (m : E)) := by
     rw [hsplit, map_add, hJu, hJv]
     module
@@ -181,7 +181,7 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     exact le_trans (hUperpLow x hx)
       (mul_le_mul_of_nonneg_right hεa (sq_nonneg ‖(x : E)‖))
   have hkey : ∀ x : A.domain, ε * ‖(x : E)‖ ^ 2 ≤
-      RCLike.re ⟪U.reflectionOperator
+      RCLike.re ⟪(U.reflection : E →L[ℂ] E)
         (A x - ((lam : ℝ) : ℂ) • (x : E)), (x : E)⟫_ℂ := by
     intro x
     have h := reflected_centered_form_lower_pmap A U hred
@@ -195,7 +195,7 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     isSelfAdjoint_perturb_bounded hA hH
   have hcoer : ∀ x : (Hop.toLinearMap +ᵥ A).domain,
       ε * ‖(x : E)‖ ^ 2 ≤
-        (⟪U.reflectionOperator ((Hop.toLinearMap +ᵥ A) x -
+        (⟪(U.reflection : E →L[ℂ] E) ((Hop.toLinearMap +ᵥ A) x -
           ((lam : ℝ) : ℂ) • (x : E)), (x : E)⟫_ℂ).re := by
     intro x
     have hx : ((x : E)) ∈ A.domain := x.2
@@ -207,7 +207,7 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
       rw [hap]
       abel
     rw [hsplit, map_add, inner_add_left]
-    have h0 : RCLike.re ⟪(U.reflectionOperator ∘L Hop) (x : E), (x : E)⟫_ℂ = 0 :=
+    have h0 : RCLike.re ⟪((U.reflection : E →L[ℂ] E) ∘L Hop) (x : E), (x : E)⟫_ℂ = 0 :=
       hskew (x : E)
     simp only [ContinuousLinearMap.comp_apply] at h0
     have hgoal := hkey ⟨(x : E), hx⟩
@@ -215,7 +215,7 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     simp only [Complex.add_re]
     linarith [hgoal, h0]
   have hres := TauCeti.LinearPMap.mem_resolventSet_of_coercive_comp hAH
-    (J := U.reflectionOperator) (Submodule.reflectionOperator_norm_map U) hε hcoer
+    (J := (U.reflection : E →L[ℂ] E)) (U.reflection.norm_map) hε hcoer
 
   exact fun hspec => (_root_.LinearPMap.mem_spectrum_iff _ _).1 hspec hres
 

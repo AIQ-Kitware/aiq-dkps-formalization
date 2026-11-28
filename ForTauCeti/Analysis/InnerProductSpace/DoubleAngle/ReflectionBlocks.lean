@@ -151,18 +151,12 @@ section Involution
 
 variable {U}
 
-/-- The reflection through `U`, as a unit of the operator ring. -/
-private theorem reflectionOperator_mul_self :
-    U.reflectionOperator * U.reflectionOperator = 1 := by
-  rw [ContinuousLinearMap.mul_def, Submodule.reflectionOperator_involutive,
-    ← ContinuousLinearMap.one_def]
-
 /-- Conjugating an involution by the reflection gives an involution. -/
 private theorem reflectionConjugate_mul_self {Z : E →L[𝕜] E} (hZ : Z * Z = 1) :
-    (U.reflectionOperator ∘L Z ∘L U.reflectionOperator) *
-      (U.reflectionOperator ∘L Z ∘L U.reflectionOperator) = 1 := by
-  set J : E →L[𝕜] E := U.reflectionOperator with hJdef
-  have hJJ : J * J = 1 := reflectionOperator_mul_self
+    ((U.reflection : E →L[𝕜] E) ∘L Z ∘L (U.reflection : E →L[𝕜] E)) *
+      ((U.reflection : E →L[𝕜] E) ∘L Z ∘L (U.reflection : E →L[𝕜] E)) = 1 := by
+  set J : E →L[𝕜] E := (U.reflection : E →L[𝕜] E) with hJdef
+  have hJJ : J * J = 1 := U.reflection_mul_self
   have hcomp : J ∘L Z ∘L J = J * (Z * J) := by
     rw [ContinuousLinearMap.mul_def, ContinuousLinearMap.mul_def]
   rw [hcomp]
@@ -178,16 +172,13 @@ theorem diagonalPart_sq_add_offDiagonalPart_sq {Z : E →L[𝕜] E} (hZ : Z * Z 
     U.diagBlock Z * U.diagBlock Z +
       U.offDiagBlock Z * U.offDiagBlock Z = 1 := by
   set W : E →L[𝕜] E :=
-    U.reflectionOperator ∘L Z ∘L U.reflectionOperator with hWdef
-  have hR : U.reflectionOperator = (U.reflection : E →L[𝕜] E) := by
-    ext x
-    exact Submodule.reflectionOperator_apply_eq_reflection U x
+    (U.reflection : E →L[𝕜] E) ∘L Z ∘L (U.reflection : E →L[𝕜] E) with hWdef
   have hWW : W * W = 1 := reflectionConjugate_mul_self hZ
   have hD : (2 : 𝕜) • U.diagBlock Z = Z + W :=
-    by simpa [hR, hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
+    by simpa [hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
       (Submodule.two_smul_diagBlock U Z)
   have hS : (2 : 𝕜) • U.offDiagBlock Z = Z - W :=
-    by simpa [hR, hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
+    by simpa [hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
       (Submodule.two_smul_offDiagBlock U Z)
   have hkey : (4 : 𝕜) • (U.diagBlock Z * U.diagBlock Z +
       U.offDiagBlock Z * U.offDiagBlock Z) = (4 : 𝕜) • (1 : E →L[𝕜] E) := by
@@ -213,16 +204,13 @@ theorem diagonalPart_mul_offDiagonalPart_add_offDiagonalPart_mul_diagonalPart
     U.diagBlock Z * U.offDiagBlock Z +
       U.offDiagBlock Z * U.diagBlock Z = 0 := by
   set W : E →L[𝕜] E :=
-    U.reflectionOperator ∘L Z ∘L U.reflectionOperator with hWdef
-  have hR : U.reflectionOperator = (U.reflection : E →L[𝕜] E) := by
-    ext x
-    exact Submodule.reflectionOperator_apply_eq_reflection U x
+    (U.reflection : E →L[𝕜] E) ∘L Z ∘L (U.reflection : E →L[𝕜] E) with hWdef
   have hWW : W * W = 1 := reflectionConjugate_mul_self hZ
   have hD : (2 : 𝕜) • U.diagBlock Z = Z + W :=
-    by simpa [hR, hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
+    by simpa [hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
       (Submodule.two_smul_diagBlock U Z)
   have hS : (2 : 𝕜) • U.offDiagBlock Z = Z - W :=
-    by simpa [hR, hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
+    by simpa [hWdef, ← Nat.cast_smul_eq_nsmul 𝕜] using
       (Submodule.two_smul_offDiagBlock U Z)
   have hkey : (4 : 𝕜) • (U.diagBlock Z * U.offDiagBlock Z +
       U.offDiagBlock Z * U.diagBlock Z) = (4 : 𝕜) • (0 : E →L[𝕜] E) := by

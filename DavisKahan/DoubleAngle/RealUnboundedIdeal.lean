@@ -212,11 +212,11 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
     (hgap : FormBoundedSylvesterGap
       (realSelfAdjointSpectralRestriction A hA S hS)
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : E →L[ℝ] E) (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : E), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : E →L[ℝ] E) (x : E), hJdom x⟩ =
+        (V.reflection : E →L[ℝ] E) (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS) V) ∧
@@ -229,7 +229,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
   set Uc := realSelfAdjointSpectralSubspace A hA Sᶜ hS.compl with hUc
   set A₀ := realSelfAdjointSpectralRestriction A hA S hS with hA₀def
   set Λ := realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl with hΛdef
-  set J : E →L[ℝ] E := V.reflectionOperator with hJ
+  set J : E →L[ℝ] E := (V.reflection : E →L[ℝ] E) with hJ
   set X : U →L[ℝ] E := U.subtypeL with hX
   set F₁ : Uc →L[ℝ] E := J ∘L Uc.subtypeL with hF₁
   -- domain and intertwining data for the exact block
@@ -276,7 +276,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
       rfl
     have hadj : F₁.adjoint = Uc.subtypeL.adjoint ∘L J := by
       rw [hF₁, ContinuousLinearMap.adjoint_comp, hJ,
-        adjoint_reflectionOperator V]
+        (V.isSelfAdjoint_reflection).adjoint_eq]
     have hsymm : V.reflection.symm = V.reflection := V.reflection_symm
     change J (Uc.subtypeL (F₁.adjoint x)) = _
     rw [hadj]
@@ -286,7 +286,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
     change J (Uc.starProjection (J x)) =
       V.reflection (Uc.starProjection (V.reflection.symm x))
     rw [hsymm]
-    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
+    simp only [hJ, LinearIsometryEquiv.coe_coe'']
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N U
     (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)) F₁ hF₁iso hFproj hraw.1
@@ -299,12 +299,12 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
       exact congrArg (fun z : Uc => (z : E))
         (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self v)
     have hJJ : (J ∘L J : E →L[ℝ] E) = ContinuousLinearMap.id ℝ E :=
-      Submodule.reflectionOperator_involutive V
+      V.reflection_mul_self
     calc F₁.adjoint ∘L F₁
         = (Uc.subtypeL.adjoint ∘L J.adjoint) ∘L (J ∘L Uc.subtypeL) := by
           rw [hF₁, ContinuousLinearMap.adjoint_comp]
       _ = Uc.subtypeL.adjoint ∘L (J ∘L J) ∘L Uc.subtypeL := by
-          rw [hJ, adjoint_reflectionOperator V]
+          rw [hJ, (V.isSelfAdjoint_reflection).adjoint_eq]
           rfl
       _ = Uc.subtypeL.adjoint ∘L Uc.subtypeL := by
           rw [hJJ, ContinuousLinearMap.id_comp]
@@ -366,11 +366,11 @@ theorem sinTwoTheta_reflectionResidual_gauge_real
     (hgap : FormBoundedSylvesterGap
       (realSelfAdjointSpectralRestriction A hA S hS)
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : E →L[ℝ] E) (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : E), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : E →L[ℝ] E) (x : E), hJdom x⟩ =
+        (V.reflection : E →L[ℝ] E) (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS) V) ∧
@@ -411,11 +411,11 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
     (hgap : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction A U hred)
       (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
-    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
+    (hJdom : ∀ x : A.domain, (V.reflection : E →L[ℝ] E) (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (R.toLinearMap +ᵥ A)
-          ⟨V.reflectionOperator (x : E), hJdom x⟩ =
-        V.reflectionOperator (A x))
+          ⟨(V.reflection : E →L[ℝ] E) (x : E), hJdom x⟩ =
+        (V.reflection : E →L[ℝ] E) (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock U V) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock U V) ≤
@@ -424,7 +424,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
   set Uc := (Uᗮ : Submodule ℝ E) with hUc
   set A₀ := TauCeti.LinearPMap.reducingRestriction A U hred with hA₀def
   set Λ := TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal with hΛdef
-  set J : E →L[ℝ] E := V.reflectionOperator with hJ
+  set J : E →L[ℝ] E := (V.reflection : E →L[ℝ] E) with hJ
   set X : U →L[ℝ] E := U.subtypeL with hX
   set F₁ : Uc →L[ℝ] E := J ∘L Uc.subtypeL with hF₁
   -- domain and intertwining data for the exact block
@@ -476,7 +476,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
       rfl
     have hadj : F₁.adjoint = Uc.subtypeL.adjoint ∘L J := by
       rw [hF₁, ContinuousLinearMap.adjoint_comp, hJ,
-        adjoint_reflectionOperator V]
+        (V.isSelfAdjoint_reflection).adjoint_eq]
     have hsymm : V.reflection.symm = V.reflection := V.reflection_symm
     change J (Uc.subtypeL (F₁.adjoint x)) = _
     rw [hadj]
@@ -486,7 +486,7 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
     change J (Uc.starProjection (J x)) =
       V.reflection (Uc.starProjection (V.reflection.symm x))
     rw [hsymm]
-    simp only [hJ, Submodule.reflectionOperator_apply_eq_reflection]
+    simp only [hJ, LinearIsometryEquiv.coe_coe'']
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N U
     (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)) F₁ hF₁iso hFproj hraw.1
@@ -499,12 +499,12 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_real
       exact congrArg (fun z : Uc => (z : E))
         (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self v)
     have hJJ : (J ∘L J : E →L[ℝ] E) = ContinuousLinearMap.id ℝ E :=
-      Submodule.reflectionOperator_involutive V
+      V.reflection_mul_self
     calc F₁.adjoint ∘L F₁
         = (Uc.subtypeL.adjoint ∘L J.adjoint) ∘L (J ∘L Uc.subtypeL) := by
           rw [hF₁, ContinuousLinearMap.adjoint_comp]
       _ = Uc.subtypeL.adjoint ∘L (J ∘L J) ∘L Uc.subtypeL := by
-          rw [hJ, adjoint_reflectionOperator V]
+          rw [hJ, (V.isSelfAdjoint_reflection).adjoint_eq]
           rfl
       _ = Uc.subtypeL.adjoint ∘L Uc.subtypeL := by
           rw [hJJ, ContinuousLinearMap.id_comp]
@@ -575,13 +575,13 @@ variable (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
 of the self-adjoint operator. -/
 theorem realSpectralReflection_mem_domain
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
-    (realSelfAdjointSpectralSubspace A hA S hS).reflectionOperator (x : E) ∈
+    ((realSelfAdjointSpectralSubspace A hA S hS).reflection : E →L[ℝ] E) (x : E) ∈
       A.domain := by
   have hP : (realSelfAdjointSpectralSubspace A hA S hS).starProjection (x : E)
       ∈ A.domain := by
     rw [← realSelfAdjointSpectralProjection_eq_starProjection A hA S hS]
     exact realSelfAdjointSpectralProjection_mem_domain A hA hS x
-  rw [Submodule.reflectionOperator_apply]
+  rw [Submodule.reflection_apply_smul]
   exact A.domain.sub_mem (A.domain.smul_mem (2 : ℝ) hP) x.property
 
 /-- Reflection through a genuine real spectral range commutes with the
@@ -589,9 +589,9 @@ self-adjoint operator on its domain. -/
 theorem realSelfAdjoint_apply_spectralReflection
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
     A
-        ⟨(realSelfAdjointSpectralSubspace A hA S hS).reflectionOperator (x : E),
+        ⟨((realSelfAdjointSpectralSubspace A hA S hS).reflection : E →L[ℝ] E) (x : E),
           realSpectralReflection_mem_domain A hA S hS x⟩ =
-      (realSelfAdjointSpectralSubspace A hA S hS).reflectionOperator
+      ((realSelfAdjointSpectralSubspace A hA S hS).reflection : E →L[ℝ] E)
         (A x) := by
   set U := realSelfAdjointSpectralSubspace A hA S hS with hUdef
   have hproj : realSelfAdjointSpectralProjection A hA S hS = U.starProjection :=
@@ -601,10 +601,10 @@ theorem realSelfAdjoint_apply_spectralReflection
     exact realSelfAdjointSpectralProjection_mem_domain A hA hS x
   let px : A.domain := ⟨U.starProjection (x : E), hP⟩
   have hreflect :
-      (⟨U.reflectionOperator (x : E),
+      (⟨(U.reflection : E →L[ℝ] E) (x : E),
         realSpectralReflection_mem_domain A hA S hS x⟩ : A.domain) =
         (2 : ℝ) • px - x :=
-    Subtype.ext (Submodule.reflectionOperator_apply U (x : E))
+    Subtype.ext (Submodule.reflection_apply_smul U (x : E))
   let qx : A.domain :=
     ⟨realSelfAdjointSpectralProjection A hA S hS (x : E),
       realSelfAdjointSpectralProjection_mem_domain A hA hS x⟩
@@ -621,7 +621,7 @@ theorem realSelfAdjoint_apply_spectralReflection
         realSelfAdjoint_apply_spectralProjection A hA hS x
       _ = U.starProjection (A x) := by rw [hproj]
   rw [hreflect, LinearPMap.map_sub, LinearPMap.map_smul,
-    Submodule.reflectionOperator_apply, hPcomm]
+    Submodule.reflection_apply_smul, hPcomm]
 
 variable (Eop : E →L[ℝ] E) (hEop : Eop.IsSymmetric)
 
@@ -631,7 +631,7 @@ operators have the same domain. -/
 theorem realPerturbedSpectralReflection_mem_domain
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
     (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
-      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS).reflectionOperator
+      (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS).reflection
         (x : E) ∈ A.domain := by
   let C := (Eop.toLinearMap +ᵥ A)
   let hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)
@@ -647,16 +647,17 @@ theorem real_add_reflectionPerturbation_intertwines
         (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
           (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS) Eop).toLinearMap +ᵥ A)
         ⟨(realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
-            (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS).reflectionOperator
+            (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop))
+              S hS).reflection
               (x : E),
           realPerturbedSpectralReflection_mem_domain A hA Eop hEop S hS x⟩ =
       (realSelfAdjointSpectralSubspace (Eop.toLinearMap +ᵥ A)
-        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS).reflectionOperator
+        (isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop)) S hS).reflection
           (A x) := by
   set C := (Eop.toLinearMap +ᵥ A) with hCdef
   set hC : IsSelfAdjoint C := isSelfAdjoint_perturb_bounded hA (isSelfAdjoint_iff_isSymmetric.mpr hEop) with hCsa
   set V := realSelfAdjointSpectralSubspace C hC S hS with hVdef
-  set J : E →L[ℝ] E := V.reflectionOperator with hJdef
+  set J : E →L[ℝ] E := (V.reflection : E →L[ℝ] E) with hJdef
   set D : E →L[ℝ] E := reflectionPerturbation V Eop with hDdef
   have hJdomA : J (x : E) ∈ A.domain :=
     realPerturbedSpectralReflection_mem_domain A hA Eop hEop S hS x
@@ -673,10 +674,10 @@ theorem real_add_reflectionPerturbation_intertwines
       _ = J (C xc) := hcommC
       _ = J (A x + Eop (x : E)) := congrArg J (add_comm _ _)
   have hJJ : J (J (x : E)) = (x : E) := by
-    simpa only [J, Submodule.reflectionOperator_apply_eq_reflection] using
+    simpa only [J, LinearIsometryEquiv.coe_coe''] using
       V.reflection_reflection (x : E)
   have hreflection (y : E) : V.reflection y = J y :=
-    (Submodule.reflectionOperator_apply_eq_reflection V y).symm
+    rfl
   have hDapply : D (J (x : E)) = Eop (J (x : E)) - J (Eop (x : E)) := by
     calc
       D (J (x : E)) =

@@ -189,10 +189,10 @@ perturbed operator or to Davis--Kahan. -/
 theorem reflection_commutes_of_reducesSubspace
     {T : H →ₗ.[𝕜] H} {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
     (h : _root_.LinearPMap.IsReducing T V) :
-    ∃ hmaps : TauCeti.LinearPMap.MapsDomainTo T T (V.reflectionOperator),
+    ∃ hmaps : TauCeti.LinearPMap.MapsDomainTo T T ((V.reflection : H →L[𝕜] H)),
       ∀ x : T.domain,
-        T ⟨V.reflectionOperator ((x : H)), hmaps x⟩
-          = V.reflectionOperator (T x) := by
+        T ⟨(V.reflection : H →L[𝕜] H) ((x : H)), hmaps x⟩
+          = (V.reflection : H →L[𝕜] H) (T x) := by
   have hzeroV : ∀ z : H, z ∈ Vᗮ → V.starProjection z = 0 := by
     intro z hz
     have hs := Submodule.starProjection_orthogonal_apply (U := V) z
@@ -202,13 +202,13 @@ theorem reflection_commutes_of_reducesSubspace
     intro z hz
     rw [Submodule.starProjection_orthogonal_apply,
       Submodule.starProjection_eq_self_iff.mpr hz, sub_self]
-  have hrefl : ∀ y : H, V.reflectionOperator y
+  have hrefl : ∀ y : H, (V.reflection : H →L[𝕜] H) y
       = V.starProjection y - Vᗮ.starProjection y := by
     intro y
     rw [Submodule.starProjection_orthogonal_apply,
-      Submodule.reflectionOperator_apply, two_smul]
+      Submodule.reflection_apply_smul, two_smul]
     abel
-  have hmaps : TauCeti.LinearPMap.MapsDomainTo T T (V.reflectionOperator) := by
+  have hmaps : TauCeti.LinearPMap.MapsDomainTo T T ((V.reflection : H →L[𝕜] H)) := by
     intro x
     rw [hrefl]
     exact T.domain.sub_mem (h.starProjection_mem_domain x.property)
@@ -225,7 +225,7 @@ theorem reflection_commutes_of_reducesSubspace
     rw [Submodule.starProjection_orthogonal_apply]
     abel
   have hsplit :
-      (⟨V.reflectionOperator ((x : H)), hmaps x⟩ : T.domain)
+      (⟨(V.reflection : H →L[𝕜] H) ((x : H)), hmaps x⟩ : T.domain)
           = (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain)
             - ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ := by
     apply Subtype.ext
@@ -253,19 +253,19 @@ theorem reflection_commutes_of_reducesSubspace
 
 /-- **The reflection in `V` intertwines the perturbed operator.**
 
-The domain-aware statement that `V.reflectionOperator` maps `A`'s domain into
+The domain-aware statement that `(V.reflection : H →L[𝕜] H)` maps `A`'s domain into
 itself and that reflecting commutes with `A + B` on that domain.  Self-adjointness
 and involutivity of the reflection are *not* fields: they hold for every
 subspace. -/
 structure ReflectionIntertwines (A : H →ₗ.[𝕜] H) (B : H →L[𝕜] H)
     (V : Submodule 𝕜 H) [V.HasOrthogonalProjection] where
   /-- The reflection preserves the domain of `A`. -/
-  mapsDomain : TauCeti.LinearPMap.MapsDomainTo A A (V.reflectionOperator)
+  mapsDomain : TauCeti.LinearPMap.MapsDomainTo A A ((V.reflection : H →L[𝕜] H))
   /-- Reflecting commutes with the perturbed operator on the domain. -/
   commutes : ∀ x : A.domain,
-    A ⟨V.reflectionOperator (x : H), mapsDomain x⟩ +
-        B (V.reflectionOperator (x : H))
-      = V.reflectionOperator (A x) + V.reflectionOperator (B (x : H))
+    A ⟨(V.reflection : H →L[𝕜] H) (x : H), mapsDomain x⟩ +
+        B ((V.reflection : H →L[𝕜] H) (x : H))
+      = (V.reflection : H →L[𝕜] H) (A x) + (V.reflection : H →L[𝕜] H) (B (x : H))
 
 namespace ReflectionIntertwines
 
