@@ -116,16 +116,13 @@ theorem projectedResidual_norm_le
         ContinuousLinearMap.hilbertSchmidtNorm
           (P.data.residual.adjoint ∘L P.data.F₁) := by
       simp [projectedResidual]
-    _ = ContinuousLinearMap.hilbertSchmidtNorm
-          (ContinuousLinearMap.id ℂ F ∘L P.data.residual.adjoint ∘L
-            P.data.F₁) := by simp
-    _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint := by
+    _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint * ‖P.data.F₁‖ := by
       obtain ⟨_, b, -⟩ := exists_hilbertBasis ℂ E
-      exact ContinuousLinearMap.hilbertSchmidtNorm_comp_isometries_le
-        (ContinuousLinearMap.id ℂ F) b
-        (by simpa only [approximationNumberEnergy_eq_basisEnergy b P.data.residual.adjoint,
-          hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hRadj)
-        P.data.F₁ ContinuousLinearMap.norm_id_le hF₁
+      apply ContinuousLinearMap.hilbertSchmidtNorm_comp_le_right _ _ b
+      simpa only [approximationNumberEnergy_eq_basisEnergy b P.data.residual.adjoint,
+        hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hRadj
+    _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint :=
+      mul_le_of_le_one_right (ContinuousLinearMap.hilbertSchmidtNorm_nonneg _) hF₁
     _ = ContinuousLinearMap.hilbertSchmidtNorm P.data.residual :=
       ContinuousLinearMap.hilbertSchmidtNorm_adjoint P.data.residual
 
@@ -411,16 +408,13 @@ theorem result
       ContinuousLinearMap.hilbertSchmidtNorm P.projectedResidual =
           ContinuousLinearMap.hilbertSchmidtNorm (P.data.residual.adjoint ∘L P.data.F₁) := by
         simp [projectedResidual]
-      _ = ContinuousLinearMap.hilbertSchmidtNorm
-            (ContinuousLinearMap.id ℝ F ∘L P.data.residual.adjoint ∘L
-              P.data.F₁) := by simp
-      _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint := by
+      _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint * ‖P.data.F₁‖ := by
         obtain ⟨_, b, -⟩ := exists_hilbertBasis ℝ E
-        exact ContinuousLinearMap.hilbertSchmidtNorm_comp_isometries_le
-          (ContinuousLinearMap.id ℝ F) b
-          (by simpa only [approximationNumberEnergy_eq_basisEnergy b P.data.residual.adjoint,
-            hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hRadj)
-          P.data.F₁ ContinuousLinearMap.norm_id_le hF₁
+        apply ContinuousLinearMap.hilbertSchmidtNorm_comp_le_right _ _ b
+        simpa only [approximationNumberEnergy_eq_basisEnergy b P.data.residual.adjoint,
+          hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hRadj
+      _ ≤ ContinuousLinearMap.hilbertSchmidtNorm P.data.residual.adjoint :=
+        mul_le_of_le_one_right (ContinuousLinearMap.hilbertSchmidtNorm_nonneg _) hF₁
       _ = ContinuousLinearMap.hilbertSchmidtNorm P.data.residual :=
         ContinuousLinearMap.hilbertSchmidtNorm_adjoint P.data.residual
   have hS : approximationNumberEnergy S.operator ≠ ⊤ :=

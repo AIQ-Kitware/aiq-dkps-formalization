@@ -14,8 +14,8 @@ public import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
 The accepted Hilbert–Schmidt family owns the extended gauge, finite-gauge
 submodule, and completeness. No separate norm or membership predicate is defined here.
 
-The remaining results are a pointwise-on-a-basis Fatou bound for the energy,
-negation invariance of the real norm, and a contraction estimate for that norm.
+The remaining results are a pointwise-on-a-basis Fatou bound for the energy
+and negation invariance of the real norm.
 
 ## Provenance
 
@@ -30,13 +30,11 @@ open scoped ENNReal NNReal
 
 namespace ContinuousLinearMap
 
-variable {𝕜 E F G H ι : Type*} [RCLike 𝕜]
+variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
-omit [CompleteSpace E] [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- Pointwise convergence on a Hilbert basis bounds the limit's energy by the liminf. -/
 theorem hilbertSchmidtEnergy_le_liminf {ι : Type*} (b : HilbertBasis ι 𝕜 E)
     {u : Filter ℕ} [u.NeBot]
@@ -58,24 +56,10 @@ theorem hilbertSchmidtEnergy_le_liminf {ι : Type*} (b : HilbertBasis ι 𝕜 E)
           rw [hilbertSchmidtEnergy_def]; exact sum_le_tsum s)
 
 
-omit [CompleteSpace F] in
 /-- Negation leaves the canonical real Hilbert–Schmidt norm unchanged. -/
 @[simp] theorem hilbertSchmidtNorm_neg (T : E →L[𝕜] F) :
     (-T).hilbertSchmidtNorm = T.hilbertSchmidtNorm := by
   simpa only [neg_one_smul, norm_neg, norm_one, one_mul] using
     hilbertSchmidtNorm_smul (-1 : 𝕜) T
-
-omit [CompleteSpace F] [CompleteSpace G] in
-/-- Contractive factors do not enlarge the Hilbert–Schmidt norm of a finite-energy map. -/
-theorem hilbertSchmidtNorm_comp_isometries_le (L : F →L[𝕜] G) {T : E →L[𝕜] F}
-    (b : HilbertBasis ι 𝕜 E) (hT : T.hilbertSchmidtEnergy b ≠ ∞)
-    (R : H →L[𝕜] E) (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
-    (L ∘L T ∘L R).hilbertSchmidtNorm ≤ T.hilbertSchmidtNorm := by
-  calc
-    _ ≤ ‖L‖ * T.hilbertSchmidtNorm * ‖R‖ :=
-      hilbertSchmidtNorm_comp_comp_le L T R b hT
-    _ ≤ 1 * T.hilbertSchmidtNorm * 1 := by
-      gcongr <;> simp only [one_mul, T.hilbertSchmidtNorm_nonneg]
-    _ = T.hilbertSchmidtNorm := by ring
 
 end ContinuousLinearMap

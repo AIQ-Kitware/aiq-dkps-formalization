@@ -734,7 +734,7 @@
         },
         {
           "source_clause": "No local polar-factor smallness premise appears.",
-          "lean_clause": "The local TauCeti near-isometry branch plus YWS Procrustes alignment handles all regimes, so hpolar is absent.",
+          "lean_clause": "TauCeti's sharp unitary polar bound applies for every Gram defect and supplies the alignment directly.",
           "relation": "lean_weaker_hypothesis",
           "note": "This strengthens the theorem and improves paper fidelity."
         },

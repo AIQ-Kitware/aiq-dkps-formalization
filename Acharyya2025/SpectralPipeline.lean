@@ -24,8 +24,8 @@ are **no longer stages of this pipeline** and this list used to say they were.
 The capstone routes its eigenvector perturbation through the Yu--Wang--Samworth
 population-gap residual bound, which carries no `ε ≤ α/2` smallness condition,
 and its polar alignment through
-`TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_apply_le` (`δ < 1`) with
-a Procrustes fallback, not through the `δ ≤ 1/2` form `PolarFactor` wraps.
+TauCeti's `LinearMap.exists_linearIsometryEquiv_comp_operatorAbs_eq_and_norm_apply_sub_le`
+for every Gram defect `δ`.
 Those three modules have no consumers.
 
 This file retains the world-map definitions

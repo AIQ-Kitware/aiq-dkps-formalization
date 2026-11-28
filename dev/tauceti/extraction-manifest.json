@@ -1504,13 +1504,11 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "Acharyya2025.PolarFactor",
-        "Acharyya2025.ConfigPerturbation",
-        "Challenge.NearIsometry.Leaderboard",
-        "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry"
+        "Challenge.NearIsometry.Leaderboard"
       ],
       "status": "partially-upstreamed",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16127",
-      "migration_note": "2026-11-01: The original eigenbasis/diagonal polar near-isometry proof, including its 15 proof-only private helper declarations, was replaced by a short use of accepted LinearMap.exists_linearIsometryEquiv_comp_operatorAbs_eq and LinearMap.norm_operatorAbs_apply_sub_le, plus isSymmetric_operatorAbs and operatorAbs_sq. This retains the same historical statement TauCeti.LinearMap.exists_linearIsometryEquiv_comp_polarFactor and the four other public statements as downstream paper/challenge-facing formulations. The witness S is now precisely M.operatorAbs. Accepted #16127 at TauCeti commit 2b69ec4d36 was independently implemented according to PR author notes, NOT copied/adapted from DKPS. The original source was ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean at Davis--Kahan fc38eb4, retained in DKPS donor e4637c3919ae; Kitware copyright and original AI co-authorship remain attributed. The local declarations still serve paper-specific spellings and a historical weaker-constant challenge theorem; the reusable foundation is now consumed upstream, not reproved locally."
+      "migration_note": "2026-11-01: The original coordinate proof and 15 private helpers retired in favor of native modulus and polar laws. 2026-11-28: The local positive-factor existential and the two sharp pointwise bounds retire. LinearMap.exists_linearIsometryEquiv_comp_operatorAbs_eq supplies the native polar factorization, and LinearMap.exists_linearIsometryEquiv_comp_operatorAbs_eq_and_norm_apply_sub_le supplies a single isometry with the sharp delta bound for arbitrary Gram defects, including singular maps. Acharyya2025.ConfigPerturbation uses the latter directly and drops its large-defect fallback. The two finite real factor-two statements continue to serve Acharyya's source lemma and the original challenge signatures, including the zero-dimensional case. Accepted #16127 (2b69ec4d366e7d65e006370c54e65109a08a02b9) explicitly reports independent proof development. Original source: ForMathlib/Analysis/InnerProductSpace/NearIsometry.lean at Davis--Kahan fc38eb4 and ForTauCeti/Analysis/InnerProductSpace/NearIsometry.lean at DKPS e4637c3919ae. Acharyya configuration theorem source: a2efbaefa462c06a339fd2ac678c663e1ff66f90:Acharyya2025/ConfigPerturbation.lean."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.OrthogonalSeries",
@@ -1707,8 +1705,8 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "partially-upstreamed",
-      "upstream_pr": "#15340, #16582, #13988",
-      "migration_note": "November 1: retired duplicate cosPrincipalAngles and sinThetaSq definitions and their nonnegativity/bounds/order/symmetry/card-minus-overlap proofs, cosPrincipalAngles_eq, familyIsometry_mem_span, singularValues_comp_adjoint_familyIsometry, overlapOp_coord, familyIsometry_adjoint_coord, starProjection_span_range_eq_comp and singularValues_starProjection_comp_starProjection. Native cosine and squared-sine definitions support arbitrary finite index types; Fin d sums translate through Fintype.card_fin and Fin.sum_univ_eq_sum_range. Native #15340 fe7e204a9aa8c36b52c6605c774166bc590b4498 replaces the basic engine independently. Native #16582 0df7c1368e4d208845ec50de86ccac8e042e31ca replaces the cosine dictionary and rank-one proof, including isometric/coisometric padding. Paper callers apply Orthonormal.principalCosines_eq_cosPrincipalAngles and Submodule.principalCosines_span_singleton directly after native projection equations. #13988 6e9359613bce697ea5483673e3d46e96f4a6c881 supplies the range API replacing membership helpers. Retains Fin-indexed block enumeration, projector-distance/angle-norm consequences, selected-polar alignment, and equal-rank sine-spectrum arguments; no claim they have all been subsumed by this slice. Historical source e4637c3919ae under donor path, original introduction 34319dc; Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0. Explicitly adapted native cross-block Frobenius results are separate lineage from independent #15340. Subsequent November 1 slice: removed singularValues_orthogonal_familyIsometry_comm, singularValues_orthogonal_starProjection_comp_starProjection_comm and their private complementary-Gram/polar-conjugation/padding helpers. Native Submodule.principalSines_comm (#14677, 7fd5323416c03413b1fbc4c956b7bd7552b4d82c) now supplies the same equal-rank RCLike symmetry directly. Retains only Fin-block enumeration/cross-block presentation, selected-polar alignment and the smallest-cosine/largest-angle norm bridge; there is no local sine-symmetry engine."
+      "upstream_pr": "#15340, #16582, #13988, #16089",
+      "migration_note": "November 1: retired duplicate cosPrincipalAngles and sinThetaSq definitions and their nonnegativity/bounds/order/symmetry/card-minus-overlap proofs, cosPrincipalAngles_eq, familyIsometry_mem_span, singularValues_comp_adjoint_familyIsometry, overlapOp_coord, familyIsometry_adjoint_coord, starProjection_span_range_eq_comp and singularValues_starProjection_comp_starProjection. Native cosine and squared-sine definitions support arbitrary finite index types; Fin d sums translate through Fintype.card_fin and Fin.sum_univ_eq_sum_range. Native #15340 fe7e204a9aa8c36b52c6605c774166bc590b4498 replaces the basic engine independently. Native #16582 0df7c1368e4d208845ec50de86ccac8e042e31ca replaces the cosine dictionary and rank-one proof, including isometric/coisometric padding. Paper callers apply Orthonormal.principalCosines_eq_cosPrincipalAngles and Submodule.principalCosines_span_singleton directly after native projection equations. #13988 6e9359613bce697ea5483673e3d46e96f4a6c881 supplies the range API replacing membership helpers. Retains Fin-indexed block enumeration, projector-distance/angle-norm consequences, selected-polar alignment, and equal-rank sine-spectrum arguments; no claim they have all been subsumed by this slice. Historical source e4637c3919ae under donor path, original introduction 34319dc; Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0. Explicitly adapted native cross-block Frobenius results are separate lineage from independent #15340. Subsequent November 1 slice: removed singularValues_orthogonal_familyIsometry_comm, singularValues_orthogonal_starProjection_comp_starProjection_comm and their private complementary-Gram/polar-conjugation/padding helpers. Native Submodule.principalSines_comm (#14677, 7fd5323416c03413b1fbc4c956b7bd7552b4d82c) now supplies the same equal-rank RCLike symmetry directly. 2026-11-28: retire blockFamily, orthonormal_blockFamily, range_blockFamily, sinThetaSq_blockFamily_eq_sum_cross and the unused sum_norm_sub_starProjection_sq_eq_two_mul_sinThetaSq from original DKPS donor 1fbd3918f440ca8c672873217e3dec1993539f17. Acharyya cross-energy symmetry uses TauCeti.sinThetaSq_comp_subtypeVal_comp_subtypeVal_eq_sum_compl_norm_inner_sq and sinThetaSq_comm directly. The native sinThetaSq_comp_subtypeVal_eq_sum_compl_norm_inner_sq also accepts any second orthonormal family on the first coordinate subtype, including another coordinate selection after reindexing. Accepted #16089 at f1031b9e4fc722623197777fbb84d58909c46d35 explicitly distinguishes the independent family sine laws from DKPS #13864. Retain the arbitrary-two-basis projector-distance identity in Projection.Geometry, selected-polar alignment and the smallest-cosine/largest-angle norm bridge."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry",
@@ -2819,7 +2817,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
-      "provenance_class": "authored in place 2026-07-28: the Hilbert-Schmidt norm and the resulting TauCeti.SymmetricOperatorIdealFamily, the second instance of that structure after the Ky Fan families",
+      "provenance_class": "Kitware, Apache-2.0, Jon Crall and Claude Opus 5. The original DKPS Hilbert-Schmidt family was authored in place 2026-07-28. The local contraction wrapper is anchored at 2dc5d8197314237a357fe16ef5b98f2a036c9da4.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt"
@@ -2827,8 +2825,8 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "staged-partial",
-      "upstream_pr": null,
-      "migration_note": "2026-10-25: removed the parallel extended norm, chosen-basis helpers, IsHilbertSchmidt predicate, closure/gauge laws and norm-reading adapters. All norm consumers use OperatorIdealFamily.hilbertSchmidt.gauge, and source finiteness proofs use the canonical energy. Only pointwise-basis Fatou, real-norm negation and the contraction-norm consequence remain. Fatou no longer assumes completeness; the contraction consequence takes native energy finiteness."
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/3687",
+      "migration_note": "2026-10-25: removed the parallel extended norm, chosen-basis helpers, IsHilbertSchmidt predicate, closure and gauge laws, and norm-reading adapters. 2026-11-28: retire the local two-sided contraction wrapper. Both Theorem 6.2 projected residuals use ContinuousLinearMap.hilbertSchmidtNorm_comp_le_right in TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Basic, followed by the bound of one on the right factor. The native theorem takes finite energy on a Hilbert basis of the middle space and works for real or complex complete Hilbert spaces of independent dimensions. Kim Morrison's Forgejo #3687 integration a769a112e152bdaa9b74db962bc84427ab356646 derives the bound from native Hilbert-Schmidt energy laws for the AmenableTracesOnCStarAlgebras roadmap. DKPS proof descent is unverified. Retain basis-pointwise Fatou without a completeness assumption and real-norm negation."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
@@ -5143,12 +5141,13 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
+      "provenance_class": "Original DKPS finite sine-theta donor, moved at a48c0e0c2a51a26b9426c84856496ebc33fad793. Claude Opus 4.8, Kitware, Apache-2.0.",
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
+        "TauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
+        "TauCeti.Analysis.InnerProductSpace.InvariantSubspace",
         "Mathlib"
       ],
       "blocked_dependencies": [],
@@ -5156,8 +5155,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16545",
+      "migration_note": "2026-11-28: Retire starProjection_comp_toContinuousLinearMap_comm. All callers use the reverse of LinearMap.IsSymmetric.starProjection_apply_comm from #16545 (a2a2c9a9ba5c5d4e8a8dbb9ad641f17058b29206), which covers the original arbitrary RCLike, possibly incomplete ambient and invariant subspace admitting an orthogonal projection. The native PR credits Davis--Kahan and Bhatia and states that no formalization was vendored. The finite norm and residual results are retained here."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/SinTheta/Perturbation.lean",

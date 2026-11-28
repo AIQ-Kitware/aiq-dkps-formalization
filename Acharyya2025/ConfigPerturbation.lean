@@ -18,18 +18,16 @@ The proof is coordinatewise and reuses the spectral toolkit built in this
 session:
 
 * `Acharyya2025.Weyl` (Weyl perturbation and eigenbasis Parseval),
-* `YuWangSamworth2015.Core.Residual` and `.Procrustes` (population-gap
-  cross-energy and global Procrustes alignment),
+* `YuWangSamworth2015.Core.Residual` (population-gap cross energy),
 * `Acharyya2025.Overlap` (overlap matrix `Q`, commutator identity,
   `QᵀQ − I` deviation bound),
-* `ForTauCeti.Analysis.InnerProductSpace.NearIsometry` for the local alignment
-  branch.
+* `TauCeti.Analysis.InnerProductSpace.Polar.Unitary` for the alignment.
 
 The three-term decomposition `ψ̂W − ψ = Term1 + Term2 + Term3` is:
 
 * `Term1 = (W − M) ψ̂` where `M := toEuclideanLin Qᵀ` is the near-isometry whose
-  Gram deviation `QᵀQ − I` is small; local alignment uses the sharp TauCeti
-  near-isometry theorem and the complementary regime uses YWS Procrustes;
+  Gram deviation is `QᵀQ − I`. The native polar factorization bounds the
+  distance from `M` to the isometry by the Gram defect.
 * `Term2 = M ψ̂ − (the QΛ^{1/2}-rescaled vector)` — the commutator term, each
   entry `Q_{kl}(√λ̂_k − √λ_l)` controlled by the Sylvester identity;
 * `Term3` — the population reconstruction defect `√λ_l(Σ_k Q_{kl} v_k − u_l)`,
@@ -49,9 +47,9 @@ public import Mathlib
 public import Acharyya2024.Common
 public import Acharyya2025.Weyl
 public import Acharyya2025.Overlap
-public import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
+public import TauCeti.Analysis.InnerProductSpace.Orthonormal.Overlap
+public import TauCeti.Analysis.InnerProductSpace.Polar.Unitary
 public import YuWangSamworth2015.Core.Residual
-public import YuWangSamworth2015.Core.Procrustes
 
 public section
 
@@ -233,8 +231,7 @@ private theorem crossSamp_yws_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsS
   simpa [mul_comm] using hyws
 
 /-- The two directed cross energies of equal-dimensional blocks agree. -/
-private theorem crossPop_eq_crossSamp (hd : d ≤ n)
-    (hT : T.IsSymmetric) (hS : S.IsSymmetric) :
+private theorem crossPop_eq_crossSamp (hT : T.IsSymmetric) (hS : S.IsSymmetric) :
     (∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < d),
       ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
         (⟪hT.eigenvectorBasis hn_eq i, hS.eigenvectorBasis hn_eq j⟫_ℝ)^2) =
@@ -242,9 +239,6 @@ private theorem crossPop_eq_crossSamp (hd : d ≤ n)
       ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
         (⟪hS.eigenvectorBasis hn_eq i, hT.eigenvectorBasis hn_eq j⟫_ℝ)^2 := by
   let s : Finset (Fin n) := Finset.univ.filter (fun i : Fin n => (i : ℕ) < d)
-  have hscard : s.card = d := by
-    dsimp [s]
-    exact leading_filter_card (n := n) (d := d) hd
   have hscompl : sᶜ = Finset.univ.filter (fun i : Fin n => d ≤ (i : ℕ)) := by
     dsimp [s]
     exact leading_filter_compl (n := n) (d := d)
@@ -261,21 +255,12 @@ private theorem crossPop_eq_crossSamp (hd : d ≤ n)
           refine Finset.sum_congr rfl (fun j _ => ?_)
           rw [real_inner_comm]
           simp [Real.norm_eq_abs, sq_abs]
-    _ = TauCeti.sinThetaSq
-          (TauCeti.orthonormal_blockFamily (hS.eigenvectorBasis hn_eq) s hscard)
-          (TauCeti.orthonormal_blockFamily (hT.eigenvectorBasis hn_eq) s hscard) :=
-        (TauCeti.sinThetaSq_blockFamily_eq_sum_cross
-          (hS.eigenvectorBasis hn_eq) (hT.eigenvectorBasis hn_eq) hscard hscard).symm
-    _ = TauCeti.sinThetaSq
-          (TauCeti.orthonormal_blockFamily (hT.eigenvectorBasis hn_eq) s hscard)
-          (TauCeti.orthonormal_blockFamily (hS.eigenvectorBasis hn_eq) s hscard) :=
-        TauCeti.sinThetaSq_comm
-          (TauCeti.orthonormal_blockFamily (hS.eigenvectorBasis hn_eq) s hscard)
-          (TauCeti.orthonormal_blockFamily (hT.eigenvectorBasis hn_eq) s hscard)
     _ = ∑ i ∈ s, ∑ j ∈ sᶜ,
-          ‖⟪hT.eigenvectorBasis hn_eq j, hS.eigenvectorBasis hn_eq i⟫_ℝ‖^2 :=
-        TauCeti.sinThetaSq_blockFamily_eq_sum_cross
-          (hT.eigenvectorBasis hn_eq) (hS.eigenvectorBasis hn_eq) hscard hscard
+          ‖⟪hT.eigenvectorBasis hn_eq j, hS.eigenvectorBasis hn_eq i⟫_ℝ‖^2 := by
+        rw [← TauCeti.sinThetaSq_comp_subtypeVal_comp_subtypeVal_eq_sum_compl_norm_inner_sq
+          (hS.eigenvectorBasis hn_eq) (hT.eigenvectorBasis hn_eq) s,
+          TauCeti.sinThetaSq_comm,
+          TauCeti.sinThetaSq_comp_subtypeVal_comp_subtypeVal_eq_sum_compl_norm_inner_sq]
     _ = ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < d),
           ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
             (⟪hS.eigenvectorBasis hn_eq i, hT.eigenvectorBasis hn_eq j⟫_ℝ)^2 := by
@@ -298,7 +283,7 @@ private theorem crossPop_yws_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSy
       ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
         (⟪hT.eigenvectorBasis hn_eq i, hS.eigenvectorBasis hn_eq j⟫_ℝ)^2
       ≤ 4 * (d : ℝ) * ε^2 / α^2 := by
-  rw [crossPop_eq_crossSamp hd hT hS]
+  rw [crossPop_eq_crossSamp hT hS]
   exact crossSamp_yws_le hd hT hS hα_pos hα htail hε
 
 /-- **Rank-floor Davis--Kahan for the Acharyya configuration, with no smallness
@@ -1330,12 +1315,6 @@ theorem exists_isometry_configFrobError_spectralConfig_le
         ≤ configFrobBound d α Λ ε  := by
   set δ : ℝ := (d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2) with hδ
   have hδ0 : 0 ≤ δ := by rw [hδ]; positivity
-  -- The near-isometry `M` and its Gram-deviation bound feed the local branch.
-  -- For `δ < 1`, the sharp TauCeti polar estimate gives an isometry within `δ`.
-  -- For `δ ≥ 1`, YWS supplies a global Procrustes alignment; since both the
-  -- overlap map and the alignment are contractions/isometries, their distance
-  -- is at most `2 ≤ 2δ`.  This removes the former `δ ≤ 1/2` hypothesis while
-  -- preserving the existing `2δ` Term-1 envelope.
   set M := nearIsometry hT hS hd with hM
   have hclose : ∀ x : EuclideanSpace ℝ (Fin d),
       |⟪M x, M x⟫_ℝ - ⟪x, x⟫_ℝ| ≤ δ * ⟪x, x⟫_ℝ := by
@@ -1346,69 +1325,15 @@ theorem exists_isometry_configFrobError_spectralConfig_le
       ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
         (∀ x y, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ) ∧
         (∀ x, ‖(M - W) x‖ ≤ 2 * δ * ‖x‖) := by
-    by_cases hδlt : δ < 1
-    · obtain ⟨W, hWsharp⟩ :=
-        TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_apply_le M hδlt hclose
-      refine ⟨W.toLinearEquiv.toLinearMap,
-        fun x y => W.inner_map_map x y, fun x => ?_⟩
-      rw [LinearMap.sub_apply]
-      have hprod : 0 ≤ δ * ‖x‖ := mul_nonneg hδ0 (norm_nonneg x)
-      exact (hWsharp x).trans (by nlinarith)
-    · have hδge : 1 ≤ δ := le_of_not_gt hδlt
-      let e : Fin d ↪ Fin n := Fin.castLEEmb hd
-      have hu := LinearMap.IsSymmetric.isOrderedEigenframe_eigenvectorBasis hT hn_eq e
-      have hv := LinearMap.IsSymmetric.isOrderedEigenframe_eigenvectorBasis hS hn_eq e
-      have hu_orthonormal := (LinearMap.IsSymmetric.isOrderedEigenframe_iff.mp hu).orthonormal
-      have hv_orthonormal := (LinearMap.IsSymmetric.isOrderedEigenframe_iff.mp hv).orthonormal
-      have hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
-          α ≤ |hT.eigenvalues hn_eq (e i) - hT.eigenvalues hn_eq k| := by
-        intro i k hk
-        have hkge : d ≤ (k : ℕ) := by
-          by_contra hkd
-          apply hk
-          refine ⟨⟨(k : ℕ), Nat.lt_of_not_ge hkd⟩, ?_⟩
-          apply Fin.ext
-          rfl
-        have hlead : α ≤ hT.eigenvalues hn_eq (e i) := by
-          apply hα
-          simp [e]
-        have hlead0 : 0 ≤ hT.eigenvalues hn_eq (e i) :=
-          le_trans (le_of_lt hα_pos) hlead
-        rw [htail k hkge, sub_zero, abs_of_nonneg hlead0]
-        exact hlead
-      obtain ⟨W, hWiso, _hWalign⟩ :=
-        YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le
-          hu hv hα_pos hgap
-      have hM_overlap :
-          M = TauCeti.overlapOperator ℝ
-            (fun i => hT.eigenvectorBasis hn_eq (e i))
-            (fun i => hS.eigenvectorBasis hn_eq (e i)) := by
-        apply LinearMap.ext
-        intro x
-        ext l
-        rw [hM, nearIsometry_apply, TauCeti.overlapOperator_apply]
-        refine Finset.sum_congr rfl (fun k _ => ?_)
-        simp only [Acharyya2025.Overlap.overlap]
-        rw [real_inner_comm]
-        simp [e, mul_comm]
-      refine ⟨W, hWiso, fun x => ?_⟩
-      have hMnorm : ‖M x‖ ≤ ‖x‖ := by
-        rw [hM_overlap]
-        exact TauCeti.norm_overlapOperator_apply_le hu_orthonormal hv_orthonormal x
-      have hWnorm : ‖W x‖ = ‖x‖ := by
-        have hsq : ‖W x‖ ^ 2 = ‖x‖ ^ 2 := by
-          rw [← real_inner_self_eq_norm_sq, ← real_inner_self_eq_norm_sq,
-            hWiso x x]
-        nlinarith [norm_nonneg (W x), norm_nonneg x]
-      rw [LinearMap.sub_apply]
-      calc
-        ‖M x - W x‖ ≤ ‖M x‖ + ‖W x‖ := norm_sub_le _ _
-        _ ≤ ‖x‖ + ‖x‖ := add_le_add hMnorm (le_of_eq hWnorm)
-        _ = 2 * ‖x‖ := by ring
-        _ ≤ 2 * δ * ‖x‖ := by
-          have hprod : 0 ≤ (δ - 1) * ‖x‖ :=
-            mul_nonneg (sub_nonneg.mpr hδge) (norm_nonneg x)
-          nlinarith
+    have hnorm (x : EuclideanSpace ℝ (Fin d)) :
+        |‖M x‖ ^ 2 - ‖x‖ ^ 2| ≤ δ * ‖x‖ ^ 2 := by
+      simpa only [real_inner_self_eq_norm_sq] using hclose x
+    obtain ⟨W, _, hWsharp⟩ :=
+      M.exists_linearIsometryEquiv_comp_operatorAbs_eq_and_norm_apply_sub_le rfl hnorm
+    refine ⟨W.toLinearEquiv.toLinearMap, fun x y => W.inner_map_map x y, fun x => ?_⟩
+    rw [LinearMap.sub_apply]
+    have hprod := mul_nonneg hδ0 (norm_nonneg x)
+    exact (hWsharp x).trans (by nlinarith)
   refine ⟨W, hWiso, ?_⟩
   -- The total error and the three terms as product-space vectors.
   set etot : EuclideanSpace ℝ (Fin n × Fin d) :=

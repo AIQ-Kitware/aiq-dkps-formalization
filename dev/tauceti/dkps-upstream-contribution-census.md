@@ -1,5 +1,50 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 polar alignment, Hilbert–Schmidt restriction, and projections
+
+The Acharyya configuration perturbation proof now uses
+`LinearMap.exists_linearIsometryEquiv_comp_operatorAbs_eq_and_norm_apply_sub_le`
+for its alignment. The theorem handles every Gram defect, including singular
+maps, so the separate large-defect Procrustes argument and three local
+near-isometry statements retire. The two historical factor-two statements keep
+their finite real paper and challenge scope, including zero dimensions. Their
+linear-map proof uses the same sharp native bound. The independent development
+disclosure and original DKPS source are recorded in the November 1 entry.
+[#16127 integration](https://github.com/TauCetiProject/TauCeti/commit/2b69ec4d366e7d65e006370c54e65109a08a02b9)
+
+The real and complex Theorem 6.2 projected residual bounds now use
+`ContinuousLinearMap.hilbertSchmidtNorm_comp_le_right`. It applies in
+arbitrary complete Hilbert dimensions with finite energy on the middle
+space. The local two-sided contraction wrapper retires. The donor keeps
+pointwise Fatou for a Hilbert basis of an incomplete domain and real-norm
+negation. Kim Morrison added the one-sided bounds for the
+AmenableTracesOnCStarAlgebras roadmap in Forgejo #3687, deriving them
+from the native energy inequalities. DKPS proof descent is unverified.
+[Forgejo #3687 integration](https://github.com/TauCetiProject/TauCeti/commit/a769a112e152bdaa9b74db962bc84427ab356646)
+
+The Acharyya cross-energy symmetry proof now uses the coordinate-subtype
+eigenblock sine formula and family symmetry from #16089. The local
+`Fin d` block enumeration, cross-sum proof, and unused squared-sine
+presentation of projector distance retire. The formula for any second
+orthonormal family over the first block covers different coordinate
+selections after reindexing. The arbitrary-two-basis projector-distance
+identity in `Projection.Geometry` remains a separate result. #16089
+explicitly reports independent implementation from DKPS #13864.
+[#16089 integration](https://github.com/TauCetiProject/TauCeti/commit/f1031b9e4fc722623197777fbb84d58909c46d35)
+
+Finite sine-theta localization now uses
+`LinearMap.IsSymmetric.starProjection_apply_comm` from #16545. The
+native result has the same incomplete-ambient scope for a subspace
+admitting an orthogonal projection, with the equality reversed. The
+local split-vector commutation proof retires. The integration cites
+Davis–Kahan and Bhatia and reports no vendored formalization.
+[#16545 integration](https://github.com/TauCetiProject/TauCeti/commit/a2a2c9a9ba5c5d4e8a8dbb9ad641f17058b29206)
+
+The focused build (19,697 jobs), default build (22,812 jobs), and
+Challenge with the semantic-surface audit (22,522 jobs) passed without
+warnings at TauCeti `007b3a1150`. All 1,569 source-census references
+resolved and all 20 available comparator signatures matched.
+
 ## November 28 ideal moduli, diagonal angle data, and nuclear trace
 
 The rectangular modulus gauge and membership proofs now use

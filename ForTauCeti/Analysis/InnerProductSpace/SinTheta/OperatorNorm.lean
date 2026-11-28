@@ -16,6 +16,7 @@ Built on Tau Ceti's Sylvester bound without any dimension factor.
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Block
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.InnerProductSpace.DoubleAngle.Vector
 public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 import Mathlib.Analysis.InnerProductSpace.Semisimple
@@ -42,8 +43,6 @@ self-adjointness of the projections.
 
 ## Main results
 
-* `TauCeti.starProjection_comp_toContinuousLinearMap_comm`: an invariant
-  subspace's projection commutes with a symmetric operator.
 * `TauCeti.norm_starProjection_comp_starProjection_le`: the operator-norm
   sin-Θ bound `‖Q̂ ∘L P‖ ≤ ε / g`.
 
@@ -77,25 +76,6 @@ open Module (finrank)
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E] [CompleteSpace E]
-
-omit [FiniteDimensional 𝕜 E] [CompleteSpace E] in
-/-- **A symmetric operator commutes with the projection onto an invariant
-subspace.**  If `T` is symmetric and `U` is `T`-invariant (hence `Uᗮ` is too),
-then `T (P x) = P (T x)` for `P = U.starProjection`. -/
-theorem starProjection_comp_toContinuousLinearMap_comm {T : E →ₗ[𝕜] E}
-    (hT : T.IsSymmetric) {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hUinv : ∀ x ∈ U, T x ∈ U) (x : E) :
-    T (U.starProjection x) = U.starProjection (T x) := by
-  have hpx : U.starProjection x ∈ U := U.starProjection_apply_mem x
-  have hrest : x - U.starProjection x ∈ Uᗮ := U.sub_starProjection_mem_orthogonal x
-  have hTpx : T (U.starProjection x) ∈ U := hUinv _ hpx
-  have hTrest : T (x - U.starProjection x) ∈ Uᗮ :=
-    LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hT (p := U) hUinv hrest
-  have hsplit : T x = T (U.starProjection x) + T (x - U.starProjection x) := by
-    rw [← map_add]; congr 1; abel
-  have hzero : U.starProjection (T (x - U.starProjection x)) = 0 :=
-    Submodule.eq_starProjection_of_mem_orthogonal (Submodule.zero_mem U) (by simpa using hTrest)
-  rw [hsplit, map_add, U.starProjection_eq_self_iff.mpr hTpx, hzero, add_zero]
 
 variable {T S : E →ₗ[𝕜] E}
 
@@ -143,11 +123,11 @@ theorem exists_isSymmetric_comp_sub_comp_eq (hT : T.IsSymmetric) (hS : S.IsSymme
   have hcommT : Tc ∘L P = P ∘L Tc := by
     ext x
     simp only [ContinuousLinearMap.comp_apply]
-    exact starProjection_comp_toContinuousLinearMap_comm hT hUinv x
+    exact (hT.starProjection_apply_comm hUinv x).symm
   have hcommS : Sc ∘L Q = Q ∘L Sc := by
     ext x
     simp only [ContinuousLinearMap.comp_apply]
-    exact starProjection_comp_toContinuousLinearMap_comm hS hVinv x
+    exact (hS.starProjection_apply_comm hVinv x).symm
   -- `A`, `B` symmetric.
   have hone : IsSelfAdjoint (1 : E →L[𝕜] E) := IsSelfAdjoint.one _
   have hAsa : IsSelfAdjoint A := by
@@ -200,7 +180,7 @@ theorem exists_isSymmetric_comp_sub_comp_eq (hT : T.IsSymmetric) (hS : S.IsSymme
       rw [map_sub, V.starProjection_eq_self_iff.mpr hQxV, sub_self]
     have hQSQ : Q (S (Q x)) = S (Q x) := V.starProjection_eq_self_iff.mpr (hVinv _ hQxV)
     have hTP : T (P (Q x)) = P (T (Q x)) :=
-      starProjection_comp_toContinuousLinearMap_comm hT hUinv (Q x)
+      (hT.starProjection_apply_comm hUinv (Q x)).symm
     have hAX : (A ∘L X) x = T (P (Q x)) := by
       simp only [ContinuousLinearMap.comp_apply, hX, hA, hTc, add_apply,
         smul_apply, sub_apply,
