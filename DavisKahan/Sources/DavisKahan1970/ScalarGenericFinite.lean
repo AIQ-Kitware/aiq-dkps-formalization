@@ -87,7 +87,7 @@ theorem tanTheta_directed_finiteDimensional_symmetricNorming_rclike
     (hUnwantedSpectrum : Module.End.PointSpectrumIn A Uᗮ (Set.Ici (α + δ)))
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      (approximateSubspace X).principalTangents U)
+      X.toLinearMap.range.principalTangents U)
     (hR : N.Mem (ritzResidual A X).toContinuousLinearMap) :
     N.Mem tanTheta0.toContinuousLinearMap ∧
       δ * N.gauge tanTheta0.toContinuousLinearMap ≤

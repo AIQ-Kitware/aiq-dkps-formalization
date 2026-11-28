@@ -114,7 +114,7 @@ ordinary-self-adjoint operator.
 theorem isSymmetric_generalizedCompression {A : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (X : F →ₗ[𝕜] E) (hX : Function.Injective X) :
     (generalizedCompression A X hX).IsSymmetric := by
-  exact isSymmetric_compression hA (orthonormalizedEmbedding X hX)
+  exact hA.adjoint_conj (orthonormalizedEmbedding X hX).toLinearMap
 
 /-- The interval/exterior spectral hypothesis for a generalized trial pair,
 in either orientation.

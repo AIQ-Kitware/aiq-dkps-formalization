@@ -1,5 +1,40 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 Ritz residuals and finite tangent bounds
+
+DKPS now uses the accepted SSP-C28/C29 tangent estimate from its own
+#26822. For a trial isometry `X`, its range equivalence transports the
+Ritz compression bound, the residual, and the unitarily invariant
+seminorm to the canonical range-subspace formulation. Equality of
+singular values recovers the conclusion for any tangent representative.
+Specializing to the native Ky Fan seminorm gives every prefix bound.
+The paper's interval and rank hypotheses are preserved, as is the
+right-angle exclusion. The local singular-vector witness and prefix
+proofs retire. Their source at `161446e6b` is in
+`DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean`, by Jon Crall
+and GPT 5.6 High, Kitware 2026, Apache-2.0.
+[#26822](https://github.com/TauCetiProject/TauCeti/pull/26822) ·
+[Accepted integration](https://github.com/TauCetiProject/TauCeti/commit/3dd25fa2147bc1998858ca867f2c2b3381c58d26)
+
+The independently developed #16661 supplies the Rayleigh–Ritz Frobenius
+decomposition and minimality, and the principal sine and cosine
+identifications for isometric trial maps. Its integration acknowledges
+DKPS's roadmap implementation. The local Frobenius proofs, range
+projection proof, and sine and cosine dictionary retire. Local callers
+take the actual trial-map range and use the accepted singular-value
+formulas. Mathlib supplies the symmetry of the adjoint compression and
+the left inverse of a linear isometry. The remaining linear-map Ritz
+formulas and invariant-pair covariance continue to support the
+paper-facing interfaces. The source anchor for the retired trial-map
+helpers is `161446e6b:ForTauCeti/Analysis/InnerProductSpace/Residual/`.
+[#16661 integration](https://github.com/TauCetiProject/TauCeti/commit/c5920d8f1e7cad46b0c0d79052124180557ea6d2)
+
+The backport removes 602 net lines of Lean. The focused build (9,827 jobs),
+full default build (22,804 jobs), and Challenge with the Theorem 6.3 and
+semantic-surface audits (22,516 jobs) passed without warnings. A Lean
+probe recovered both retired Frobenius statements at their original
+linear-map scope. The source-census probe resolved all 1,573 declarations.
+
 ## November 27 characteristic roots, polar laws, and orthogonal projections
 
 DKPS pins TauCeti at `007b3a1150fc0293b327e10238b5e097afc05c56` with the

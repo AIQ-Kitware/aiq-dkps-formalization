@@ -69,7 +69,7 @@ transversality into injectivity. -/
 theorem cosThetaMagnitude_injective_of_isTransverse
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E)
-    (htrans : Disjoint (approximateSubspace X) Uᗮ) :
+    (htrans : Disjoint X.toLinearMap.range Uᗮ) :
     Function.Injective (cosThetaMagnitude U X) :=
   cosThetaMagnitude_injective U X
     (LinearMap.ker_eq_bot.mp ((tanThetaEmbedding_defined_iff U X).mp htrans))
@@ -189,7 +189,7 @@ private theorem cosThetaMagnitude_apply_rightSingularBasis
 private theorem moorePenroseInverse_cosThetaMagnitude_apply_rightSingularBasis
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E)
-    (htrans : Disjoint (approximateSubspace X) Uᗮ)
+    (htrans : Disjoint X.toLinearMap.range Uᗮ)
     (i : Fin (finrank 𝕜 F)) :
     LinearMap.moorePenroseInverse (cosThetaMagnitude U X)
         (LinearMap.rightSingularBasis (sinThetaEmbedding U X) i) =
@@ -229,7 +229,7 @@ private theorem moorePenroseInverse_cosThetaMagnitude_apply_rightSingularBasis
 private theorem tanThetaEmbedding_apply_rightSingularBasis
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E)
-    (htrans : Disjoint (approximateSubspace X) Uᗮ)
+    (htrans : Disjoint X.toLinearMap.range Uᗮ)
     (i : Fin (finrank 𝕜 F)) :
     tanThetaEmbedding U X (LinearMap.rightSingularBasis (sinThetaEmbedding U X) i) =
       ((((Real.sqrt
@@ -245,9 +245,9 @@ singular-value sequence. -/
 theorem singularValues_tanThetaEmbedding
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E)
-    (htrans : Disjoint (approximateSubspace X) Uᗮ) :
+    (htrans : Disjoint X.toLinearMap.range Uᗮ) :
     (tanThetaEmbedding U X).singularValues =
-      (approximateSubspace X).principalTangents U := by
+      X.toLinearMap.range.principalTangents U := by
   classical
   let S := sinThetaEmbedding U X
   let T := tanThetaEmbedding U X
@@ -323,7 +323,7 @@ theorem singularValues_tanThetaEmbedding
           Matrix.singularValues_toLin_diagonal b (fun j => (d j : 𝕜)) (Equiv.refl _) ha i
       _ = Real.tan (Real.arcsin (S.singularValues k)) := by
         rw [Real.tan_arcsin]
-      _ = (approximateSubspace X).principalTangents U k := by
+      _ = X.toLinearMap.range.principalTangents U k := by
         simpa [S] using
           (principalTangents_approximateSubspace_apply U X k).symm
   · rw [T.singularValues_of_finrank_le hk]
@@ -378,7 +378,7 @@ theorem isTransverse_of_orderedRitzGap
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
-    Disjoint (approximateSubspace X) Uᗮ := by
+    Disjoint X.toLinearMap.range Uᗮ := by
   rcases subsingleton_or_nontrivial F with _ | _
   · rw [Submodule.disjoint_def]
     intro x hx _hxperp
@@ -430,16 +430,16 @@ noncomputable def graphOperator (U : Submodule 𝕜 E)
 /-- The public graph name agrees definitionally with the coordinate tangent. -/
 theorem graphOperator_eq_tanThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
-    (_htrans : Disjoint (approximateSubspace X) Uᗮ) :
+    (_htrans : Disjoint X.toLinearMap.range Uᗮ) :
     graphOperator U X = tanThetaEmbedding U X :=
   rfl
 
 /-- The graph operator has the directed principal-tangent singular values. -/
 theorem singularValues_graphOperator (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
-    (htrans : Disjoint (approximateSubspace X) Uᗮ) :
+    (htrans : Disjoint X.toLinearMap.range Uᗮ) :
     (graphOperator U X).singularValues =
-      (approximateSubspace X).principalTangents U := by
+      X.toLinearMap.range.principalTangents U := by
   simpa [graphOperator] using singularValues_tanThetaEmbedding U X htrans
 
 /-- **Davis--Kahan `tan Θ`, ordered residual form, every UI norm.** -/
@@ -462,7 +462,7 @@ theorem isTransverse_of_tanTheta_residual_gap
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
-    Disjoint (approximateSubspace X) Uᗮ :=
+    Disjoint X.toLinearMap.range Uᗮ :=
   isTransverse_of_orderedRitzGap
     hA hU X hM hGalerkin hδ hgap
 

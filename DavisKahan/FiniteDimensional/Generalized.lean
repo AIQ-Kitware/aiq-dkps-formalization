@@ -162,7 +162,7 @@ theorem generalizedTanTheta_residual_le
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     (_hdim : finrank 𝕜 F ≤ finrank 𝕜 V)
     (_htrans : Disjoint
-      (approximateSubspace (orthonormalizedEmbedding X hX)) Vᗮ)
+      (orthonormalizedEmbedding X hX).toLinearMap.range Vᗮ)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : Module.End.PointOrderedGap (generalizedCompression A X hX) ⊤ A Vᗮ δ) :
     δ * N (tanThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤

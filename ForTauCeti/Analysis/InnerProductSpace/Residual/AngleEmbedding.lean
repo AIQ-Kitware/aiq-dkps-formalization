@@ -287,90 +287,15 @@ theorem cosTwoThetaEmbedding_injective_iff (U : Submodule 𝕜 E)
   rw [← LinearMap.ker_eq_bot, ← LinearMap.ker_eq_bot,
     ker_cosTwoThetaEmbedding U X]
 
-/-- The orthogonal projection onto the range of an isometric embedding is
-`X X⋆`. -/
-theorem projection_approximateSubspace_eq_comp_adjoint (X : F →ₗᵢ[𝕜] E) :
-    ((approximateSubspace X)).starProjection.toLinearMap =
-      X.toLinearMap ∘ₗ X.toLinearMap.adjoint := by
-  ext y
-  -- states the goal with the definition unfolded, in the shape the next step needs.
-  change (approximateSubspace X).starProjection y =
-    X.toLinearMap (X.toLinearMap.adjoint y)
-  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
-  · change X.toLinearMap (X.toLinearMap.adjoint y) ∈
-      LinearMap.range X.toLinearMap
-    exact ⟨X.toLinearMap.adjoint y, rfl⟩
-  · intro w hw
-    -- restates the hypothesis with the definition unfolded, which is the form the
-    -- following step matches against.
-    change w ∈ LinearMap.range X.toLinearMap at hw
-    rcases hw with ⟨z, rfl⟩
-    rw [inner_sub_left]
-    apply sub_eq_zero.mpr
-    -- states the goal as the inner-product identity the isometry/adjoint lemma
-    -- expects, rather than through the bundled map.
-    change ⟪y, X z⟫_𝕜 =
-      ⟪X (X.toLinearMap.adjoint y), X z⟫_𝕜
-    exact (LinearMap.adjoint_inner_left X.toLinearMap z y).symm |>.trans
-      (X.inner_map_map (X.toLinearMap.adjoint y) z).symm
-
-/-- The singular values of `sinThetaEmbedding U X = P_{Uᗮ}X` are the
-principal sines directed from `range X` toward `U`.
-
-The proof identifies the projection onto `range X` with `X X⋆`, precomposes by
-`X⋆`, and uses coisometry padding to show that the ambient cross projection has
-exactly the same singular-value sequence as the rectangular embedding map.
--/
-theorem singularValues_sinThetaEmbedding (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
-    (sinThetaEmbedding U X).singularValues =
-      Submodule.principalSines (approximateSubspace X) U := by
-  have hmap :
-      sinThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint =
-        ((approximateSubspace X).sinThetaMap U).toLinearMap := by
-    rw [sinThetaEmbedding, Submodule.sinThetaMap_def]
-    change (Uᗮ.starProjection.toLinearMap ∘ₗ X.toLinearMap) ∘ₗ X.toLinearMap.adjoint =
-      Uᗮ.starProjection.toLinearMap ∘ₗ ((approximateSubspace X)).starProjection.toLinearMap
-    rw [projection_approximateSubspace_eq_comp_adjoint X]
-    simp only [LinearMap.comp_assoc]
-  calc
-    (sinThetaEmbedding U X).singularValues =
-        (sinThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint).singularValues :=
-      (LinearMap.singularValues_comp_adjoint_linearIsometry (sinThetaEmbedding U X) X).symm
-    _ = (((approximateSubspace X).sinThetaMap U).toLinearMap).singularValues := by rw [hmap]
-    _ = Submodule.principalSines (approximateSubspace X) U := by
-      rw [Submodule.principalSines_def]
-
-/-- The singular values of `cosThetaEmbedding U X = P_U X` are the
-principal cosines directed from `range X` toward `U`. -/
-theorem singularValues_cosThetaEmbedding (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
-    (cosThetaEmbedding U X).singularValues =
-      Submodule.principalCosines (approximateSubspace X) U := by
-  have hmap :
-      cosThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint =
-        ((approximateSubspace X).cosThetaMap U).toLinearMap := by
-    rw [cosThetaEmbedding, Submodule.cosThetaMap_def]
-    change (U.starProjection.toLinearMap ∘ₗ X.toLinearMap) ∘ₗ X.toLinearMap.adjoint =
-      U.starProjection.toLinearMap ∘ₗ ((approximateSubspace X)).starProjection.toLinearMap
-    rw [projection_approximateSubspace_eq_comp_adjoint X]
-    simp only [LinearMap.comp_assoc]
-  calc
-    (cosThetaEmbedding U X).singularValues =
-        (cosThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint).singularValues :=
-      (LinearMap.singularValues_comp_adjoint_linearIsometry (cosThetaEmbedding U X) X).symm
-    _ = (((approximateSubspace X).cosThetaMap U).toLinearMap).singularValues := by rw [hmap]
-    _ = Submodule.principalCosines (approximateSubspace X) U := by
-      rw [Submodule.principalCosines_def]
-
 /-- The positive coordinate cosine has the principal-angle cosine
 singular-value sequence. -/
 theorem singularValues_cosThetaMagnitude (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
     (cosThetaMagnitude U X).singularValues =
-      Submodule.principalCosines (approximateSubspace X) U := by
-  rw [singularValues_cosThetaMagnitude_eq_embedding,
-    singularValues_cosThetaEmbedding]
+      Submodule.principalCosines X.toLinearMap.range U := by
+  rw [singularValues_cosThetaMagnitude_eq_embedding]
+  exact (U.principalCosines_range_eq_singularValues
+    (X := X.toContinuousLinearMap) X.isometry).symm
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- The tangent map is finite exactly when the represented subspace is
@@ -381,9 +306,9 @@ exactly the kernel condition on the right.
 -/
 theorem tanThetaEmbedding_defined_iff (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
-    Disjoint (approximateSubspace X) Uᗮ ↔
+    Disjoint X.toLinearMap.range Uᗮ ↔
       LinearMap.ker (cosThetaEmbedding U X) = ⊥ := by
-  rw [← Submodule.injOn_starProjection_iff_disjoint (approximateSubspace X) U,
+  rw [← Submodule.injOn_starProjection_iff_disjoint X.toLinearMap.range U,
     LinearMap.ker_eq_bot]
   constructor
   · intro h x y hxy

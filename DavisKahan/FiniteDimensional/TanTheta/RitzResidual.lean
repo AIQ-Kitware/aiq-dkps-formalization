@@ -11,6 +11,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import TauCeti.Analysis.InnerProductSpace.SingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.RitzTangent
 
 /-!
 # The paper-exact finite Davis--Kahan `tan Θ` theorem
@@ -20,11 +21,10 @@ in Davis--Kahan (1970), Section 2 and equation (6.6): the Ritz compression lies
 in a finite interval, while the unwanted exact spectrum lies above that
 interval by `δ`.  The conclusion controls every unitarily invariant norm.
 
-The proof is organized around the source argument.  The hard root is a family
-of Ky Fan prefix inequalities obtained from singular vectors of the sine block;
-Fan dominance then gives every rectangular unitarily invariant norm.  This is
-intentionally separate from the later relaxed spectral-norm theorem and from
-an ordered graph-Sylvester formulation.
+The accepted TauCeti Ritz-residual bound is applied on the range of the
+trial isometry. Isometric coordinate transport recovers the paper's
+formulation with an arbitrary operator having the principal tangents as
+its singular values.
 -/
 
 public section
@@ -52,497 +52,48 @@ the exact subspace is contained in `[α + δ, ∞)`. -/
   Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Icc β α) ∧
     Module.End.PointSpectrumIn A Uᗮ (Set.Ici (α + δ))
 
+private theorem pointSpectrumIn_ritz_on_range
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ}
+    (hgap : TanThetaIntervalGap A U X β α δ) :
+    Module.End.PointSpectrumIn
+      (X.toLinearMap.range.subtype.adjoint ∘ₗ A ∘ₗ X.toLinearMap.range.subtype)
+      ⊤ (Set.Iic α) := by
+  have hM : Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Iic α) :=
+    hgap.1.mono le_rfl Set.Icc_subset_Iic_self
+  apply Module.End.pointSpectrumIn_Iic_of_re_inner_apply_self_le
+  intro z _
+  let e := X.equivRange
+  have hz : X (e.symm z) = (z : E) := congrArg Subtype.val (e.apply_symm_apply z)
+  have h := hA.re_inner_ritz_le_of_pointSpectrumIn X.toLinearMap hM (e.symm z)
+  have hnorm : ‖e.symm z‖ = ‖z‖ := e.symm.norm_map z
+  rw [hnorm] at h
+  simp only [LinearMap.comp_apply, LinearMap.adjoint_inner_left, Submodule.subtype_apply]
+  simpa only [LinearMap.comp_apply, LinearMap.adjoint_inner_left, LinearIsometry.coe_toLinearMap,
+    hz] using h
+
 /-- The paper's interval hypotheses force the trial and exact subspaces to be
-transverse.  Thus the tangent has no `π/2` pole; this is a conclusion, not an
-extra hypothesis. -/
+transverse. Thus the tangent has no `π/2` pole. -/
 theorem isTransverse_of_tanThetaIntervalGap
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : U ∈ Module.End.invtSubmodule A)
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ) :
-    Disjoint (approximateSubspace X) Uᗮ := by
-  rw [Submodule.disjoint_def]
-  intro x hx hxperp
-  rcases hx with ⟨y, rfl⟩
-  have hxyUperp : X.toLinearMap y ∈ Uᗮ := hxperp
-  have hMspec : Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Iic α) := by
-    apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
-    intro lam hlam
-    exact (Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mp hgap.1 hlam).2
-  have hMupper :
-      RCLike.re ⟪compression A X y, y⟫_𝕜 ≤ α * ‖y‖ ^ 2 :=
-    hA.re_inner_ritz_le_of_pointSpectrumIn X.toLinearMap hMspec y
-  have hAlower :
-      (α + δ) * ‖X.toLinearMap y‖ ^ 2 ≤
-        RCLike.re ⟪A (X.toLinearMap y), X.toLinearMap y⟫_𝕜 :=
-    hA.le_re_inner_of_pointSpectrumIn_orthogonal hU hgap.2 hxyUperp
-  have hinner :
-      RCLike.re ⟪compression A X y, y⟫_𝕜 =
-        RCLike.re ⟪A (X.toLinearMap y), X.toLinearMap y⟫_𝕜 := by
-    simp only [compression, LinearMap.comp_apply]
-    rw [LinearMap.adjoint_inner_left]
-  have hnorm : ‖X.toLinearMap y‖ = ‖y‖ := X.norm_map y
-  have hyzero : y = 0 := by
-    by_contra hy
-    have hynorm : 0 < ‖y‖ := norm_pos_iff.mpr hy
-    rw [← hinner, hnorm] at hAlower
-    nlinarith [sq_pos_of_pos hynorm]
-  simp [hyzero]
-
+    Disjoint X.toLinearMap.range Uᗮ :=
+  X.toLinearMap.range.disjoint_orthogonal_of_directedProjectionGap_lt_one U
+    (X.toLinearMap.range.directedProjectionGap_lt_one_of_pointSpectrumIn_compression
+      U hA hU hδ (pointSpectrumIn_ritz_on_range hA X hgap) hgap.2)
 
 /-- The principal tangent at an index is `tan (arcsin σ)` for the directed sine block. -/
 theorem principalTangents_approximateSubspace_apply
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E) (i : ℕ) :
-    (approximateSubspace X).principalTangents U i =
+    X.toLinearMap.range.principalTangents U i =
       Real.tan (Real.arcsin ((sinThetaEmbedding U X).singularValues i)) := by
-  rw [Submodule.principalTangents_apply, Submodule.principalAngles_apply,
-    ← singularValues_sinThetaEmbedding U X]
-
-/-- The normalized residual-side witness attached to a sine singular vector.
-
-At a zero singular value the tangent contribution is zero, so the corresponding Ritz-space
-basis vector is used.  At a positive singular value, the left singular vector is projected
-away from the Ritz space and normalized by the complementary cosine. -/
-noncomputable def tanThetaResidualWitness
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (X : F →ₗᵢ[𝕜] E) (i : Fin (finrank 𝕜 F)) : E :=
-  let S := sinThetaEmbedding U X
-  let σ := S.singularValues i
-  let v := LinearMap.rightSingularBasis S i
-  if σ = 0 then X v else
-    (((Real.sqrt (1 - σ ^ 2) : ℝ) : 𝕜)⁻¹) •
-      (LinearMap.leftSingularVector S i - ((σ : ℝ) : 𝕜) • X v)
-
-/-- **Adjoint transfer along a real singular relation.**
-
-If `X⋆ y = σ • v` with `σ` real, then testing `X w` against `y` is testing `w`
-against `v`, scaled by `σ`.  Two lines, and
-`orthonormal_tanThetaResidualWitness` below proves an instance of it **three
-times**: twice at `⟪X vi, yj⟫` in two different branches, once at `⟪yi, X vj⟫`
-in the mirrored form.  See `{lane:DK-LONGPROOF-7}`. -/
-theorem inner_apply_right_of_adjoint_eq_smul {X : E →ₗ[𝕜] F} {y : F} {v : E} {σ : ℝ}
-    (h : X.adjoint y = ((σ : ℝ) : 𝕜) • v) (w : E) :
-    ⟪X w, y⟫_𝕜 = ((σ : ℝ) : 𝕜) * ⟪w, v⟫_𝕜 := by
-  rw [← LinearMap.adjoint_inner_right, h, inner_smul_right]
-
-/-- The mirrored form of `inner_apply_right_of_adjoint_eq_smul`, with the
-singular vector on the left.  `σ` being real is what makes the conjugate
-disappear. -/
-theorem inner_apply_left_of_adjoint_eq_smul {X : E →ₗ[𝕜] F} {y : F} {v : E} {σ : ℝ}
-    (h : X.adjoint y = ((σ : ℝ) : 𝕜) • v) (w : E) :
-    ⟪y, X w⟫_𝕜 = ((σ : ℝ) : 𝕜) * ⟪v, w⟫_𝕜 := by
-  rw [← LinearMap.adjoint_inner_left, h, inner_smul_left, RCLike.conj_ofReal]
-
-/-- The residual witnesses form an orthonormal family once the tangent has no pole. -/
-theorem orthonormal_tanThetaResidualWitness
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (X : F →ₗᵢ[𝕜] E)
-    (htrans : Disjoint (approximateSubspace X) Uᗮ) :
-    Orthonormal 𝕜 (tanThetaResidualWitness U X) := by
-  classical
-  let S := sinThetaEmbedding U X
-  rw [orthonormal_iff_ite]
-  intro i j
-  by_cases hij : i = j
-  · subst j
-    rw [ite_eq_left rfl]
-    let σ := S.singularValues i
-    let v := LinearMap.rightSingularBasis S i
-    have hvv : ⟪v, v⟫_𝕜 = 1 := by
-      simp [v]
-    by_cases hσ : σ = 0
-    · have hw : tanThetaResidualWitness U X i = X.toLinearMap v := by
-        simp [tanThetaResidualWitness, S, σ, v, hσ]
-      rw [hw]
-      calc
-        ⟪X.toLinearMap v, X.toLinearMap v⟫_𝕜 = ⟪v, v⟫_𝕜 :=
-          X.inner_map_map v v
-        _ = 1 := hvv
-    · let y := LinearMap.leftSingularVector S i
-      have hXadj : X.toLinearMap.adjoint y = ((σ : ℝ) : 𝕜) • v := by
-        simpa [S, σ, v, y, sinThetaEmbedding] using
-          U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := i)
-      have hyy : ⟪y, y⟫_𝕜 = 1 := by
-        simpa [y] using
-          (orthonormal_iff_ite.mp (LinearMap.orthonormal_leftSingularVector S)
-            ⟨i, hσ⟩ ⟨i, hσ⟩)
-      have hXv_y : ⟪X.toLinearMap v, y⟫_𝕜 = ((σ : ℝ) : 𝕜) := by
-        calc
-          ⟪X.toLinearMap v, y⟫_𝕜 = ⟪v, X.toLinearMap.adjoint y⟫_𝕜 :=
-            (LinearMap.adjoint_inner_right X.toLinearMap v y).symm
-          _ = ⟪v, ((σ : ℝ) : 𝕜) • v⟫_𝕜 := by rw [hXadj]
-          _ = ((σ : ℝ) : 𝕜) := by rw [inner_smul_right, hvv, mul_one]
-      have hy_Xv : ⟪y, X.toLinearMap v⟫_𝕜 = ((σ : ℝ) : 𝕜) := by
-        calc
-          ⟪y, X.toLinearMap v⟫_𝕜 = ⟪X.toLinearMap.adjoint y, v⟫_𝕜 :=
-            (LinearMap.adjoint_inner_left X.toLinearMap v y).symm
-          _ = ⟪((σ : ℝ) : 𝕜) • v, v⟫_𝕜 := by rw [hXadj]
-          _ = ((σ : ℝ) : 𝕜) := by
-            rw [inner_smul_left, RCLike.conj_ofReal, hvv, mul_one]
-      have hXX : ⟪X.toLinearMap v, X.toLinearMap v⟫_𝕜 = 1 := by
-        calc
-          ⟪X.toLinearMap v, X.toLinearMap v⟫_𝕜 = ⟪v, v⟫_𝕜 :=
-            X.inner_map_map v v
-          _ = 1 := hvv
-      have hraw :
-          ⟪y - ((σ : ℝ) : 𝕜) • X.toLinearMap v,
-            y - ((σ : ℝ) : 𝕜) • X.toLinearMap v⟫_𝕜 =
-            (((1 - σ ^ 2 : ℝ) : 𝕜)) := by
-        simp only [inner_sub_left, inner_sub_right, inner_smul_left,
-          inner_smul_right, RCLike.conj_ofReal, hyy, hy_Xv, hXv_y, hXX]
-        push_cast
-        ring
-      have hσnonneg : 0 ≤ σ := S.singularValues_nonneg i
-      have hσlt : σ < 1 := by
-        simpa [S, σ, sinThetaEmbedding] using
-          U.singularValues_starProjection_orthogonal_comp_lt_one_of_disjoint X htrans i
-      let c := Real.sqrt (1 - σ ^ 2)
-      have hcpos : 0 < c := by
-        dsimp [c]
-        exact Real.sqrt_pos.2 (by nlinarith)
-      have hcne : c ≠ 0 := ne_of_gt hcpos
-      have hw :
-          tanThetaResidualWitness U X i =
-            ((((c : ℝ) : 𝕜)⁻¹) •
-              (y - ((σ : ℝ) : 𝕜) • X.toLinearMap v)) := by
-        simp [tanThetaResidualWitness, S, σ, v, y, c, hσ]
-      have hc_sq : c ^ 2 = 1 - σ ^ 2 := by
-        dsimp [c]
-        exact Real.sq_sqrt (by nlinarith)
-      have hnormalize : c⁻¹ * (c⁻¹ * (1 - σ ^ 2)) = 1 := by
-        field_simp [hcne]
-        nlinarith
-      rw [hw]
-      simp only [inner_smul_left, inner_smul_right, map_inv₀,
-        RCLike.conj_ofReal, hraw]
-      exact_mod_cast hnormalize
-  · rw [ite_eq_right hij]
-    let σi := S.singularValues i
-    let σj := S.singularValues j
-    let vi := LinearMap.rightSingularBasis S i
-    let vj := LinearMap.rightSingularBasis S j
-    have hvv : ⟪vi, vj⟫_𝕜 = 0 := by
-      simp [vi, vj, hij,
-        orthonormal_iff_ite.mp (LinearMap.rightSingularBasis S).orthonormal i j]
-    have hXX : ⟪X.toLinearMap vi, X.toLinearMap vj⟫_𝕜 = 0 := by
-      calc
-        ⟪X.toLinearMap vi, X.toLinearMap vj⟫_𝕜 = ⟪vi, vj⟫_𝕜 :=
-          X.inner_map_map vi vj
-        _ = 0 := hvv
-    by_cases hi : σi = 0
-    · have hwi : tanThetaResidualWitness U X i = X.toLinearMap vi := by
-        simp [tanThetaResidualWitness, S, σi, vi, hi]
-      by_cases hj : σj = 0
-      · have hwj : tanThetaResidualWitness U X j = X.toLinearMap vj := by
-          simp [tanThetaResidualWitness, S, σj, vj, hj]
-        rw [hwi, hwj, hXX]
-      · let yj := LinearMap.leftSingularVector S j
-        have hXadjj : X.toLinearMap.adjoint yj = ((σj : ℝ) : 𝕜) • vj := by
-          simpa [S, σj, vj, yj, sinThetaEmbedding] using
-            U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := j)
-        have hXvi_yj :
-            ⟪X.toLinearMap vi, yj⟫_𝕜 = ((σj : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 :=
-          inner_apply_right_of_adjoint_eq_smul hXadjj vi
-        have hraw :
-            ⟪X.toLinearMap vi,
-              yj - ((σj : ℝ) : 𝕜) • X.toLinearMap vj⟫_𝕜 = 0 := by
-          rw [inner_sub_right, inner_smul_right, hXvi_yj, hXX, hvv]
-          simp
-        let cj := Real.sqrt (1 - σj ^ 2)
-        have hwj :
-            tanThetaResidualWitness U X j =
-              ((((cj : ℝ) : 𝕜)⁻¹) •
-                (yj - ((σj : ℝ) : 𝕜) • X.toLinearMap vj)) := by
-          simp [tanThetaResidualWitness, S, σj, vj, yj, cj, hj]
-        rw [hwi, hwj, inner_smul_right, hraw, mul_zero]
-    · let yi := LinearMap.leftSingularVector S i
-      have hXadji : X.toLinearMap.adjoint yi = ((σi : ℝ) : 𝕜) • vi := by
-        simpa [S, σi, vi, yi, sinThetaEmbedding] using
-          U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := i)
-      by_cases hj : σj = 0
-      · have hyi_Xvj :
-            ⟪yi, X.toLinearMap vj⟫_𝕜 = ((σi : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 := by
-          calc
-            ⟪yi, X.toLinearMap vj⟫_𝕜 =
-                ⟪X.toLinearMap.adjoint yi, vj⟫_𝕜 :=
-              (LinearMap.adjoint_inner_left X.toLinearMap vj yi).symm
-            _ = ⟪((σi : ℝ) : 𝕜) • vi, vj⟫_𝕜 := by rw [hXadji]
-            _ = ((σi : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 := by
-              rw [inner_smul_left, RCLike.conj_ofReal]
-        have hraw :
-            ⟪yi - ((σi : ℝ) : 𝕜) • X.toLinearMap vi,
-              X.toLinearMap vj⟫_𝕜 = 0 := by
-          rw [inner_sub_left, inner_smul_left, RCLike.conj_ofReal,
-            hyi_Xvj, hXX, hvv]
-          simp
-        let ci := Real.sqrt (1 - σi ^ 2)
-        have hwi :
-            tanThetaResidualWitness U X i =
-              ((((ci : ℝ) : 𝕜)⁻¹) •
-                (yi - ((σi : ℝ) : 𝕜) • X.toLinearMap vi)) := by
-          simp [tanThetaResidualWitness, S, σi, vi, yi, ci, hi]
-        have hwj : tanThetaResidualWitness U X j = X.toLinearMap vj := by
-          simp [tanThetaResidualWitness, S, σj, vj, hj]
-        rw [hwi, hwj, inner_smul_left, hraw, mul_zero]
-      · let yj := LinearMap.leftSingularVector S j
-        have hXadjj : X.toLinearMap.adjoint yj = ((σj : ℝ) : 𝕜) • vj := by
-          simpa [S, σj, vj, yj, sinThetaEmbedding] using
-            U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := j)
-        have hyy : ⟪yi, yj⟫_𝕜 = 0 := by
-          simpa [yi, yj, hij] using
-            (orthonormal_iff_ite.mp (LinearMap.orthonormal_leftSingularVector S)
-              ⟨i, hi⟩ ⟨j, hj⟩)
-        have hyi_Xvj :
-            ⟪yi, X.toLinearMap vj⟫_𝕜 = ((σi : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 :=
-          inner_apply_left_of_adjoint_eq_smul hXadji vj
-        have hXvi_yj :
-            ⟪X.toLinearMap vi, yj⟫_𝕜 = ((σj : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 :=
-          inner_apply_right_of_adjoint_eq_smul hXadjj vi
-        have hraw :
-            ⟪yi - ((σi : ℝ) : 𝕜) • X.toLinearMap vi,
-              yj - ((σj : ℝ) : 𝕜) • X.toLinearMap vj⟫_𝕜 = 0 := by
-          simp only [inner_sub_left, inner_sub_right, inner_smul_left,
-            inner_smul_right, RCLike.conj_ofReal,
-            hyy, hyi_Xvj, hXvi_yj, hXX, hvv]
-          ring
-        let ci := Real.sqrt (1 - σi ^ 2)
-        let cj := Real.sqrt (1 - σj ^ 2)
-        have hwi :
-            tanThetaResidualWitness U X i =
-              ((((ci : ℝ) : 𝕜)⁻¹) •
-                (yi - ((σi : ℝ) : 𝕜) • X.toLinearMap vi)) := by
-          simp [tanThetaResidualWitness, S, σi, vi, yi, ci, hi]
-        have hwj :
-            tanThetaResidualWitness U X j =
-              ((((cj : ℝ) : 𝕜)⁻¹) •
-                (yj - ((σj : ℝ) : 𝕜) • X.toLinearMap vj)) := by
-          simp [tanThetaResidualWitness, S, σj, vj, yj, cj, hj]
-        simp only [hwi, hwj, inner_smul_left, inner_smul_right,
-          hraw, mul_zero, mul_zero]
-
-/-- The scalar spectral-gap estimate for one principal tangent.
-
-This is the analytic core of equation (6.6), expressed without direct-rotation coordinates.
-The left singular vector of the sine block is projected away from the Ritz space; Galerkin
-orthogonality removes that projection from the residual pairing, while its norm supplies the
-cosine denominator. -/
-theorem tanThetaResidualWitness_scalar
-    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
-    (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hδ : 0 < δ)
-    (hgap : TanThetaIntervalGap A U X β α δ)
-    (tanTheta0 : F →ₗ[𝕜] E)
-    (htan : tanTheta0.singularValues =
-      (approximateSubspace X).principalTangents U)
-    (i : Fin (finrank 𝕜 F)) :
-    δ * tanTheta0.singularValues i ≤
-      RCLike.re ⟪tanThetaResidualWitness U X i,
-        ritzResidual A X (LinearMap.rightSingularBasis (sinThetaEmbedding U X) i)⟫_𝕜 := by
-  let S := sinThetaEmbedding U X
-  let M := compression A X
-  let R := ritzResidual A X
-  let σ := S.singularValues i
-  let v := LinearMap.rightSingularBasis S i
-  have hvnorm : ‖v‖ = 1 := (LinearMap.rightSingularBasis S).orthonormal.norm_eq_one i
-  have hσnonneg : 0 ≤ σ := S.singularValues_nonneg i
-  have htrans := isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap
-  have hσlt : σ < 1 := by
-    simpa only [σ, S, sinThetaEmbedding] using
-      U.singularValues_starProjection_orthogonal_comp_lt_one_of_disjoint X htrans i
-  have hcpos : 0 < Real.sqrt (1 - σ ^ 2) := Real.sqrt_pos.2 (by nlinarith)
-  have htan_i : tanTheta0.singularValues i = σ / Real.sqrt (1 - σ ^ 2) := by
-    calc
-      tanTheta0.singularValues i = (approximateSubspace X).principalTangents U i :=
-        congrArg (fun z : ℕ →₀ ℝ => z (i : ℕ)) htan
-      _ = Real.tan (Real.arcsin σ) := by
-        simpa [S, σ, sinThetaEmbedding] using principalTangents_approximateSubspace_apply U X (i : ℕ)
-      _ = σ / Real.sqrt (1 - σ ^ 2) := Real.tan_arcsin σ
-  by_cases hσzero : σ = 0
-  · have hgal := LinearMap.congr_fun (LinearMap.adjoint_comp_ritzResidual_eq_zero A X) v
-    change X.toLinearMap.adjoint (R v) = 0 at hgal
-    have horth : ⟪X.toLinearMap v, R v⟫_𝕜 = 0 := by
-      rw [← LinearMap.adjoint_inner_right, hgal, inner_zero_right]
-    have hwitness : tanThetaResidualWitness U X i = X.toLinearMap v := by
-      simp [tanThetaResidualWitness, S, σ, v, hσzero]
-    rw [htan_i, hσzero, zero_div, mul_zero, hwitness]
-    change 0 ≤ RCLike.re ⟪X.toLinearMap v, R v⟫_𝕜
-    rw [horth]
-    simp
-  · let y := LinearMap.leftSingularVector S i
-    have hynorm : ‖y‖ = 1 := by
-      simpa [y] using (LinearMap.orthonormal_leftSingularVector S).norm_eq_one ⟨i, hσzero⟩
-    have hSv : S v = ((σ : ℝ) : 𝕜) • y := by
-      simpa [S, σ, v, y, sinThetaEmbedding] using LinearMap.apply_rightSingularBasis S i
-    have hSadj : S.adjoint y = ((σ : ℝ) : 𝕜) • v := by
-      simpa only [S, σ, v, y] using LinearMap.adjoint_leftSingularVector S i
-    have hyUperp : y ∈ Uᗮ := by
-      dsimp [y]
-      rw [LinearMap.leftSingularVector_def]
-      exact Uᗮ.smul_mem _ (Uᗮ.starProjection_apply_mem (X v))
-    have hXadj : X.toLinearMap.adjoint y = ((σ : ℝ) : 𝕜) • v := by
-      simpa [S, σ, v, y, sinThetaEmbedding] using
-        U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := i)
-    have hMupper : RCLike.re ⟪M v, v⟫_𝕜 ≤ α := by
-      have hspec : Module.End.PointSpectrumIn M ⊤ (Set.Iic α) := by
-        apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
-        intro lam hlam
-        exact (Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mp hgap.1 hlam).2
-      have hbound : RCLike.re ⟪M v, v⟫_𝕜 ≤ α * ‖v‖ ^ 2 :=
-        hA.re_inner_ritz_le_of_pointSpectrumIn X.toLinearMap hspec v
-      simpa [hvnorm] using hbound
-    have hAlower : α + δ ≤ RCLike.re ⟪A y, y⟫_𝕜 := by
-      have hbound : (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜 :=
-        hA.le_re_inner_of_pointSpectrumIn_orthogonal hU hgap.2 hyUperp
-      simpa [hynorm] using hbound
-    have hred := (hA.isReducing_iff_mem_invtSubmodule U).mpr hU
-    have hSyl := LinearMap.congr_fun
-      (hred.sylvester_starProjection_orthogonal_comp X.toLinearMap M) v
-    have hpair :
-        RCLike.re ⟪y, R v⟫_𝕜 =
-          σ * (RCLike.re ⟪A y, y⟫_𝕜 - RCLike.re ⟪M v, v⟫_𝕜) := by
-      have hright :
-          ⟪y, Uᗮ.starProjection.toLinearMap (R v)⟫_𝕜 = ⟪y, R v⟫_𝕜 := by
-        change ⟪y, Uᗮ.starProjection (R v)⟫_𝕜 = ⟪y, R v⟫_𝕜
-        rw [← Uᗮ.inner_starProjection_left_eq_right,
-          Submodule.starProjection_eq_self_iff.mpr hyUperp]
-      have hsyl' : A (S v) - S (M v) = Uᗮ.starProjection.toLinearMap (R v) := by
-        simpa [S, M, R, ritzResidual, residual, sinThetaEmbedding] using hSyl
-      have hSM : ⟪y, S (M v)⟫_𝕜 = ⟪S.adjoint y, M v⟫_𝕜 := by
-        exact (LinearMap.adjoint_inner_left S (M v) y).symm
-      have hpairComplex :
-          ⟪y, R v⟫_𝕜 =
-            (((σ : ℝ) : 𝕜) * (⟪y, A y⟫_𝕜 - ⟪v, M v⟫_𝕜)) := by
-        calc
-          ⟪y, R v⟫_𝕜 = ⟪y, Uᗮ.starProjection.toLinearMap (R v)⟫_𝕜 := hright.symm
-          _ = ⟪y, A (S v) - S (M v)⟫_𝕜 := by rw [hsyl']
-          _ = ⟪y, A (S v)⟫_𝕜 - ⟪y, S (M v)⟫_𝕜 := inner_sub_right _ _ _
-          _ = (((σ : ℝ) : 𝕜) * ⟪y, A y⟫_𝕜) - ⟪y, S (M v)⟫_𝕜 := by
-            rw [hSv, map_smul, inner_smul_right]
-          _ = (((σ : ℝ) : 𝕜) * ⟪y, A y⟫_𝕜) -
-              (((σ : ℝ) : 𝕜) * ⟪v, M v⟫_𝕜) := by
-            rw [hSM, hSadj, inner_smul_left, RCLike.conj_ofReal]
-          _ = (((σ : ℝ) : 𝕜) * (⟪y, A y⟫_𝕜 - ⟪v, M v⟫_𝕜)) := by ring
-      have hAy : RCLike.re ⟪y, A y⟫_𝕜 = RCLike.re ⟪A y, y⟫_𝕜 := by
-        rw [← inner_conj_symm, RCLike.conj_re]
-      have hMv : RCLike.re ⟪v, M v⟫_𝕜 = RCLike.re ⟪M v, v⟫_𝕜 := by
-        rw [← inner_conj_symm, RCLike.conj_re]
-      rw [hpairComplex, RCLike.re_ofReal_mul, map_sub, hAy, hMv]
-    have hpair_lower : δ * σ ≤ RCLike.re ⟪y, R v⟫_𝕜 := by
-      rw [hpair]
-      nlinarith
-    have hgal := LinearMap.congr_fun (LinearMap.adjoint_comp_ritzResidual_eq_zero A X) v
-    change X.toLinearMap.adjoint (R v) = 0 at hgal
-    have hXorth : ⟪X.toLinearMap v, R v⟫_𝕜 = 0 := by
-      rw [← LinearMap.adjoint_inner_right, hgal, inner_zero_right]
-    have hrawComplex :
-        ⟪y - ((σ : ℝ) : 𝕜) • X.toLinearMap v, R v⟫_𝕜 =
-          ⟪y, R v⟫_𝕜 := by
-      rw [inner_sub_left, inner_smul_left, RCLike.conj_ofReal, hXorth,
-        mul_zero, sub_zero]
-    have hraw :
-        RCLike.re ⟪y - ((σ : ℝ) : 𝕜) • X.toLinearMap v, R v⟫_𝕜 =
-          RCLike.re ⟪y, R v⟫_𝕜 := congrArg RCLike.re hrawComplex
-    let c := Real.sqrt (1 - σ ^ 2)
-    have hcpos' : 0 < c := by simpa [c] using hcpos
-    have hscale :
-        RCLike.re ⟪((((c : ℝ) : 𝕜)⁻¹) •
-            (y - ((σ : ℝ) : 𝕜) • X.toLinearMap v)), R v⟫_𝕜 =
-          RCLike.re ⟪y, R v⟫_𝕜 / c := by
-      calc
-        RCLike.re ⟪((((c : ℝ) : 𝕜)⁻¹) •
-            (y - ((σ : ℝ) : 𝕜) • X.toLinearMap v)), R v⟫_𝕜 =
-            c⁻¹ * RCLike.re
-              ⟪y - ((σ : ℝ) : 𝕜) • X.toLinearMap v, R v⟫_𝕜 := by
-                rw [inner_smul_left, map_inv₀, RCLike.conj_ofReal,
-                  ← RCLike.ofReal_inv, RCLike.re_ofReal_mul]
-        _ = c⁻¹ * RCLike.re ⟪y, R v⟫_𝕜 := by rw [hraw]
-        _ = RCLike.re ⟪y, R v⟫_𝕜 / c := by
-          simp [div_eq_mul_inv, mul_comm]
-    rw [htan_i]
-    change δ * (σ / c) ≤
-      RCLike.re ⟪
-        (if σ = 0 then X.toLinearMap v else
-          ((((c : ℝ) : 𝕜)⁻¹) •
-            (y - ((σ : ℝ) : 𝕜) • X.toLinearMap v))),
-        R v⟫_𝕜
-    rw [ite_eq_right hσzero, hscale]
-    simpa [div_eq_mul_inv, mul_assoc] using
-      (div_le_div_iff_of_pos_right hcpos').2 hpair_lower
-
-/-- Ky Fan domination up to the full trial-space dimension. -/
-private theorem kyFan_tanTheta0_ritzResidual_le_of_le_finrank
-    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
-    (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hδ : 0 < δ)
-    (hgap : TanThetaIntervalGap A U X β α δ)
-    (tanTheta0 : F →ₗ[𝕜] E)
-    (htan : tanTheta0.singularValues =
-      (approximateSubspace X).principalTangents U)
-    {k : ℕ} (hk : k ≤ finrank 𝕜 F) :
-    δ * tanTheta0.kyFanSum k ≤
-      (ritzResidual A X).kyFanSum k := by
-  let S := sinThetaEmbedding U X
-  let castIndex : Fin k → Fin (finrank 𝕜 F) := fun i => Fin.castLE hk i
-  have htrans := isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap
-  have huFull := orthonormal_tanThetaResidualWitness U X htrans
-  have hu : Orthonormal 𝕜
-      (fun i : Fin k => tanThetaResidualWitness U X (castIndex i)) := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    simpa [castIndex] using
-      (orthonormal_iff_ite.mp huFull (castIndex i) (castIndex j))
-  have hv : Orthonormal 𝕜
-      (fun i : Fin k => LinearMap.rightSingularBasis S (castIndex i)) := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    simpa [castIndex] using
-      (orthonormal_iff_ite.mp (LinearMap.rightSingularBasis S).orthonormal
-        (castIndex i) (castIndex j))
-  have hnorm := (ritzResidual A X).norm_sum_inner_le_kyFanSum hu hv
-  simp only [Fintype.card_fin] at hnorm
-  have hreal := (RCLike.re_le_norm _).trans hnorm
-  rw [map_sum] at hreal
-  have hsum := (Finset.sum_le_sum fun i _ =>
-    tanThetaResidualWitness_scalar hA hU X hδ hgap tanTheta0 htan (castIndex i)).trans hreal
-  rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
-  rw [Finset.mul_sum]
-  exact hsum
-
-/-- **The source Ky Fan root for the finite `tan Θ` theorem.**
-
-For every prefix length, the sum of the first principal tangents is bounded by
-the corresponding singular-value prefix of the Ritz residual.  The proof is
-the finite version of Davis--Kahan equation (6.6): choose singular vectors of
-the directed sine block, construct the complementary cosine vectors, derive
-the scalar gap inequalities, sum, and invoke the rectangular Ky Fan
-variational principle.
-
-The operator `tanTheta0` is intentionally arbitrary, as in the paper; only its
-singular values are prescribed.  This theorem is the single hard
-geometric/majorization seam. -/
-theorem kyFan_tanTheta0_ritzResidual_le
-    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
-    (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (_hβα : β ≤ α) (hδ : 0 < δ)
-    (hgap : TanThetaIntervalGap A U X β α δ)
-    (tanTheta0 : F →ₗ[𝕜] E)
-    (htan : tanTheta0.singularValues =
-      (approximateSubspace X).principalTangents U) (k : ℕ) :
-    δ * tanTheta0.kyFanSum k ≤
-      (ritzResidual A X).kyFanSum k := by
-  by_cases hk : k ≤ finrank 𝕜 F
-  · exact kyFan_tanTheta0_ritzResidual_le_of_le_finrank hA hU X hδ hgap
-      tanTheta0 htan hk
-  · have hk' : finrank 𝕜 F ≤ k := Nat.le_of_not_ge hk
-    rw [((tanTheta0.kyFanSum_eq_nuclear ((LinearMap.finrank_range_le tanTheta0).trans hk')).trans
-        (tanTheta0.kyFanSum_eq_nuclear (LinearMap.finrank_range_le tanTheta0)).symm),
-      (((ritzResidual A X).kyFanSum_eq_nuclear
-        ((LinearMap.finrank_range_le (ritzResidual A X)).trans hk')).trans
-        ((ritzResidual A X).kyFanSum_eq_nuclear
-          (LinearMap.finrank_range_le (ritzResidual A X))).symm)]
-    exact kyFan_tanTheta0_ritzResidual_le_of_le_finrank hA hU X hδ hgap
-      tanTheta0 htan le_rfl
+  rw [Submodule.principalTangents_apply, Submodule.principalAngles_apply]
+  exact congrArg (fun s : ℕ →₀ ℝ => Real.tan (Real.arcsin (s i)))
+    (U.principalSines_range_eq_singularValues (X := X.toContinuousLinearMap) X.isometry)
 
 /-- **Paper-exact Davis--Kahan `tan Θ`, residual form, every UI norm.**
 
@@ -557,22 +108,56 @@ theorem tanTheta0_ritzResidual_le
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
-    (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (_hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      (approximateSubspace X).principalTangents U) :
+      X.toLinearMap.range.principalTangents U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
-  have hprefix : ∀ k,
-      (((δ : ℝ) : 𝕜) • tanTheta0).kyFanSum k ≤
-        (ritzResidual A X).kyFanSum k := by
-    intro k
-    rw [LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg hδ.le]
-    exact kyFan_tanTheta0_ritzResidual_le hA hU X hβα hδ hgap
-      tanTheta0 htan k
-  have hN := N.map_le_of_kyFanSum_le (hprefix)
-  rw [map_smul_eq_mul N] at hN
-  simpa [RCLike.norm_ofReal, abs_of_pos hδ] using hN
+  let Z := X.toLinearMap.range
+  let e : F ≃ₗᵢ[𝕜] Z := X.equivRange
+  have hM := pointSpectrumIn_ritz_on_range hA X hgap
+  have hgapZ := Z.directedProjectionGap_lt_one_of_pointSpectrumIn_compression
+    U hA hU hδ hM hgap.2
+  have hN := UnitarilyInvariantSeminorm.mul_map_tanThetaMap_le_map_ritzResidual
+    (UnitarilyInvariantSeminorm.arrowCongr e (LinearIsometryEquiv.refl 𝕜 E) N)
+    hA hU hδ hM hgap.2
+  have hX : Z.subtype ∘ₗ (e : F →ₗ[𝕜] Z) = X.toLinearMap := rfl
+  have hadj : (e : F →ₗ[𝕜] Z) ∘ₗ X.toLinearMap.adjoint = Z.subtype.adjoint := by
+    have h := congrArg LinearMap.adjoint hX
+    rw [LinearMap.adjoint_comp, e.adjoint_coe_eq_symm] at h
+    rw [← h, ← LinearMap.comp_assoc]
+    have he : (e : F →ₗ[𝕜] Z) ∘ₗ (e.symm : Z →ₗ[𝕜] F) = LinearMap.id := by
+      apply LinearMap.ext
+      intro y
+      exact e.apply_symm_apply y
+    rw [he, LinearMap.id_comp]
+  have hR :
+      (A ∘ₗ Z.subtype - Z.subtype ∘ₗ (Z.subtype.adjoint ∘ₗ A ∘ₗ Z.subtype)) ∘ₗ
+        (e : F →ₗ[𝕜] Z) = ritzResidual A X := by
+    rw [LinearMap.sub_comp, LinearMap.comp_assoc, hX, ← hadj]
+    simp only [ritzResidual, residual, compression, LinearMap.comp_assoc, hX]
+    rw [← LinearMap.comp_assoc _ (e : F →ₗ[𝕜] Z) Z.subtype, hX]
+  have htan' : tanTheta0.singularValues =
+      (Z.tanThetaMap U ∘ₗ (e : F →ₗ[𝕜] Z)).singularValues := by
+    rw [LinearMap.singularValues_comp_linearIsometryEquiv, Z.singularValues_tanThetaMap U hgapZ]
+    exact htan
+  have hrefl : ((LinearIsometryEquiv.refl 𝕜 E).symm : E →ₗ[𝕜] E) = LinearMap.id := rfl
+  simpa only [UnitarilyInvariantSeminorm.arrowCongr_apply, hrefl, LinearMap.id_comp,
+    hR, ← N.map_eq_of_singularValues_eq htan'] using hN
+
+/-- The Ritz-residual bound for each Ky Fan prefix. -/
+theorem kyFan_tanTheta0_ritzResidual_le
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : U ∈ Module.End.invtSubmodule A)
+    (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hgap : TanThetaIntervalGap A U X β α δ)
+    (tanTheta0 : F →ₗ[𝕜] E)
+    (htan : tanTheta0.singularValues = X.toLinearMap.range.principalTangents U) (k : ℕ) :
+    δ * tanTheta0.kyFanSum k ≤ (ritzResidual A X).kyFanSum k := by
+  simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using
+    tanTheta0_ritzResidual_le (UnitarilyInvariantSeminorm.kyFan 𝕜 F E k)
+      hA hU X hβα hδ hgap tanTheta0 htan
 
 /-- **The residual conclusion of the 1970 `tan Θ` theorem.**
 
@@ -590,7 +175,7 @@ theorem davisKahan1970_tanTheta0_ritzResidual_le
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      (approximateSubspace X).principalTangents U) :
+      X.toLinearMap.range.principalTangents U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   exact tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan
 
@@ -609,7 +194,7 @@ theorem davisKahan1970_generalizedTanTheta0_ritzResidual_le
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      (approximateSubspace X).principalTangents U) :
+      X.toLinearMap.range.principalTangents U) :
     δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   exact tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan
 
@@ -623,8 +208,8 @@ theorem tanTheta0_ritzResidual_le_and_isTransverse
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
-      (approximateSubspace X).principalTangents U) :
-    Disjoint (approximateSubspace X) Uᗮ ∧
+      X.toLinearMap.range.principalTangents U) :
+    Disjoint X.toLinearMap.range Uᗮ ∧
       δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   exact ⟨isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap,
     tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan⟩
