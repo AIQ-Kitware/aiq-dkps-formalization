@@ -11,6 +11,7 @@ public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
+import TauCeti.Analysis.InnerProductSpace.Spectral.BlockSum
 
 /-!
 # Orthogonal block sums and finite angle functional calculus
@@ -38,58 +39,6 @@ open scoped InnerProductSpace
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 
-private noncomputable def blockInlLinear
-    {E₁ E₂ : Type*}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] :
-    E₁ →ₗ[𝕜] WithLp 2 (E₁ × E₂) :=
-  (WithLp.linearEquiv 2 𝕜 (E₁ × E₂)).symm.toLinearMap ∘ₗ LinearMap.inl 𝕜 E₁ E₂
-
-private noncomputable def blockInrLinear
-    {E₁ E₂ : Type*}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] :
-    E₂ →ₗ[𝕜] WithLp 2 (E₁ × E₂) :=
-  (WithLp.linearEquiv 2 𝕜 (E₁ × E₂)).symm.toLinearMap ∘ₗ LinearMap.inr 𝕜 E₁ E₂
-
-@[simp] private theorem blockInlLinear_apply
-    {E₁ E₂ : Type*}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
-    (x : E₁) :
-    blockInlLinear (𝕜 := 𝕜) (E₂ := E₂) x = WithLp.toLp 2 (x, (0 : E₂)) := rfl
-
-@[simp] private theorem blockInrLinear_apply
-    {E₁ E₂ : Type*}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
-    (x : E₂) :
-    blockInrLinear (𝕜 := 𝕜) (E₁ := E₁) x = WithLp.toLp 2 ((0 : E₁), x) := rfl
-
-private theorem blockInlLinear_intertwines
-    {E₁ E₂ : Type*}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
-    (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂) :
-    blockInlLinear (𝕜 := 𝕜) (E₂ := E₂) ∘ₗ A =
-      (A.prodMap B).withLpMap 2 ∘ₗ
-        blockInlLinear (𝕜 := 𝕜) (E₂ := E₂) := by
-  ext x
-  apply WithLp.ofLp_injective 2
-  simp [LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply]
-
-private theorem blockInrLinear_intertwines
-    {E₁ E₂ : Type*}
-    [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁]
-    [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
-    (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂) :
-    blockInrLinear (𝕜 := 𝕜) (E₁ := E₁) ∘ₗ B =
-      (A.prodMap B).withLpMap 2 ∘ₗ
-        blockInrLinear (𝕜 := 𝕜) (E₁ := E₁) := by
-  ext x
-  apply WithLp.ofLp_injective 2
-  simp [LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply]
-
 /-- **Finite self-adjoint functional calculus preserves an orthogonal block sum.** -/
 theorem selfAdjointFunctionalCalculus_orthogonalBlockSum
     {E₁ E₂ : Type*}
@@ -101,46 +50,25 @@ theorem selfAdjointFunctionalCalculus_orthogonalBlockSum
     LinearMap.IsSymmetric.cfc hAB f =
       ((LinearMap.IsSymmetric.cfc hA f).prodMap (LinearMap.IsSymmetric.cfc hB f)).withLpMap 2 := by
   dsimp only
-  let J₁ : E₁ →ₗ[𝕜] WithLp 2 (E₁ × E₂) :=
-    blockInlLinear (𝕜 := 𝕜) (E₁ := E₁) (E₂ := E₂)
-  let J₂ : E₂ →ₗ[𝕜] WithLp 2 (E₁ × E₂) :=
-    blockInrLinear (𝕜 := 𝕜) (E₁ := E₁) (E₂ := E₂)
-  let T : WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (E₁ × E₂) :=
-    (A.prodMap B).withLpMap 2
-  let hT : T.IsSymmetric :=
-    UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hA hB
-  have hJ₁ : J₁ ∘ₗ A = T ∘ₗ J₁ := blockInlLinear_intertwines A B
-  have hJ₂ : J₂ ∘ₗ B = T ∘ₗ J₂ := blockInrLinear_intertwines A B
-  have hfc₁ := hA.comp_cfc_eq_cfc_comp hT hJ₁ f
-  have hfc₂ := hB.comp_cfc_eq_cfc_comp hT hJ₂ f
-  apply LinearMap.ext
-  intro x
-  have hx : x = J₁ x.ofLp.1 + J₂ x.ofLp.2 := by
-    apply (WithLp.ext_iff (p := 2)).mpr
-    apply Prod.ext_iff.mpr
-    constructor <;> simp [J₁, J₂]
-  have h₁ :
-      LinearMap.IsSymmetric.cfc hT f (J₁ x.ofLp.1) =
-        J₁ (LinearMap.IsSymmetric.cfc hA f x.ofLp.1) := by
-    simpa only [LinearMap.comp_apply] using
-      (LinearMap.congr_fun hfc₁ x.ofLp.1).symm
-  have h₂ :
-      LinearMap.IsSymmetric.cfc hT f (J₂ x.ofLp.2) =
-        J₂ (LinearMap.IsSymmetric.cfc hB f x.ofLp.2) := by
-    simpa only [LinearMap.comp_apply] using
-      (LinearMap.congr_fun hfc₂ x.ofLp.2).symm
-  calc
-    LinearMap.IsSymmetric.cfc hT f x
-        = LinearMap.IsSymmetric.cfc hT f (J₁ x.ofLp.1 + J₂ x.ofLp.2) := by rw [← hx]
-    _ = LinearMap.IsSymmetric.cfc hT f (J₁ x.ofLp.1) +
-          LinearMap.IsSymmetric.cfc hT f (J₂ x.ofLp.2) := map_add _ _ _
-    _ = J₁ (LinearMap.IsSymmetric.cfc hA f x.ofLp.1) +
-          J₂ (LinearMap.IsSymmetric.cfc hB f x.ofLp.2) := by rw [h₁, h₂]
-    _ = ((LinearMap.IsSymmetric.cfc hA f).prodMap
-      (LinearMap.IsSymmetric.cfc hB f)).withLpMap 2 x := by
-        apply WithLp.ofLp_injective 2
-        simp [J₁, J₂, LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply,
-          WithLp.ofLp_fst, WithLp.ofLp_snd]
+  apply LinearMap.toContinuousLinearMap.injective
+  rw [(UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hA hB).toContinuousLinearMap_cfc]
+  have hAc : IsSelfAdjoint A.toContinuousLinearMap :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
+  have hBc : IsSelfAdjoint B.toContinuousLinearMap :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hB
+  have toContinuousBlock (P : E₁ →ₗ[𝕜] E₁) (Q : E₂ →ₗ[𝕜] E₂) :
+      ((P.prodMap Q).withLpMap 2).toContinuousLinearMap =
+        P.toContinuousLinearMap.withLpProdMap 2 Q.toContinuousLinearMap := by
+    apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mpr
+    exact (ContinuousLinearMap.coe_withLpProdMap (p := 2)
+      P.toContinuousLinearMap Q.toContinuousLinearMap).symm
+  rw [toContinuousBlock A B,
+    ContinuousLinearMap.cfc_withLpProdMap A.toContinuousLinearMap B.toContinuousLinearMap
+    f hAc hBc
+    (((A.toContinuousLinearMap.finite_spectrum ℝ).union
+      (B.toContinuousLinearMap.finite_spectrum ℝ)).continuousOn f),
+    ← hA.toContinuousLinearMap_cfc, ← hB.toContinuousLinearMap_cfc,
+    toContinuousBlock (hA.cfc f) (hB.cfc f)]
 
 /-- **The sine-angle operator of an orthogonal sum of subspace pairs is block-diagonal.** -/
 theorem sinAngleOperator_orthogonalBlockSumSubmodule

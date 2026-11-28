@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1570
+**Unique cited Lean declarations:** 1569
 
 ## How to use this census
 
@@ -1356,7 +1356,6 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule`
 - `TauCeti.UnitarilyInvariantSeminorm.mem_orthogonalBlockSumSubmodule`
 - `TauCeti.UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule`
-- `LinearMap.IsSymmetric.comp_cfc_eq_cfc_comp`
 - `LinearMap.prodMap`
 - `LinearMap.withLpMap`
 - `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric`

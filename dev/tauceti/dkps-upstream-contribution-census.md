@@ -1,5 +1,24 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 block functional calculus
+
+The finite self-adjoint block formula now uses
+`ContinuousLinearMap.cfc_withLpProdMap` from kim-em's HeegaardFloer
+spectral-flow additivity PR on Forgejo #630. The finite and bounded
+calculi agree on each block and on their sum. The union of the two
+finite spectra makes every real symbol continuous on the set used
+by the native theorem. The sharpness angle, tangent, and double-angle
+formulas keep their original statements. The local inclusions and
+intertwining proof retire. DKPS proof descent is unverified.
+[Forgejo #630](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/630) ·
+[Integration](https://github.com/TauCetiProject/TauCeti/commit/40822675c0a7f156b9534f0f95edf0087bed8475)
+
+The focused build (8,683 jobs), default build (22,816 jobs), and
+Challenge with the result semantic-surface audit (22,526 jobs)
+passed without warnings at TauCeti `007b3a1150`. All 1,569
+source-census references resolved and all 17 available comparator
+signatures matched.
+
 ## November 27 product projections and block singular-value sums
 
 The projector onto a product subspace now uses

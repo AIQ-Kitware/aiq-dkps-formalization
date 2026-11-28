@@ -8694,6 +8694,27 @@
       "integration": "13f061f3f1b1dfce3a28c5af2629c16b08b97584, 5eeeaf3f759c9cea1e90419989d43b7c6150f16e",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "Use native block counts for every nonzero value. The dimensions determine the zero multiplicity in the finite lists, so the formula still accepts an arbitrary penalty with values in any additive commutative monoid. The full Ky Fan formula uses the identity penalty. Retire the separate polar/eigenbasis and basis-trace calculations. #14456 reports no external formalization was vendored."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum",
+      "source_declarations": [
+        "TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum",
+        "TauCeti.blockInlLinear",
+        "TauCeti.blockInrLinear",
+        "TauCeti.blockInlLinear_apply",
+        "TauCeti.blockInrLinear_apply",
+        "TauCeti.blockInlLinear_intertwines",
+        "TauCeti.blockInrLinear_intertwines"
+      ],
+      "original_source_anchor": "f8a57362456628aaefaa6523a25f85bb2c790faa (introduction), 68c946101128ef003344a420bdff9fb2ad22c148 (pre-retirement)",
+      "authors_license": "Jon Crall and GPT-5.6 Sol, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Spectral.BlockSum",
+      "final_declarations": ["ContinuousLinearMap.cfc_withLpProdMap"],
+      "roadmap_targets": ["HeegaardFloer §3.3 (spectral-flow direct sums, block calculus prerequisite)"],
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/630",
+      "integration": "40822675c0a7f156b9534f0f95edf0087bed8475",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Apply the native bounded block formula through LinearMap.IsSymmetric.toContinuousLinearMap_cfc. The union of the finite spectra discharges continuity for every real symbol, preserving the exact finite linear-map statement used by the sharpness assembly. Retire the two proof-only inclusions and their action and intertwining lemmas. The accepted auxiliary API was contributed by kim-em with the spectral-flow direct-sum result. DKPS proof descent is unverified."
     }
   ],
   "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"

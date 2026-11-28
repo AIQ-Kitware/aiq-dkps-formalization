@@ -3355,7 +3355,6 @@
         "TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule",
         "TauCeti.UnitarilyInvariantSeminorm.mem_orthogonalBlockSumSubmodule",
         "TauCeti.UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule",
-        "LinearMap.IsSymmetric.comp_cfc_eq_cfc_comp",
         "LinearMap.prodMap",
         "LinearMap.withLpMap",
         "TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric",
