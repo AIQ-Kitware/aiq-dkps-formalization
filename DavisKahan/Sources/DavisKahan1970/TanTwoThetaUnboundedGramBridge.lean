@@ -16,6 +16,7 @@ public import DavisKahan.InfiniteDimensional.DoubleAngle
 public import DavisKahan.Geometry.Polar.DirectRotation
 public import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
 public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
+import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 
 public section
 
@@ -528,13 +529,6 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
   set J : H →L[ℂ] H := (V.reflection : H →L[ℂ] H) with hJdef
   have hJsa : IsSelfAdjoint J :=
     Submodule.isSelfAdjoint_reflection V
-  have hJ2 : J * J = 1 := Submodule.reflection_mul_self V
-  have hJJ : ∀ x, J (J x) = x := fun x => by
-    have h := congrArg (fun T : H →L[ℂ] H => T x) hJ2
-    simpa using h
-  have hJnorm : ‖J‖ ≤ 1 :=
-    ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
-      rw [TauCeti.norm_apply_of_isSelfAdjoint_of_mul_self hJsa hJ2, one_mul]
   -- the corner, extended to the ambient space
   have hamb : Uᗮ.subtypeL ∘L reflectionSineCorner U J ∘L U.subtypeL.adjoint
       = Uᗮ.starProjection ∘L J ∘L U.starProjection := by
@@ -563,22 +557,23 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
       LinearIsometry.coe_toContinuousLinearMap, LinearIsometryEquiv.coe_toLinearIsometry]
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
-  apply NNReal.eq
-  calc ((reflectionSineCorner U J).singularValue n : ℝ)
-      = ((Uᗮ.subtypeL ∘L reflectionSineCorner U J ∘L
-          U.subtypeL.adjoint).singularValue n : ℝ) :=
-        ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+  calc (reflectionSineCorner U J).singularValue n
+      = (Uᗮ.subtypeL ∘L reflectionSineCorner U J ∘L U.subtypeL.adjoint).singularValue n :=
+        ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
           (ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
-            (reflectionSineCorner U J)) n))).symm
-    _ = ((Uᗮ.starProjection ∘L J ∘L U.starProjection).singularValue n : ℝ) := by
-        rw [hamb]
-    _ = ((U.starProjection ∘L J ∘L Uᗮ.starProjection).singularValue n : ℝ) := by
+            (reflectionSineCorner U J)) n).symm
+    _ = (Uᗮ.starProjection ∘L J ∘L U.starProjection).singularValue n := by rw [hamb]
+    _ = (U.starProjection ∘L J ∘L Uᗮ.starProjection).singularValue n := by
         rw [← hstar, ContinuousLinearMap.star_eq_adjoint,
           ContinuousLinearMap.singularValue_adjoint]
-    _ = (((U.starProjection ∘L J ∘L Uᗮ.starProjection) ∘L J).singularValue n : ℝ) :=
-        ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
-          (ContinuousLinearMap.sameSingularValues_comp_right hJnorm hJnorm hJJ) n))).symm
-    _ = ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) := by rw [hblock]
+    _ = ((U.starProjection ∘L J ∘L Uᗮ.starProjection) ∘L J).singularValue n := by
+        let h : H →L[ℂ] H := U.starProjection ∘L J ∘L Uᗮ.starProjection
+        have hs := h.singularValue_comp_linearIsometryEquiv V.reflection
+          (LinearIsometryEquiv.refl ℂ H) n
+        change (ContinuousLinearMap.id ℂ H ∘L h ∘L J).singularValue n = h.singularValue n at hs
+        rw [ContinuousLinearMap.id_comp] at hs
+        exact hs.symm
+    _ = (DavisKahan.sinTwoThetaIdealBlock U V).singularValue n := by rw [hblock]
 
 end IdealBlockBridge
 

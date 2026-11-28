@@ -11,6 +11,8 @@ public import ForTauCeti.Analysis.Normed.Operator.Restriction
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.SinTheta.SpectralBridge
+import TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle
+import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 
 public section
 
@@ -59,20 +61,6 @@ theorem boundedRealSpectrum_eq_realSpectrum (X : E →L[𝕜] E) :
   rw [_root_.LinearPMap.mem_realSpectrum_iff, X.spectrum_toPMap_top]
 
 omit [CompleteSpace E] [CompleteSpace F] in
-/-- Orthogonal projection on the left is contractive in operator norm. -/
-theorem projection_comp_opNorm_le
-    (U : Submodule 𝕜 F) [U.HasOrthogonalProjection]
-    (T : E →L[𝕜] F) :
-    ‖U.starProjection ∘L T‖ ≤ ‖T‖ := by
-  calc
-    ‖U.starProjection ∘L T‖ ≤ ‖U.starProjection‖ * ‖T‖ :=
-      U.starProjection.opNorm_comp_le T
-    _ ≤ 1 * ‖T‖ := by
-      gcongr
-      exact U.starProjection_norm_le
-    _ = ‖T‖ := one_mul _
-
-omit [CompleteSpace E] [CompleteSpace F] in
 /-- The rectangular projection--operator--inclusion block is contractive. -/
 theorem restricted_projection_sandwich_norm_le
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -80,24 +68,10 @@ theorem restricted_projection_sandwich_norm_le
     (T : E →L[𝕜] F) :
     ‖((Vᗮ.starProjection ∘L T ∘L U.subtypeL)).codRestrict Vᗮ
       (fun _x => Vᗮ.starProjection_apply_mem _)‖ ≤ ‖T‖ := by
-  -- Explicit arguments: with the operator left as a metavariable, `rw` cannot solve it from
-  -- the membership proof, whose type is only definitionally the expected one.
-  rw [ContinuousLinearMap.opNorm_codRestrict_eq (Vᗮ.starProjection ∘L T ∘L U.subtypeL) Vᗮ
-    (fun x => Vᗮ.starProjection_apply_mem _)]
-  calc
-    ‖Vᗮ.starProjection ∘L T ∘L U.subtypeL‖
-        ≤ ‖Vᗮ.starProjection‖ * ‖T‖ * ‖U.subtypeL‖ := by
-          refine (Vᗮ.starProjection.opNorm_comp_le (T ∘L U.subtypeL)).trans ?_
-          rw [mul_assoc]
-          gcongr
-          exact T.opNorm_comp_le U.subtypeL
-    _ ≤ 1 * ‖T‖ * 1 := by
-      gcongr
-      · exact Vᗮ.starProjection_norm_le
-      · refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one ?_
-        intro x
-        simp
-    _ = ‖T‖ := by ring
+  have h := ContinuousLinearMap.singularValue_orthogonalProjectionOnto_comp_comp_subtypeL_le
+    Vᗮ U T 0
+  rw [ContinuousLinearMap.singularValue_zero, ContinuousLinearMap.singularValue_zero] at h
+  exact_mod_cast h
 
 omit [CompleteSpace E] in
 /-- The directed projection gap is the norm of the rectangular cross block. -/
@@ -106,34 +80,17 @@ theorem directedGap_eq_restrictedBlock_norm
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖((Vᗮ.starProjection ∘L U.subtypeL)).codRestrict Vᗮ
       (fun _x => Vᗮ.starProjection_apply_mem _)‖ = U.directedProjectionGap V := by
-  let T : U →L[𝕜] Vᗮ :=
-    ((Vᗮ.starProjection ∘L U.subtypeL)).codRestrict Vᗮ (fun x => Vᗮ.starProjection_apply_mem _)
-  have hle1 : ‖T‖ ≤ ‖Vᗮ.starProjection ∘L U.starProjection‖ := by
-    refine ContinuousLinearMap.opNorm_le_bound _
-      (norm_nonneg (Vᗮ.starProjection ∘L U.starProjection)) ?_
-    intro x
-    have hPx : U.starProjection (x : E) = (x : E) :=
-      Submodule.starProjection_eq_self_iff.mpr x.property
-    have h := (Vᗮ.starProjection ∘L U.starProjection).le_opNorm (x : E)
-    -- Corestriction does not change the norm of the underlying vector.
-    change ‖Vᗮ.starProjection (x : E)‖ ≤
-      ‖Vᗮ.starProjection ∘L U.starProjection‖ * ‖(x : E)‖
-    simpa [hPx] using h
-  have hle2 : ‖Vᗮ.starProjection ∘L U.starProjection‖ ≤ ‖T‖ := by
-    refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg T) ?_
-    intro x
-    let ux : U := ⟨U.starProjection x, U.starProjection_apply_mem x⟩
-    have hTx := T.le_opNorm ux
-    have hproj : ‖U.starProjection x‖ ≤ ‖x‖ :=
-      U.norm_starProjection_apply_le x
-    calc
-      ‖(Vᗮ.starProjection ∘L U.starProjection) x‖ = ‖T ux‖ := by rfl
-      _ ≤ ‖T‖ * ‖ux‖ := hTx
-      _ ≤ ‖T‖ * ‖x‖ :=
-        mul_le_mul_of_nonneg_left hproj (norm_nonneg T)
-  rw [Submodule.directedProjectionGap_def]
-  change ‖T‖ = ‖Vᗮ.starProjection ∘L U.starProjection‖
-  exact le_antisymm hle1 hle2
+  have hrange : U.subtypeL.range = U := by
+    ext x
+    simp
+  let : U.subtypeL.range.HasOrthogonalProjection :=
+    hrange.symm ▸ (inferInstance : U.HasOrthogonalProjection)
+  have h := V.norm_starProjection_orthogonal_comp (X := U.subtypeL)
+    (AddMonoidHomClass.isometry_iff_norm U.subtypeL |>.2 fun _ => rfl)
+  rw [Submodule.directedProjectionGap_def, Submodule.starProjection_congr hrange] at h
+  rw [ContinuousLinearMap.opNorm_codRestrict_eq (Vᗮ.starProjection ∘L U.subtypeL) Vᗮ
+    (fun _ => Vᗮ.starProjection_apply_mem _), Submodule.directedProjectionGap_def]
+  exact h
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The directed residual block satisfies the restricted Sylvester equation. -/

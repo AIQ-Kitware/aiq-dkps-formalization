@@ -1,5 +1,41 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 rectangular sine blocks and compressions
+
+The norm of the rectangular sine block now follows from
+`Submodule.norm_starProjection_orthogonal_comp`, using the isometric
+inclusion of the source subspace and preservation of the operator norm
+under codomain restriction. The bounded residual estimates and
+Section 8's `norm_sineBlockC_eq_directedProjectionGap` share this
+argument. The general norm identity still applies in incomplete
+ambient spaces. #16661 reports independent development and acknowledges
+the DKPS roadmap implementation.
+[#16661 integration](https://github.com/TauCetiProject/TauCeti/commit/c5920d8f1e7cad46b0c0d79052124180557ea6d2)
+
+The rectangular compression bound is now the zeroth case of
+`ContinuousLinearMap.singularValue_orthogonalProjectionOnto_comp_comp_subtypeL_le`.
+#24866 generalizes the range-compression lemma introduced with the
+Hilbert–Schmidt energy theorem in #16622. Both were submitted by
+tauceti-ai-for-science. Mathlib's operator-norm laws now supply the
+codomain-restriction norm equality and the single-projection
+contraction used by the residual proof.
+[#16622 integration](https://github.com/TauCetiProject/TauCeti/commit/cbeaee9f03627f5c09da950d62a5cf7af049e10d) ·
+[#24866 integration](https://github.com/TauCetiProject/TauCeti/commit/09317e21889746f91b731fece5a5faad9a48b374)
+
+The reflected sine corner uses the native isometric invariance from
+our DKPS-derived #13866 directly on the complete singular-value
+sequence. The local contractive right-inverse theorem still covers
+split surjections that can have a kernel. The ambient extension of
+a rectangular subspace block also stays available at its
+isometric-inclusion scope.
+[#13866 integration](https://github.com/TauCetiProject/TauCeti/commit/7bbe813acf610ee6db4caba078b9c4facf357b90)
+
+The focused build (9,899 jobs), default build (22,804 jobs), and
+Challenge with the Section 8 and result semantic-surface audits
+(22,516 jobs) passed without warnings at TauCeti `007b3a1150`.
+All 1,572 source-census declaration references resolved and all 17
+available comparator signatures matched.
+
 ## November 27 complementary projections and directed gaps
 
 Mathlib's `Submodule.starProjection_orthogonal_val` replaces

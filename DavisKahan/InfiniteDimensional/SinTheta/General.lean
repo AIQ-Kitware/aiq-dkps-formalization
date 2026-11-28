@@ -302,7 +302,8 @@ theorem sinTheta_residual
       ‖C‖ = ‖(Uᗮ).starProjection ∘L A.sylvester M X‖ :=
         ContinuousLinearMap.opNorm_codRestrict_eq _ _ _
       _ ≤ ‖A.sylvester M X‖ :=
-        projection_comp_opNorm_le Uᗮ _
+        (Uᗮ.starProjection.opNorm_comp_le _).trans
+          (mul_le_of_le_one_left (norm_nonneg _) Uᗮ.starProjection_norm_le)
   simpa [hY] using hbound.trans hC
 
 /-- One-sided perturbation theorem for spectral subspaces.

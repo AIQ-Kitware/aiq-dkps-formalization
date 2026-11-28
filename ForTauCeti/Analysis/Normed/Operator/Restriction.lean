@@ -26,16 +26,8 @@ applies when the domain is a bare subspace carrier. -/
 theorem opNorm_codRestrict_eq
     (T : E →L[𝕜] F) (M : Submodule 𝕜 F)
     (hT : ∀ x, T x ∈ M) :
-    ‖T.codRestrict M hT‖ = ‖T‖ := by
-  apply le_antisymm
-  · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg T) ?_
-    intro x
-    exact T.le_opNorm x
-  · refine ContinuousLinearMap.opNorm_le_bound _
-      (norm_nonneg (T.codRestrict M hT)) ?_
-    intro x
-    have hx := (T.codRestrict M hT).le_opNorm x
-    exact hx
+    ‖T.codRestrict M hT‖ = ‖T‖ :=
+  (T.codRestrict M hT).opNorm_ext T fun _ => rfl
 
 /-- Restricting to the full subspace does not change the spectrum. -/
 theorem spectrum_restrict_top (A : E →L[𝕜] E)

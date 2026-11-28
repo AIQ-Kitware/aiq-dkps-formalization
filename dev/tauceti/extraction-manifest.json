@@ -8542,6 +8542,32 @@
       "integration": "3dd25fa2147bc1998858ca867f2c2b3381c58d26; 7d18dcc1e85f003204a98b0a5756583c7446d03d",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "The restricted codomain needed by the DKPS Sylvester estimates is retained. Its pointwise identity follows from the native projected residual on a reducing subspace. #36835 preserves the credit to the finite DKPS statement originally recorded in Residual/AngleEmbedding.lean."
+    },
+    {
+      "source_module": "DavisKahan.InfiniteDimensional.SinTheta.Restriction; DavisKahan.Sources.DavisKahan1970.SineTheta.FullAnglePresentation; ForTauCeti.Analysis.Normed.Operator.Restriction",
+      "source_declarations": ["TauCeti.DavisKahanExt.directedGap_eq_restrictedBlock_norm", "TauCeti.DavisKahanExt.restricted_projection_sandwich_norm_le", "TauCeti.DavisKahanExt.projection_comp_opNorm_le", "TauCeti.DavisKahan1970.norm_sineBlockC_eq_directedProjectionGap", "ContinuousLinearMap.opNorm_codRestrict_eq"],
+      "original_source_anchor": "f55aabfaf32e2f705447c4e7faf27c2ab3cc54b7; a90197f9d092fb862f9771261fcce93f3258725b (restriction API); 4469b61278eb15b7311c977451232e46117680b2 (Section 8 sine block)",
+      "authors_license": "Jon Crall with OpenAI GPT-5.6 Thinking (sine restriction), GPT 5.6 High (operator restriction), and OpenAI GPT-5.6 Sol (Section 8), Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Projection.PrincipalAngle; TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax",
+      "final_declarations": ["Submodule.norm_starProjection_orthogonal_comp", "ContinuousLinearMap.singularValue_orthogonalProjectionOnto_comp_comp_subtypeL_le"],
+      "roadmap_targets": ["SSP-C01–C08 (trial-map angle API)", "OperatorIdeals (compression by two subspaces)"],
+      "upstream_pr": "#16661; #16622; #24866",
+      "integration": "c5920d8f1e7cad46b0c0d79052124180557ea6d2; cbeaee9f03627f5c09da950d62a5cf7af049e10d; 09317e21889746f91b731fece5a5faad9a48b374",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The rectangular norm applies the native isometry theorem to the source subtype inclusion. Section 8 uses the same identity through Mathlib Submodule.adjoint_subtypeL. Index zero of the native singular-value compression inequality gives the rectangular norm inequality. Both generic DKPS norm statements still admit incomplete ambient spaces. Mathlib ContinuousLinearMap.opNorm_ext now supplies codomain restriction norm preservation, and opNorm_comp_le with starProjection_norm_le retires projection_comp_opNorm_le. #16661 discloses independent development and acknowledges the DKPS roadmap. #24866 generalizes the private compression bound from #16622; neither integration establishes DKPS proof descent."
+    },
+    {
+      "source_module": "DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge",
+      "source_declarations": ["TauCeti.DavisKahan1970.hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock"],
+      "original_source_anchor": "a56c016732375adfff975419c19e8caabc18db7b:DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean; f55aabfaf32e2f705447c4e7faf27c2ab3cc54b7",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry",
+      "final_declarations": ["ContinuousLinearMap.singularValue_comp_linearIsometryEquiv"],
+      "roadmap_targets": ["OI-B72 (isometric-invariance prerequisite)"],
+      "upstream_pr": "#13866",
+      "integration": "7bbe813acf610ee6db4caba078b9c4facf357b90",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "Use the DKPS-derived native isometric invariance for precomposition by the subspace reflection at every index, in NNReal. The source block identity and its scope stay intact. The broader local contractive right-inverse lemma still permits split surjections with kernel and the local subspace transport still handles nonsurjective inclusions."
     }
   ],
   "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"

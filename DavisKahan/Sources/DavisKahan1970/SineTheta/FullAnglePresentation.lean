@@ -9,10 +9,10 @@ public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.FullAngleReal
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 public import DavisKahan.SpectralTheory.OperatorAngle
 public import DavisKahan.SpectralTheory.Complexification.Subspace
+import DavisKahan.InfiniteDimensional.SinTheta.Restriction
 
 /-!
 # Presentation bridges for the full Davis--Kahan operator angle
@@ -123,42 +123,13 @@ noncomputable local instance instCStarAlgebraSubspaceCoordinateFullAnglePresenta
     CStarAlgebra (↥U →L[ℂ] ↥U) :=
   inferInstance
 
-private theorem subtype_comp_adjoint_subtype
-    (W : Submodule ℂ E) [W.HasOrthogonalProjection] :
-    W.subtypeL ∘L W.subtypeL.adjoint = W.starProjection := by
-  rw [Submodule.adjoint_subtypeL]
-  rfl
-
 /-- The source sine block has operator norm equal to the directed projection gap. -/
 theorem norm_sineBlockC_eq_directedProjectionGap
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sineBlockC U V‖ = U.directedProjectionGap V := by
-  have hseq := ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
-    U Vᗮ (sineBlockC U V)
-  have h0 := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hseq 0))
-  rw [ContinuousLinearMap.singularValue_zero, coe_nnNorm,
-    ContinuousLinearMap.singularValue_zero, coe_nnNorm] at h0
-  have hamb :
-      Vᗮ.subtypeL ∘L sineBlockC U V ∘L U.subtypeL.adjoint =
-        Vᗮ.starProjection ∘L U.starProjection := by
-    rw [sineBlockC]
-    have hV :
-        Vᗮ.subtypeL ∘L Vᗮ.subtypeL.adjoint = Vᗮ.starProjection :=
-      subtype_comp_adjoint_subtype Vᗮ
-    have hU :
-        U.subtypeL ∘L U.subtypeL.adjoint = U.starProjection :=
-      subtype_comp_adjoint_subtype U
-    calc
-      (Vᗮ.subtypeL ∘L Vᗮ.subtypeL.adjoint ∘L U.subtypeL) ∘L
-          U.subtypeL.adjoint =
-          (Vᗮ.subtypeL ∘L Vᗮ.subtypeL.adjoint) ∘L
-            (U.subtypeL ∘L U.subtypeL.adjoint) := by
-        ext x
-        rfl
-      _ = Vᗮ.starProjection ∘L U.starProjection := by rw [hV, hU]
-  rw [hamb] at h0
-  simpa only [Submodule.directedProjectionGap_def] using h0.symm
+  rw [sineBlockC, Submodule.adjoint_subtypeL]
+  exact DavisKahanExt.directedGap_eq_restrictedBlock_norm U V
 
 /-- The source positive sine modulus has the same norm as the directed gap. -/
 theorem norm_sineBlockModulusC_eq_directedProjectionGap
