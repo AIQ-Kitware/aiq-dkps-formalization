@@ -38,19 +38,22 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
 variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
   [CompleteSpace V]
 
+omit [CompleteSpace H] in
 /-- A compact form embedding makes the variational resolvent compact. -/
 theorem CoerciveFormData.isCompactOperator_resolvent
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V))
     (hcompact : IsCompactOperator D.embed) :
     IsCompactOperator D.resolvent :=
-  hcompact.comp_clm D.solutionOperator
+  InnerProductSpace.isCompactOperator_formSolutionOperator D.sesqForm D.sesqForm_isUnit hcompact
 
+omit [CompleteSpace H] in
 /-- A compact form embedding gives compact graph embedding for the associated
 positive self-adjoint operator. -/
 theorem CoerciveFormData.associatedOperator_graph_compact
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V))
     (hcompact : IsCompactOperator D.embed) :
     SequentiallyCompactGraphEmbedding D.associatedOperator := by
+  rw [D.associatedOperator_eq_inverse]
   exact inverse_graph_embedding_compact
     D.resolvent D.resolvent_injective
     (D.isCompactOperator_resolvent hcompact)
@@ -61,6 +64,7 @@ theorem CoerciveFormData.graph_compact_iff_resolvent_compact
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     SequentiallyCompactGraphEmbedding D.associatedOperator ↔
       IsCompactOperator D.resolvent := by
+  rw [D.associatedOperator_eq_inverse]
   exact inverse_graph_compact_iff
     D.resolvent D.resolvent_injective
 

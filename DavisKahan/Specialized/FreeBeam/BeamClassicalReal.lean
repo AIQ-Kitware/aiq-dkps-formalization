@@ -205,23 +205,8 @@ theorem beamOperator_affine_mem_and_zero (a b : ℝ) :
     ∃ h : affineLp a b ∈ beamOperator.domain,
       beamOperator ⟨affineLp a b, h⟩ = 0 := by
   have hres : beamCoerciveFormData.resolvent (affineLp a b) = affineLp a b := by
-    rw [show beamCoerciveFormData.resolvent =
-      beamCoerciveFormData.embed ∘L beamCoerciveFormData.solutionOperator from rfl]
-    have hsol : beamCoerciveFormData.solutionOperator (affineLp a b) = affineV a b := by
-      rw [show beamCoerciveFormData.solutionOperator =
-        beamCoerciveFormData.formInverse ∘L
-          ContinuousLinearMap.adjoint beamCoerciveFormData.embed from rfl]
-      have hinv : beamCoerciveFormData.formInverse = 1 := by
-        rw [show beamCoerciveFormData.formInverse =
-          Ring.inverse beamCoerciveFormData.formOperator from rfl]
-        rw [show beamCoerciveFormData.formOperator = ContinuousLinearMap.id ℝ BeamV from rfl]
-        exact Ring.inverse_one _
-      rw [ContinuousLinearMap.comp_apply, hinv]
-      rw [show ContinuousLinearMap.adjoint beamCoerciveFormData.embed (affineLp a b) =
-        affineV a b from adjoint_beamEmbed_affine a b]
-      rfl
-    rw [ContinuousLinearMap.comp_apply, hsol]
-    exact beamEmbed_affineV a b
+    have h := DFunLike.congr_fun (Scalar.beamResolvent_eq (𝕜 := ℝ)) (affineLp a b)
+    exact h.trans (congrArg beamEmbed (adjoint_beamEmbed_affine a b)) |>.trans (beamEmbed_affineV a b)
   obtain ⟨hmem, hB⟩ := beamShiftedFormData.exists_beamOperator_apply_of_resolvent_eq hres
   exact ⟨hmem, hB.trans (sub_self _)⟩
 
@@ -791,8 +776,7 @@ theorem closure_classicalFreeBeamCoreGraph_eq_graph :
         have hRinv :
             beamCoerciveFormData.resolvent
                 (beamShiftedFormData.shiftedOperator xb) = (xb : BeamL2) := by
-          exact beamCoerciveFormData.resolvent.apply_inverse_toPMap_top
-            beamCoerciveFormData.resolvent_injective xb
+          exact beamCoerciveFormData.resolvent_associatedOperator_apply xb
         calc
           beamCoerciveFormData.resolvent g =
               beamCoerciveFormData.resolvent

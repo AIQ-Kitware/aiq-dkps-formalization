@@ -53,7 +53,6 @@ universe u v
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
-  [CompleteSpace H]
 variable {V : Type v} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V]
   [CompleteSpace V]
 
@@ -102,7 +101,7 @@ theorem exists_beamOperator_apply_of_resolvent_eq
     {f x : H} (h : D.resolvent f = x) :
     ∃ hx : x ∈ D.beamOperator.domain, D.beamOperator ⟨x, hx⟩ = f - x := by
   subst x
-  let v : D.beamOperator.domain := ⟨D.resolvent f, D.resolvent.apply_mem_domain_inverse_toPMap_top f⟩
+  let v : D.beamOperator.domain := ⟨D.resolvent f, D.resolvent_mem_associatedOperator_domain f⟩
   refine ⟨v.property, (D.beamOperator_apply v).trans ?_⟩
   exact congrArg (fun z => z - D.resolvent f) (D.toCoerciveFormData.associatedOperator_resolvent f)
 
@@ -134,10 +133,9 @@ noncomputable def formRepresentative
 theorem embed_formRepresentative
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.shiftedOperator.domain) :
-    D.embed (D.formRepresentative x) = (x : H) := by
-  change D.toCoerciveFormData.resolvent
-      (D.shiftedOperator x) = (x : H)
-  exact D.resolvent.apply_inverse_toPMap_top D.resolvent_injective x
+    D.embed (D.formRepresentative x) = (x : H) :=
+  (D.resolvent_apply (D.shiftedOperator x)).symm.trans
+    (D.toCoerciveFormData.resolvent_associatedOperator_apply x)
 
 /-- The shifted operator quadratic form is the represented shifted form
 energy. -/
@@ -148,21 +146,12 @@ theorem shifted_quadratic_eq_form_energy
       RCLike.re
         ⟪D.formOperator (D.formRepresentative x),
           D.formRepresentative x⟫_𝕜 := by
-  let f := D.shiftedOperator x
-  have henergy := D.toCoerciveFormData.resolvent_energy_identity f
-  have hRx : D.toCoerciveFormData.resolvent f = (x : H) :=
-    D.embed_formRepresentative x
-  calc
-    RCLike.re ⟪f, (x : H)⟫_𝕜 =
-        RCLike.re ⟪(x : H), f⟫_𝕜 := inner_re_symm _ _
-    _ = RCLike.re ⟪D.toCoerciveFormData.resolvent f, f⟫_𝕜 := by rw [hRx]
-    _ = RCLike.re
-        ⟪D.formOperator (D.toCoerciveFormData.solutionOperator f),
-          D.toCoerciveFormData.solutionOperator f⟫_𝕜 :=
-      congrArg RCLike.re henergy
-    _ = RCLike.re
-        ⟪D.formOperator (D.formRepresentative x),
-          D.formRepresentative x⟫_𝕜 := rfl
+  have h : ⟪D.shiftedOperator x, D.embed (D.formRepresentative x)⟫_𝕜 =
+      D.sesqForm (D.formRepresentative x) (D.formRepresentative x) :=
+    D.embed.inner_closedFormOperator D.embed_injective D.embed_dense D.sesqForm
+      (x := x) (D.embed_formRepresentative x) (D.formRepresentative x)
+  rw [D.embed_formRepresentative x] at h
+  exact congrArg RCLike.re (h.trans (D.toCoerciveFormData.sesqForm_apply _ _))
 
 /-- The unshifted beam quadratic form is exactly the bending energy. -/
 theorem beam_quadratic_eq_bendingEnergy
@@ -191,12 +180,11 @@ theorem beam_nonnegative
   exact D.bending_nonnegative _
 
 /-- The shifted form realization is self-adjoint. -/
-theorem shiftedOperator_isSelfAdjoint
+theorem shiftedOperator_isSelfAdjoint [CompleteSpace H]
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     _root_.IsSelfAdjoint D.shiftedOperator :=
   D.toCoerciveFormData.associatedOperator_isSelfAdjoint
 
-omit [CompleteSpace H] in
 /-- The identity perturbation is symmetric. -/
 theorem negIdentity_isSelfAdjointOperator :
     (-(1 : H →L[𝕜] H)).IsSymmetric := by
@@ -205,7 +193,7 @@ theorem negIdentity_isSelfAdjointOperator :
 
 /-- Subtracting the identity preserves self-adjointness, so the unshifted free
 beam is self-adjoint. -/
-theorem beamOperator_isSelfAdjoint
+theorem beamOperator_isSelfAdjoint [CompleteSpace H]
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     _root_.IsSelfAdjoint D.beamOperator := by
   exact isSelfAdjoint_perturb_bounded D.shiftedOperator_isSelfAdjoint

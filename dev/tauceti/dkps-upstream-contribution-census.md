@@ -1,5 +1,36 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 closed sesquilinear forms in the free-beam realization
+
+The coercive form represented by the bounded operator now uses
+`InnerProductSpace.formSolutionMap` and `formSolutionOperator`. Its unbounded
+realization is `ContinuousLinearMap.closedFormOperator`, with self-adjointness
+from the first representation theorem at shift zero. These are the form
+representation portion of UO-D06 from chrisflav’s #41886. The original
+bounded data determines the same sesquilinear form, and the free-beam
+arguments in both scalar fields share the same solution-operator formula.
+[#41886](https://github.com/TauCetiProject/TauCeti/pull/41886)
+
+The graph of the represented operator agrees with the partial inverse
+of the ambient solution operator. This equality needs no ambient completeness
+and connects the closed-form construction to the compact-inverse spectrum
+and graph compactness proofs. The original domain, action, and form energy
+continue to give the Section 9 statements. The separate local bounded form
+inverse, its composition formula, and the unused symmetry and energy
+wrappers retire.
+[#37946](https://github.com/TauCetiProject/TauCeti/pull/37946)
+
+The source notices are anchored at `c727b53fe` in
+`DavisKahan/SpectralTheory/FormMethod/CoerciveFormResolvent.lean`. #41886
+credits the DKPS adaptation in `SelfAdjointMaximal`. The form realization
+and Lax–Milgram solution machinery have unestablished DKPS descent.
+
+The focused build (9,581 jobs), default build (22,794 jobs), and Challenge
+with the Section 9 and semantic-surface audits (22,502 jobs) passed without
+warnings. All 17 available comparator signatures matched. A separate Lean
+check recovered the original bounded-inverse expression for the solution
+operator over `RCLike`. The import policy reported zero violations.
+
 ## November 27 bounded inverses in the free-beam realization
 
 The coercive-form operator is now `LinearPMap.inverse` on the range of

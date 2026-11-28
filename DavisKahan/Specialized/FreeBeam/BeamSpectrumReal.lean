@@ -38,19 +38,8 @@ noncomputable section
 /-- The variational resolvent is the embedding composed with its adjoint. -/
 theorem beamResolvent_eq :
     beamCoerciveFormData.resolvent =
-      beamEmbed.comp (ContinuousLinearMap.adjoint beamEmbed) := by
-  have h1 : beamCoerciveFormData.resolvent =
-      beamCoerciveFormData.embed ∘L beamCoerciveFormData.solutionOperator := rfl
-  have h2 : beamCoerciveFormData.solutionOperator =
-      beamCoerciveFormData.formInverse ∘L
-        ContinuousLinearMap.adjoint beamCoerciveFormData.embed := rfl
-  have h3 : beamCoerciveFormData.formInverse = 1 := by
-    rw [show beamCoerciveFormData.formInverse =
-      Ring.inverse beamCoerciveFormData.formOperator from rfl]
-    rw [show beamCoerciveFormData.formOperator = ContinuousLinearMap.id ℝ BeamV from rfl]
-    exact Ring.inverse_one _
-  rw [h1, h2, h3]
-  rfl
+      beamEmbed.comp (ContinuousLinearMap.adjoint beamEmbed) :=
+  Scalar.beamResolvent_eq (𝕜 := ℝ)
 
 /-- The real variational resolvent is compact. -/
 theorem isCompactOperator_beamResolvent :
@@ -123,6 +112,8 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
     change lam ∈ beamShiftedFormData.beamOperator.spectrum at h
     rw [beamShiftedFormData.beamOperator_eq_subScalar, _root_.LinearPMap.mem_spectrum_iff,
       TauCeti.LinearPMap.mem_resolventSet_subScalar_iff] at h
+    change lam + 1 ∉ beamCoerciveFormData.associatedOperator.resolventSet at h
+    rw [beamCoerciveFormData.associatedOperator_eq_inverse] at h
     exact (_root_.LinearPMap.mem_spectrum_iff _ _).mpr h
   have hc : c ≠ 0 := by
     intro h0

@@ -8370,6 +8370,49 @@
       "integration": "0957a1a58e89439fc9ded61290002f81706e7b56",
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "Use Mathlib compact operators and composition, and TauCeti's generalized compact-operator subsequence and totally bounded image laws. The two-way proof for the sequential graph condition remains local and uses Mathlib's separated-sequence argument. Forgejo #2801 (c9c8c1b4bff7e60811510cb89bc16221aec1ca03) supplies the adjoint injectivity equivalence for the dense embedding. The compact subsequence law originated in #2333 (b47f6bed28777951e54c5d4e8c73a46091639faf). DKPS proof descent is unestablished for these accepted helpers."
+    },
+    {
+      "source_module": "DavisKahan.SpectralTheory.FormMethod.{CoerciveFormResolvent,FormCompactness,ShiftedBeamRealization}",
+      "source_declarations": [
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.formOperator_isUnit",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.formInverse",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.solutionOperator",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.solutionOperator_apply",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.solutionOperator_injective",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.resolvent",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.resolvent_injective",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.resolvent_isSymmetric",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.resolvent_isSelfAdjoint",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.resolvent_energy_identity",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.resolvent_nonnegative",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.associatedOperator",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.associatedOperator_isSelfAdjoint",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.isCompactOperator_resolvent",
+        "TauCeti.DavisKahan.FreeBeam.Analytic.ShiftedBeamFormData.shifted_quadratic_eq_form_energy"
+      ],
+      "original_source_anchor": "c727b53feb06bcc62efedf47fef3b3ad52445593:DavisKahan/SpectralTheory/FormMethod/{CoerciveFormResolvent,FormCompactness,ShiftedBeamRealization}.lean",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LaxMilgram; TauCeti.Analysis.InnerProductSpace.LinearPMap.ClosedForm.Basic",
+      "final_declarations": [
+        "InnerProductSpace.isUnit_continuousLinearMapOfBilin_of_coercive",
+        "InnerProductSpace.formSolutionMap",
+        "InnerProductSpace.formSolutionOperator",
+        "InnerProductSpace.formSolutionOperator_injective",
+        "InnerProductSpace.isSymmetric_formSolutionOperator",
+        "InnerProductSpace.isSelfAdjoint_formSolutionOperator",
+        "InnerProductSpace.inner_formSolutionOperator_self",
+        "InnerProductSpace.re_inner_formSolutionOperator_self_nonneg",
+        "InnerProductSpace.isCompactOperator_formSolutionOperator",
+        "ContinuousLinearMap.closedFormOperator",
+        "ContinuousLinearMap.isSelfAdjoint_closedFormOperator",
+        "ContinuousLinearMap.eq_closedFormOperator_of_mem_graph_iff",
+        "ContinuousLinearMap.inner_closedFormOperator"
+      ],
+      "roadmap_targets": ["UO-D06"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/41886",
+      "integration": "94d4276d66dbbb71b26757b08611f297733ed424",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The form representation component of UO-D06 supplies the canonical operator and solution maps over RCLike. Equality with the inverse of the solution map follows by comparing graphs and uses no completeness on the ambient space. The original variational identities are consequences of the native equations with the bounded representation substituted. Injectivity of the form-space solution follows from injectivity of its composition with the embedding. The ambient energy orientation follows from Hermiticity. DKPS still owns the shifted bending form, its unshifted energy identity, and the Section 9 graph compactness statement. The integration discloses DKPS provenance for SelfAdjointMaximal. DKPS descent is unestablished for the representation and Lax–Milgram machinery."
     }
   ],
   "current_consumption_pin": "fba9bfbf453bcf0d77efdde60fbce2376c2e35a8"

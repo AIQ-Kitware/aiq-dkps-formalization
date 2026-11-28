@@ -563,6 +563,15 @@ def beamCoerciveFormData : Abstract.CoerciveFormData (𝕜 := 𝕜) (H := (BeamL
   coercive := fun u => le_of_eq (by
     rw [ContinuousLinearMap.id_apply, one_mul, ← inner_self_eq_norm_sq (𝕜 := 𝕜)])
 
+/-- The free-beam solution operator is the embedding composed with its adjoint,
+since the represented bounded form operator is the identity. -/
+theorem beamResolvent_eq :
+    (beamCoerciveFormData (𝕜 := 𝕜)).resolvent =
+      beamEmbed.comp (ContinuousLinearMap.adjoint beamEmbed) := by
+  ext1 f
+  exact ((beamCoerciveFormData (𝕜 := 𝕜)).resolvent_apply f).trans
+    (congrArg beamEmbed ((beamCoerciveFormData (𝕜 := 𝕜)).formOperator_solutionOperator f))
+
 /-- The pair coordinates of a form-space element decompose its squared norm. -/
 theorem beamV_re_inner_self (u : (BeamV (𝕜 := 𝕜))) :
     RCLike.re ⟪u, u⟫_𝕜 = ‖beamEmbed u‖ ^ 2 + ‖beamSnd u‖ ^ 2 := by

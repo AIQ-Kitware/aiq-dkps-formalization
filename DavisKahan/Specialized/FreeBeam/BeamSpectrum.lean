@@ -222,23 +222,8 @@ theorem beamOperator_affine_mem_and_zero (a b : ℂ) :
       beamOperator ⟨affineLp a b, h⟩ = 0 := by
   -- the resolvent fixes affine elements
   have hres : beamCoerciveFormData.resolvent (affineLp a b) = affineLp a b := by
-    rw [show beamCoerciveFormData.resolvent
-        = beamCoerciveFormData.embed ∘L beamCoerciveFormData.solutionOperator from rfl]
-    have hsol : beamCoerciveFormData.solutionOperator (affineLp a b) = affineV a b := by
-      rw [show beamCoerciveFormData.solutionOperator
-          = beamCoerciveFormData.formInverse ∘L
-            (ContinuousLinearMap.adjoint beamCoerciveFormData.embed) from rfl]
-      have hinv : beamCoerciveFormData.formInverse = 1 := by
-        rw [show beamCoerciveFormData.formInverse
-            = Ring.inverse beamCoerciveFormData.formOperator from rfl]
-        rw [show beamCoerciveFormData.formOperator = 1 from rfl]
-        exact Ring.inverse_one _
-      rw [ContinuousLinearMap.comp_apply, hinv]
-      rw [show (ContinuousLinearMap.adjoint beamCoerciveFormData.embed)
-          (affineLp a b) = affineV a b from adjoint_beamEmbed_affine a b]
-      rfl
-    rw [ContinuousLinearMap.comp_apply, hsol]
-    exact beamEmbed_affineV a b
+    have h := DFunLike.congr_fun (Scalar.beamResolvent_eq (𝕜 := ℂ)) (affineLp a b)
+    exact h.trans (congrArg beamEmbed (adjoint_beamEmbed_affine a b)) |>.trans (beamEmbed_affineV a b)
   obtain ⟨hmem, hB⟩ := beamShiftedFormData.exists_beamOperator_apply_of_resolvent_eq hres
   exact ⟨hmem, hB.trans (sub_self _)⟩
 
@@ -765,19 +750,8 @@ theorem nonneg_of_beamOperator_eigen {lam : ℝ} {x : beamOperator.domain}
 /-- The variational resolvent is the embedding composed with its own adjoint. -/
 theorem beamResolvent_eq :
     beamCoerciveFormData.resolvent
-      = beamEmbed.comp (ContinuousLinearMap.adjoint beamEmbed) := by
-  have h1 : beamCoerciveFormData.resolvent
-      = beamCoerciveFormData.embed ∘L beamCoerciveFormData.solutionOperator := rfl
-  have h2 : beamCoerciveFormData.solutionOperator
-      = beamCoerciveFormData.formInverse ∘L
-        ContinuousLinearMap.adjoint beamCoerciveFormData.embed := rfl
-  have h3 : beamCoerciveFormData.formInverse = 1 := by
-    rw [show beamCoerciveFormData.formInverse
-        = Ring.inverse beamCoerciveFormData.formOperator from rfl]
-    rw [show beamCoerciveFormData.formOperator = 1 from rfl]
-    exact Ring.inverse_one _
-  rw [h1, h2, h3]
-  rfl
+      = beamEmbed.comp (ContinuousLinearMap.adjoint beamEmbed) :=
+  Scalar.beamResolvent_eq (𝕜 := ℂ)
 
 /-- The variational resolvent is a compact operator. -/
 theorem isCompactOperator_beamResolvent :
@@ -897,6 +871,8 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
     change (lam : ℂ) ∈ beamShiftedFormData.beamOperator.spectrum at h
     rw [beamShiftedFormData.beamOperator_eq_subScalar, _root_.LinearPMap.mem_spectrum_iff,
       TauCeti.LinearPMap.mem_resolventSet_subScalar_iff] at h
+    change (lam : ℂ) + 1 ∉ beamCoerciveFormData.associatedOperator.resolventSet at h
+    rw [beamCoerciveFormData.associatedOperator_eq_inverse] at h
     exact (_root_.LinearPMap.mem_spectrum_iff _ _).mpr h
   have hc : c ≠ 0 := by
     intro h0

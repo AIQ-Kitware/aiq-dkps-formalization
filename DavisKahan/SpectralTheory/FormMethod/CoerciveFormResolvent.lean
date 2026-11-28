@@ -6,9 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 module
 
-public import Mathlib.Analysis.InnerProductSpace.Positive
-public import TauCeti.Analysis.InnerProductSpace.Adjoint
-public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Inverse
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ClosedForm.Basic
+public import TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Inverse
 public import Mathlib.Tactic
 
 /-!
@@ -24,9 +23,9 @@ and the ambient solution operator is
 
 `R = j A⁻¹ j*`.
 
-This file constructs `R`, proves the variational identity, positivity,
-self-adjointness, and injectivity. The associated operator is the accepted
-partial inverse of `R` on its range.
+TauCeti’s Lax–Milgram solution maps give `u` and `R`. The associated
+operator is the canonical closed-form operator. Its equality with the partial
+inverse of `R` supplies the compact-inverse spectrum formula.
 
 The free-beam specialization takes `V` to be an `H²` form space and `A` to
 represent the shifted bending form.
@@ -72,158 +71,146 @@ structure CoerciveFormData where
 
 namespace CoerciveFormData
 
-omit [CompleteSpace H] in
-/-- Coercivity makes the form operator invertible in the bounded-operator
-algebra. -/
-theorem formOperator_isUnit (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    IsUnit D.formOperator :=
-  _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
-      (c := ⟨D.coercivityConstant, D.coercivity_pos.le⟩) D.coercivity_pos
-      (fun z => (mul_comm _ _).le.trans ((D.coercive z).trans (RCLike.re_le_norm _)))
-
-/-- Bounded inverse of the represented form operator. -/
+/-- The bounded sesquilinear form represented by the form operator. -/
 @[expose]
-noncomputable def formInverse (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    V →L[𝕜] V :=
-  Ring.inverse D.formOperator
+noncomputable def sesqForm (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+    V →L⋆[𝕜] V →L[𝕜] 𝕜 :=
+  D.formOperator.adjoint.toSesqForm
+
+omit [CompleteSpace H] in
+/-- Evaluation of the form represented by the bounded operator. -/
+theorem sesqForm_apply (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (u v : V) :
+    D.sesqForm u v = ⟪D.formOperator u, v⟫_𝕜 := by
+  rw [sesqForm, ContinuousLinearMap.toSesqForm_apply_coe, ContinuousLinearMap.comp_apply,
+    innerSL_apply_apply]
+  exact ContinuousLinearMap.adjoint_inner_right D.formOperator u v
+
+omit [CompleteSpace H] in
+private theorem sesqForm_hermitian (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (u v : V) :
+    D.sesqForm u v = star (D.sesqForm v u) := by
+  rw [D.sesqForm_apply, D.sesqForm_apply]
+  exact (D.form_selfAdjoint.isSymmetric u v).trans (inner_conj_symm u (D.formOperator v)).symm
+
+omit [CompleteSpace H] in
+/-- Coercivity makes the Fréchet–Riesz operator of the form invertible. -/
+theorem sesqForm_isUnit (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+    IsUnit (InnerProductSpace.continuousLinearMapOfBilin D.sesqForm) :=
+  InnerProductSpace.isUnit_continuousLinearMapOfBilin_of_coercive D.sesqForm D.coercivity_pos
+    (fun u => (D.sesqForm_apply u u).symm ▸ D.coercive u)
 
 /-- Variational solution map from ambient forcing to the form space. -/
 @[expose]
-noncomputable def solutionOperator
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+noncomputable def solutionOperator (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →L[𝕜] V :=
-  D.formInverse ∘L D.embed.adjoint
+  InnerProductSpace.formSolutionMap D.sesqForm D.sesqForm_isUnit D.embed
 
-/-- Ambient bounded resolvent produced by the form method. -/
+/-- Ambient bounded solution operator of the form problem. -/
 @[expose]
-noncomputable def resolvent
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+noncomputable def resolvent (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →L[𝕜] H :=
-  D.embed ∘L D.solutionOperator
+  InnerProductSpace.formSolutionOperator D.sesqForm D.sesqForm_isUnit D.embed
 
-/-- The solution operator of a coercive form, unfolded. -/
-@[simp] theorem solutionOperator_apply
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
-    D.solutionOperator f = D.formInverse (D.embed.adjoint f) := rfl
+omit [CompleteSpace H] in
+/-- The ambient solution is the embedded form-space solution. -/
+@[simp] theorem resolvent_apply (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
+    D.resolvent f = D.embed (D.solutionOperator f) :=
+  InnerProductSpace.formSolutionOperator_apply _ _ _ _
 
-/-- The form's inverse, unfolded.  **Note this is `A⁻¹`, not a resolvent at a spectral
-parameter** -- it is unrelated to `_root_.LinearPMap.resolvent` despite the name. -/
-@[simp] theorem resolvent_apply
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
-    D.resolvent f = D.embed (D.solutionOperator f) := rfl
+omit [CompleteSpace H] in
+/-- Variational identity in inner-product form. -/
+theorem variational_identity
+    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) (v : V) :
+    ⟪D.formOperator (D.solutionOperator f), v⟫_𝕜 = ⟪f, D.embed v⟫_𝕜 :=
+  (D.sesqForm_apply _ _).symm.trans
+    (InnerProductSpace.apply_formSolutionMap D.sesqForm D.sesqForm_isUnit D.embed f v)
 
 /-- Applying the form operator to the variational solution returns the adjoint
 embedding of the forcing. -/
 theorem formOperator_solutionOperator
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
-    D.formOperator (D.solutionOperator f) = D.embed.adjoint f := by
-  have hmul : D.formOperator * Ring.inverse D.formOperator = 1 :=
-    Ring.mul_inverse_cancel D.formOperator D.formOperator_isUnit
-  have happ := DFunLike.congr_fun hmul (D.embed.adjoint f)
-  simpa [solutionOperator, formInverse] using happ
+    D.formOperator (D.solutionOperator f) = D.embed.adjoint f :=
+  ext_inner_right 𝕜 fun v => (D.variational_identity f v).trans
+    (ContinuousLinearMap.adjoint_inner_left D.embed v f).symm
 
-/-- The solution operator is injective because the adjoint embedding is
-injective. -/
-theorem solutionOperator_injective
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    Function.Injective D.solutionOperator := by
-  intro f g hfg
-  apply (ContinuousLinearMap.adjoint_injective_iff_denseRange.mpr D.embed_dense)
-  rw [← D.formOperator_solutionOperator f,
-    ← D.formOperator_solutionOperator g, hfg]
+omit [CompleteSpace H] in
+/-- The ambient solution operator is injective. -/
+theorem resolvent_injective (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+    Function.Injective D.resolvent :=
+  InnerProductSpace.formSolutionOperator_injective D.sesqForm D.sesqForm_isUnit
+    (fun u hu => by
+      apply norm_eq_zero.mp
+      have h := D.coercive u
+      rw [← D.sesqForm_apply, hu, map_zero] at h
+      by_contra hn
+      exact (not_lt_of_ge h) (mul_pos D.coercivity_pos (sq_pos_of_ne_zero hn)))
+    D.embed_dense
 
-/-- Variational identity in inner-product form. -/
-theorem variational_identity
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V))
-    (f : H) (v : V) :
-    ⟪D.formOperator (D.solutionOperator f), v⟫_𝕜 =
-      ⟪f, D.embed v⟫_𝕜 := by
-  rw [D.formOperator_solutionOperator]
-  exact ContinuousLinearMap.adjoint_inner_left D.embed v f
-
-/-- The ambient form resolvent is injective. -/
-theorem resolvent_injective
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    Function.Injective D.resolvent := by
-  intro f g hfg
-  apply D.solutionOperator_injective
-  apply D.embed_injective
-  exact hfg
-
-/-- The ambient form resolvent is symmetric. -/
-theorem resolvent_isSymmetric
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    D.resolvent.IsSymmetric := by
-  intro f g
-  let u := D.solutionOperator f
-  let v := D.solutionOperator g
-  calc
-    ⟪D.resolvent f, g⟫_𝕜 = ⟪u, D.embed.adjoint g⟫_𝕜 := by
-      rw [resolvent_apply]
-      simpa [u] using
-        (ContinuousLinearMap.adjoint_inner_right D.embed u g).symm
-    _ = ⟪u, D.formOperator v⟫_𝕜 := by
-      rw [D.formOperator_solutionOperator g]
-    _ = ⟪D.formOperator u, v⟫_𝕜 := by
-      exact D.form_selfAdjoint.isSymmetric u v |>.symm
-    _ = ⟪D.embed.adjoint f, v⟫_𝕜 := by
-      rw [D.formOperator_solutionOperator f]
-    _ = ⟪f, D.resolvent g⟫_𝕜 := by
-      rw [resolvent_apply]
-      exact ContinuousLinearMap.adjoint_inner_left D.embed v f
-
-/-- The ambient form resolvent is self-adjoint. -/
-theorem resolvent_isSelfAdjoint
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+/-- The ambient solution operator is self-adjoint. -/
+theorem resolvent_isSelfAdjoint (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     IsSelfAdjoint D.resolvent :=
-  ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr D.resolvent_isSymmetric
+  InnerProductSpace.isSelfAdjoint_formSolutionOperator D.sesqForm D.sesqForm_isUnit
+    D.embed D.sesqForm_hermitian
 
-/-- The resolvent quadratic form is the represented form energy of its
-variational solution. -/
-theorem resolvent_energy_identity
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
-    ⟪D.resolvent f, f⟫_𝕜 =
-      ⟪D.formOperator (D.solutionOperator f), D.solutionOperator f⟫_𝕜 := by
-  calc
-    ⟪D.resolvent f, f⟫_𝕜 =
-        ⟪D.solutionOperator f, D.embed.adjoint f⟫_𝕜 := by
-      rw [resolvent_apply]
-      exact (ContinuousLinearMap.adjoint_inner_right D.embed
-        (D.solutionOperator f) f).symm
-    _ = ⟪D.solutionOperator f,
-        D.formOperator (D.solutionOperator f)⟫_𝕜 := by
-      rw [D.formOperator_solutionOperator]
-    _ = ⟪D.formOperator (D.solutionOperator f),
-        D.solutionOperator f⟫_𝕜 := by
-      exact D.form_selfAdjoint.isSymmetric _ _ |>.symm
-
-/-- The ambient form resolvent is positive. -/
-theorem resolvent_nonnegative
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
-    0 ≤ RCLike.re ⟪D.resolvent f, f⟫_𝕜 := by
-  rw [D.resolvent_energy_identity]
-  exact le_trans
-    (mul_nonneg D.coercivity_pos.le (sq_nonneg ‖D.solutionOperator f‖))
-    (D.coercive (D.solutionOperator f))
-
-/-- Closed positive self-adjoint operator associated to the coercive form. -/
+/-- The closed operator represented by the coercive form. -/
 @[expose]
-noncomputable def associatedOperator
-    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+noncomputable def associatedOperator (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →ₗ.[𝕜] H :=
-  (D.resolvent.toLinearMap.toPMap ⊤).inverse
+  D.embed.closedFormOperator D.embed_injective D.embed_dense D.sesqForm
 
-/-- The associated unbounded operator is self-adjoint. -/
+/-- Self-adjointness from TauCeti’s first representation theorem at shift zero. -/
 theorem associatedOperator_isSelfAdjoint
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    _root_.IsSelfAdjoint D.associatedOperator :=
-  D.resolvent.isSelfAdjoint_inverse_toPMap_top D.resolvent_isSelfAdjoint D.resolvent_injective
+    IsSelfAdjoint D.associatedOperator :=
+  D.embed.isSelfAdjoint_closedFormOperator D.embed_injective D.embed_dense D.sesqForm
+    D.sesqForm_hermitian (α := 0)
+    (by simpa only [ContinuousLinearMap.shiftedForm_zero] using D.sesqForm_isUnit)
 
-/-- The form resolvent is the inverse of the associated operator on its domain. -/
+omit [CompleteSpace H] in
+/-- The coercive-form realization is the partial inverse of its ambient
+solution operator. -/
+theorem associatedOperator_eq_inverse (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.associatedOperator = (D.resolvent.toLinearMap.toPMap ⊤).inverse := by
+  symm
+  apply D.embed.eq_closedFormOperator_of_mem_graph_iff D.embed_injective D.embed_dense D.sesqForm
+  intro x f
+  rw [D.resolvent.mem_graph_inverse_toPMap_top_iff D.resolvent_injective]
+  constructor
+  · intro h
+    exact ⟨D.solutionOperator f, (D.resolvent_apply f).symm.trans h,
+      InnerProductSpace.apply_formSolutionMap _ _ _ _⟩
+  · rintro ⟨u, hu, hf⟩
+    exact (D.resolvent_apply f).trans <|
+      (congrArg D.embed
+        (InnerProductSpace.eq_formSolutionMap D.sesqForm D.sesqForm_isUnit D.embed hf).symm).trans hu
+
+omit [CompleteSpace H] in
+/-- The ambient solution lies in the represented operator domain. -/
+theorem resolvent_mem_associatedOperator_domain
+    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
+    D.resolvent f ∈ D.associatedOperator.domain := by
+  rw [D.resolvent_apply f]
+  exact D.embed.apply_mem_domain_closedFormOperator D.embed_injective D.embed_dense D.sesqForm
+    (InnerProductSpace.apply_formSolutionMap _ _ _ _)
+
+omit [CompleteSpace H] in
+/-- The associated operator recovers the forcing. -/
 @[simp] theorem associatedOperator_resolvent
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
-    D.associatedOperator ⟨D.resolvent f, D.resolvent.apply_mem_domain_inverse_toPMap_top f⟩ = f :=
-  D.resolvent.inverse_toPMap_top_apply D.resolvent_injective f
+    D.associatedOperator ⟨D.resolvent f, D.resolvent_mem_associatedOperator_domain f⟩ = f :=
+  D.embed.closedFormOperator_apply_eq D.embed_injective D.embed_dense D.sesqForm
+    (D.resolvent_apply f).symm
+    (InnerProductSpace.apply_formSolutionMap _ _ _ _)
+
+omit [CompleteSpace H] in
+/-- The ambient solution operator recovers every vector in the operator domain. -/
+theorem resolvent_associatedOperator_apply
+    (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (x : D.associatedOperator.domain) :
+    D.resolvent (D.associatedOperator x) = (x : H) := by
+  let f := D.associatedOperator x
+  have h : ((x : H), f) ∈ D.associatedOperator.graph := D.associatedOperator.mem_graph x
+  rw [congrArg (fun A : H →ₗ.[𝕜] H => A.graph) D.associatedOperator_eq_inverse,
+    D.resolvent.mem_graph_inverse_toPMap_top_iff D.resolvent_injective] at h
+  exact h
 
 end CoerciveFormData
 
