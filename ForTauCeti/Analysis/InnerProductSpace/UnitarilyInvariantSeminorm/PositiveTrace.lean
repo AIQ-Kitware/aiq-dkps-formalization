@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockTrace
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Basic
 
 /-!
 # Full Ky Fan sums are additive on positive operators
@@ -28,35 +29,15 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
-/-- Full Ky Fan sum of a positive endomorphism is its ordinary trace, in
-any orthonormal basis. -/
-theorem kyFanSum_positive_eq_basis_trace (A : E →ₗ[𝕜] E)
-    (hA : A.IsPositive)
-    (b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E) :
-    A.kyFanSum (finrank 𝕜 E) =
-      ∑ i : Fin (finrank 𝕜 E), RCLike.re ⟪A (b i), b i⟫_𝕜 := by
-  calc
-    A.kyFanSum (finrank 𝕜 E) =
-        ∑ i : Fin (finrank 𝕜 E), A.singularValues i :=
-      ((LinearMap.kyFanSum_def A _).trans (Fin.sum_univ_eq_sum_range _ _).symm)
-    _ = ∑ i : Fin (finrank 𝕜 E),
-        RCLike.re ⟪A.operatorAbs (b i), b i⟫_𝕜 :=
-      (sum_re_inner_abs_self_eq_sum_singularValues A rfl b).symm
-    _ = ∑ i : Fin (finrank 𝕜 E), RCLike.re ⟪A (b i), b i⟫_𝕜 := by
-      have h : A = A.operatorAbs := hA.eq_operatorAbs (by rw [hA.adjoint_eq])
-      rw [← h]
-
 /-- The trace norm is additive on positive endomorphisms. -/
 theorem kyFanSum_add_of_isPositive
     (A B : E →ₗ[𝕜] E) (hA : A.IsPositive) (hB : B.IsPositive) :
     (A + B).kyFanSum (finrank 𝕜 E) =
       A.kyFanSum (finrank 𝕜 E) + B.kyFanSum (finrank 𝕜 E) := by
-  let b : OrthonormalBasis (Fin (finrank 𝕜 E)) 𝕜 E :=
-    stdOrthonormalBasis 𝕜 E
-  rw [kyFanSum_positive_eq_basis_trace (A + B) (hA.add hB) b,
-    kyFanSum_positive_eq_basis_trace A hA b,
-    kyFanSum_positive_eq_basis_trace B hB b]
-  simp only [LinearMap.add_apply, inner_add_left, map_add,
-    Finset.sum_add_distrib]
+  have htrace (C : E →ₗ[𝕜] E) (hC : C.IsPositive) :
+      C.kyFanSum (finrank 𝕜 E) = RCLike.re (LinearMap.trace 𝕜 E C) := by
+    rw [C.kyFanSum_eq_nuclear C.finrank_range_le, ← C.re_trace_operatorAbs,
+      ← hC.eq_operatorAbs (by rw [hC.adjoint_eq])]
+  rw [htrace (A + B) (hA.add hB), htrace A hA, htrace B hB, map_add, map_add]
 
 end TauCeti

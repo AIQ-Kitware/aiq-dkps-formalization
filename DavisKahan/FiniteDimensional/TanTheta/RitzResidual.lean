@@ -10,7 +10,6 @@ public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import TauCeti.Analysis.InnerProductSpace.SingularValues
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.RitzTangent
 
 /-!

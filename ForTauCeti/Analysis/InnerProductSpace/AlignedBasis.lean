@@ -19,7 +19,8 @@ module
 
 public import Mathlib.LinearAlgebra.Basis.Defs
 public import TauCeti.Analysis.InnerProductSpace.Adjoint
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Basic
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 public import TauCeti.Analysis.InnerProductSpace.Orthonormal.Overlap
 
@@ -121,21 +122,25 @@ theorem inner_u_aligned_eq {u v : Fin d → E} (_hu : Orthonormal 𝕜 u) (hv : 
   rw [O.inner_map_map, O.symm_apply_apply]
 
 /-- **Cross-term sum = `∑ cos θ`.** Summing the Procrustes cross-term recovers the
-trace of the modulus, `∑ⱼ re⟪uⱼ, wⱼ⟫ = ∑ⱼ σⱼ`, via `W0.1(c)` on the
+trace of the modulus, `∑ⱼ re⟪uⱼ, wⱼ⟫ = ∑ⱼ σⱼ`, evaluated in the
 `O⁻¹`-image orthonormal basis. -/
 theorem sum_re_inner_u_aligned {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
     ∑ j, RCLike.re ⟪u j, hv.synthesisMapIsometry ((choosePolarUnitary (overlapOperator 𝕜 u v)).symm
           (EuclideanSpace.single j 1))⟫_𝕜
       = ∑ k : Fin d, (overlapOperator 𝕜 u v).singularValues (k : ℕ) := by
-  rw [← sum_re_inner_abs_self_eq_sum_singularValues (overlapOperator 𝕜 u v)
-    finrank_euclideanSpace_fin
-    ((EuclideanSpace.basisFun (Fin d) 𝕜).map
-      (choosePolarUnitary (overlapOperator 𝕜 u v)).symm)]
+  let M := overlapOperator 𝕜 u v
+  let b := (EuclideanSpace.basisFun (Fin d) 𝕜).map (choosePolarUnitary M).symm
+  have hsum : M.kyFanSum d = ∑ k : Fin d, M.singularValues (k : ℕ) := by
+    rw [LinearMap.kyFanSum_def, Fin.sum_univ_eq_sum_range]
+  have htrace :
+      RCLike.re (LinearMap.trace 𝕜 (EuclideanSpace 𝕜 (Fin d)) M.operatorAbs) =
+        ∑ k : Fin d, M.singularValues (k : ℕ) := by
+    rw [M.re_trace_operatorAbs,
+      ← M.kyFanSum_eq_nuclear (M.finrank_range_le.trans_eq finrank_euclideanSpace_fin), hsum]
+  rw [← htrace, LinearMap.trace_eq_sum_inner _ b, map_sum]
   refine Finset.sum_congr rfl fun j _ => ?_
-  rw [inner_u_aligned_eq hu hv j, OrthonormalBasis.map_apply, EuclideanSpace.basisFun_apply,
-    (LinearMap.isPositive_operatorAbs (overlapOperator 𝕜 u v)).isSymmetric
-      ((choosePolarUnitary (overlapOperator 𝕜 u v)).symm (EuclideanSpace.single j 1))
-      ((choosePolarUnitary (overlapOperator 𝕜 u v)).symm (EuclideanSpace.single j 1))]
+  rw [inner_u_aligned_eq hu hv j]
+  simp only [b, OrthonormalBasis.map_apply, EuclideanSpace.basisFun_apply, M]
 
 /-- **Yu–Wang–Samworth aligned-basis bound.** For orthonormal families `u, v`
 (bases of the two `d`-subspaces), the Procrustes-rotated basis

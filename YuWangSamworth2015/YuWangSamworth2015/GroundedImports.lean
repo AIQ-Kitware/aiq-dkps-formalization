@@ -14,7 +14,6 @@ public import YuWangSamworth2015.Core.ConsecutiveBlock
 public import ForTauCeti.Analysis.InnerProductSpace.TwoLevelOperator
 public import ForTauCeti.Analysis.InnerProductSpace.RankOneSinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
 /-!

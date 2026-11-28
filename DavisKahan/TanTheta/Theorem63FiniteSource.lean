@@ -17,7 +17,6 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
 public import TauCeti.Analysis.InnerProductSpace.SingularValues
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
 public section

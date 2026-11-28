@@ -170,7 +170,7 @@ theorem sin_two_theta_reflection_le (N : UnitarilyInvariantSeminorm 𝕜 E E)
   set T' : E →ₗ[𝕜] E :=
     W.reflection.toLinearMap ∘ₗ T ∘ₗ W.reflection.toLinearMap with hT'def
   have hT'sym : T'.IsSymmetric := by
-    have h := isSymmetric_conj_unitary hT (W.reflection (𝕜 := 𝕜))
+    have h := (LinearMap.isSymmetric_linearIsometryEquiv_conj_iff T (W.reflection (𝕜 := 𝕜))).2 hT
     rwa [Submodule.reflection_symm] at h
   have hUperp_inv : ∀ x ∈ Uᗮ, T x ∈ Uᗮ := fun x hx =>
     LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hT (p := U) hUinv hx

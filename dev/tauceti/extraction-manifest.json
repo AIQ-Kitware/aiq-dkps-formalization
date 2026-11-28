@@ -1144,14 +1144,15 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 75fdc44; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
-        "TauCeti.Analysis.InnerProductSpace.Orthonormal.Overlap"
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
+        "TauCeti.Analysis.InnerProductSpace.Orthonormal.Overlap",
+        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "partially-upstreamed",
-      "upstream_pr": "#15120, #13988, #15340",
-      "migration_note": "November 1: span_range_le_range_familyIsometry, overlapOp, overlapOp_apply, overlapOp_contraction and sum_sq_singularValues_overlapOp retired. The general old overlap equals TauCeti.overlapOperator by synthesisMapIsometry_toLinearMap and adjoint_synthesisMap_comp_synthesisMap; correspondence compiled before deletion. Consumers use native overlap, norm bound and Orthonormal.range_synthesisMapIsometry directly. Native #15340 fe7e204a9aa8c36b52c6605c774166bc590b4498 is explicitly independent, not a DKPS port. Retains selected choosePolarUnitary cross-term identities and alignment bound, plus a short inequality from native cosine bounds: the accepted existential Procrustes family does not identify this selected witness. Historical source e4637c3919ae under donor path, introduction 75fdc44; Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0. Coordinate-isometry/range integrations #15120 63ca9e2f2bac253526484a022e3bc0b557712c40 and #13988 6e9359613bce697ea5483673e3d46e96f4a6c881."
+      "upstream_pr": "#15120, #13988, #15340, #14442, #46215",
+      "migration_note": "November 1: span_range_le_range_familyIsometry, overlapOp, overlapOp_apply, overlapOp_contraction and sum_sq_singularValues_overlapOp retired. The general old overlap equals TauCeti.overlapOperator by synthesisMapIsometry_toLinearMap and adjoint_synthesisMap_comp_synthesisMap; correspondence compiled before deletion. Consumers use native overlap, norm bound and Orthonormal.range_synthesisMapIsometry directly. Native #15340 fe7e204a9aa8c36b52c6605c774166bc590b4498 is explicitly independent, not a DKPS port. Retains selected choosePolarUnitary cross-term identities and alignment bound, plus a short inequality from native cosine bounds: the accepted existential Procrustes family does not identify this selected witness. Historical source e4637c3919ae under donor path, introduction 75fdc44; Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0. Coordinate-isometry/range integrations #15120 63ca9e2f2bac253526484a022e3bc0b557712c40 and #13988 6e9359613bce697ea5483673e3d46e96f4a6c881. The selected Procrustes cross-term proof reads the native nuclear trace of the modulus in the aligned basis and uses the full Ky Fan sum identity. The witness remains the chosen kernel-completed polar unitary, including singular overlaps."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.Basic",
@@ -2160,6 +2161,7 @@
         "TauCeti.exists_norm_apply_eq_singularValues_zero",
         "TauCeti.eigenvalues_gram_adjoint",
         "TauCeti.isSymmetric_conj_unitary",
+        "TauCeti.eigenvalues_conj_unitary_le",
         "TauCeti.eigenvalues_conj_unitary",
         "TauCeti.comp_adjoint_eq_conj_adjoint_comp",
         "TauCeti.sum_re_inner_abs_self_eq_sum_singularValues",
@@ -2168,25 +2170,51 @@
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularSubspace",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung",
+      "final_declarations": [
+        "LinearMap.abs_singularValues_sub_singularValues_le",
+        "LinearMap.singularValues_le_of_norm_apply_le",
+        "LinearMap.re_trace_operatorAbs",
+        "TauCeti.UnitarilyInvariantSeminorm.norm_trace_adjoint_comp_le_opNorm_mul_nuclear",
+        "LinearMap.isSymmetric_linearIsometryEquiv_conj_iff",
+        "LinearEquiv.charpoly_conj",
+        "LinearMap.IsSymmetric.eigenvalues_eq_eigenvalues_iff"
+      ],
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "moved; introduced at Davis--Kahan commit 29506b0; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib",
-        "TauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
-        "TauCeti.Analysis.InnerProductSpace.SchurHorn",
-        "TauCeti.Analysis.InnerProductSpace.SingularValues",
-        "TauCeti.Analysis.InnerProductSpace.Gram.Perturbation",
-        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius",
-        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Basic"
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "partially-upstreamed",
-      "upstream_pr": "#19338, #14677, #14820, #14442, #13839, #46215",
-      "migration_note": "November 2: retire norm_gram_sub_gram_apply_le in favor of LinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_apply_le, including trivial spaces and without imposing extra nonnegativity assumptions on growth constants. Accepted #19338 integration 1e77c6499fb5e9f35cb57611638b25c3de9ce0b6 explicitly adapts this donor and the YWS Core/SingularSubspace source; it is not independent work. Retire singularValues_le_one_of_contraction using native singularValues_le_of_norm_apply_le (#14677, 7fd5323416c03413b1fbc4c956b7bd7552b4d82c), all natural indices including zero tail. Retire the four smallest/largest gain and attainment theorems and private Gram quadratic-form helpers: native singularValues_mul_norm_le_norm_apply, norm_apply_le_singularValues_mul_norm, rightSingularBasis and norm_apply_rightSingularBasis provide the original positive-dimension statements directly (#14820, 561df1ec2196f312ef0c607bdfe3e202535374c1). Retire sum_sq_singularValues and sum_sq_norm_apply_unitary_comp via native trace_adjoint_comp_self_eq_sum_norm_apply_sq, trace_adjoint_comp_self_eq_sum_sq_singularValues, sum_norm_apply_sq_eq_sum_norm_apply_sq and sum_fin_singularValues (#14442, 09e43a78d09cdef107d8604de0517331119edd6e), with explicit Fin/Finsupp and real-to-RCLike bridges. Retire eigenvalues_gram_adjoint: native eigenvalues_adjoint_comp_self_eq_eigenvalues_self_comp_adjoint (#13839, 0229509ce8dcd20951f52978eb5e6b20f595ea47) is rectangular and covers it; a full endomorphism correspondence was compiled. No DKPS proof descent is inferred for these independent native APIs merely from a shared theorem. Keep dimension/completeness-free isSymmetric_conj_unitary (native adjoint conjugation needs additional hypotheses), sorted signed eigenvalue conjugation for arbitrary symmetric maps (not just positive Gram maps), the identity at the selected choosePolarUnitary witness, arbitrary-basis modulus trace, and the energy/modulus and squared-growth-constant consequences, now using native engines. Historical donor e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Singular/Subspace.lean, introduction 29506b0; Jon Crall / Claude Opus 4.8, Kitware Inc., Apache-2.0. No unchanged source-facing theorem scope is weakened. The source-facing YuWangSamworth2015.sq_gap_mul_sum_cross_singularVectors_le in e4637c3919ae:YuWangSamworth2015/YuWangSamworth2015/Core/SingularSubspace.lean (Jon Crall / GPT-5.6 High, Kitware Inc., Apache-2.0) is retained with its proof replaced by LinearMap.sq_mul_sum_sum_norm_inner_rightSingularBasis_sq_le_four_mul_card_mul_sq from the same explicitly adapted #19338. Canonical Gram eigenbases coincide with native rightSingularBasis_def; arbitrary eigenframe theorems are not superseded by that identification. November 27: retain the basis-sum formula but prove it through LinearMap.re_trace_operatorAbs from #46215 (integration d81b59c694a9155b934108465cc1c824cf458226, jizhi-de-jichi, SpectralSteepestDescent 1.2) and Mathlib LinearMap.trace_eq_sum_inner. The basis-sum proof first entered DKPS at 5f0fa04f880ff8d262f8daa193bd9e666f06238c. The integration reports reuse of an existing TauCeti calculation. DKPS proof descent is unverified."
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "#19338, #14677, #14820, #14442, #13839, #46215, #43341",
+      "migration_note": "November 2: retire norm_gram_sub_gram_apply_le in favor of LinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_apply_le, including trivial spaces and without imposing extra nonnegativity assumptions on growth constants. Accepted #19338 integration 1e77c6499fb5e9f35cb57611638b25c3de9ce0b6 explicitly adapts this donor and the YWS Core/SingularSubspace source; it is not independent work. Retire singularValues_le_one_of_contraction using native singularValues_le_of_norm_apply_le (#14677, 7fd5323416c03413b1fbc4c956b7bd7552b4d82c), all natural indices including zero tail. Retire the four smallest/largest gain and attainment theorems and private Gram quadratic-form helpers: native singularValues_mul_norm_le_norm_apply, norm_apply_le_singularValues_mul_norm, rightSingularBasis and norm_apply_rightSingularBasis provide the original positive-dimension statements directly (#14820, 561df1ec2196f312ef0c607bdfe3e202535374c1). Retire sum_sq_singularValues and sum_sq_norm_apply_unitary_comp via native trace_adjoint_comp_self_eq_sum_norm_apply_sq, trace_adjoint_comp_self_eq_sum_sq_singularValues, sum_norm_apply_sq_eq_sum_norm_apply_sq and sum_fin_singularValues (#14442, 09e43a78d09cdef107d8604de0517331119edd6e), with explicit Fin/Finsupp and real-to-RCLike bridges. Retire eigenvalues_gram_adjoint: native eigenvalues_adjoint_comp_self_eq_eigenvalues_self_comp_adjoint (#13839, 0229509ce8dcd20951f52978eb5e6b20f595ea47) is rectangular and covers it; a full endomorphism correspondence was compiled. No DKPS proof descent is inferred for these independent native APIs merely from a shared theorem. Keep dimension/completeness-free isSymmetric_conj_unitary (native adjoint conjugation needs additional hypotheses), sorted signed eigenvalue conjugation for arbitrary symmetric maps (not just positive Gram maps), the identity at the selected choosePolarUnitary witness, arbitrary-basis modulus trace, and the energy/modulus and squared-growth-constant consequences, now using native engines. Historical donor e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Singular/Subspace.lean, introduction 29506b0; Jon Crall / Claude Opus 4.8, Kitware Inc., Apache-2.0. No unchanged source-facing theorem scope is weakened. The source-facing YuWangSamworth2015.sq_gap_mul_sum_cross_singularVectors_le in e4637c3919ae:YuWangSamworth2015/YuWangSamworth2015/Core/SingularSubspace.lean (Jon Crall / GPT-5.6 High, Kitware Inc., Apache-2.0) is retained with its proof replaced by LinearMap.sq_mul_sum_sum_norm_inner_rightSingularBasis_sq_le_four_mul_card_mul_sq from the same explicitly adapted #19338. Canonical Gram eigenbases coincide with native rightSingularBasis_def; arbitrary eigenframe theorems are not superseded by that identification. November 27: retain the basis-sum formula but prove it through LinearMap.re_trace_operatorAbs from #46215 (integration d81b59c694a9155b934108465cc1c824cf458226, jizhi-de-jichi, SpectralSteepestDescent 1.2) and Mathlib LinearMap.trace_eq_sum_inner. The basis-sum proof first entered DKPS at 5f0fa04f880ff8d262f8daa193bd9e666f06238c. The integration reports reuse of an existing TauCeti calculation. DKPS proof descent is unverified. November 28. Retire abs_sq_singularValues_sub_le after recovering the original Fin-indexed rectangular estimate by factoring the difference of squares and applying the Weyl and pointwise upper bounds. The Weyl bound is from #14820 (561df1ec2196f312ef0c607bdfe3e202535374c1) and works at every natural index. The old Fin n binder gives positive source dimension, hence the nonnegativity of the originally unsigned growth constant. Retire sum_re_inner_abs_self_eq_sum_singularValues and sum_sq_norm_le_sum_re_inner_abs_of_contraction. They follow from re_trace_operatorAbs (#46215, d81b59c694a9155b934108465cc1c824cf458226), trace_eq_sum_inner (Mathlib), and, for the energy bound, norm_trace_adjoint_comp_le_opNorm_mul_nuclear (#43341, b01b009b08f6340c9d6d0c383eb0095ce2b4f9ba) at A and A. Retire isSymmetric_conj_unitary, eigenvalues_conj_unitary_le and eigenvalues_conj_unitary. Mathlib isSymmetric_linearIsometryEquiv_conj_iff covers the incomplete ambient setting. LinearEquiv.charpoly_conj and IsSymmetric.eigenvalues_eq_eigenvalues_iff recover the ordered spectra. The preceding versions remain at f8809f517 under this path. Keep comp_adjoint_eq_conj_adjoint_comp for the kernel-completed unitary at its actual selected witness.",
+      "maintained_declarations": [
+        "TauCeti.comp_adjoint_eq_conj_adjoint_comp"
+      ]
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.PositiveTrace",
+      "source_declarations": [
+        "TauCeti.kyFanSum_positive_eq_basis_trace",
+        "TauCeti.kyFanSum_add_of_isPositive"
+      ],
+      "original_source_anchor": "f8809f517:ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/PositiveTrace.lean, introduced in 1c5805c013c7c4f051c49bd3bfe5f4a484f1f4f7.",
+      "authors_license": "Jon Crall and GPT-6, Kitware copyright, Apache-2.0.",
+      "roadmap_target": "unitarily-invariant-norm",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Basic",
+      "final_declarations": [
+        "LinearMap.kyFanSum_eq_nuclear",
+        "LinearMap.re_trace_operatorAbs"
+      ],
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "#14442, #46215",
+      "migration_note": "Remove kyFanSum_positive_eq_basis_trace. Use the native identification of the full Ky Fan sum with the nuclear seminorm from #14442 (09e43a78d09cdef107d8604de0517331119edd6e) and the modulus-trace identity from #46215. The actual positive-additivity result is retained and uses linearity of trace and equality of a positive operator with its modulus.",
+      "maintained_declarations": [
+        "TauCeti.kyFanSum_add_of_isPositive"
+      ]
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.SingularSystem",

@@ -6,7 +6,6 @@ Authors: Jon Crall, GPT-6
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
 
 /-!

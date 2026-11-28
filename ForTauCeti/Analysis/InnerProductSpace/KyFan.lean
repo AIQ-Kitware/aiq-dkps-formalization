@@ -15,7 +15,6 @@ public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.KyFan
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Geometry
 public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 public import TauCeti.Analysis.InnerProductSpace.Spectrum
 public import TauCeti.Analysis.InnerProductSpace.ZeroExtension

@@ -1,5 +1,38 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 finite singular values and nuclear trace
+
+The squared singular-value perturbation proof retires. Factoring the
+difference of squares reduces it to TauCeti's Weyl bound (OI-A50, #14820) and
+the pointwise singular-value bounds. The Lean scope check recovers the
+original rectangular `RCLike` statement. Its `Fin n` index forces positive
+source dimension and supplies the nonnegativity of the unsigned growth
+constant. The native Weyl bound itself is valid at every natural index.
+[#14820 integration](https://github.com/TauCetiProject/TauCeti/commit/561df1ec2196f312ef0c607bdfe3e202535374c1)
+
+The Procrustes cross-term and positive Ky Fan additivity proofs use the
+trace of the modulus from #46215 and the full Ky Fan sum identity from
+#14442 directly. The separate contraction-energy proof follows from
+#43341's trace duality at the same operator in both slots, together with
+the orthonormal-basis trace formula. DKPS proof descent for these native
+results is unverified. The selected polar unitary in the Procrustes
+statement still covers singular overlaps.
+[#46215 integration](https://github.com/TauCetiProject/TauCeti/commit/d81b59c694a9155b934108465cc1c824cf458226) ·
+[#14442 integration](https://github.com/TauCetiProject/TauCeti/commit/09e43a78d09cdef107d8604de0517331119edd6e) ·
+[#43341 integration](https://github.com/TauCetiProject/TauCeti/commit/b01b009b08f6340c9d6d0c383eb0095ce2b4f9ba)
+
+Mathlib's isometric conjugation law now supplies symmetry for the reflected
+operator in the mirror-defect bound. Its characteristic polynomial law
+and the sorted-eigenvalue characterization recover the retired local
+min–max conjugation proof. The donor retains the Gram identity for the
+chosen kernel-completed unitary. Original declarations and authorship are
+recorded in the extraction manifest at DKPS `f8809f517`.
+
+The focused and default builds, Challenge, and the result semantic-surface
+audit passed with warnings treated as errors. All 1,569 source-census
+references resolved. The 17 available Davis–Kahan comparator signatures
+and the Yu–Wang–Samworth comparator signature matched.
+
 ## November 28 Sylvester shifts, Lyapunov bounds, and compact eigenvalues
 
 The bounded interval/exterior proof, both ordered-cutoff orientations, and the
