@@ -148,7 +148,6 @@ topics:
   - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant
   - Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
   - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
-  - Analysis.InnerProductSpace.SkewAdjointExponential
 - id: T14
   title: Borel functional calculus and projection-valued measures
   modules:
@@ -185,7 +184,6 @@ topics:
   - Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
   - Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator
   - Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
-  - Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
   - Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
   # Blockwise lower bounds now come from TauCeti.Analysis.Normed.Group.BlockLowerBound.
 - id: T23
@@ -464,7 +462,6 @@ rungs:
   - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant
   - Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
   - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
-  - Analysis.InnerProductSpace.SkewAdjointExponential
 - id: K
   title: Borel functional calculus and projection-valued measures (T14)
   seeds:
@@ -505,7 +502,6 @@ rungs:
   - Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction
   - Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
   - Analysis.InnerProductSpace.LinearPMap.SpectralSupport
-  - Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
   - Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
 - id: O
   title: Sylvester equations and the Rosenblum theorem (T16)

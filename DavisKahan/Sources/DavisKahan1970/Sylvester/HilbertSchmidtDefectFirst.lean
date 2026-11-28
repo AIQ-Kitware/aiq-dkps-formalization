@@ -7,7 +7,7 @@ module
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
 public import DavisKahan.Sylvester.HomogeneousUniqueness
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
@@ -41,8 +41,8 @@ inputs came from Spectra's Born-rule stack.  Both are now native:
   self-adjoint by Stone's theorem (`TauCeti/Analysis/Semigroups/Group/Unitary.lean`) and
   satisfies the Sylvester equation by `generator_sylvesterGroup_apply`;
 * the gap inverse is native `LinearPMap.spectralGapInverse`, with the sharp `δ⁻¹`;
-* `(genToGroup hA).val.stoneGenerator (genToGroup hA).property = A` is Stone's uniqueness half
-  (`…/LinearPMap/StoneUniqueness.lean`), which is what lets a statement about
+* `(genToGroup hA).val.stoneGenerator (genToGroup hA).property = A` follows from
+  TauCeti's Stone theorem, which lets a statement about
   the *flow* be read as a statement about `A` and `B`.
 -/
 

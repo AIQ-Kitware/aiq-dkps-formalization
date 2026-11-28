@@ -9,8 +9,8 @@ public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate
 public import TauCeti.Analysis.Normed.Group.BlockLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
+public import ForTauCeti.Analysis.Semigroups.Group.ComplexOperator
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
@@ -93,7 +93,7 @@ private theorem gridProj_comm (hA : IsSelfAdjoint A) (ε : ℝ) (k : ℤ) (t : �
           (TauCeti.LinearPMap.genToGroup hA).property t y)
       = (TauCeti.LinearPMap.genToGroup hA).val.complexOperator (TauCeti.LinearPMap.genToGroup
             hA).property t (gridProj hA ε k y) :=
-  TauCeti.LinearPMap.specProjection_expLimit_apply hA _ _ t y
+  TauCeti.LinearPMap.specProjection_genToGroup_apply hA _ _ t y
 
 /-- **The per-block bound, with the shift.**  On a block whose two projections
 are both nonzero the separation hypothesis applies to genuine spectral points,

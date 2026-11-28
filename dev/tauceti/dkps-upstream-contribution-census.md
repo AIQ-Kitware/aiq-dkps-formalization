@@ -1,5 +1,42 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 native Stone group and the Yosida limit
+
+DKPS now selects the unitary group from lucien-ad-lucem's Stone theorem
+in #5881. Its Stone generator is the original self-adjoint partial
+operator by scalar normalization. The former pointwise `limUnder`
+construction, separate proofs of the group laws and continuity, and
+dominated-convergence proof of the generator retire.
+[#5881 integration](https://github.com/TauCetiProject/TauCeti/commit/db15f9f89f66d790d00f05c58caa7f1d0664f82d)
+
+For SA-E25–E27 and SA-E29, DKPS identifies the group with the original
+Yosida limit. The approximants converge on the operator domain by our
+#28079. The contraction resolvent identity transfers that convergence
+to the resolvents at 1. Trotter–Kato from kim-em's Forgejo #738 gives
+strong convergence for nonnegative time, and unitarity gives negative
+time. A Lean scope check showed that every Stone group for the same
+operator equals the old DKPS group. Our #30736 still supplies the
+Cauchy bound used for uniform convergence on bounded time sets. The
+Yosida identification is a DKPS result combining these accepted inputs.
+[#28079 integration](https://github.com/TauCetiProject/TauCeti/commit/958ea898407ffa3925584ae4cf2a58517097f911) ·
+[#738 integration](https://github.com/TauCetiProject/TauCeti/commit/8adbff176e7b1f623675f18e6e7535678f2b9324) ·
+[#30736 integration](https://github.com/TauCetiProject/TauCeti/commit/f0f7c4b96aba257ab68e23f04a4e2bbd141b0532)
+
+The spectral-projection commutation (SA-E30), restricted flow, and
+Hilbert–Schmidt Sylvester consumers use the selected group. The
+domain-vector integral identity and displacement bound follow from
+the native orbit derivative. The bounded exponential facade retires
+through the native derivative, unitarity, and commuting Duhamel laws.
+The former proofs are at `423b96cb0` in the Yosida, Stone uniqueness,
+and skew-adjoint exponential modules. The extraction manifest preserves
+Kitware authorship and the earlier Spectra ancestry. DKPS proof
+descent for #5881 and Forgejo #738 is unverified.
+
+The focused and default builds, Challenge, and the Hilbert–Schmidt
+Sylvester and result semantic-surface audits passed with warnings
+treated as errors. All 1,569 source-census references resolved, and the
+17 available Davis–Kahan comparator signatures matched.
+
 ## November 28 finite singular values and nuclear trace
 
 The squared singular-value perturbation proof retires. Factoring the

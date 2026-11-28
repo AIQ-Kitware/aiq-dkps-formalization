@@ -16,6 +16,7 @@ public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 public import Mathlib.MeasureTheory.Integral.ExpDecay
 public import Mathlib.Topology.MetricSpace.ProperSpace.Real
 public import DavisKahan.SpectralTheory.AbstractSpectrum
+import Mathlib.Analysis.CStarAlgebra.Exponential
 
 
 public section

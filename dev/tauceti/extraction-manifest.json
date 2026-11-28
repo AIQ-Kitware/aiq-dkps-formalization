@@ -277,9 +277,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
-        "ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
         "ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded",
         "ForTauCeti.Analysis.Semigroups.Group.ComplexOperator",
         "ForTauCeti.Analysis.Complex.Cayley.Inverse"
@@ -315,14 +313,12 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
         "ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner",
-        "ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockIdentity",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator",
@@ -4164,7 +4160,12 @@
       ],
       "status": "staged",
       "upstream_pr": null,
-      "migration_note": "November 9: replace specProjection_comm_expApprox by specProjection_comm_yosidaFlow, directly stating pointwise commutation with native StronglyContinuousGroup.ofBoundedExp. Apply Commute.exp_right to the canonical symmetric approximant; no local bounded-flow adapter remains. Strong-limit projection commutation is preserved at the original scope. Original Kitware/Jon Crall/Claude Opus 5, Apache-2.0."
+      "migration_note": "November 9: replace specProjection_comm_expApprox by specProjection_comm_yosidaFlow, directly stating pointwise commutation with native StronglyContinuousGroup.ofBoundedExp. Apply Commute.exp_right to the canonical symmetric approximant; no local bounded-flow adapter remains. Strong-limit projection commutation is preserved at the original scope. Original Kitware/Jon Crall/Claude Opus 5, Apache-2.0. November 28. The SA-E30 consumer now states the original commutation directly at the native Stone group, using tendsto_yosidaFlow_genToGroup and the native imaginary-shift resolvent law from #28079. The equality with the previous limit group was checked over all real times. Source 423b96cb0 at the staging path, Jon Crall / Claude Opus 5, Kitware, Apache-2.0.",
+      "maintained_declarations": [
+        "TauCeti.LinearPMap.specProjection_comm_yosidaApproxSym",
+        "TauCeti.LinearPMap.specProjection_comm_yosidaFlow",
+        "TauCeti.LinearPMap.specProjection_genToGroup_apply"
+      ]
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -4207,26 +4208,33 @@
         "integral_expApprox",
         "integral_expLimit",
         "integral_expTime_apply",
-        "tendsto_genDiffQuot_genToGroup"
+        "tendsto_genDiffQuot_genToGroup",
+        "integral_yosidaFlow",
+        "tendsto_stoneDiffQuot_genToGroup",
+        "stoneGenerator_genToGroup"
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
+      "final_tauceti_module": "TauCeti.Analysis.Semigroups.Group.Stone.Unbounded",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
-      "direct_dependencies": [
-        "TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
-        "ForTauCeti.Analysis.Semigroups.Group.ComplexOperator"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"
+      "downstream_users": [],
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "#5881, Forgejo #738",
+      "migration_note": "November 9: remove continuous_expApprox_apply and use native StronglyContinuousGroup.continuous_orbit directly. Rename integral_expApprox to integral_yosidaFlow, stated for the native bounded group; remove the unused self-adjointness proof parameter, strengthening its scope to arbitrary partial maps on the same complete complex Hilbert space. Preserve the strong-limit integral identity and generator identification. Historical names above are provenance, not a current API index. Original Kitware/Jon Crall/Claude Opus 5, Apache-2.0. Native-carrier completion: generator_genToGroup becomes stoneGenerator_genToGroup, and tendsto_genDiffQuot_genToGroup becomes tendsto_stoneDiffQuot_genToGroup. The forward self-adjointness theorem is now native isSelfAdjoint_stoneGenerator. The concrete Yosida-limit generator recovery remains local; no second generator is defined. November 28. Delete the module after replacing the locally constructed strong-limit group with the group from Stone #5881 (db15f9f89f66d790d00f05c58caa7f1d0664f82d). Its Stone generator equality follows by scalar normalization. The original integral identity survives as integral_genToGroup and follows from the native orbit derivative. Trotter–Kato, Forgejo #738 (8adbff176e7b1f623675f18e6e7535678f2b9324), identifies the original Yosida limit with the selected group in all real times, including negative times by unitarity. The final DKPS bridge remains local. Original proof c9c8502c; source at 423b96cb0 under the staging path, Jon Crall and Claude Opus 5, Kitware copyright, Apache-2.0. DKPS proof descent for #5881 and Forgejo #738 is unverified.",
+      "accepted_upstream_declarations": [
+        "IsSelfAdjoint.exists_isUnitary_complexGenerator_eq_I_smul",
+        "IsSelfAdjoint.existsUnique_isUnitary_complexGenerator_eq_I_smul",
+        "TauCeti.Semigroups.StronglyContinuousSemigroup.tendsto_apply_of_tendsto_resolvent",
+        "TauCeti.Semigroups.StronglyContinuousGroup.hasDerivAt"
       ],
-      "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "November 9: remove continuous_expApprox_apply and use native StronglyContinuousGroup.continuous_orbit directly. Rename integral_expApprox to integral_yosidaFlow, stated for the native bounded group; remove the unused self-adjointness proof parameter, strengthening its scope to arbitrary partial maps on the same complete complex Hilbert space. Preserve the strong-limit integral identity and generator identification. Historical names above are provenance, not a current API index. Original Kitware/Jon Crall/Claude Opus 5, Apache-2.0. Native-carrier completion: generator_genToGroup becomes stoneGenerator_genToGroup, and tendsto_genDiffQuot_genToGroup becomes tendsto_stoneDiffQuot_genToGroup. The forward self-adjointness theorem is now native isSelfAdjoint_stoneGenerator. The concrete Yosida-limit generator recovery remains local; no second generator is defined."
+      "maintained_declarations": [
+        "TauCeti.LinearPMap.stoneGenerator_genToGroup",
+        "TauCeti.LinearPMap.integral_genToGroup"
+      ]
     },
     {
       "source_module": "Spectra/YosidaHille/Approximation/{Helpers,Defs}.lean at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63, with bounded-flow and limit proofs developed in DKPS",
@@ -4270,30 +4278,33 @@
         "norm_resolventAtIn_le",
         "norm_resolventAtNegIn_le",
         "norm_yosidaApprox_le",
-        "norm_yosidaJNeg_le"
+        "norm_yosidaJNeg_le",
+        "norm_yosidaFlow_sub_self_le"
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
+      "final_tauceti_module": "TauCeti.Analysis.Semigroups.Group.Stone.Unbounded",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "adapted Spectra approximation scaffold; DKPS flow/limit development; direct consumption of accepted Tau Ceti approximants and bounded groups",
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.LinearPMap.Yosida.Basic",
         "TauCeti.Analysis.Semigroups.Group.Stone.Basic",
-        "ForTauCeti.Analysis.Semigroups.Group.ComplexOperator",
-        "ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
+        "TauCeti.Analysis.Semigroups.Group.Stone.Unbounded",
         "Mathlib",
-        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Yosida.Uniform"
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Yosida.Uniform",
+        "TauCeti.Analysis.Semigroups.TrotterKato",
+        "TauCeti.LinearAlgebra.LinearPMap.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness"
+        "DavisKahan.SpectralTheory.SpectralRestrictionOperator",
+        "DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtDefectFirst"
       ],
-      "status": "partially-upstreamed",
+      "status": "consumed-upstream-with-dkps-result-retained",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/30736",
-      "migration_note": "Yosida resolvents, their sharp norm estimates, and the adjoint-resolvent identity now use Tau Ceti's canonical LinearPMap resolver directly. The approximation and group-convergence mathematics remains local. The spectral-projection consumer now shares the canonical inverse with the Borel calculus; no conversion remains. November 4 prepared SA-E14-E21/E23 prefix port: branch port-sa-e14-e23-yosida-approximants, commit e274c92c0cd53e939842681a6911574ef2c86524, based independently on accepted main 57ab0f657d7fb33d7c9425bf696bec3045b0fd75. Canonical module TauCeti/Analysis/InnerProductSpace/LinearPMap/Yosida.lean defines LinearPMap.imaginaryYosidaApproximation and symmetricYosidaApproximation, with normalized resolvent contraction/convergence, domain factorization, norm, adjoint, self-adjointness, commutation and domain-convergence laws in root IsSelfAdjoint. Signed real shifts generalize the positive-natural source and supply both tails via cocompact limits. The accepted dense-subset convergence theorem replaces the repeated donor density proofs; no unitary-group or spectral-measure carrier is ported. Preserve Kitware/Jon Crall/Claude Opus 5 adaptation and Spectra Formalization Project/Adam Bornemann ancestry at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63, Apache-2.0. Focused 5065-job warning-as-error build, all 13 linters on 17 declarations plus 7 generated, axioms, full header/text style and natural-index scope examples passed. Shared packet: tauceti-dkps-campaign/waves/2026-11-04/yosida-approximants. Prepared, not submitted/integrated; later group/Stone results and all local consumers remain. Submitted as #28079, observed open November 4, not integrated. Review repair 293950b684316d94690698d0ae876d66314c1374 is pushed: the accepted TauCeti.Semigroups.yosidaApproximation, both composition identities and commutation now work over any nontrivially normed scalar field; imaginaryYosidaApproximation specializes that factory at I*r. Shared filter-based normalized-resolvent convergence and domain approximation reductions serve both the real semigroup and complex applications. Factorization is LinearPMap.imaginaryYosidaApproximation_apply_eq_smul_resolvent_apply with only resolvent membership, without self-adjointness or completeness; the normalized pointwise limit is IsSelfAdjoint.tendsto_smul_resolvent_I_mul_apply. Imaginary resolvent membership/norm helpers live in Resolvent. Documentation and repeated estimates are repaired, preserving all donor/Spectra provenance. Three-module focused and real Yosida/Hille-Yosida generation regression build passed (5921 jobs); 13 linters passed on 59 declarations plus 20 generated; standard axioms, 24399-file full style and expanded scope examples passed. Twenty new and five generalized public declarations in three files; packet refreshed. New-head upstream CI/review pending. PR-description edit returned connector 403; host update-pr-body.sh performs metadata-only synchronization. No root pin change or local donor retirement. November 5 follow-up repair cf0827228f9b42292a16c972567e35223891be8f is pushed to #28079: generalize the existing norm_yosidaApproximation_le to every NontriviallyNormedField, hypothesis norm(lambda)*norm(R(lambda)) <= 1 and bound 2*norm(lambda), without a positive-parameter hypothesis. The imaginary norm estimate now applies this common bound. Delete the unused imaginaryYosidaApproximation_apply_eq_smul_resolvent_apply wrapper; generic yosidaApproximation_apply_eq_smul_resolvent_apply supplies factorization. State the averaging identity explicitly before simplifying the symmetric convergence limit, and document both generic convergence criteria. Focused plus real-generation regression build (5921 jobs), 13 linters on 58 declarations plus 19 generated, standard axioms, expanded scope examples and 24399-file full style passed. Current cumulative API: nineteen new and six generalized declarations in three files. Packet and no-build host description script refreshed. Fresh upstream CI/review pending; no integration, root pin change or donor retirement. November 5 placement repair 25ff5e8155bd88e514049bd77eea0ad1477a3e3c pushed to #28079: move the shared definition and eight supporting theorems into TauCeti.Analysis.Normed.Operator.LinearPMap.Yosida, in root LinearPMap namespace. All old TauCeti.Semigroups names are removed without aliases. Both self-adjoint and real-generation consumers import the lower-level module; all real consumers are migrated. Shared and self-adjoint source import closures contain 3 and 12 TauCeti modules respectively, with no semigroup dependency. Focused and real-generation regression build passed (5923 jobs); all 13 environment linters passed across ten changed modules (121 declarations plus 38 generated); scope examples, standard axioms and full style (24400 files) passed. Exact-head bundle, body, review and validation are refreshed; the host update-pr-body.sh performs no build. Connector description edit returned 403. Fresh CI/review pending; still no integration, root pin change or local donor retirement. November 5 follow-up 24d3137c101232863e9bb4c568f0b18aff8f8e9c removes the redundant Dense import from the semigroup consumer and rewrites its overview/Main results to distinguish the imported generic module from its own real-parameter results. Shared mathematical API unchanged. Focused/real-generation regression build (5923 jobs), 13 environment linters (121 declarations plus 38 generated), scope examples, standard axioms and 24400-file style passed. Pushed/open, not integrated. 2026-11-05 review repair 725864e54f56217421a7ee2bfa5742e322d9ca34 exports imaginaryYosidaApproximation_eq_yosidaApproximation and the scalar/filter-general tendsto_smul_resolvent_apply_of_mem without density or uniform bounds; the dense convergence theorem uses it and the unused real-only atTop domain theorem is removed. External scope examples, focused real/self-adjoint build, 13 environment linters and full style passed; upstream CI/review pending. 2026-11-05 repair 669b77958c667f9e79d86299865b53e3ace10f89 exports symmetricYosidaApproximation_def and generalizes imaginary and symmetric algebraic definitions and laws to complex normed spaces, retaining complete Hilbert-space assumptions for self-adjoint results. Focused build, external normed-space examples, 13 environment linters and full style passed; fresh upstream CI/review pending. 2026-11-06: #28079 integrated as 958ea898407ffa3925584ae4cf2a58517097f911, accepted head 669b77958c667f9e79d86299865b53e3ace10f89, present in Tau Ceti a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8. Retire the local positive-natural Yosida approximants and their duplicate norm, self-adjointness, commutation and convergence proof engines; the flow and its Stone/spectral-projection consumers use native signed-real symmetricYosidaApproximation and its convergence directly. Retain the downstream exponential-flow and uniqueness theory. Upstream PR preserves Spectra Adam Bornemann ancestry and Kitware Jon Crall/Claude Opus 5 provenance. November 9 native bounded-flow consumption: delete yosidaApproximantSymSA, expApprox and their five forwarding laws; the approximating sequence now directly uses StronglyContinuousGroup.ofBoundedExp (A.symmetricYosidaApproximation (n : real)). Norm, inner-product, complex-linearity and group laws use native results, at the original complete complex Hilbert scope including zero-dimensional and nonseparable spaces. Rename the retained estimates norm_expApprox_sub_le and norm_expApprox_sub_self_le to norm_yosidaFlow_sub_le and norm_yosidaFlow_sub_self_le, and the two cauchySeq_expApprox theorems to cauchySeq_yosidaFlow and cauchySeq_yosidaFlow_of_mem_domain. The pointwise strong limit and unbounded legacy group remain local; this slice does not claim their canonical-carrier migration complete. Source before retirement: DKPS 303682284 at the recorded module; copyright Kitware 2026, Jon Crall/Claude Opus 5, Apache-2.0, preserving Spectra/Adam Bornemann ancestry at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63. Native API inspected at accepted TauCeti a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8; this records consumption of independently available APIs, not proof adaptation from DKPS or a merge of #30735. Native unbounded-carrier completion, November 9: genToGroup now returns a native strongly continuous group with its IsUnitary property, using the proved Yosida strong limit. The legacy carrier is gone. Concrete approximation convergence remains local because native abstract Stone existence does not identify this particular approximating sequence. November 27: accepted #30736 (SA-E24) integrates at f0f7c4b96aba257ab68e23f04a4e2bbd141b0532 from c00248fbb5d67ac97142e3815566f2390bdcf111. The native TauCeti.Analysis.InnerProductSpace.LinearPMap.Yosida.Uniform theorem gives uniform Cauchy orbits for signed real shifts along cocompact ℝ on bounded real time sets. Specialize to the existing positive-natural index via its cofinal cast. Pointwise convergence defines the same limit, and uniform convergence on bounded intervals supplies strong continuity. Retire the old pairwise approximation, domain/density Cauchy, and domain-only continuity proof code. The quantitative displacement bound, limit group construction and Stone generator identification retain their statements. The donor ancestry is DKPS b9a02d00c (Jon Crall, Claude Opus 5, Kitware 2026, Apache-2.0) and the Duhamel argument from Spectra 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63 (Adam Bornemann, Spectra Formalization Project, Apache-2.0). The upstream proof shares the native comparison and bounded-generator criterion with real Yosida. The upstream port also exposes ContinuousLinearMap.restrictScalars_exp from the existing native Stone proof, generalized to RCLike scalars. The approximant definitions and domain convergence consumed in this module were previously integrated through #28079.",
+      "migration_note": "Yosida resolvents, their sharp norm estimates, and the adjoint-resolvent identity now use Tau Ceti's canonical LinearPMap resolver directly. The approximation and group-convergence mathematics remains local. The spectral-projection consumer now shares the canonical inverse with the Borel calculus; no conversion remains. November 4 prepared SA-E14-E21/E23 prefix port: branch port-sa-e14-e23-yosida-approximants, commit e274c92c0cd53e939842681a6911574ef2c86524, based independently on accepted main 57ab0f657d7fb33d7c9425bf696bec3045b0fd75. Canonical module TauCeti/Analysis/InnerProductSpace/LinearPMap/Yosida.lean defines LinearPMap.imaginaryYosidaApproximation and symmetricYosidaApproximation, with normalized resolvent contraction/convergence, domain factorization, norm, adjoint, self-adjointness, commutation and domain-convergence laws in root IsSelfAdjoint. Signed real shifts generalize the positive-natural source and supply both tails via cocompact limits. The accepted dense-subset convergence theorem replaces the repeated donor density proofs; no unitary-group or spectral-measure carrier is ported. Preserve Kitware/Jon Crall/Claude Opus 5 adaptation and Spectra Formalization Project/Adam Bornemann ancestry at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63, Apache-2.0. Focused 5065-job warning-as-error build, all 13 linters on 17 declarations plus 7 generated, axioms, full header/text style and natural-index scope examples passed. Shared packet: tauceti-dkps-campaign/waves/2026-11-04/yosida-approximants. Prepared, not submitted/integrated; later group/Stone results and all local consumers remain. Submitted as #28079, observed open November 4, not integrated. Review repair 293950b684316d94690698d0ae876d66314c1374 is pushed: the accepted TauCeti.Semigroups.yosidaApproximation, both composition identities and commutation now work over any nontrivially normed scalar field; imaginaryYosidaApproximation specializes that factory at I*r. Shared filter-based normalized-resolvent convergence and domain approximation reductions serve both the real semigroup and complex applications. Factorization is LinearPMap.imaginaryYosidaApproximation_apply_eq_smul_resolvent_apply with only resolvent membership, without self-adjointness or completeness; the normalized pointwise limit is IsSelfAdjoint.tendsto_smul_resolvent_I_mul_apply. Imaginary resolvent membership/norm helpers live in Resolvent. Documentation and repeated estimates are repaired, preserving all donor/Spectra provenance. Three-module focused and real Yosida/Hille-Yosida generation regression build passed (5921 jobs); 13 linters passed on 59 declarations plus 20 generated; standard axioms, 24399-file full style and expanded scope examples passed. Twenty new and five generalized public declarations in three files; packet refreshed. New-head upstream CI/review pending. PR-description edit returned connector 403; host update-pr-body.sh performs metadata-only synchronization. No root pin change or local donor retirement. November 5 follow-up repair cf0827228f9b42292a16c972567e35223891be8f is pushed to #28079: generalize the existing norm_yosidaApproximation_le to every NontriviallyNormedField, hypothesis norm(lambda)*norm(R(lambda)) <= 1 and bound 2*norm(lambda), without a positive-parameter hypothesis. The imaginary norm estimate now applies this common bound. Delete the unused imaginaryYosidaApproximation_apply_eq_smul_resolvent_apply wrapper; generic yosidaApproximation_apply_eq_smul_resolvent_apply supplies factorization. State the averaging identity explicitly before simplifying the symmetric convergence limit, and document both generic convergence criteria. Focused plus real-generation regression build (5921 jobs), 13 linters on 58 declarations plus 19 generated, standard axioms, expanded scope examples and 24399-file full style passed. Current cumulative API: nineteen new and six generalized declarations in three files. Packet and no-build host description script refreshed. Fresh upstream CI/review pending; no integration, root pin change or donor retirement. November 5 placement repair 25ff5e8155bd88e514049bd77eea0ad1477a3e3c pushed to #28079: move the shared definition and eight supporting theorems into TauCeti.Analysis.Normed.Operator.LinearPMap.Yosida, in root LinearPMap namespace. All old TauCeti.Semigroups names are removed without aliases. Both self-adjoint and real-generation consumers import the lower-level module; all real consumers are migrated. Shared and self-adjoint source import closures contain 3 and 12 TauCeti modules respectively, with no semigroup dependency. Focused and real-generation regression build passed (5923 jobs); all 13 environment linters passed across ten changed modules (121 declarations plus 38 generated); scope examples, standard axioms and full style (24400 files) passed. Exact-head bundle, body, review and validation are refreshed; the host update-pr-body.sh performs no build. Connector description edit returned 403. Fresh CI/review pending; still no integration, root pin change or local donor retirement. November 5 follow-up 24d3137c101232863e9bb4c568f0b18aff8f8e9c removes the redundant Dense import from the semigroup consumer and rewrites its overview/Main results to distinguish the imported generic module from its own real-parameter results. Shared mathematical API unchanged. Focused/real-generation regression build (5923 jobs), 13 environment linters (121 declarations plus 38 generated), scope examples, standard axioms and 24400-file style passed. Pushed/open, not integrated. 2026-11-05 review repair 725864e54f56217421a7ee2bfa5742e322d9ca34 exports imaginaryYosidaApproximation_eq_yosidaApproximation and the scalar/filter-general tendsto_smul_resolvent_apply_of_mem without density or uniform bounds; the dense convergence theorem uses it and the unused real-only atTop domain theorem is removed. External scope examples, focused real/self-adjoint build, 13 environment linters and full style passed; upstream CI/review pending. 2026-11-05 repair 669b77958c667f9e79d86299865b53e3ace10f89 exports symmetricYosidaApproximation_def and generalizes imaginary and symmetric algebraic definitions and laws to complex normed spaces, retaining complete Hilbert-space assumptions for self-adjoint results. Focused build, external normed-space examples, 13 environment linters and full style passed; fresh upstream CI/review pending. 2026-11-06: #28079 integrated as 958ea898407ffa3925584ae4cf2a58517097f911, accepted head 669b77958c667f9e79d86299865b53e3ace10f89, present in Tau Ceti a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8. Retire the local positive-natural Yosida approximants and their duplicate norm, self-adjointness, commutation and convergence proof engines; the flow and its Stone/spectral-projection consumers use native signed-real symmetricYosidaApproximation and its convergence directly. Retain the downstream exponential-flow and uniqueness theory. Upstream PR preserves Spectra Adam Bornemann ancestry and Kitware Jon Crall/Claude Opus 5 provenance. November 9 native bounded-flow consumption: delete yosidaApproximantSymSA, expApprox and their five forwarding laws; the approximating sequence now directly uses StronglyContinuousGroup.ofBoundedExp (A.symmetricYosidaApproximation (n : real)). Norm, inner-product, complex-linearity and group laws use native results, at the original complete complex Hilbert scope including zero-dimensional and nonseparable spaces. Rename the retained estimates norm_expApprox_sub_le and norm_expApprox_sub_self_le to norm_yosidaFlow_sub_le and norm_yosidaFlow_sub_self_le, and the two cauchySeq_expApprox theorems to cauchySeq_yosidaFlow and cauchySeq_yosidaFlow_of_mem_domain. The pointwise strong limit and unbounded legacy group remain local; this slice does not claim their canonical-carrier migration complete. Source before retirement: DKPS 303682284 at the recorded module; copyright Kitware 2026, Jon Crall/Claude Opus 5, Apache-2.0, preserving Spectra/Adam Bornemann ancestry at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63. Native API inspected at accepted TauCeti a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8; this records consumption of independently available APIs, not proof adaptation from DKPS or a merge of #30735. Native unbounded-carrier completion, November 9: genToGroup now returns a native strongly continuous group with its IsUnitary property, using the proved Yosida strong limit. The legacy carrier is gone. Concrete approximation convergence remains local because native abstract Stone existence does not identify this particular approximating sequence. November 27: accepted #30736 (SA-E24) integrates at f0f7c4b96aba257ab68e23f04a4e2bbd141b0532 from c00248fbb5d67ac97142e3815566f2390bdcf111. The native TauCeti.Analysis.InnerProductSpace.LinearPMap.Yosida.Uniform theorem gives uniform Cauchy orbits for signed real shifts along cocompact ℝ on bounded real time sets. Specialize to the existing positive-natural index via its cofinal cast. Pointwise convergence defines the same limit, and uniform convergence on bounded intervals supplies strong continuity. Retire the old pairwise approximation, domain/density Cauchy, and domain-only continuity proof code. The quantitative displacement bound, limit group construction and Stone generator identification retain their statements. The donor ancestry is DKPS b9a02d00c (Jon Crall, Claude Opus 5, Kitware 2026, Apache-2.0) and the Duhamel argument from Spectra 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63 (Adam Bornemann, Spectra Formalization Project, Apache-2.0). The upstream proof shares the native comparison and bounded-generator criterion with real Yosida. The upstream port also exposes ContinuousLinearMap.restrictScalars_exp from the existing native Stone proof, generalized to RCLike scalars. The approximant definitions and domain convergence consumed in this module were previously integrated through #28079. November 28. Adopt the unitary group supplied by #5881 (db15f9f89f66d790d00f05c58caa7f1d0664f82d). Delete the separate limUnder flow, its bundled operators and proofs of additivity, unitarity, the group law and continuity. A scope probe proved equality of the old group with every unitary group having complex generator iA. DKPS establishes the strong limit from native generator convergence on dom A (#28079, 958ea898407ffa3925584ae4cf2a58517097f911), the resolvent bound and Forgejo #738 (8adbff176e7b1f623675f18e6e7535678f2b9324). DKPS still uses its accepted #30736 Cauchy bound to obtain uniform convergence on bounded time sets. The orbit displacement bound uses the integral of the native group derivative. Spectral projection commutation consumes mem_resolventSet_I_mul and the limit identification. This supplies SA-E25–E27 and SA-E29 in DKPS through accepted building blocks and a local Yosida comparison. Original limit source 423b96cb0 at the staging path, Jon Crall / Claude Opus 5, Kitware, Apache-2.0, with Spectra ancestry above.",
       "retired_local_declarations": [
         "yosidaApproximantSymSA",
         "expApprox",
@@ -4305,7 +4316,23 @@
         "norm_yosidaFlow_sub_le",
         "cauchySeq_yosidaFlow_of_mem_domain",
         "cauchySeq_yosidaFlow",
-        "continuous_expLimit_of_mem_domain"
+        "continuous_expLimit_of_mem_domain",
+        "I_mul_pnat_im_ne_zero",
+        "neg_I_mul_pnat_im_ne_zero",
+        "expLimit",
+        "expLimitFun",
+        "tendsto_expLimitFun",
+        "expLimitFun_add",
+        "expLimitFun_smul",
+        "expLimit_apply",
+        "norm_expLimitFun",
+        "norm_expLimit_apply",
+        "expLimit_zero",
+        "inner_expLimit",
+        "expLimit_add",
+        "continuous_expLimit",
+        "norm_yosidaFlow_sub_self_le",
+        "norm_expLimit_sub_self_le"
       ],
       "accepted_upstream_declarations": [
         "TauCeti.Semigroups.StronglyContinuousGroup.ofBoundedExp",
@@ -4316,10 +4343,21 @@
         "TauCeti.Semigroups.StronglyContinuousGroup.IsUnitary.norm_map",
         "TauCeti.Semigroups.StronglyContinuousGroup.IsUnitary.inner_map_map",
         "TauCeti.Semigroups.StronglyContinuousGroup.IsUnitary.map_smul",
-        "IsSelfAdjoint.uniformCauchySeqOn_exp_smul_I_smul_symmetricYosidaApproximation_apply"
+        "IsSelfAdjoint.uniformCauchySeqOn_exp_smul_I_smul_symmetricYosidaApproximation_apply",
+        "IsSelfAdjoint.exists_isUnitary_complexGenerator_eq_I_smul",
+        "IsSelfAdjoint.existsUnique_isUnitary_complexGenerator_eq_I_smul",
+        "TauCeti.Semigroups.StronglyContinuousSemigroup.tendsto_apply_of_tendsto_resolvent",
+        "IsSelfAdjoint.tendsto_symmetricYosidaApproximation_apply",
+        "IsSelfAdjoint.mem_resolventSet_I_mul"
       ],
       "integration": "f0f7c4b96aba257ab68e23f04a4e2bbd141b0532",
-      "accepted_head": "c00248fbb5d67ac97142e3815566f2390bdcf111"
+      "accepted_head": "c00248fbb5d67ac97142e3815566f2390bdcf111",
+      "maintained_declarations": [
+        "TauCeti.LinearPMap.genToGroup",
+        "TauCeti.LinearPMap.tendsto_yosidaFlow_genToGroup",
+        "TauCeti.LinearPMap.tendstoUniformlyOn_yosidaFlow_genToGroup",
+        "TauCeti.LinearPMap.norm_genToGroup_sub_self_le"
+      ]
     },
     {
       "source_module": "Spectra/OneParameterUnitaryGroup/Basic.lean at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63, with DKPS criterion additions",
@@ -4525,21 +4563,14 @@
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
+      "final_tauceti_module": "TauCeti.Analysis.Semigroups.BoundedGenerator.Perturbation",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "adapted Duhamel proof architecture; Mathlib exponential and derivative APIs; native Tau Ceti bounded-group unitarity",
-      "direct_dependencies": [
-        "TauCeti.Analysis.Semigroups.Group.Stone.Basic",
-        "TauCeti.Analysis.Semigroups.BoundedGenerator.Perturbation",
-        "TauCeti.Analysis.SpecialFunctions.Exponential",
-        "Mathlib"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation"
-      ],
-      "status": "partially-upstreamed",
+      "downstream_users": [],
+      "status": "retired-upstream-subsumed-local-copy-removed",
       "upstream_pr": null,
       "retired_local_declarations": [
         "IsSkewAdjointCLM",
@@ -4547,11 +4578,21 @@
         "commute_expTime",
         "real_smul_I_smul",
         "commute_expTime_of_commute",
-        "hasDerivAt_expTime_sub"
+        "hasDerivAt_expTime_sub",
+        "expTime",
+        "expTime_def",
+        "expTime_zero",
+        "hasDerivAt_expTime",
+        "hasDerivAt_expTime_apply",
+        "norm_expTime_I_smul",
+        "norm_expTime_sub_expTime_le"
       ],
-      "migration_note": "November 9: replace the local adjoint/inner-product/norm proof engine for norm_expTime_I_smul by native isUnitary_ofBoundedExp and IsUnitary.norm_map, via the explicit exponential/restriction-of-scalars representation. Retire unused IsSkewAdjointCLM, its I-smul lemma, commute_expTime and real_smul_I_smul. Retain the commuting Duhamel estimate and its analytic support. This does not claim the Duhamel result is accepted upstream. Preserve original Kitware/Jon Crall/Claude Opus 5, Apache-2.0, and Spectra/Adam Bornemann ancestry at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63. Native bounded Stone APIs at accepted TauCeti a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8 are independently available; no DKPS proof descent is asserted. November 16: consume native TauCeti.exp_add_sub_exp_eq_integral directly in norm_expTime_sub_expTime_le, evaluating the operator integral at the vector and using commutation and native unitarity. Delete the unused commutation facade and private interpolation-derivative helper. Keep hasDerivAt_expTime and hasDerivAt_expTime_apply for the downstream Stone/Yosida integral argument. All original hypotheses and real-time scope are preserved. The same repair is submitted to open PR #30736 (SA-E24); submission is not integration. November 27: #30736 is accepted at f0f7c4b96aba257ab68e23f04a4e2bbd141b0532 with head c00248fbb5d67ac97142e3815566f2390bdcf111. Its native bounded-generator limit criterion supplies the strong continuity argument through uniform convergence. The signed Duhamel comparison here still supplies the quantitative time-displacement estimate, and the derivative API supports Stone uniqueness.",
+      "migration_note": "November 9: replace the local adjoint/inner-product/norm proof engine for norm_expTime_I_smul by native isUnitary_ofBoundedExp and IsUnitary.norm_map, via the explicit exponential/restriction-of-scalars representation. Retire unused IsSkewAdjointCLM, its I-smul lemma, commute_expTime and real_smul_I_smul. Retain the commuting Duhamel estimate and its analytic support. This does not claim the Duhamel result is accepted upstream. Preserve original Kitware/Jon Crall/Claude Opus 5, Apache-2.0, and Spectra/Adam Bornemann ancestry at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63. Native bounded Stone APIs at accepted TauCeti a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8 are independently available; no DKPS proof descent is asserted. November 16: consume native TauCeti.exp_add_sub_exp_eq_integral directly in norm_expTime_sub_expTime_le, evaluating the operator integral at the vector and using commutation and native unitarity. Delete the unused commutation facade and private interpolation-derivative helper. Keep hasDerivAt_expTime and hasDerivAt_expTime_apply for the downstream Stone/Yosida integral argument. All original hypotheses and real-time scope are preserved. The same repair is submitted to open PR #30736 (SA-E24); submission is not integration. November 27: #30736 is accepted at f0f7c4b96aba257ab68e23f04a4e2bbd141b0532 with head c00248fbb5d67ac97142e3815566f2390bdcf111. Its native bounded-generator limit criterion supplies the strong continuity argument through uniform convergence. The signed Duhamel comparison here still supplies the quantitative time-displacement estimate, and the derivative API supports Stone uniqueness. November 28. Delete the bounded exponential facade after the last Stone consumer moves to native group derivatives. Its norm proof already used native bounded Stone unitarity, and its commuting comparison used the native bounded-generator inequality with negated generators for negative times. Source 423b96cb0 at the staging path; the Spectra credit above still applies.",
       "accepted_upstream_declarations": [
-        "TauCeti.Semigroups.norm_exp_smul_sub_exp_smul_apply_le_of_commute"
+        "TauCeti.Semigroups.norm_exp_smul_sub_exp_smul_apply_le_of_commute",
+        "TauCeti.Semigroups.StronglyContinuousGroup.isUnitary_ofBoundedExp",
+        "hasDerivAt_exp_smul_const",
+        "ContinuousLinearMap.hasDerivAt_exp_smul_apply"
       ]
     },
     {
@@ -4950,8 +4991,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid",
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.BlockEstimate",
+        "ForTauCeti.Analysis.Semigroups.Group.ComplexOperator"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -4959,7 +5000,7 @@
       ],
       "status": "staged-needs-current-validation",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun. November 28. The spectral-gap proof uses the native Stone group through the Yosida identification and its spectral projection commutation."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Core/AngleGeometry.lean",
@@ -7400,7 +7441,6 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap"

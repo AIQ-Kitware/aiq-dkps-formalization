@@ -24,7 +24,7 @@ analysis is required at any step:
 * the symmetric Yosida approximant is a linear combination of two resolvents,
   so it commutes too;
 * an exponential of a commuting operator commutes (`Commute.exp_right`);
-* and `expLimit` is the strong limit of those exponentials, so commutation
+* the Stone group is the strong limit of those exponentials, so commutation
   survives — a projection is continuous, and limits are unique.
 
 ## Sources
@@ -34,9 +34,8 @@ spectral projections and the flow.
 
 ## Provenance
 
-*New.*  Every ingredient is already in `SpectralMeasure.lean`,
-`YosidaApproximation.lean` and `SkewAdjointExponential.lean`; this is the
-composition none of them performs.
+The DKPS argument combines spectral projection and resolvent commutation
+with strong convergence of the symmetric Yosida flows.
 -/
 
 public section
@@ -59,12 +58,12 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 is a linear combination of two resolvents. -/
 theorem specProjection_comm_yosidaApproxSym (n : ℕ+) :
     Commute ((A.spectralPVM hA).proj B hB) (A.symmetricYosidaApproximation (n : ℝ)) := by
-  have him : (I * (n : ℂ)).im ≠ 0 := I_mul_pnat_im_ne_zero n
-  have hnim : (-I * (n : ℂ)).im ≠ 0 := neg_I_mul_pnat_im_ne_zero n
+  have hn : (n : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr n.ne_zero
   have hrootIn : (I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
-    hA.mem_resolventSet_of_im_ne_zero him
-  have hrootNegIn : (-I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
-    hA.mem_resolventSet_of_im_ne_zero hnim
+    hA.mem_resolventSet_I_mul hn
+  have hrootNegIn : (-I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A := by
+    simpa only [ofReal_neg, ofReal_natCast, mul_neg, neg_mul] using
+      hA.mem_resolventSet_I_mul (neg_ne_zero.mpr hn)
   have h1 : Commute ((A.spectralPVM hA).proj B hB) (A.resolvent (I * (n : ℂ))) :=
     hA.commute_spectralPVM_proj_resolvent B hB hrootIn
   have h2 : Commute ((A.spectralPVM hA).proj B hB) (A.resolvent (-I * (n : ℂ))) :=
@@ -85,9 +84,9 @@ theorem specProjection_comm_yosidaFlow (n : ℕ+) (t : ℝ) (ψ : H) :
 /-- **Spectral projections commute with the unitary group.**  Commutation with
 the bounded approximants survives the strong limit. -/
 @[simp]
-theorem specProjection_expLimit_apply (t : ℝ) (ψ : H) :
-    (A.spectralPVM hA).proj B hB (expLimit hA t ψ) = expLimit hA t
-        ((A.spectralPVM hA).proj B hB ψ) := by
+theorem specProjection_genToGroup_apply (t : ℝ) (ψ : H) :
+    (A.spectralPVM hA).proj B hB ((genToGroup hA).val t ψ) =
+      (genToGroup hA).val t ((A.spectralPVM hA).proj B hB ψ) := by
   have hstep : ∀ n : ℕ+,
       (A.spectralPVM hA).proj B hB (ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ψ)
         = ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t
@@ -96,12 +95,13 @@ theorem specProjection_expLimit_apply (t : ℝ) (ψ : H) :
     exact specProjection_comm_yosidaFlow hA B hB n t ψ
   have hleft : Tendsto (fun n : ℕ+ => (A.spectralPVM hA).proj B hB (ofBoundedExp
     (A.symmetricYosidaApproximation (n : ℝ)) t ψ))
-      atTop (𝓝 ((A.spectralPVM hA).proj B hB (expLimit hA t ψ))) :=
-    (((A.spectralPVM hA).proj B hB).continuous.tendsto _).comp (tendsto_expLimitFun hA t ψ)
+      atTop (𝓝 ((A.spectralPVM hA).proj B hB ((genToGroup hA).val t ψ))) :=
+    (((A.spectralPVM hA).proj B hB).continuous.tendsto _).comp
+      (tendsto_yosidaFlow_genToGroup hA t ψ)
   have hright : Tendsto (fun n : ℕ+ => ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t
     ((A.spectralPVM hA).proj B hB ψ))
-      atTop (𝓝 (expLimit hA t ((A.spectralPVM hA).proj B hB ψ))) :=
-    tendsto_expLimitFun hA t ((A.spectralPVM hA).proj B hB ψ)
+      atTop (𝓝 ((genToGroup hA).val t ((A.spectralPVM hA).proj B hB ψ))) :=
+    tendsto_yosidaFlow_genToGroup hA t ((A.spectralPVM hA).proj B hB ψ)
   exact tendsto_nhds_unique (by simpa only [hstep] using hleft) hright
 
 end LinearPMap
