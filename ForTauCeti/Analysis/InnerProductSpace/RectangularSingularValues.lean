@@ -15,47 +15,24 @@ public import Mathlib.Analysis.InnerProductSpace.PiL2
 
 
 /-!
-# Rectangular singular values and adjoint-product spectra
+# Quadratic floors and rectangular Gram operators
 
-For a linear map `A : E →ₗ[𝕜] F` between finite-dimensional inner-product spaces, the two
-Gram operators `A†A` (on `E`) and `AA†` (on `F`) share their nonzero spectrum, including
-multiplicity.  Mathlib defines the zero-padded singular-value sequence
-`LinearMap.singularValues` through `A†A` only; this file supplies the canonical bridge to the
-codomain-side Gram operator.
+TauCeti supplies the eigenspace equivalence for the two compositions and the sorted
+source and target Gram spectra in `Module.End.eigenspaceCompEquiv` and
+`TauCeti.Analysis.InnerProductSpace.SingularValues`. The results here relate spectral
+floors of those Gram operators to pointwise quadratic floors and compare the singular
+values of maps with identical Gram operators.
 
-## Main results
+The counting lemmas cover antitone tuples of different lengths with equal nonzero
+fiber counts.
 
-* `TauCeti.nonzeroEigenspaceEquivAdjointCompSelfSelfCompAdjoint`: the linear equivalence
-  `x ↦ A x` (inverse `y ↦ μ⁻¹ • A† y`) between the nonzero `μ`-eigenspaces of `A†A` and `AA†`;
-* `TauCeti.eigenvalues_adjointCompSelf_eq_selfCompAdjoint`: the sorted eigenvalue lists of
-  `A†A` and `AA†` agree at every index below both dimensions;
-* `TauCeti.sq_singularValues_selfCompAdjoint`: the sorted eigenvalues of `AA†` are the
-  squared singular values of `A`, zero-padded past the rank;
-* `TauCeti.le_eigenvalues_selfCompAdjoint_of_norm_sq_floor`: a quadratic floor
-  `α‖x‖² ≤ ‖Ax‖²` forces the first `finrank 𝕜 E` sorted eigenvalues of `AA†` to be at least
-  `α`, and `TauCeti.norm_sq_floor_of_le_eigenvalues_adjointCompSelf` is the converse
-  direction used to descend from spectral floors back to quadratic floors.
+## Provenance
 
-The combinatorial engine is `TauCeti.antitone_eq_of_card_filter_eq`: two antitone
-nonnegative finite sequences with equal fiber cardinalities over every nonzero value agree at
-every index where both are defined.
-
-## Proof sources
-
-The eigenspace equivalence and the counting argument are original to this file.  The vendored
-Apache-2.0 excerpt `vendor/lean/lean-stat-learning-theory/SingularSystemGram.excerpt.lean`
-(Zhang–Lee–Liu) constructs explicit left singular vectors for Euclidean matrix maps and was
-consulted as a cross-check for the spectral bookkeeping; no code was copied from it here.
-
-## Preferred variant
-
-This is the **preferred** implementation of the rectangular adjoint-spectrum layer, and the
-one the Perfect Quench build depends on (via `GramSpectrumBridge`).  A near-identical
-alternative proof from the `dk-work` branch (GPT-5.6 High) is preserved verbatim for
-comparison at `RectangularSingularValuesDkVariant.lean`; the two differ only in three minor
-spots, and that variant does not elaborate on the pinned toolchain (its `calc` form of
-`sq_singularValues_selfCompAdjoint` provokes a `whnf` heartbeat blow-up), which is why this
-file rewrote that proof.
+Extracted from `ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues`
+at DKPS commit `82d20de`. Authors Jon Crall, GPT-5.6 High and Claude Fable 5,
+Kitware copyright, Apache-2.0. The previous eigenspace equivalence and sorted
+Gram-spectrum proofs are in Git history. The independently implemented
+TauCeti #13839 now supplies those results.
 -/
 
 public section
@@ -156,158 +133,7 @@ variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
-/-! ### The nonzero eigenspace equivalence between `A†A` and `AA†` -/
-
-/-- The codomain Gram operator `AA†` is symmetric. -/
-theorem isSymmetric_self_comp_adjoint (A : E →ₗ[𝕜] F) : (A ∘ₗ A.adjoint).IsSymmetric :=
-  A.isPositive_self_comp_adjoint.isSymmetric
-
-/-- `A` maps each eigenspace of `A†A` into the same eigenspace of `AA†`. -/
-theorem apply_mem_eigenspace_selfCompAdjoint (A : E →ₗ[𝕜] F) {μ : 𝕜} {x : E}
-    (hx : x ∈ Module.End.eigenspace (A.adjoint.comp A) μ) :
-    A x ∈ Module.End.eigenspace (A.comp A.adjoint) μ := by
-  rw [Module.End.mem_eigenspace_iff] at hx ⊢
-  calc (A.comp A.adjoint) (A x) = A ((A.adjoint.comp A) x) := rfl
-    _ = μ • A x := by rw [hx, map_smul]
-
-/-- `A†` maps each eigenspace of `AA†` into the same eigenspace of `A†A`. -/
-theorem adjoint_apply_mem_eigenspace_adjointCompSelf (A : E →ₗ[𝕜] F) {μ : 𝕜} {y : F}
-    (hy : y ∈ Module.End.eigenspace (A.comp A.adjoint) μ) :
-    A.adjoint y ∈ Module.End.eigenspace (A.adjoint.comp A) μ := by
-  rw [Module.End.mem_eigenspace_iff] at hy ⊢
-  calc (A.adjoint.comp A) (A.adjoint y) = A.adjoint ((A.comp A.adjoint) y) := rfl
-    _ = μ • A.adjoint y := by rw [hy, map_smul]
-
-/-- The nonzero `μ`-eigenspaces of `A†A` and `AA†` are linearly equivalent, via `x ↦ A x`
-with inverse `y ↦ μ⁻¹ • A† y`.  This is the multiplicity-preserving form of the statement
-that `A†A` and `AA†` have the same nonzero spectrum. -/
-noncomputable def nonzeroEigenspaceEquivAdjointCompSelfSelfCompAdjoint
-    (A : E →ₗ[𝕜] F) (μ : 𝕜) (hμ : μ ≠ 0) :
-    Module.End.eigenspace (A.adjoint.comp A) μ ≃ₗ[𝕜]
-      Module.End.eigenspace (A.comp A.adjoint) μ := by
-  refine LinearEquiv.ofLinearMap
-    (A.restrict fun x hx => apply_mem_eigenspace_selfCompAdjoint A hx)
-    ((μ⁻¹ • A.adjoint).restrict fun y hy => Submodule.smul_mem _ _
-      (adjoint_apply_mem_eigenspace_adjointCompSelf A hy)) ?_ ?_
-  · ext y
-    have hy := y.property
-    rw [Module.End.mem_eigenspace_iff] at hy
-    simp only [LinearMap.comp_apply, LinearMap.coe_restrict_apply, LinearMap.id_coe, id_eq,
-      LinearMap.smul_apply]
-    calc A (μ⁻¹ • A.adjoint y.val) = μ⁻¹ • (A.comp A.adjoint) y.val := by
-          rw [map_smul]; rfl
-      _ = μ⁻¹ • μ • y.val := by rw [hy]
-      _ = y.val := inv_smul_smul₀ hμ y.val
-  · ext x
-    have hx := x.property
-    rw [Module.End.mem_eigenspace_iff] at hx
-    simp only [LinearMap.comp_apply, LinearMap.coe_restrict_apply, LinearMap.id_coe, id_eq,
-      LinearMap.smul_apply]
-    calc μ⁻¹ • A.adjoint (A x.val) = μ⁻¹ • (A.adjoint.comp A) x.val := rfl
-      _ = μ⁻¹ • μ • x.val := by rw [hx]
-      _ = x.val := inv_smul_smul₀ hμ x.val
-
-/-- Corresponding nonzero eigenspaces of `A†A` and `AA†` have equal dimension. -/
-theorem finrank_eigenspace_adjointCompSelf_eq_selfCompAdjoint
-    (A : E →ₗ[𝕜] F) (μ : 𝕜) (hμ : μ ≠ 0) :
-    finrank 𝕜 (Module.End.eigenspace (A.adjoint.comp A) μ) =
-      finrank 𝕜 (Module.End.eigenspace (A.comp A.adjoint) μ) :=
-  (nonzeroEigenspaceEquivAdjointCompSelfSelfCompAdjoint A μ hμ).finrank_eq
-
-/-- A nonzero scalar is an eigenvalue of `A†A` exactly when it is an eigenvalue of `AA†`. -/
-theorem hasEigenvalue_adjointCompSelf_iff_selfCompAdjoint
-    (A : E →ₗ[𝕜] F) (μ : 𝕜) (hμ : μ ≠ 0) :
-    Module.End.HasEigenvalue (A.adjoint.comp A) μ ↔
-      Module.End.HasEigenvalue (A.comp A.adjoint) μ := by
-  have h := finrank_eigenspace_adjointCompSelf_eq_selfCompAdjoint A μ hμ
-  simp only [Module.End.hasEigenvalue_iff, ne_eq, ← Submodule.finrank_eq_zero, h]
-
-/-! ### Equality of the sorted nonzero spectra -/
-
-private theorem card_filter_eigenvalues_real_eq {G : Type*} [NormedAddCommGroup G]
-    [InnerProductSpace 𝕜 G] [FiniteDimensional 𝕜 G] {S : G →ₗ[𝕜] G} (hS : S.IsSymmetric)
-    {m : ℕ} (hm : finrank 𝕜 G = m) (c : ℝ) :
-    #{i | hS.eigenvalues hm i = c} =
-      finrank 𝕜 (Module.End.eigenspace S ((c : ℝ) : 𝕜)) := by
-  rw [← hS.card_filter_eigenvalues_eq hm ((c : ℝ) : 𝕜)]
-  congr 1
-  ext i
-  simp
-
-/-- For every nonzero real value, the sorted eigenvalue lists of `A†A` and `AA†` have fibers
-of equal cardinality. -/
-theorem card_filter_eigenvalues_adjointCompSelf_eq_selfCompAdjoint
-    (A : E →ₗ[𝕜] F) {d n : ℕ} (hd : finrank 𝕜 E = d) (hn : finrank 𝕜 F = n)
-    {c : ℝ} (hc : c ≠ 0) :
-    #{i : Fin d | A.isSymmetric_adjoint_comp_self.eigenvalues hd i = c} =
-      #{j : Fin n | (isSymmetric_self_comp_adjoint A).eigenvalues hn j = c} := by
-  have hμ : ((c : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hc
-  rw [card_filter_eigenvalues_real_eq A.isSymmetric_adjoint_comp_self hd c,
-    card_filter_eigenvalues_real_eq (isSymmetric_self_comp_adjoint A) hn c]
-  exact finrank_eigenspace_adjointCompSelf_eq_selfCompAdjoint A ((c : ℝ) : 𝕜) hμ
-
-/-- **Rectangular spectral bridge.**  The sorted (descending) eigenvalue lists of `A†A` and
-`AA†` agree at every index below both space dimensions.  Beyond the rank of `A` both lists
-are zero, so no hypothesis relating `d` and `n` is required. -/
-theorem eigenvalues_adjointCompSelf_eq_selfCompAdjoint
-    (A : E →ₗ[𝕜] F) {d n : ℕ} (hd : finrank 𝕜 E = d) (hn : finrank 𝕜 F = n)
-    {k : ℕ} (hkd : k < d) (hkn : k < n) :
-    A.isSymmetric_adjoint_comp_self.eigenvalues hd ⟨k, hkd⟩ =
-      (isSymmetric_self_comp_adjoint A).eigenvalues hn ⟨k, hkn⟩ :=
-  antitone_eq_of_card_filter_eq
-    (A.isSymmetric_adjoint_comp_self.eigenvalues_antitone hd)
-    ((isSymmetric_self_comp_adjoint A).eigenvalues_antitone hn)
-    (A.isPositive_adjoint_comp_self.nonneg_eigenvalues hd)
-    (A.isPositive_self_comp_adjoint.nonneg_eigenvalues hn)
-    (fun _ hc => card_filter_eigenvalues_adjointCompSelf_eq_selfCompAdjoint A hd hn hc)
-    hkd hkn
-
-/-! ### Codomain Gram spectra via the accepted adjoint singular-value theorem
-
-`LinearMap.singularValues_adjoint` is supplied by TauCeti's singular-value module.
-The original DKPS independent proof was retired in the 2026-10-31 consumption.
--/
-
-/-- The sorted eigenvalues of the codomain Gram operator `AA†` are the squared singular
-values of `A`, zero-padded past the rank of `A`. -/
-theorem sq_singularValues_selfCompAdjoint (A : E →ₗ[𝕜] F) {n : ℕ}
-    (hn : finrank 𝕜 F = n) (i : Fin n) :
-    A.singularValues i ^ 2 = (isSymmetric_self_comp_adjoint A).eigenvalues hn i := by
-  have h1 := A.adjoint.sq_singularValues_fin hn i
-  rw [LinearMap.singularValues_adjoint] at h1
-  rw [h1]
-  exact congrFun (LinearMap.IsSymmetric.eigenvalues_congr (by rw [adjoint_adjoint])
-    A.adjoint.isSymmetric_adjoint_comp_self (isSymmetric_self_comp_adjoint A) hn) i
-
-/-- Every positive squared singular value of `A` is an eigenvalue of `AA†`. -/
-theorem hasEigenvalue_selfCompAdjoint_sq_singularValues
-    (A : E →ₗ[𝕜] F) {i : ℕ} (hi : i < finrank 𝕜 A.range) :
-    Module.End.HasEigenvalue (A.comp A.adjoint) ((A.singularValues i ^ 2 : ℝ) : 𝕜) := by
-  have hiE : i < finrank 𝕜 E := hi.trans_le A.finrank_range_le
-  have hpos : 0 < A.singularValues i := A.singularValues_pos_iff_lt_finrank_range.mpr hi
-  have h0 := A.hasEigenvalue_adjoint_comp_self_sq_singularValues hiE
-  rw [RCLike.ofReal_pow]
-  have hne : ((A.singularValues i : ℝ) : 𝕜) ^ 2 ≠ 0 :=
-    pow_ne_zero 2 (RCLike.ofReal_ne_zero.mpr hpos.ne')
-  exact (hasEigenvalue_adjointCompSelf_iff_selfCompAdjoint A
-    (((A.singularValues i : ℝ) : 𝕜) ^ 2) hne).mp h0
-
-/-! ### Quadratic floors and Gram spectra
-
-## Provenance
-
-* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues`, moved to
-  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
-  commit `82d20de`.
-* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
-  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
-* Original authors / copyright: Jon Crall, GPT-5.6 High, Claude Fable 5; Copyright (c) 2026
-  Kitware, Inc.;
-  Apache 2.0.
-* Spectra influence: **none** — this module imports only Mathlib and sibling
-  `ForTauCeti` staging modules.
--/
+/-! ### Quadratic floors and Gram spectra -/
 
 /-- The Gram quadratic form is the squared image norm:
 `re ⟪(A†A) x, x⟫ = ‖A x‖²`. -/
@@ -377,10 +203,10 @@ comparison `finrank E ≤ finrank F` is not assumed: it is automatic when `α > 
 theorem le_eigenvalues_selfCompAdjoint_of_norm_sq_floor
     (A : E →ₗ[𝕜] F) {α : ℝ} (hfloor : ∀ x, α * ‖x‖ ^ 2 ≤ ‖A x‖ ^ 2)
     {n : ℕ} (hn : finrank 𝕜 F = n) (i : Fin n) (hi : (i : ℕ) < finrank 𝕜 E) :
-    α ≤ (isSymmetric_self_comp_adjoint A).eigenvalues hn i := by
+    α ≤ A.isSymmetric_self_comp_adjoint.eigenvalues hn i := by
   rcases le_or_gt α 0 with hα | hα
   · exact hα.trans (A.isPositive_self_comp_adjoint.nonneg_eigenvalues hn i)
-  · rw [← eigenvalues_adjointCompSelf_eq_selfCompAdjoint A rfl hn hi i.isLt]
+  · rw [← A.eigenvalues_adjoint_comp_self_eq_eigenvalues_self_comp_adjoint rfl hn hi i.isLt]
     exact le_eigenvalues_adjointCompSelf_of_norm_sq_floor A hfloor rfl ⟨i, hi⟩
 
 /-- Singular values only depend on the Gram operator. -/

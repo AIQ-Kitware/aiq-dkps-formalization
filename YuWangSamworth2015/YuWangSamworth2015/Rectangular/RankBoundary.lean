@@ -72,8 +72,9 @@ theorem twoLevelOperator_zero_one (U : Submodule 𝕜 E) [U.HasOrthogonalProject
 self-adjoint and idempotent, so `P⋆P = P`; its squared singular values are
 therefore its eigenvalues `1` and `0`. -/
 theorem rightGram_projection (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    rightGram (U.starProjection.toLinearMap) = U.starProjection.toLinearMap := by
-  rw [rightGram, (Submodule.starProjection_isSymmetric _).adjoint_eq]
+    U.starProjection.toLinearMap.adjoint ∘ₗ U.starProjection.toLinearMap =
+      U.starProjection.toLinearMap := by
+  rw [(Submodule.starProjection_isSymmetric _).adjoint_eq]
   ext x
   change U.starProjection (U.starProjection x) = U.starProjection x
   exact Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
@@ -142,8 +143,8 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
     ∃ A Â : E →ₗ[ℝ] E,
       finrank ℝ (LinearMap.range A) = 1 ∧
       finrank ℝ (LinearMap.range Â) = 1 ∧
-      rightGram A v = (1 : ℝ) • v ∧
-      rightGram Â w = (1 : ℝ) • w ∧
+      (A.adjoint ∘ₗ A) v = (1 : ℝ) • v ∧
+      (Â.adjoint ∘ₗ Â) w = (1 : ℝ) • w ∧
       Submodule.sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) = 1 ∧
       ¬ ∀ Δ : ℝ, 0 < Δ →
           Submodule.sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) ≤
@@ -198,9 +199,9 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation_euclidean :
     ∃ A Â : EuclideanSpace ℝ (Fin 2) →ₗ[ℝ] EuclideanSpace ℝ (Fin 2),
       finrank ℝ (LinearMap.range A) = 1 ∧
       finrank ℝ (LinearMap.range Â) = 1 ∧
-      rightGram A (EuclideanSpace.single (0 : Fin 2) (1 : ℝ))
+      (A.adjoint ∘ₗ A) (EuclideanSpace.single (0 : Fin 2) (1 : ℝ))
         = (1 : ℝ) • EuclideanSpace.single (0 : Fin 2) (1 : ℝ) ∧
-      rightGram Â (EuclideanSpace.single (1 : Fin 2) (1 : ℝ))
+      (Â.adjoint ∘ₗ Â) (EuclideanSpace.single (1 : Fin 2) (1 : ℝ))
         = (1 : ℝ) • EuclideanSpace.single (1 : Fin 2) (1 : ℝ) ∧
       Submodule.sinThetaFrobenius
           (Submodule.span ℝ {EuclideanSpace.single (0 : Fin 2) (1 : ℝ)})

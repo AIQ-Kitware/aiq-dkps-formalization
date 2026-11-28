@@ -71,15 +71,15 @@ squared singular values of the right Gram operators. -/
 @[expose]
 def CorrespondingRightSingularBlock (A Â : E →ₗ[𝕜] F)
     (U V : Submodule 𝕜 E) : Prop :=
-  CorrespondingEigenblock (isSymmetric_rightGram A)
-    (isSymmetric_rightGram Â) U V
+  CorrespondingEigenblock A.isSymmetric_adjoint_comp_self
+    Â.isSymmetric_adjoint_comp_self U V
 
 /-- Ordered-index correspondence for left singular blocks. -/
 @[expose]
 def CorrespondingLeftSingularBlock (A Â : E →ₗ[𝕜] F)
     (U V : Submodule 𝕜 F) : Prop :=
-  CorrespondingEigenblock (isSymmetric_leftGram A)
-    (isSymmetric_leftGram Â) U V
+  CorrespondingEigenblock A.isSymmetric_self_comp_adjoint
+    Â.isSymmetric_self_comp_adjoint U V
 
 /-- The minimum in Theorem 2 transports through a common Gram coefficient
 without choosing an operator/Frobenius branch globally. -/
@@ -183,14 +183,14 @@ theorem yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap (rightGram A) U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap ((A.adjoint ∘ₗ A)) U Δ) :
     Submodule.sinThetaFrobenius U V ≤
       2 * (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
   apply yuWangSamworth_gram_sinTheta_le
-    (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
+    A.isSymmetric_adjoint_comp_self Â.isSymmetric_adjoint_comp_self
     (by simpa only [CorrespondingRightSingularBlock] using hcorr)
     hrank hΔ
     hgap
@@ -204,14 +204,14 @@ theorem yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap (leftGram A) U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap ((A ∘ₗ A.adjoint)) U Δ) :
     Submodule.sinThetaFrobenius U V ≤
       2 * (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
   apply yuWangSamworth_gram_sinTheta_le
-    (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
+    A.isSymmetric_self_comp_adjoint Â.isSymmetric_self_comp_adjoint
     (by simpa only [CorrespondingLeftSingularBlock] using hcorr)
     hrank hΔ
     hgap
@@ -224,7 +224,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_opNormCoefficient_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap (rightGram A) U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap ((A.adjoint ∘ₗ A)) U Δ) :
     ∃ (u v : Fin d → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -235,7 +235,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_opNormCoefficient_le
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
   apply yuWangSamworth_gram_alignedBasis_le
-    (isSymmetric_rightGram A) (isSymmetric_rightGram Â)
+    A.isSymmetric_adjoint_comp_self Â.isSymmetric_adjoint_comp_self
     (by simpa only [CorrespondingRightSingularBlock] using hcorr)
     hrank hΔ
     hgap
@@ -248,7 +248,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap (leftGram A) U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap ((A ∘ₗ A.adjoint)) U Δ) :
     ∃ (u v : Fin d → F), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -259,7 +259,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
   apply yuWangSamworth_gram_alignedBasis_le
-    (isSymmetric_leftGram A) (isSymmetric_leftGram Â)
+    A.isSymmetric_self_comp_adjoint Â.isSymmetric_self_comp_adjoint
     (by simpa only [CorrespondingLeftSingularBlock] using hcorr)
     hrank hΔ
     hgap
@@ -272,7 +272,7 @@ theorem yuWangSamworth_rightSingularSubspace_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap (rightGram A) U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap ((A.adjoint ∘ₗ A)) U Δ) :
     Submodule.sinThetaFrobenius U V ≤
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
@@ -288,7 +288,7 @@ theorem yuWangSamworth_leftSingularSubspace_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap (leftGram A) U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap ((A ∘ₗ A.adjoint)) U Δ) :
     Submodule.sinThetaFrobenius U V ≤
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
@@ -304,7 +304,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap (rightGram A) U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap ((A.adjoint ∘ₗ A)) U Δ) :
     ∃ (u v : Fin d → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -324,7 +324,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap (leftGram A) U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap ((A ∘ₗ A.adjoint)) U Δ) :
     ∃ (u v : Fin d → F), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -349,7 +349,7 @@ theorem still quantifies over the choice.
 
 Passing to the Gram operators — the paper's own route — `A vⱼ = σⱼ uⱼ` is
 `A⋆A vⱼ = σⱼ² vⱼ`, so the printed hypothesis is an ordered eigenframe of
-`rightGram A` at the indices of the sorted squared singular values.
+`(A.adjoint ∘ₗ A)` at the indices of the sorted squared singular values.
 -/
 
 /-- Generic Gram transport for the sine-distance part of Theorem 3, at frame
@@ -424,12 +424,12 @@ denominator is the *intrinsic* gap of `A⋆A`, which — unlike the paper's prin
 theorem yuWangSamworth_rightSingularSubspace_frame_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d : ℕ} {hn : finrank 𝕜 E = n}
     {e : Fin d ↪ Fin n} {v vHat : Fin d → E}
-    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn e v)
-    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn e vHat)
+    (hv : IsOrderedEigenframe A.isSymmetric_adjoint_comp_self hn e v)
+    (hvHat : IsOrderedEigenframe Â.isSymmetric_adjoint_comp_self hn e vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
-      Δ ≤ |(isSymmetric_rightGram A).eigenvalues hn (e i) -
-            (isSymmetric_rightGram A).eigenvalues hn k|) :
+      Δ ≤ |A.isSymmetric_adjoint_comp_self.eigenvalues hn (e i) -
+            A.isSymmetric_adjoint_comp_self.eigenvalues hn k|) :
     Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range v))
         (Submodule.span 𝕜 (Set.range vHat)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
@@ -446,12 +446,12 @@ corrected rank-boundary convention.** -/
 theorem yuWangSamworth_leftSingularSubspace_frame_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d : ℕ} {hm : finrank 𝕜 F = m}
     {e : Fin d ↪ Fin m} {u û : Fin d → F}
-    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm e u)
-    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm e û)
+    (hu : IsOrderedEigenframe A.isSymmetric_self_comp_adjoint hm e u)
+    (hû : IsOrderedEigenframe Â.isSymmetric_self_comp_adjoint hm e û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin m), k ∉ Set.range (⇑e) →
-      Δ ≤ |(isSymmetric_leftGram A).eigenvalues hm (e i) -
-            (isSymmetric_leftGram A).eigenvalues hm k|) :
+      Δ ≤ |A.isSymmetric_self_comp_adjoint.eigenvalues hm (e i) -
+            A.isSymmetric_self_comp_adjoint.eigenvalues hm k|) :
     Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range û)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
@@ -468,12 +468,12 @@ the corrected rank-boundary convention.** -/
 theorem yuWangSamworth_rightSingularAlignedBasis_frame_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d : ℕ} {hn : finrank 𝕜 E = n}
     {e : Fin d ↪ Fin n} {v vHat : Fin d → E}
-    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn e v)
-    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn e vHat)
+    (hv : IsOrderedEigenframe A.isSymmetric_adjoint_comp_self hn e v)
+    (hvHat : IsOrderedEigenframe Â.isSymmetric_adjoint_comp_self hn e vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
-      Δ ≤ |(isSymmetric_rightGram A).eigenvalues hn (e i) -
-            (isSymmetric_rightGram A).eigenvalues hn k|) :
+      Δ ≤ |A.isSymmetric_adjoint_comp_self.eigenvalues hn (e i) -
+            A.isSymmetric_adjoint_comp_self.eigenvalues hn k|) :
     ∃ (w ŵ : Fin d → E), Orthonormal 𝕜 w ∧ Orthonormal 𝕜 ŵ ∧
       Submodule.span 𝕜 (Set.range w) = Submodule.span 𝕜 (Set.range v) ∧
       Submodule.span 𝕜 (Set.range ŵ) = Submodule.span 𝕜 (Set.range vHat) ∧
@@ -493,12 +493,12 @@ the corrected rank-boundary convention.** -/
 theorem yuWangSamworth_leftSingularAlignedBasis_frame_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d : ℕ} {hm : finrank 𝕜 F = m}
     {e : Fin d ↪ Fin m} {u û : Fin d → F}
-    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm e u)
-    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm e û)
+    (hu : IsOrderedEigenframe A.isSymmetric_self_comp_adjoint hm e u)
+    (hû : IsOrderedEigenframe Â.isSymmetric_self_comp_adjoint hm e û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin m), k ∉ Set.range (⇑e) →
-      Δ ≤ |(isSymmetric_leftGram A).eigenvalues hm (e i) -
-            (isSymmetric_leftGram A).eigenvalues hm k|) :
+      Δ ≤ |A.isSymmetric_self_comp_adjoint.eigenvalues hm (e i) -
+            A.isSymmetric_self_comp_adjoint.eigenvalues hm k|) :
     ∃ (w ŵ : Fin d → F), Orthonormal 𝕜 w ∧ Orthonormal 𝕜 ŵ ∧
       Submodule.span 𝕜 (Set.range w) = Submodule.span 𝕜 (Set.range u) ∧
       Submodule.span 𝕜 (Set.range ŵ) = Submodule.span 𝕜 (Set.range û) ∧

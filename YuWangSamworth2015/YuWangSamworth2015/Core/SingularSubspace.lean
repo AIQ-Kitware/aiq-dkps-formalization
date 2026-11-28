@@ -9,7 +9,6 @@ public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinT
 
 public import YuWangSamworth2015.Core.Statistics
 public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularVectors
-public import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
 public import TauCeti.Analysis.InnerProductSpace.HermitianDilation.Basic
 public import TauCeti.Analysis.InnerProductSpace.HermitianDilation.Norm
 public import TauCeti.Analysis.InnerProductSpace.SingularSubspace.Perturbation
@@ -29,8 +28,8 @@ Literature map:
 
 The right singular subspaces are spectral subspaces of `A⋆A`, the left ones
 are spectral subspaces of `AA⋆`, and the Hermitian dilation packages both at
-once.  Reusable singular-subspace and Gram infrastructure lives in
-`ForTauCeti`; this file records the YWS-specific application API built on it.
+once.  TauCeti provides the singular-subspace and Gram perturbation theorems.
+This file records the YWS-specific application API built on them.
 
 The accepted target-Gram population overlap theorem (Tau Ceti #26823) is
 available directly from the `SingularVectors` import above. Its squared overlap

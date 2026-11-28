@@ -351,14 +351,14 @@ theorem IsRightSingularBlock.toOrderedFrame {p q d r s : ℕ}
     {hr : r ≤ s} {hd : d = s - r + 1} {V : Fin d → EuclideanSpace ℝ (Fin q)}
     (hV : IsRightSingularBlock A hr hd V)
     (hrd : r + d = s + 1) (hsq : s + 1 ≤ q) :
-    IsOrderedEigenframe (isSymmetric_rightGram A) (finrank_euclidean q)
+    IsOrderedEigenframe A.isSymmetric_adjoint_comp_self (finrank_euclidean q)
       (consecutiveEmb (hrd.trans_le hsq)) V := by
   refine isOrderedEigenframe_iff.mpr { orthonormal := hV.1, apply_eq := ?_ }
   intro i
-  rw [show (isSymmetric_rightGram A).eigenvalues (finrank_euclidean q)
+  rw [show A.isSymmetric_adjoint_comp_self.eigenvalues (finrank_euclidean q)
         (consecutiveEmb (hrd.trans_le hsq) i)
       = A.singularValues (r + (i : ℕ)) ^ 2 from by
-        rw [← sq_singularValues_eq_eigenvalues_rightGram]; rfl]
+        rw [← A.sq_singularValues_fin]; rfl]
   exact hV.2 i
 
 /-- A source-scoped left block is an ordered left singular frame. -/
@@ -367,14 +367,15 @@ theorem IsLeftSingularBlock.toOrderedFrame {p q d r s : ℕ}
     {hr : r ≤ s} {hd : d = s - r + 1} {U : Fin d → EuclideanSpace ℝ (Fin p)}
     (hU : IsLeftSingularBlock A hr hd U)
     (hrd : r + d = s + 1) (hsp : s + 1 ≤ p) :
-    IsOrderedEigenframe (isSymmetric_leftGram A) (finrank_euclidean p)
+    IsOrderedEigenframe A.isSymmetric_self_comp_adjoint (finrank_euclidean p)
       (consecutiveEmb (hrd.trans_le hsp)) U := by
   refine isOrderedEigenframe_iff.mpr { orthonormal := hU.1, apply_eq := ?_ }
   intro i
-  rw [show (isSymmetric_leftGram A).eigenvalues (finrank_euclidean p)
+  rw [show A.isSymmetric_self_comp_adjoint.eigenvalues (finrank_euclidean p)
         (consecutiveEmb (hrd.trans_le hsp) i)
       = A.singularValues (r + (i : ℕ)) ^ 2 from by
-        rw [← sq_singularValues_eq_eigenvalues_leftGram]; rfl]
+        exact (A.sq_singularValues_eq_eigenvalues_self_comp_adjoint (finrank_euclidean p)
+          (consecutiveEmb (hrd.trans_le hsp) i).isLt).symm]
   exact hU.2 i
 
 /-- **Yu--Wang--Samworth 2015, Theorem 3, right singular subspaces, sine

@@ -1,5 +1,46 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 finite frames, rectangular Gram spectra, and modulus symmetry
+
+Perfect Quench now uses TauCeti's finite-family Gram operator, its matrix
+identification, and both directions of the lower frame bound argument. The
+same finite-dimensional, real configuration statements apply at the same
+indices. #14569 covers PA-A01–A12 and reports writing the API from
+Christensen's standard definitions. DKPS proof descent is unverified.
+#39969 moved the accepted API into `Frame/Basic`.
+[#14569 integration](https://github.com/TauCetiProject/TauCeti/commit/e9093218a7223738a4337c7069078cc5c79d10a1) ·
+[#39969 integration](https://github.com/TauCetiProject/TauCeti/commit/5c00f72476932349ceb9d54efb112628a05a797d)
+
+Independent #13839 covers PD-C07/C08. Its composition eigenspace equivalence
+handles unit scalars over a commutative ring, and its sorted Gram spectra and
+squared-singular-value results apply to rectangular `RCLike` maps. These retire
+the local multiplicity and spectrum comparison proofs. Yu–Wang–Samworth uses
+Mathlib's adjoint compositions and symmetry facts and the native squared spectra
+at every ambient index. The arbitrary-frame and Frobenius numerator bounds stay
+paper-facing. The local quadratic-floor theorems for arbitrary rectangular maps
+and the counting facts for unequal tuple lengths remain available.
+[#13839 integration](https://github.com/TauCetiProject/TauCeti/commit/0229509ce8dcd20951f52978eb5e6b20f595ea47)
+
+Direct rotation applies Mathlib's `CFC.abs_star` through the finite-to-CFC
+modulus comparison from #16523. The unused finite sign symmetry also retires
+through the comparison from our #20358 (PD-A47) and the rectangular bounded
+`ContinuousLinearMap.modulus_neg` in #17050. DKPS proof descent for the
+bounded sign lemma is unverified. The selected unitary completion remains
+available for singular square maps.
+[#16523 integration](https://github.com/TauCetiProject/TauCeti/commit/893678359b586eace5dfe8ce192eb8a725406cb6) ·
+[#20358 integration](https://github.com/TauCetiProject/TauCeti/commit/f4a3266bdf016c565840d069c5db06eb5352ddd1) ·
+[#17050 integration](https://github.com/TauCetiProject/TauCeti/commit/e36963f4148ed374ed24fcac1fe1953e93b69982)
+
+The extraction manifest links the retired names to their sources at DKPS
+`c133b8aa7`, including `FiniteFrame.lean`, `Gram/Operator.lean`,
+`RectangularSingularValues.lean`, and `Polar/Decomposition.lean`. The
+Yu–Wang–Samworth census now points to the native Gram statements.
+
+The focused build, default build (22,802 jobs), and Challenge with the
+Davis–Kahan semantic-surface audit (22,516 jobs) passed without warnings.
+The Yu–Wang–Samworth declaration probe passed, all 1,569 Davis–Kahan
+census references resolved, and all 17 available comparator signatures matched.
+
 ## November 28 spectral bands and form bounds
 
 A self-adjoint partial operator with spectrum in a bounded interval

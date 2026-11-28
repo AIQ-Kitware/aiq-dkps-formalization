@@ -3,10 +3,10 @@ Rectangular Gram-spectrum bridge for raw-response Quench.
 
 This module connects the repository's matrix-level sorted-eigenvalue convention
 (`Matrix.IsHermitian.eigenvalues₀` of `configGram`) to the intrinsic
-rectangular spectral theory in `ForMathlib`:
+finite-frame spectral theory in TauCeti:
 
 * the configuration Gram matrix acts as the Gram operator `A A†` of the analysis map of the
-  configuration (`TauCeti.finiteAnalysis`);
+  configuration (`TauCeti.analysisMap`);
 * a quadratic floor on the configuration therefore bounds the first `d` sorted eigenvalues
   of the `n × n` Gram matrix below (`eigenvalues₀_configGram_lower_of_quadratic_floor`);
 * conversely, with `d ≤ n`, a floor on those eigenvalues recovers the quadratic floor
@@ -19,7 +19,7 @@ the target-augmentation floor in `SpectralRegularity.lean`.
 module
 
 public import DkpsQuench2026.Core.Certificates
-public import ForTauCeti.Analysis.InnerProductSpace.FiniteFrame
+public import TauCeti.Analysis.InnerProductSpace.Frame.Basic
 public import TauCeti.Analysis.InnerProductSpace.CenteredScatter
 
 public section
@@ -62,16 +62,11 @@ theorem sum_sq_linearForm_eq_sum_norm_inner {n d : Nat} (z : Config n d) (x : Ve
 operator `A A†` of the analysis map of the configuration. -/
 theorem toEuclideanLin_configGram_eq_finiteGramOperator {n d : Nat} (z : Config n d) :
     Matrix.toEuclideanLin (disMatToMatrix (configGram z)) =
-      TauCeti.finiteGramOperator ℝ z := by
-  apply LinearMap.ext
-  intro c
-  apply PiLp.ext
-  intro i
-  rw [TauCeti.finiteGramOperator_apply]
-  show (disMatToMatrix (configGram z) *ᵥ WithLp.ofLp c) i = _
-  simp only [Matrix.mulVec, dotProduct]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  rw [inner_vec_eq_sum]
+      TauCeti.gramOperator ℝ z := by
+  rw [TauCeti.gramOperator_eq_toEuclideanLin_gram]
+  congr 1
+  ext i j
+  rw [Matrix.gram_apply, inner_vec_eq_sum]
   rfl
 
 /-- The repository's sorted eigenvalues of a configuration Gram matrix agree with the sorted
@@ -79,12 +74,12 @@ eigenvalues of the finite-family Gram operator. -/
 theorem eigenvalues₀_configGram_eq_eigenvalues_finiteGramOperator
     {n d : Nat} (z : Config n d) (i : Fin (Fintype.card (Fin n))) :
     (configGramPosSemidef z).isHermitian.eigenvalues₀ i =
-      (TauCeti.isSymmetric_finiteGramOperator ℝ z).eigenvalues
+      (TauCeti.isSymmetric_gramOperator (𝕜 := ℝ) z).eigenvalues
         finrank_euclideanSpace i := by
   have hcongr := LinearMap.IsSymmetric.eigenvalues_congr
     (toEuclideanLin_configGram_eq_finiteGramOperator z)
     (opSym (configGramPosSemidef z).isHermitian)
-    (TauCeti.isSymmetric_finiteGramOperator ℝ z)
+    (TauCeti.isSymmetric_gramOperator (𝕜 := ℝ) z)
     (finrank_euclideanSpace (𝕜 := ℝ) (ι := Fin n))
   exact congrFun hcongr i
 
@@ -98,7 +93,7 @@ theorem eigenvalues₀_configGram_lower_of_quadratic_floor
     (i : Fin (Fintype.card (Fin n))) (hi : (i : Nat) < d) :
     α ≤ (configGramPosSemidef z).isHermitian.eigenvalues₀ i := by
   rw [eigenvalues₀_configGram_eq_eigenvalues_finiteGramOperator]
-  refine TauCeti.le_eigenvalues_finiteGramOperator_of_forall_le_sum_sq ℝ
+  refine TauCeti.le_eigenvalues_gramOperator z
     (fun x => ?_) finrank_euclideanSpace i (by simpa [finrank_euclideanSpace_fin] using hi)
   rw [← sum_sq_linearForm_eq_sum_norm_inner]
   exact hquad x
@@ -113,7 +108,7 @@ theorem quadratic_floor_of_eigenvalues₀_configGram_lower
     (x : Vec d) :
     α * ‖x‖ ^ 2 ≤ ∑ i : Fin n, (∑ a, x a * z i a) ^ 2 := by
   rw [sum_sq_linearForm_eq_sum_norm_inner]
-  refine TauCeti.sum_sq_floor_of_le_eigenvalues_finiteGramOperator ℝ
+  refine TauCeti.mul_norm_sq_le_sum_norm_inner_sq_of_le_eigenvalues_gramOperator z
     finrank_euclideanSpace (by simpa [finrank_euclideanSpace_fin] using hdn)
     (fun k hk => ?_) x
   rw [← eigenvalues₀_configGram_eq_eigenvalues_finiteGramOperator]

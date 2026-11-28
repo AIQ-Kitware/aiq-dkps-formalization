@@ -37,7 +37,7 @@ for the right blocks and `σ_{p+1}² := −∞` for the left, with `σ_j := 0` f
 Theorem 2 to `A⋆A ∈ ℝ^{q×q}`.  The statements below are stated in exactly that
 reading:
 
-* `sq_singularValues_eq_eigenvalues_rightGram` is the bridge, and it is where the
+* `LinearMap.sq_singularValues_fin` is the bridge, and it is where the
   zero continuation enters — `LinearMap.singularValues` is zero past the rank by
   construction, so `σ_j² ` and the sorted spectrum of `A⋆A` agree at *every*
   ambient index, zeros included;
@@ -76,22 +76,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
 
-/-! ## The squared-singular-value bridge -/
-
-/-- **The sorted spectrum of `A⋆A` is the squared singular values, zeros
-included.**  `LinearMap.singularValues` vanishes past `rank(A)`, so this identity
-holds at *every* ambient index — which is precisely the corrected reading of the
-paper's boundary convention. -/
-theorem sq_singularValues_eq_eigenvalues_rightGram (A : E →ₗ[𝕜] F) {n : ℕ}
-    (hn : finrank 𝕜 E = n) (i : Fin n) :
-    A.singularValues (i : ℕ) ^ 2 = (isSymmetric_rightGram A).eigenvalues hn i :=
-  A.sq_singularValues_fin hn i
-
-/-- The same for `A A⋆` and the left singular vectors. -/
-theorem sq_singularValues_eq_eigenvalues_leftGram (A : E →ₗ[𝕜] F) {m : ℕ}
-    (hm : finrank 𝕜 F = m) (i : Fin m) :
-    A.singularValues (i : ℕ) ^ 2 = (isSymmetric_leftGram A).eigenvalues hm i :=
-  sq_singularValues_selfCompAdjoint A hm i
+/-! ## Squared-singular-value boundary gaps -/
 
 /-- **The paper's boundary gap, translated.**  Squared-singular-value boundary
 gaps at the ends of the block `r, …, s` are exactly the boundary gap of the
@@ -102,10 +87,10 @@ theorem orderedBlockBoundaryGap_rightGram {A : E →ₗ[𝕜] F} {n r s : ℕ}
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
     (hhi : ∀ q p : Fin n, (q : ℕ) = s → (p : ℕ) = s + 1 →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2) :
-    OrderedBlockBoundaryGap (isSymmetric_rightGram A) hn r s Δ := by
+    OrderedBlockBoundaryGap A.isSymmetric_adjoint_comp_self hn r s Δ := by
   refine orderedBlockBoundaryGap_iff.mpr ⟨fun q p hq hp => ?_, fun q p hq hp => ?_⟩ <;>
-    rw [← sq_singularValues_eq_eigenvalues_rightGram A hn,
-      ← sq_singularValues_eq_eigenvalues_rightGram A hn]
+    rw [← A.sq_singularValues_fin hn,
+      ← A.sq_singularValues_fin hn]
   · exact hlo q p hq hp
   · exact hhi q p hq hp
 
@@ -116,10 +101,10 @@ theorem orderedBlockBoundaryGap_leftGram {A : E →ₗ[𝕜] F} {m r s : ℕ}
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
     (hhi : ∀ q p : Fin m, (q : ℕ) = s → (p : ℕ) = s + 1 →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2) :
-    OrderedBlockBoundaryGap (isSymmetric_leftGram A) hm r s Δ := by
+    OrderedBlockBoundaryGap A.isSymmetric_self_comp_adjoint hm r s Δ := by
   refine orderedBlockBoundaryGap_iff.mpr ⟨fun q p hq hp => ?_, fun q p hq hp => ?_⟩ <;>
-    rw [← sq_singularValues_eq_eigenvalues_leftGram A hm,
-      ← sq_singularValues_eq_eigenvalues_leftGram A hm]
+    rw [← A.sq_singularValues_eq_eigenvalues_self_comp_adjoint hm q.isLt,
+      ← A.sq_singularValues_eq_eigenvalues_self_comp_adjoint hm p.isLt]
   · exact hlo q p hq hp
   · exact hhi q p hq hp
 
@@ -163,9 +148,9 @@ This is the corrected theorem.  Under the printed convention
 theorem yuWangSamworth_rightSingularSubspace_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d r s : ℕ} {hn : finrank 𝕜 E = n}
     (hsn : s + 1 ≤ n) (hd : r + d = s + 1) {v vHat : Fin d → E}
-    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn
+    (hv : IsOrderedEigenframe A.isSymmetric_adjoint_comp_self hn
       (consecutiveEmb (hd.trans_le hsn)) v)
-    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn
+    (hvHat : IsOrderedEigenframe Â.isSymmetric_adjoint_comp_self hn
       (consecutiveEmb (hd.trans_le hsn)) vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin n, (q : ℕ) + 1 = r → (p : ℕ) = r →
@@ -184,9 +169,9 @@ theorem yuWangSamworth_rightSingularSubspace_block_le
 theorem yuWangSamworth_leftSingularSubspace_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d r s : ℕ} {hm : finrank 𝕜 F = m}
     (hsm : s + 1 ≤ m) (hd : r + d = s + 1) {u û : Fin d → F}
-    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm
+    (hu : IsOrderedEigenframe A.isSymmetric_self_comp_adjoint hm
       (consecutiveEmb (hd.trans_le hsm)) u)
-    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm
+    (hû : IsOrderedEigenframe Â.isSymmetric_self_comp_adjoint hm
       (consecutiveEmb (hd.trans_le hsm)) û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin m, (q : ℕ) + 1 = r → (p : ℕ) = r →
@@ -205,9 +190,9 @@ theorem yuWangSamworth_leftSingularSubspace_block_le
 theorem yuWangSamworth_rightSingularAlignedBasis_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d r s : ℕ} {hn : finrank 𝕜 E = n}
     (hsn : s + 1 ≤ n) (hd : r + d = s + 1) {v vHat : Fin d → E}
-    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn
+    (hv : IsOrderedEigenframe A.isSymmetric_adjoint_comp_self hn
       (consecutiveEmb (hd.trans_le hsn)) v)
-    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn
+    (hvHat : IsOrderedEigenframe Â.isSymmetric_adjoint_comp_self hn
       (consecutiveEmb (hd.trans_le hsn)) vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin n, (q : ℕ) + 1 = r → (p : ℕ) = r →
@@ -229,9 +214,9 @@ theorem yuWangSamworth_rightSingularAlignedBasis_block_le
 theorem yuWangSamworth_leftSingularAlignedBasis_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d r s : ℕ} {hm : finrank 𝕜 F = m}
     (hsm : s + 1 ≤ m) (hd : r + d = s + 1) {u û : Fin d → F}
-    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm
+    (hu : IsOrderedEigenframe A.isSymmetric_self_comp_adjoint hm
       (consecutiveEmb (hd.trans_le hsm)) u)
-    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm
+    (hû : IsOrderedEigenframe Â.isSymmetric_self_comp_adjoint hm
       (consecutiveEmb (hd.trans_le hsm)) û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin m, (q : ℕ) + 1 = r → (p : ℕ) = r →
@@ -278,9 +263,9 @@ theorem, as for the sine conclusion. -/
 theorem yuWangSamworth_rightSingularAlignedFrame_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d r s : ℕ} {hn : finrank 𝕜 E = n}
     (hsn : s + 1 ≤ n) (hd : r + d = s + 1) {v vHat : Fin d → E}
-    (hv : IsOrderedEigenframe (isSymmetric_rightGram A) hn
+    (hv : IsOrderedEigenframe A.isSymmetric_adjoint_comp_self hn
       (consecutiveEmb (hd.trans_le hsn)) v)
-    (hvHat : IsOrderedEigenframe (isSymmetric_rightGram Â) hn
+    (hvHat : IsOrderedEigenframe Â.isSymmetric_adjoint_comp_self hn
       (consecutiveEmb (hd.trans_le hsn)) vHat)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin n, (q : ℕ) + 1 = r → (p : ℕ) = r →
@@ -306,9 +291,9 @@ theorem yuWangSamworth_rightSingularAlignedFrame_block_le
 theorem yuWangSamworth_leftSingularAlignedFrame_block_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {m d r s : ℕ} {hm : finrank 𝕜 F = m}
     (hsm : s + 1 ≤ m) (hd : r + d = s + 1) {u û : Fin d → F}
-    (hu : IsOrderedEigenframe (isSymmetric_leftGram A) hm
+    (hu : IsOrderedEigenframe A.isSymmetric_self_comp_adjoint hm
       (consecutiveEmb (hd.trans_le hsm)) u)
-    (hû : IsOrderedEigenframe (isSymmetric_leftGram Â) hm
+    (hû : IsOrderedEigenframe Â.isSymmetric_self_comp_adjoint hm
       (consecutiveEmb (hd.trans_le hsm)) û)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hlo : ∀ q p : Fin m, (q : ℕ) + 1 = r → (p : ℕ) = r →

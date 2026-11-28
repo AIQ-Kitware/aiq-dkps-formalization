@@ -141,7 +141,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange",
-        "ForTauCeti.Analysis.InnerProductSpace.FiniteFrame",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport",
@@ -356,7 +355,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
         "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
-        "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
         "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
         "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
@@ -1244,21 +1242,43 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.FiniteFrame",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.finiteAnalysis",
+        "TauCeti.finiteAnalysis_apply",
+        "TauCeti.finiteSynthesis",
+        "TauCeti.finiteSynthesis_apply",
+        "TauCeti.adjoint_finiteAnalysis",
+        "TauCeti.adjoint_finiteSynthesis",
+        "TauCeti.finiteFrameOperator",
+        "TauCeti.finiteGramOperator",
+        "TauCeti.finiteFrameOperator_eq_adjointCompSelf",
+        "TauCeti.finiteGramOperator_eq_selfCompAdjoint",
+        "TauCeti.finiteGramOperator_apply",
+        "TauCeti.finiteFrameOperator_isPositive",
+        "TauCeti.finiteGramOperator_isPositive",
+        "TauCeti.isSymmetric_finiteGramOperator",
+        "TauCeti.norm_sq_finiteAnalysis",
+        "TauCeti.re_inner_finiteFrameOperator_eq_sum_sq",
+        "TauCeti.le_eigenvalues_finiteGramOperator_of_forall_le_sum_sq",
+        "TauCeti.sum_sq_floor_of_le_eigenvalues_finiteGramOperator"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.FiniteFrame",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.FiniteFrame",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Frame.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "principal-angles",
       "provenance_class": "moved; introduced at Davis--Kahan commit 82d20de; authors Jon Crall, GPT-5.6 High, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues"
+        "TauCeti.Analysis.InnerProductSpace.SingularValues"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "DkpsQuench2026.Spectral.GramSpectrum"
+      ],
+      "status": "upstreamed",
+      "upstream_pr": "#14569",
+      "migration_note": "Donor snapshot c133b8aa7:ForTauCeti/Analysis/InnerProductSpace/FiniteFrame.lean. #14569 (e9093218a7223738a4337c7069078cc5c79d10a1, PA-A01–A12) implements analysisMap, synthesisMap, frameOperator, gramOperator and the corresponding adjoint, positivity, norm-square and two-way Gram-spectrum bounds. The contribution records that it was written from Christensen’s standard definitions and nothing was vendored. No DKPS proof descent is established. The non-spectral constructions include infinite-dimensional ambient spaces. Both Gram-eigenvalue directions preserve the original finite-dimensional RCLike scope and index hypotheses. #39969 (5c00f72476932349ceb9d54efb112628a05a797d) moved the existing file to Frame.Basic. The deleted donor’s Perfect Quench consumer uses gramOperator_eq_toEuclideanLin_gram, isSymmetric_gramOperator, le_eigenvalues_gramOperator and mul_norm_sq_le_sum_norm_inner_sq_of_le_eigenvalues_gramOperator directly."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.FrameFactorization",
@@ -1590,10 +1610,8 @@
       "downstream_users": [],
       "status": "partially-upstreamed",
       "upstream_pr": "#13940, #16086, #16450, #16080",
-      "migration_note": "November 1: removed the local rectangular modulus, restricted-modulus automorphism, square polar-factor construction, norm/kernel/range/partial-isometry/decomposition proofs, normal commutation proof and invertibility-restricted adjoint law. All maintained consumers use LinearMap.operatorAbs/polarFactor and native facts directly. Native polar factor is rectangular RCLike and its adjoint law needs no invertibility, strictly stronger than donor. Selected square unitary API remains for consumers; singular-case selection now delegates existence to accepted exists_linearIsometryEquiv_eqOn_polarFactor. Extra negation/normal-adjoint modulus identities remain. Independent replacements: #13940 7b2a8f443f96040539e6479461b3325307ffb9bb, #16086 0a2aed9e3a73e222aadd47ef9a13c09b1c256385, #16450 7d1da9ada3041f5e1e5d10884964da59fc89e5b9. No DKPS proof descent claimed. Historical source e4637c3919ae under donor path and original introduction 3676b5559, Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0. Canonical finite polar partial isometry is not confused with its noncanonical kernel-completed unitary. Subsequent November 1 checkpoint: positive-factor uniqueness polarFactor_eq_of_isUnit_eq_comp_positive is also retired. Finite direct rotation applies native LinearMap.eq_polarIsometry_of_comp_eq (#16080, 18681919170b67de8799d152b7a29a9a6a315889), for rectangular injective RCLike maps, then polarIsometry_toLinearMap. This is broader than square invertible unitary uniqueness. #20360 (3f89d482c31ad0fb4325394ea7ba001e7d65c8c1) adds a source reference to the original donor statement; that citation alone is not evidence of proof adaptation. November 2 final polar-factory consumption: retire polarUnitaryEquiv, coe_polarUnitaryEquiv, polar_decomposition_of_isUnit and the unused exists_polar_decomposition_unitary. DirectRotation.Basic constructs its unitary directly as (A.polarIsometry hinj).toLinearIsometryEquiv rfl; its underlying linear map remains definitionally A.polarFactor. Native #16080 integration 18681919170b67de8799d152b7a29a9a6a315889 supplies the injective factory; its integration cites mathematical references and existing APIs but discloses neither DKPS proof adaptation nor explicit independence, so neither is inferred. Native #16127 integration 2b69ec4d366e7d65e006370c54e65109a08a02b9 supplies exists_linearIsometryEquiv_comp_operatorAbs_eq rfl at full square scope, including zero dimension, reversing the equality; the integration explicitly says it was written directly and not copied/adapted from DKPS. Keep choosePolarUnitary and both identities at its selected witness: the singular kernel completion is not canonical polarFactor. Keep operatorAbs_neg (rectangular) and operatorAbs_adjoint_of_normal: no exact pinned replacement was found among the modulus APIs, and the general native adjoint formula is a different conjugation identity. Historical source e4637c3919ae and pre-retirement 3b0cfebc5 under the donor path; original introduction 3676b55, Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0.",
+      "migration_note": "November 1: removed the local rectangular modulus, restricted-modulus automorphism, square polar-factor construction, norm/kernel/range/partial-isometry/decomposition proofs, normal commutation proof and invertibility-restricted adjoint law. All maintained consumers use LinearMap.operatorAbs/polarFactor and native facts directly. Native polar factor is rectangular RCLike and its adjoint law needs no invertibility, strictly stronger than donor. Selected square unitary API remains for consumers; singular-case selection now delegates existence to accepted exists_linearIsometryEquiv_eqOn_polarFactor. Extra negation/normal-adjoint modulus identities remain. Independent replacements: #13940 7b2a8f443f96040539e6479461b3325307ffb9bb, #16086 0a2aed9e3a73e222aadd47ef9a13c09b1c256385, #16450 7d1da9ada3041f5e1e5d10884964da59fc89e5b9. No DKPS proof descent claimed. Historical source e4637c3919ae under donor path and original introduction 3676b5559, Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0. Canonical finite polar partial isometry is not confused with its noncanonical kernel-completed unitary. Subsequent November 1 checkpoint: positive-factor uniqueness polarFactor_eq_of_isUnit_eq_comp_positive is also retired. Finite direct rotation applies native LinearMap.eq_polarIsometry_of_comp_eq (#16080, 18681919170b67de8799d152b7a29a9a6a315889), for rectangular injective RCLike maps, then polarIsometry_toLinearMap. This is broader than square invertible unitary uniqueness. #20360 (3f89d482c31ad0fb4325394ea7ba001e7d65c8c1) adds a source reference to the original donor statement; that citation alone is not evidence of proof adaptation. November 2 final polar-factory consumption: retire polarUnitaryEquiv, coe_polarUnitaryEquiv, polar_decomposition_of_isUnit and the unused exists_polar_decomposition_unitary. DirectRotation.Basic constructs its unitary directly as (A.polarIsometry hinj).toLinearIsometryEquiv rfl; its underlying linear map remains definitionally A.polarFactor. Native #16080 integration 18681919170b67de8799d152b7a29a9a6a315889 supplies the injective factory; its integration cites mathematical references and existing APIs but discloses neither DKPS proof adaptation nor explicit independence, so neither is inferred. Native #16127 integration 2b69ec4d366e7d65e006370c54e65109a08a02b9 supplies exists_linearIsometryEquiv_comp_operatorAbs_eq rfl at full square scope, including zero dimension, reversing the equality; the integration explicitly says it was written directly and not copied/adapted from DKPS. Keep choosePolarUnitary and both identities at its selected witness: the singular kernel completion is not canonical polarFactor. November 28: retire both remaining modulus symmetry declarations. In direct rotation, LinearMap.toContinuousLinearMap_operatorAbs_eq_cfcAbs from #16523 (893678359b586eace5dfe8ce192eb8a725406cb6) and Mathlib CFC.abs_star give normal-adjoint invariance. The unused rectangular operatorAbs_neg follows from the finite/bounded comparison in our #20358 (f4a3266bdf016c565840d069c5db06eb5352ddd1, PD-A47) and ContinuousLinearMap.modulus_neg from #17050 (e36963f4148ed374ed24fcac1fe1953e93b69982). No DKPS proof descent is established for the sign lemma. Pre-retirement snapshot c133b8aa7:ForTauCeti/Analysis/InnerProductSpace/Polar/Decomposition.lean. Historical source e4637c3919ae and pre-retirement 3b0cfebc5 under the donor path; original introduction 3676b55, Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0.",
       "maintained_declarations": [
-        "TauCeti.operatorAbs_neg",
-        "TauCeti.operatorAbs_adjoint_of_normal",
         "TauCeti.choosePolarUnitary",
         "TauCeti.choosePolarUnitary_apply_operatorAbs_apply",
         "TauCeti.polar_decomposition_choosePolarUnitary"
@@ -1739,17 +1757,52 @@
       ]
     },
     {
+      "source_module": "DavisKahan.Specialized.SingularSubspace",
+      "source_declarations": [
+        "TauCeti.rightGram",
+        "TauCeti.leftGram",
+        "TauCeti.isSymmetric_rightGram",
+        "TauCeti.isSymmetric_leftGram"
+      ],
+      "current_namespace": "LinearMap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
+      "final_tauceti_module": null,
+      "ownership_class": "mathlib",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "DKPS relocation 49f751408161149c9e1bfd2683d19d718ecb1929. Jon Crall and GPT 5.6 High, Copyright (c) 2026 Kitware, Inc., Apache-2.0. Mathlib supplies the symmetry facts.",
+      "direct_dependencies": [
+        "Mathlib.Analysis.InnerProductSpace.Adjoint"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "YuWangSamworth2015.Rectangular"
+      ],
+      "status": "retired",
+      "upstream_pr": null,
+      "migration_note": "Donor snapshot c133b8aa7:ForTauCeti/Analysis/InnerProductSpace/Gram/Operator.lean. Yu–Wang–Samworth uses the adjoint compositions and Mathlib symmetry directly. It also uses Mathlib LinearMap.sq_singularValues_fin and TauCeti LinearMap.sq_singularValues_eq_eigenvalues_self_comp_adjoint (#13839) in place of sq_singularValues_eq_eigenvalues_rightGram and sq_singularValues_eq_eigenvalues_leftGram."
+    },
+    {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.RectangularSingularValues",
       "source_declarations": [
         "LinearMap.singularValues_adjoint",
         "LinearMap.singularValues_adjoint_apply",
         "TauCeti.singularValues_linearIsometry_comp",
         "TauCeti.LinearIsometry.adjoint_eq_zero_of_mem_orthogonal",
-        "TauCeti.singularValues_comp_adjoint_linearIsometry"
+        "TauCeti.singularValues_comp_adjoint_linearIsometry",
+        "TauCeti.isSymmetric_self_comp_adjoint",
+        "TauCeti.apply_mem_eigenspace_selfCompAdjoint",
+        "TauCeti.adjoint_apply_mem_eigenspace_adjointCompSelf",
+        "TauCeti.nonzeroEigenspaceEquivAdjointCompSelfSelfCompAdjoint",
+        "TauCeti.finrank_eigenspace_adjointCompSelf_eq_selfCompAdjoint",
+        "TauCeti.hasEigenvalue_adjointCompSelf_iff_selfCompAdjoint",
+        "TauCeti.card_filter_eigenvalues_adjointCompSelf_eq_selfCompAdjoint",
+        "TauCeti.eigenvalues_adjointCompSelf_eq_selfCompAdjoint",
+        "TauCeti.sq_singularValues_selfCompAdjoint",
+        "TauCeti.hasEigenvalue_selfCompAdjoint_sq_singularValues"
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularValues",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
       "provenance_class": "moved; introduced at Davis--Kahan commit 82d20de; authors Jon Crall, GPT-5.6 High, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
@@ -1759,9 +1812,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "2026-10-31 upstream consumption: retire the original DKPS proof of coisometry zero-padding (TauCeti.singularValues_comp_adjoint_linearIsometry), the postcomposition-isometry lemma (TauCeti.singularValues_linearIsometry_comp), and the private isometry-padding basis/eigenvalue machinery from ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues. The only consumer of the local LinearIsometry.adjoint_eq_zero_of_mem_orthogonal was the retired padding proof, so it is retired too. Consumers now invoke accepted LinearMap.singularValues_comp_adjoint_linearIsometry (operator first, embedding second) and LinearMap.singularValues_linearIsometry_comp directly from TauCeti.Analysis.InnerProductSpace.SingularValues at the pinned TauCeti main commit 463ab293070d4cb355d0a0e036469464070088bc. The DKPS original implementation is recoverable at donor commit e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/RectangularSingularValues.lean (older ForMathlib provenance: 82d20de). This is consumption of an accepted equivalent; no proof-descent assertion is made. Keep staged status because the other rectangular Gram/singular-value results in this module remain locally maintained. The same upstream SingularValues module also owns LinearMap.singularValues_adjoint. Its original DKPS proof and the pointwise singularValues_adjoint_apply wrapper are retired; consumers use the upstream equality of Finsupp singular-value sequences. The remaining DKPS Gram-spectrum results keep their original statements."
+      "status": "partially-upstreamed",
+      "upstream_pr": "#13839",
+      "migration_note": "2026-10-31 upstream consumption: retire the original DKPS proof of coisometry zero-padding (TauCeti.singularValues_comp_adjoint_linearIsometry), the postcomposition-isometry lemma (TauCeti.singularValues_linearIsometry_comp), and the private isometry-padding basis/eigenvalue machinery from ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues. The only consumer of the local LinearIsometry.adjoint_eq_zero_of_mem_orthogonal was the retired padding proof, so it is retired too. Consumers now invoke accepted LinearMap.singularValues_comp_adjoint_linearIsometry (operator first, embedding second) and LinearMap.singularValues_linearIsometry_comp directly from TauCeti.Analysis.InnerProductSpace.SingularValues at the pinned TauCeti main commit 463ab293070d4cb355d0a0e036469464070088bc. The DKPS original implementation is recoverable at donor commit e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/RectangularSingularValues.lean (older ForMathlib provenance: 82d20de). This is consumption of an accepted equivalent; no proof-descent assertion is made. Keep staged status because the other rectangular Gram/singular-value results in this module remain locally maintained. The same upstream SingularValues module also owns LinearMap.singularValues_adjoint. Its original DKPS proof and the pointwise singularValues_adjoint_apply wrapper are retired; consumers use the upstream equality of Finsupp singular-value sequences. The remaining DKPS Gram-spectrum results keep their original statements. November 28 donor snapshot c133b8aa7:ForTauCeti/Analysis/InnerProductSpace/RectangularSingularValues.lean. Independent #13839 (0229509ce8dcd20951f52978eb5e6b20f595ea47, PD-C07/C08) supplies Module.End.eigenspaceCompEquiv and finrank_eigenspace_comp_comm at general unit scalars over commutative rings, plus the sorted Gram formulas LinearMap.eigenvalues_adjoint_comp_self_eq_eigenvalues_self_comp_adjoint and LinearMap.sq_singularValues_eq_eigenvalues_self_comp_adjoint. The local equivalence, multiplicity and eigenvalue corollaries, and sorted-spectrum proofs retire. Mathlib supplies LinearMap.isSymmetric_self_comp_adjoint. The pointwise quadratic floors, equality of singular values from identical Gram operators and finite counting results for tuples of different lengths remain available locally."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.SchattenNorm",

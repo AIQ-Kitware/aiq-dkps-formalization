@@ -374,9 +374,22 @@ theorem directRotationCosine_comm (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) :
     directRotationCosine V U = directRotationCosine U V := by
-  rw [directRotationCosine, directRotationCosine, ← adjoint_canonicalIntertwiner U V,
-    TauCeti.operatorAbs_adjoint_of_normal
-      (canonicalIntertwiner_normal_of_acute U V hacute)]
+  let A := canonicalIntertwiner U V
+  have hA : IsStarNormal A.toContinuousLinearMap := by
+    constructor
+    rw [Commute, SemiconjBy, ContinuousLinearMap.star_eq_adjoint,
+      ← LinearMap.adjoint_toContinuousLinearMap]
+    exact ContinuousLinearMap.coe_inj.mp <| by
+      simpa only [ContinuousLinearMap.toLinearMap_mul, LinearMap.coe_toContinuousLinearMap,
+        Module.End.mul_eq_comp]
+        using canonicalIntertwiner_normal_of_acute U V hacute
+  rw [directRotationCosine, directRotationCosine, ← adjoint_canonicalIntertwiner U V]
+  change A.adjoint.operatorAbs = A.operatorAbs
+  apply LinearMap.toContinuousLinearMap.injective
+  rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_cfcAbs,
+    LinearMap.toContinuousLinearMap_operatorAbs_eq_cfcAbs,
+    LinearMap.adjoint_toContinuousLinearMap, ← ContinuousLinearMap.star_eq_adjoint]
+  exact CFC.abs_star _ hA
 
 /-- **Davis--Kahan Corollary 3.2, in the paper's printed form: interchanging
 `P` and `Q` leaves `Θ` unchanged and replaces `J` by `-J`.**

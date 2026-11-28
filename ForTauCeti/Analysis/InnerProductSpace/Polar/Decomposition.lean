@@ -16,9 +16,8 @@ public import Mathlib.Analysis.InnerProductSpace.StarOrder
 # Selected unitary factors and extra modulus identities
 
 The modulus and canonical polar partial isometry are `LinearMap.operatorAbs`
-and `LinearMap.polarFactor`, supplied by TauCeti. This module retains selected
-square unitary factors used by alignment consumers, and two
-additional modulus identities.
+and `LinearMap.polarFactor`, supplied by TauCeti. This module retains the selected
+square unitary factor used by alignment consumers.
 The singular-case choice comes from the accepted unitary-extension theorem;
 its action on the kernel is not canonical.
 
@@ -39,31 +38,6 @@ open LinearMap InnerProductSpace
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
-
-section RectangularModulus
-
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-  [FiniteDimensional 𝕜 F]
-
-/-- **The modulus does not see a sign.**  `|-A| = |A|`, because the two Gram operators
-`(-A)⋆(-A)` and `A⋆A` are literally the same operator and the positive square root of a
-positive operator is unique. -/
-theorem operatorAbs_neg (A : E →ₗ[𝕜] F) : LinearMap.operatorAbs (-A) = A.operatorAbs := by
-  refine (LinearMap.IsPositive.eq_operatorAbs (A := -A)
-    (A.isPositive_operatorAbs) ?_).symm
-  rw [LinearMap.operatorAbs_sq, map_neg, LinearMap.neg_comp, LinearMap.comp_neg, neg_neg]
-
-end RectangularModulus
-
-/-- **A normal operator and its adjoint have the same modulus.**  Normality says the two Gram
-operators `A⋆A` and `AA⋆` agree, and `|A⋆|` is by definition the positive square root of the
-second. -/
-theorem operatorAbs_adjoint_of_normal {A : E →ₗ[𝕜] E}
-    (hnormal : A.adjoint ∘ₗ A = A ∘ₗ A.adjoint) :
-    LinearMap.operatorAbs (LinearMap.adjoint A) = A.operatorAbs := by
-  refine (LinearMap.IsPositive.eq_operatorAbs (A := A.adjoint)
-    (A.isPositive_operatorAbs) ?_).symm
-  rw [LinearMap.operatorAbs_sq, LinearMap.adjoint_adjoint, hnormal]
 
 /-! ### General square case: a kernel-completed unitary
 
