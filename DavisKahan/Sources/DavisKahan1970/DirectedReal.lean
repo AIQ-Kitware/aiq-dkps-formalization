@@ -83,7 +83,7 @@ theorem theorem63ResidualReal_eq_action_sub_compression
   intro z
   change Z.orthogonal.starProjection (T (z : E)) =
     T (z : E) - Z.subtypeL (Z.orthogonalProjectionOnto (T (z : E)))
-  rw [Submodule.starProjection_orthogonal_apply]
+  rw [Submodule.starProjection_orthogonal_val]
   rfl
 
 omit [CompleteSpace E] in

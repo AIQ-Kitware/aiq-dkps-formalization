@@ -101,14 +101,14 @@ variable (U) in
 theorem offDiagonalPart_apply_of_mem (Z : E →L[𝕜] E) {x : E} (hx : x ∈ U) :
     U.offDiagBlock Z x = Uᗮ.starProjection (Z x) := by
   rw [Submodule.offDiagBlock_apply, diagonalPart_apply_of_mem U Z hx,
-    Submodule.starProjection_orthogonal_apply]
+    Submodule.starProjection_orthogonal_val]
 
 variable (U) in
 /-- On `Uᗮ` the off-diagonal part of `Z` is the `U`-component of `Z x`. -/
 theorem offDiagonalPart_apply_of_mem_orthogonal (Z : E →L[𝕜] E) {x : E}
     (hx : x ∈ Uᗮ) : U.offDiagBlock Z x = U.starProjection (Z x) := by
   rw [Submodule.offDiagBlock_apply, diagonalPart_apply_of_mem_orthogonal U Z hx,
-    Submodule.starProjection_orthogonal_apply]
+    Submodule.starProjection_orthogonal_val]
   abel
 
 variable (U) in

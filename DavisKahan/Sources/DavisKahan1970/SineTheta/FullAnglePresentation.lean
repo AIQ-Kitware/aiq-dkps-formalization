@@ -180,33 +180,6 @@ theorem norm_directedAngleBlockC
       (ContinuousLinearMap.modulus_nonneg _),
     norm_sineBlockModulusC_eq_directedProjectionGap]
 
-/-- Orthogonal complementation swaps the orientation of the directed gap. -/
-theorem directedProjectionGap_orthogonal
-    (U V : Submodule ℂ E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    Uᗮ.directedProjectionGap Vᗮ = V.directedProjectionGap U := by
-  rw [Submodule.directedProjectionGap_def, Submodule.directedProjectionGap_def]
-  have hdouble : Vᗮᗮ.starProjection = V.starProjection := by
-    calc
-      Vᗮᗮ.starProjection = (1 : E →L[ℂ] E) - Vᗮ.starProjection :=
-        Submodule.starProjection_orthogonal' Vᗮ
-      _ = (1 : E →L[ℂ] E) - ((1 : E →L[ℂ] E) - V.starProjection) := by
-        rw [Submodule.starProjection_orthogonal' V]
-      _ = V.starProjection := by module
-  rw [hdouble]
-  let T : E →L[ℂ] E := V.starProjection ∘L Uᗮ.starProjection
-  have hadj : T.adjoint = Uᗮ.starProjection ∘L V.starProjection := by
-    rw [show T = V.starProjection ∘L Uᗮ.starProjection from rfl,
-      ContinuousLinearMap.adjoint_comp,
-      (isSelfAdjoint_starProjection V).adjoint_eq,
-      (isSelfAdjoint_starProjection Uᗮ).adjoint_eq]
-  have h : (T.adjoint.singularValue 0 : ℝ) = (T.singularValue 0 : ℝ) := by
-    rw [
-      ContinuousLinearMap.singularValue_adjoint]
-  rw [ContinuousLinearMap.singularValue_zero, coe_nnNorm,
-    ContinuousLinearMap.singularValue_zero, coe_nnNorm, hadj] at h
-  exact h.symm
-
 /-- The source cosine-defined directed angle is a positive operator. -/
 theorem directedAngleBlockC_nonneg
     (U V : Submodule ℂ E)
@@ -276,7 +249,7 @@ theorem norm_fullAngleBlockC_eq_maximalAngle
   rw [fullAngleBlockC, norm_continuousOrthogonalBlockSum,
     norm_directedAngleBlockC U V,
     norm_directedAngleBlockC Uᗮ Vᗮ,
-    directedProjectionGap_orthogonal U V,
+    Submodule.directedProjectionGap_orthogonal V U,
     maximalAngle,
     Submodule.projectionGap_eq_max]
   rcases le_total (U.directedProjectionGap V) (V.directedProjectionGap U) with h | h

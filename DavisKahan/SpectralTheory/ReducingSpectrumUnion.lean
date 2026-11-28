@@ -46,7 +46,7 @@ theorem starProjection_apply_eq_of_reduces
   have haU : a ∈ U := hadef ▸ U.starProjection_apply_mem _
   have hbU : b ∈ Uᗮ := hbdef ▸ Uᗮ.starProjection_apply_mem _
   have hsplit : (x : E) = a + b := by
-    rw [hadef, hbdef, Submodule.starProjection_orthogonal_apply]
+    rw [hadef, hbdef, Submodule.starProjection_orthogonal_val]
     abel
   have hxeq : x = (⟨a, ha⟩ : A.domain) + ⟨b, hb⟩ := Subtype.ext hsplit
   have hgoal : U.starProjection (A x) = A ⟨a, ha⟩ := by
@@ -142,7 +142,7 @@ theorem realSpectrum_subset_union_of_reduces
       = (x : E)
     rw [hUproj, hVproj, hUleg, hVleg]
     show a + b = (x : E)
-    rw [hadef, hbdef, Submodule.starProjection_orthogonal_apply]
+    rw [hadef, hbdef, Submodule.starProjection_orthogonal_val]
     abel
   intro y
   have hu := hR1.mem_domain (U.orthogonalProjectionOnto y)
@@ -179,7 +179,7 @@ theorem realSpectrum_subset_union_of_reduces
       + ((R2 (Uᗮ.orthogonalProjectionOnto y) : Uᗮ) : E)) - A ⟨_, hmem⟩ = y
   rw [hadd, smul_add]
   have hsum : U.starProjection y + Uᗮ.starProjection y = y := by
-    rw [Submodule.starProjection_orthogonal_apply]; abel
+    rw [Submodule.starProjection_orthogonal_val]; abel
   linear_combination (norm := module) hueq' + hveq' + hsum
 
 /-! ## Invariance plus self-adjointness gives reduction
@@ -237,7 +237,7 @@ theorem reducesSubspace_of_isSelfAdjoint_of_invariant
   have hperp : ∀ x : A.domain, Uᗮ.starProjection (x : E) ∈ A.domain := by
     intro x
     have h : Uᗮ.starProjection (x : E) = (x : E) - U.starProjection (x : E) :=
-      Submodule.starProjection_orthogonal_apply U (x : E)
+      Submodule.starProjection_orthogonal_val (K := U) (x : E)
     rw [h]
     exact A.domain.sub_mem x.2 (hproj x)
   refine ⟨?_, hinv, ?_⟩

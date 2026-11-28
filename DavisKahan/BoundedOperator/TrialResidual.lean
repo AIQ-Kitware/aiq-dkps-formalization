@@ -69,7 +69,7 @@ theorem trialResidualCore_eq_ritzDifference
   intro z
   change Zᗮ.starProjection (T (z : H)) =
     T (z : H) - (Z.subtypeL (Z.orthogonalProjectionOnto (T (z : H))))
-  rw [Submodule.starProjection_orthogonal_apply]
+  rw [Submodule.starProjection_orthogonal_val]
   rfl
 
 omit [CompleteSpace H] in

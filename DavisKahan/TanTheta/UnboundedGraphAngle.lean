@@ -66,7 +66,7 @@ theorem angularMap_apply_coe
       (C.toExact.symm v : H) -
         V.starProjection (C.toExact.symm v : H) := by
   change Vᗮ.starProjection (C.toExact.symm v : H) = _
-  exact V.starProjection_orthogonal_apply _
+  exact Submodule.starProjection_orthogonal_val (K := V) _
 
 omit [CompleteSpace H] in
 /-- Reconstruct the unique trial vector from its exact and angular

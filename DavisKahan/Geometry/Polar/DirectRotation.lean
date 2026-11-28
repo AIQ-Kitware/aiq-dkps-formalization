@@ -664,14 +664,6 @@ operator.  Only the double-complement identity `Uᗮᗮ = U` is involved, and it
 here as `starProjection_orthogonal'` applied twice. -/
 
 omit [CompleteSpace H] in
-/-- The star projection of a double orthogonal complement is the original one. -/
-theorem starProjection_orthogonal_orthogonal (U : Submodule 𝕜 H)
-    [U.HasOrthogonalProjection] :
-    (Uᗮ)ᗮ.starProjection = U.starProjection := by
-  rw [Submodule.starProjection_orthogonal' Uᗮ, Submodule.starProjection_orthogonal' U]
-  abel
-
-omit [CompleteSpace H] in
 /-- **The canonical intertwiner of the complementary pair is the same operator.**
 
 `P_Vᗮ P_Uᗮ + P_Vᗮᗮ P_Uᗮᗮ = P_Vᗮ P_Uᗮ + P_V P_U`, which is the original sum with its two
@@ -680,21 +672,10 @@ theorem spectraCanonicalIntertwiner_orthogonal (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     spectraCanonicalIntertwiner Uᗮ Vᗮ = spectraCanonicalIntertwiner U V := by
   simp only [spectraCanonicalIntertwiner,
-    starProjection_orthogonal_orthogonal]
+    Submodule.starProjection_orthogonal' Uᗮ, Submodule.starProjection_orthogonal' Vᗮ,
+    Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V,
+    sub_sub_cancel]
   exact add_comm _ _
-
-omit [CompleteSpace H] in
-/-- The symmetric projection gap is unchanged by passing to complements, since
-`P_Uᗮ − P_Vᗮ = P_V − P_U`. -/
-theorem subspaceGap_orthogonal (U V : Submodule 𝕜 H)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    Uᗮ.projectionGap Vᗮ = U.projectionGap V := by
-  rw [Submodule.projectionGap_def, Submodule.projectionGap_def]
-  show ‖Uᗮ.starProjection - Vᗮ.starProjection‖ = ‖U.starProjection - V.starProjection‖
-  rw [Submodule.starProjection_orthogonal' U, Submodule.starProjection_orthogonal' V,
-    show (1 - U.starProjection) - (1 - V.starProjection)
-      = V.starProjection - U.starProjection from by abel]
-  exact norm_sub_rev _ _
 
 omit [CompleteSpace H] in
 /-- Acuteness passes to the complementary pair: it is literally the same number. -/
@@ -702,7 +683,7 @@ theorem isUniformlyAcute_orthogonal {U V : Submodule 𝕜 H}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : IsUniformlyAcute U V) :
     IsUniformlyAcute Uᗮ Vᗮ := by
   unfold IsUniformlyAcute at h ⊢
-  rwa [subspaceGap_orthogonal]
+  rwa [Submodule.projectionGap_orthogonal]
 
 /-- **The direct rotation of the complementary pair is the same operator.**
 

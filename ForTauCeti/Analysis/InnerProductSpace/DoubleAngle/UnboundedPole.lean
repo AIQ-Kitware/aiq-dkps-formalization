@@ -813,7 +813,7 @@ theorem norm_offDiagonalPart_le_of_tendsto {ι : Type*} {l : Filter ι}
     · nlinarith [hle, hinner, norm_nonneg y, hc0]
   refine ContinuousLinearMap.opNorm_le_bound _ hc0 fun v => ?_
   have hsplit : U.starProjection v + Uᗮ.starProjection v = v := by
-    rw [Submodule.starProjection_orthogonal_apply]
+    rw [Submodule.starProjection_orthogonal_val]
     abel
   have hSv : U.offDiagBlock Z v
       = U.offDiagBlock Z (U.starProjection v)

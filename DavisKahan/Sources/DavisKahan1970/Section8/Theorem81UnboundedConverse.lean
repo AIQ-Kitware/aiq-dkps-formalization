@@ -114,7 +114,7 @@ theorem norm_starProjection_orthogonal_sub_eq (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (y : H) :
     ‖Uᗮ.starProjection y - Vᗮ.starProjection y‖
       = ‖U.starProjection y - V.starProjection y‖ := by
-  rw [Submodule.starProjection_orthogonal_apply, Submodule.starProjection_orthogonal_apply,
+  rw [Submodule.starProjection_orthogonal_val, Submodule.starProjection_orthogonal_val,
     show y - U.starProjection y - (y - V.starProjection y)
       = V.starProjection y - U.starProjection y by abel, norm_sub_rev]
 
@@ -134,20 +134,20 @@ theorem eq_of_starProjection_comm_of_crossed_trivial
   · intro u hu
     have hMu : M.starProjection u = u := Submodule.starProjection_eq_self_iff.mpr hu
     have key : M.starProjection (Qᗮ.starProjection u) = Qᗮ.starProjection u := by
-      rw [Submodule.starProjection_orthogonal_apply, map_sub, hcomm, hMu]
+      rw [Submodule.starProjection_orthogonal_val, map_sub, hcomm, hMu]
     have hzero : Qᗮ.starProjection u = 0 :=
       hMQ _ (Submodule.starProjection_eq_self_iff.mp key) (Qᗮ.starProjection_apply_mem u)
-    rw [Submodule.starProjection_orthogonal_apply] at hzero
+    rw [Submodule.starProjection_orthogonal_val] at hzero
     have hu' : u = Q.starProjection u := (sub_eq_zero.mp hzero)
     rw [hu']
     exact Q.starProjection_apply_mem u
   · intro u hu
     have hQu : Q.starProjection u = u := Submodule.starProjection_eq_self_iff.mpr hu
     have key : Q.starProjection (Mᗮ.starProjection u) = Mᗮ.starProjection u := by
-      rw [Submodule.starProjection_orthogonal_apply, map_sub, ← hcomm, hQu]
+      rw [Submodule.starProjection_orthogonal_val, map_sub, ← hcomm, hQu]
     have hzero : Mᗮ.starProjection u = 0 :=
       hQM _ (Submodule.starProjection_eq_self_iff.mp key) (Mᗮ.starProjection_apply_mem u)
-    rw [Submodule.starProjection_orthogonal_apply] at hzero
+    rw [Submodule.starProjection_orthogonal_val] at hzero
     have hu' : u = M.starProjection u := (sub_eq_zero.mp hzero)
     rw [hu']
     exact M.starProjection_apply_mem u
@@ -190,7 +190,7 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
   have hgapM : P.projectionGap M ≤ Real.sqrt 2 / 2 :=
     (maximalAngle_le_pi_div_four_iff P M).1 hMangle
   have hgapMperp : Pᗮ.projectionGap Mᗮ ≤ Real.sqrt 2 / 2 := by
-    rw [TauCeti.DavisKahan.subspaceGap_orthogonal P M]
+    rw [Submodule.projectionGap_orthogonal P M]
     exact hgapM
   have hQsp : (canonicalLowBranchUnbounded hB alpha).starProjection
       = ((Hop.toLinearMap +ᵥ A).spectralPVM hB).proj

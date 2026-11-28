@@ -155,7 +155,7 @@ theorem zeroUnboundedGraph_orthogonalProjection_apply
     (z : DirectSumSpace (E0 := E0) (E1 := E1)) :
     (unboundedBlockGraph (0 : E0 →L[ℂ] E1))ᗮ.starProjection z =
       blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (WithLp.snd z) := by
-  rw [Submodule.starProjection_orthogonal_apply]
+  rw [Submodule.starProjection_orthogonal_val]
   rw [zeroUnboundedGraph_starProjection_apply]
   let a := blockCoordinate0 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (WithLp.fst z)
   let b := blockCoordinate1 (𝕜 := ℂ) (E0 := E0) (E1 := E1) (WithLp.snd z)

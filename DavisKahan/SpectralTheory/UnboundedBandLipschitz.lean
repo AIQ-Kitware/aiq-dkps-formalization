@@ -223,7 +223,7 @@ theorem le_of_directedGap_eq_zero (U V : Submodule ℂ H)
     rw [hz, zero_mul] at hle
     simpa using norm_le_zero_iff.mp hle
   rw [Submodule.starProjection_eq_self_iff.mpr hu] at h0
-  rw [Submodule.starProjection_orthogonal_apply, sub_eq_zero] at h0
+  rw [Submodule.starProjection_orthogonal_val, sub_eq_zero] at h0
   exact h0 ▸ V.starProjection_apply_mem u
 
 /-- **Band spectrum and exterior spectrum on one operator force an inclusion.**

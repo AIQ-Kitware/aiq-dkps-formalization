@@ -82,7 +82,7 @@ theorem directedSinAngleOperatorC_apply_mem_source (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : E) :
     directedSinAngleOperatorC U V x ∈ U := by
   have hsplit : x = U.starProjection x + Uᗮ.starProjection x := by
-    rw [Submodule.starProjection_orthogonal_apply]; abel
+    rw [Submodule.starProjection_orthogonal_val]; abel
   rw [hsplit, map_add,
     directedSinAngleOperatorC_apply_eq_zero_of_mem_orthogonal U V
       (Uᗮ.starProjection_apply_mem x), add_zero]

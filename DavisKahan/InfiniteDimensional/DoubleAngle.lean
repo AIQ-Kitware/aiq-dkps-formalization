@@ -445,7 +445,7 @@ theorem complementary_comp_reflection_comp_projection
     (2 : 𝕜) • Uᗮ.starProjection (V.starProjection (U.starProjection x))
   rw [Submodule.reflection_apply_smul, map_sub, map_smul]
   have h0 : Uᗮ.starProjection (U.starProjection x) = 0 := by
-    rw [Submodule.starProjection_orthogonal_apply U (U.starProjection x),
+    rw [Submodule.starProjection_orthogonal_val (K := U) (U.starProjection x),
       show U.starProjection (U.starProjection x) = U.starProjection x from
         Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x),
       sub_self]

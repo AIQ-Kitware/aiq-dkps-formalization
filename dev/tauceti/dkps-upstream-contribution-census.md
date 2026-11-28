@@ -1,5 +1,44 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 complementary projections and directed gaps
+
+Mathlib's `Submodule.starProjection_orthogonal_val` replaces
+`Submodule.starProjection_orthogonal_apply` at every maintained call site.
+`Submodule.norm_sq_eq_add_norm_sq_starProjection` replaces both local
+`norm_sq_eq_starProjection_add_orthogonal` proofs in the cosine and Halmos
+developments. The direct-rotation intertwiner uses
+`Submodule.starProjection_orthogonal'` twice in place of its double-complement
+projection theorem. These projection formulas apply over any `RCLike` field
+and require an orthogonal projection, including in incomplete ambient spaces.
+[Pinned Mathlib projection API](https://github.com/leanprover-community/mathlib4/blob/31ce06eaadf4a200c0e1407c5f10953cf606b8f8/Mathlib/Analysis/InnerProductSpace/Projection/Basic.lean)
+
+#14109's `Submodule.projectionGap_orthogonal` and
+`Submodule.directedProjectionGap_orthogonal` replace the symmetric and
+directed complement-gap proofs. The symmetric gap is unchanged and the
+directed gap reverses orientation. Section 8 keeps its source-facing
+statements. The crossed-intersection proof uses
+`directedProjectionGap_le_iff` from #15983 for its two pointwise estimates,
+and `disjoint_orthogonal_of_directedProjectionGap_lt_one` from #16645 for
+the nonzero-defect case. The reverse estimate from a single vanishing
+crossed intersection still covers infinite-dimensional Hilbert spaces.
+All three integrations were submitted by tauceti-ai-for-science.
+Proof descent for these APIs is unverified.
+[#14109 integration](https://github.com/TauCetiProject/TauCeti/commit/b4b0f0f893f5b923b56607eb81d4b293c3696d30) ·
+[#15983 integration](https://github.com/TauCetiProject/TauCeti/commit/0b158be1c6578d63da36f4a1e8c585b3556e63e8) ·
+[#16645 integration](https://github.com/TauCetiProject/TauCeti/commit/3b449bc8628f565cf81e0129f4bd235e041d9f08)
+
+The extraction manifest preserves the retired DKPS names and source
+anchors. The DKPS projection-block and crossed-gap donors credit Jon Crall
+and GPT 5.6 High, with Kitware 2026 copyright under Apache-2.0. The
+paper-adjacent proofs retain their module credits for Jon Crall, Claude
+Fable 5, Claude Opus 5, OpenAI GPT-5.6 Thinking, and OpenAI GPT-5.6 Sol.
+
+The focused build (10,557 jobs), full default build (22,804 jobs), and
+Challenge with the Section 3, Section 8, and result semantic-surface
+audits (22,518 jobs) passed without warnings at TauCeti `007b3a1150`.
+All 1,572 source-census declaration references resolved and all 17
+available comparator signatures matched.
+
 ## November 27 native subspace reflections
 
 The local `Submodule.reflectionOperator` definition is retired. The

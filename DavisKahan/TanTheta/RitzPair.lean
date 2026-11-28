@@ -146,7 +146,7 @@ theorem ofReducesSubspace (h : _root_.LinearPMap.IsReducing A V) :
             + ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ = x := by
       apply Subtype.ext
       show V.starProjection ((x : H)) + Vᗮ.starProjection ((x : H)) = (x : H)
-      rw [Submodule.starProjection_orthogonal_apply]
+      rw [Submodule.starProjection_orthogonal_val]
       abel
     have hmap : A x = A ⟨V.starProjection ((x : H)), hVdom⟩
         + A ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ := by
@@ -159,7 +159,7 @@ theorem ofReducesSubspace (h : _root_.LinearPMap.IsReducing A V) :
       h.isInvariant_orthogonal.apply_mem _ (Vᗮ.starProjection_apply_mem _)
     rw [hmap, map_add]
     have h0 : Vᗮ.starProjection (A (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain)) = 0 := by
-      rw [Submodule.starProjection_orthogonal_apply,
+      rw [Submodule.starProjection_orthogonal_val,
         Submodule.starProjection_eq_self_iff.mpr hinV, sub_self]
     have h1 : Vᗮ.starProjection (A (⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ : A.domain))
         = A ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ :=
@@ -195,17 +195,17 @@ theorem reflection_commutes_of_reducesSubspace
           = (V.reflection : H →L[𝕜] H) (T x) := by
   have hzeroV : ∀ z : H, z ∈ Vᗮ → V.starProjection z = 0 := by
     intro z hz
-    have hs := Submodule.starProjection_orthogonal_apply (U := V) z
+    have hs := Submodule.starProjection_orthogonal_val (K := V) z
     rw [Submodule.starProjection_eq_self_iff.mpr hz] at hs
     exact sub_eq_self.mp hs.symm
   have hzeroVp : ∀ z : H, z ∈ V → Vᗮ.starProjection z = 0 := by
     intro z hz
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       Submodule.starProjection_eq_self_iff.mpr hz, sub_self]
   have hrefl : ∀ y : H, (V.reflection : H →L[𝕜] H) y
       = V.starProjection y - Vᗮ.starProjection y := by
     intro y
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       Submodule.reflection_apply_smul, two_smul]
     abel
   have hmaps : TauCeti.LinearPMap.MapsDomainTo T T ((V.reflection : H →L[𝕜] H)) := by
@@ -222,7 +222,7 @@ theorem reflection_commutes_of_reducesSubspace
           + ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ = x := by
     apply Subtype.ext
     show V.starProjection ((x : H)) + Vᗮ.starProjection ((x : H)) = (x : H)
-    rw [Submodule.starProjection_orthogonal_apply]
+    rw [Submodule.starProjection_orthogonal_val]
     abel
   have hsplit :
       (⟨(V.reflection : H →L[𝕜] H) ((x : H)), hmaps x⟩ : T.domain)

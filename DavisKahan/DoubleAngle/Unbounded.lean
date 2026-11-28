@@ -56,9 +56,9 @@ theorem norm_starProjection_reflectedComplementary_eq_sinTwoAngle
       Wᗮ.starProjection =
         boundedUnitaryConjugate V.reflection Uᗮ.starProjection := by
     ext x
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       boundedUnitaryConjugate_apply,
-      Submodule.starProjection_orthogonal_apply, map_sub,
+      Submodule.starProjection_orthogonal_val, map_sub,
       V.reflection.apply_symm_apply, Submodule.starProjection_map_apply]
   have hmapProjection :
       (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection =

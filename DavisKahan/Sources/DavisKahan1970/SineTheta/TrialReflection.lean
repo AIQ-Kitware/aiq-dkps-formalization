@@ -110,7 +110,7 @@ theorem complementProjection_comp_subtypeL :
     Vᗮ.starProjection ∘L (V.subtypeL : V →L[𝕜] H) = 0 := by
   ext v
   change Vᗮ.starProjection (v : H) = 0
-  rw [Submodule.starProjection_orthogonal_apply,
+  rw [Submodule.starProjection_orthogonal_val,
     Submodule.starProjection_eq_self_iff.mpr v.property, sub_self]
 
 /-- The off-diagonal block only sees the residual: `P_{Vᗮ} A P_V = P_{Vᗮ} R E₀*`.
@@ -248,7 +248,7 @@ theorem trialOffDiagonalBlock_sub_adjoint_apply
     simp only [ContinuousLinearMap.comp_apply] at h
     unfold trialOffDiagonalBlock
     simp only [ContinuousLinearMap.comp_apply, h,
-      Submodule.starProjection_orthogonal_apply]
+      Submodule.starProjection_orthogonal_val]
   have hXadj : (trialOffDiagonalBlock V M R).adjoint y =
       (trialCompression V M R).adjoint y -
         V.starProjection (trialCompression V M R y) := by
@@ -263,7 +263,7 @@ theorem trialOffDiagonalBlock_sub_adjoint_apply
       Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem z)
     rw [trialOffDiagonalBlock_adjoint]
     simp only [ContinuousLinearMap.comp_apply,
-      Submodule.starProjection_orthogonal_apply, map_sub]
+      Submodule.starProjection_orthogonal_val, map_sub]
     rw [h1, ← hcomm, hidem]
   rw [hX, hXadj]
   abel
@@ -279,12 +279,12 @@ private theorem proj_proj (U : Submodule 𝕜 H) [U.HasOrthogonalProjection] (z 
 omit [CompleteSpace H] in
 private theorem projPerp_proj (U : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     (z : H) : Uᗮ.starProjection (U.starProjection z) = 0 := by
-  rw [Submodule.starProjection_orthogonal_apply, proj_proj, sub_self]
+  rw [Submodule.starProjection_orthogonal_val, proj_proj, sub_self]
 
 omit [CompleteSpace H] in
 private theorem proj_projPerp (U : Submodule 𝕜 H) [U.HasOrthogonalProjection]
     (z : H) : U.starProjection (Uᗮ.starProjection z) = 0 := by
-  rw [Submodule.starProjection_orthogonal_apply, map_sub, proj_proj, sub_self]
+  rw [Submodule.starProjection_orthogonal_val, map_sub, proj_proj, sub_self]
 
 private theorem trialOffDiagonalBlock_apply (z : H) :
     trialOffDiagonalBlock V M R z =

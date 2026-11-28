@@ -104,7 +104,7 @@ private theorem isOffDiagonal_of_maps_orthogonal
     (Submodule.starProjection_apply_eq_zero_iff U).2
       (hHU (U.starProjection x) (U.starProjection_apply_mem x))
   have hQzero : Uᗮ.starProjection (H (Uᗮ.starProjection x)) = 0 := by
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       Submodule.starProjection_eq_self_iff.mpr
         (hHUperp (Uᗮ.starProjection x) (Uᗮ.starProjection_apply_mem x)),
       sub_self]

@@ -100,7 +100,7 @@ theorem theorem63Residual_eq_complementaryProjection
   change T (z : H) -
       (Z.orthogonalProjectionOnto (T (z : H)) : H) =
     Zᗮ.starProjection (T (z : H))
-  rw [Submodule.starProjection_orthogonal_apply]
+  rw [Submodule.starProjection_orthogonal_val]
   rfl
 
 omit [CompleteSpace H] in

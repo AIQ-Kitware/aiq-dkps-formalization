@@ -58,8 +58,8 @@ theorem starProjection_orthogonal_of (S : Submodule 𝕜 E) [S.HasOrthogonalProj
     (x : E) :
     (submodule (e := e) S)ᗮ.starProjection (of (e := e) x) =
       of (e := e) (Sᗮ.starProjection x) := by
-  rw [Submodule.starProjection_orthogonal_apply,
-    Submodule.starProjection_orthogonal_apply, starProjection_of]
+  rw [Submodule.starProjection_orthogonal_val,
+    Submodule.starProjection_orthogonal_val, starProjection_of]
   rfl
 
 /-- A subspace of the transported space is invariant under the transported

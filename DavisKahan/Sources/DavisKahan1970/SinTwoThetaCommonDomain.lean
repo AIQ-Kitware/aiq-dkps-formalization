@@ -102,12 +102,12 @@ theorem commonDomain_trialReflection_intertwines
   have hproj (y : T.domain) : P.starProjection (y : E) ∈ T.domain :=
     commonDomain_projection_mem hdom hP y
   have hperp (y : T.domain) : P.orthogonal.starProjection (y : E) ∈ T.domain := by
-    rw [Submodule.starProjection_orthogonal_apply]
+    rw [Submodule.starProjection_orthogonal_val]
     exact T.domain.sub_mem y.property (hproj y)
   have hpp (y : E) : P.starProjection (P.starProjection y) = P.starProjection y :=
     Submodule.starProjection_eq_self_iff.mpr (P.starProjection_apply_mem y)
   have hpzero (y : E) : P.orthogonal.starProjection (P.starProjection y) = 0 := by
-    rw [Submodule.starProjection_orthogonal_apply, hpp, sub_self]
+    rw [Submodule.starProjection_orthogonal_val, hpp, sub_self]
   have hRoff (p : P) (hp : (p : E) ∈ T.domain) :
       P.orthogonal.starProjection (T (⟨(p : E), hp⟩)) =
         P.orthogonal.starProjection (R p) := by
@@ -116,7 +116,7 @@ theorem commonDomain_trialReflection_intertwines
       hP.isInvariant.apply_mem _ p.property
     have hz : P.orthogonal.starProjection
         (A (⟨(p : E), by rw [← hdom]; exact hp⟩)) = 0 := by
-      rw [Submodule.starProjection_orthogonal_apply,
+      rw [Submodule.starProjection_orthogonal_val,
         Submodule.starProjection_eq_self_iff.mpr hin, sub_self]
     rw [hz, zero_add]
   have hC (y : T.domain) :
@@ -172,7 +172,7 @@ theorem commonDomain_trialReflection_intertwines
         (⟨P.orthogonal.starProjection (x : E), hperp x⟩ : T.domain) = x := by
     apply Subtype.ext
     show P.starProjection (x : E) + P.orthogonal.starProjection (x : E) = (x : E)
-    rw [Submodule.starProjection_orthogonal_apply]
+    rw [Submodule.starProjection_orthogonal_val]
     abel
   have hTx : T x = T (⟨P.starProjection (x : E), hproj x⟩) +
       T (⟨P.orthogonal.starProjection (x : E), hperp x⟩) := by
@@ -182,7 +182,7 @@ theorem commonDomain_trialReflection_intertwines
     exact h
   have hcomm : C (x : E) - C.adjoint (x : E) =
       T (⟨P.starProjection (x : E), hproj x⟩) - P.starProjection (T x) := by
-    rw [hC x, hCstar x, Submodule.starProjection_orthogonal_apply, hTx, map_add]
+    rw [hC x, hCstar x, Submodule.starProjection_orthogonal_val, hTx, map_add]
     abel
   have hPrefl : P.starProjection ((P.reflection : E →L[K] E) (x : E)) =
       P.starProjection (x : E) := by

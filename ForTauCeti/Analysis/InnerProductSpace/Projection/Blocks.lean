@@ -99,14 +99,6 @@ theorem reflection_apply_smul (U : Submodule 𝕜 E)
   change U.reflection x = _
   rw [Submodule.reflection_apply, two_smul, two_smul]
 
-/-- Complementary projection as `I-P`, pointwise. -/
-@[simp]
-theorem starProjection_orthogonal_apply (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (x : E) :
-    Uᗮ.starProjection x = x - U.starProjection x := by
-  rw [Submodule.starProjection_orthogonal]
-  simp
-
 /-! ### Numerical range of a block-diagonal operator
 
 An operator that commutes with the reflection is determined block by block, and

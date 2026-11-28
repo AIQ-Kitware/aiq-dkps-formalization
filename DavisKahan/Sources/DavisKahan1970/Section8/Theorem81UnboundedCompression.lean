@@ -55,7 +55,7 @@ theorem re_inner_split_of_reduces {B : H →ₗ.[ℂ] H} {Q : Submodule ℂ H}
       + ⟨Qᗮ.starProjection (x : H), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ :=
     Subtype.ext (by
       show (x : H) = Q.starProjection (x : H) + Qᗮ.starProjection (x : H)
-      rw [Submodule.starProjection_orthogonal_apply]
+      rw [Submodule.starProjection_orthogonal_val]
       abel)
   have hcross1 : (⟪B (⟨Q.starProjection (x : H), hred.starProjection_mem_domain x.property⟩ : B.domain),
       Qᗮ.starProjection (x : H)⟫_ℂ) = 0 :=

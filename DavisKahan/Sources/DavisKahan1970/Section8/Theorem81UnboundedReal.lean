@@ -413,7 +413,7 @@ theorem re_inner_split_of_reduces_real {B : Er →ₗ.[ℝ] Er} {Q : Submodule �
       + ⟨Qᗮ.starProjection (x : Er), TauCeti.LinearPMap.IsReducing.orthogonalStarProjection_mem_domain hred x.property⟩ :=
     Subtype.ext (by
       show (x : Er) = Q.starProjection (x : Er) + Qᗮ.starProjection (x : Er)
-      rw [Submodule.starProjection_orthogonal_apply]
+      rw [Submodule.starProjection_orthogonal_val]
       abel)
   have hcross1 : ⟪B (⟨Q.starProjection (x : Er), hred.starProjection_mem_domain x.property⟩ : B.domain),
       Qᗮ.starProjection (x : Er)⟫_ℝ = 0 :=

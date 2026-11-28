@@ -408,7 +408,7 @@ theorem tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike
       (by
         intro z
         have hz := hcross' z
-        simpa [D', V', Submodule.starProjection_orthogonal_apply] using hz)
+        simpa [D', V', Submodule.starProjection_orthogonal_val] using hz)
       h35' hResidual' hMem'
     have hm : N.Mem (Angle.tanAngleOperator U' V') := by
       rw [Angle.tanAngleOperator_real U' V' hdefined']

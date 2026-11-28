@@ -477,9 +477,9 @@ theorem directedGap_map_unitary
       (V.map (W.toLinearEquiv : H →ₗ[ℂ] H))ᗮ.starProjection =
         boundedUnitaryConjugate W Vᗮ.starProjection := by
     ext x
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       boundedUnitaryConjugate_apply,
-      Submodule.starProjection_orthogonal_apply, map_sub,
+      Submodule.starProjection_orthogonal_val, map_sub,
       W.apply_symm_apply, Submodule.starProjection_map_apply]
   rw [Submodule.directedProjectionGap_def, Submodule.directedProjectionGap_def]
   change ‖(V.map (W.toLinearEquiv : H →ₗ[ℂ] H))ᗮ.starProjection ∘L

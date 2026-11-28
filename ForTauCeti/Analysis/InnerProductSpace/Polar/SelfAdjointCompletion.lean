@@ -774,7 +774,7 @@ theorem exists_selfAdjoint_completion_eq_norm_restriction
     have h2 : Pᗮ.orthogonalProjectionOnto px = 0 := by
       apply Subtype.ext
       change Pᗮ.starProjection px = (0 : X)
-      rw [Submodule.starProjection_orthogonal_apply,
+      rw [Submodule.starProjection_orthogonal_val,
         Submodule.starProjection_eq_self_iff.mpr hpx, sub_self]
     have hUpx : U px = l2Inl (𝕜 := ℂ) (F := ((Pᗮ : Submodule ℂ X) : Type u)) u := by
       rw [hUdef, Submodule.orthogonalDecomposition_apply, h1, h2, l2Inl_apply]

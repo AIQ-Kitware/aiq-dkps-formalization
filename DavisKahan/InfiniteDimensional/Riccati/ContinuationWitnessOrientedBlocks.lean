@@ -124,7 +124,7 @@ theorem subspaceCoordinateAnalysis_comp_synthesis
     change Uᗮ.starProjection (((WithLp.fst z : U) : H) + ((WithLp.snd z : Uᗮ) : H)) =
       ((WithLp.snd z : Uᗮ) : H)
     have hQfst : Uᗮ.starProjection ((WithLp.fst z : U) : H) = 0 := by
-      rw [Submodule.starProjection_orthogonal_apply,
+      rw [Submodule.starProjection_orthogonal_val,
         Submodule.starProjection_eq_self_iff.mpr (WithLp.fst z : U).property,
         sub_self]
     rw [map_add, hQfst,
@@ -210,7 +210,7 @@ theorem subspaceBlockOperatorData_B10_eq_zero_of_reduces
   apply Subtype.ext
   change Uᗮ.starProjection (T (u : H)) = 0
   have hTu : T (u : H) ∈ U := hred.mem_invtSubmodule u.property
-  rw [Submodule.starProjection_orthogonal_apply,
+  rw [Submodule.starProjection_orthogonal_val,
     U.starProjection_eq_self_iff.mpr hTu, sub_self]
 
 /-- Relative to a reducing subspace, the coordinate block operator is exactly

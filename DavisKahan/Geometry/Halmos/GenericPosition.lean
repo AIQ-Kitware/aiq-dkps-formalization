@@ -176,21 +176,6 @@ theorem inner_starProjection_self (W : Submodule 𝕜 H)
         rw [Submodule.inner_right_of_mem_orthogonal hmem hperp, add_zero,
           inner_self_eq_norm_sq_to_K]
 
-omit [CompleteSpace H] in
-/-- Pythagoras across a projector. -/
-theorem norm_sq_eq_starProjection_add_orthogonal (W : Submodule 𝕜 H)
-    [W.HasOrthogonalProjection] (x : H) :
-    ‖x‖ ^ 2 = ‖W.starProjection x‖ ^ 2 + ‖x - W.starProjection x‖ ^ 2 := by
-  have hperp : ⟪W.starProjection x, x - W.starProjection x⟫_𝕜 = 0 :=
-    Submodule.inner_right_of_mem_orthogonal (W.starProjection_apply_mem x)
-      (W.sub_starProjection_mem_orthogonal x)
-  have hsplit : W.starProjection x + (x - W.starProjection x) = x := by abel
-  have hpy := @norm_add_sq 𝕜 _ _ _ _ (W.starProjection x)
-    (x - W.starProjection x)
-  rw [hsplit, hperp] at hpy
-  simp only [map_zero, mul_zero, add_zero] at hpy
-  linarith
-
 /-- **Halmos's `cos²Θ`** on the `U`-half of the generic part: the compression of
 `P_V`. -/
 @[expose]
@@ -247,7 +232,8 @@ theorem re_inner_genericCosineBlock_lt {m : genericLeftHalf U V} (hm : m ≠ 0) 
     exact hm (Subtype.ext (eq_zero_of_mem_inf_generic_left_of_mem_right U V m.2
       (heq ▸ V.starProjection_apply_mem (m : H))))
   have hpos : 0 < ‖(m : H) - V.starProjection (m : H)‖ := norm_pos_iff.mpr hne
-  have hpy := norm_sq_eq_starProjection_add_orthogonal V (m : H)
+  have hpy := V.norm_sq_eq_add_norm_sq_starProjection (m : H)
+  rw [Submodule.starProjection_orthogonal_val] at hpy
   have hcoe : ‖(m : H)‖ = ‖m‖ := Submodule.norm_coe m
   rw [hcoe] at hpy
   nlinarith

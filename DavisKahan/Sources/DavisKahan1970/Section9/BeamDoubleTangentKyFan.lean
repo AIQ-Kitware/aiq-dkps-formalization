@@ -148,7 +148,7 @@ theorem reflectionResidualCorner_beamRitzOffDiagonal (ε : ℝ) :
     rw [beamRitzOffDiagonal_apply, Submodule.starProjection_eq_self_iff.2 z.2,
       starProjection_orthogonal_eq_zero_of_mem_beamTrial z.2, map_zero, map_zero,
       add_zero, beamTrialBlock_residual_apply,
-      Submodule.starProjection_orthogonal_apply]
+      Submodule.starProjection_orthogonal_val]
     rfl
   show (beamTrialᗮ.subtypeL).adjoint (beamRitzOffDiagonal ε (z : BeamL2)) = _
   rw [hz]

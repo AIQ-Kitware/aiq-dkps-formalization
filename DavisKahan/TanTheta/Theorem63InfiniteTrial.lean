@@ -105,7 +105,7 @@ theorem theorem63Residual_apply_eq
     (theorem63Residual_eq_complementaryProjection T W)
   simp only [ContinuousLinearMap.comp_apply] at h
   rw [h]
-  exact Submodule.starProjection_orthogonal_apply _ _
+  exact Submodule.starProjection_orthogonal_val _
 
 omit [CompleteSpace H] in
 /-- Distance to a subspace is bounded by the distance to any of its members. -/

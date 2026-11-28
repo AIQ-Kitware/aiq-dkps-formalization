@@ -742,7 +742,7 @@ theorem norm_shiftedOperator_le_of_spectrumIn_Icc
       (Submodule.mem_orthogonal U (Uᗮ.starProjection y)).mp
         (Uᗮ.starProjection_apply_mem y) (S (Pu y)) (hmemS y)
     have hsplit : Pu y + Uᗮ.starProjection y = y := by
-      rw [hPu, Submodule.starProjection_orthogonal_apply]; abel
+      rw [hPu, Submodule.starProjection_orthogonal_val]; abel
     have hval : ⟪(S ∘L Pu) y, y⟫_ℂ = ⟪S (Pu y), Pu y⟫_ℂ := by
       show ⟪S (Pu y), y⟫_ℂ = _
       calc ⟪S (Pu y), y⟫_ℂ
@@ -812,7 +812,7 @@ theorem centralBandSubspace_le_of_spectrumIn_gapExterior
       have hsplit : Uᗮ.starProjection =
           (1 : H →L[ℂ] H) - U.starProjection := by
         ext z
-        rw [Submodule.starProjection_orthogonal_apply]
+        rw [Submodule.starProjection_orthogonal_val]
         simp
       rw [hsplit]
       show R.starProjection * ((1 : H →L[ℂ] H) - U.starProjection) =
@@ -861,7 +861,7 @@ theorem le_centralBandSubspace_of_spectrumIn_Icc
         Rᗮ.starProjection ∘L U.starProjection := by
       have hsplit : Rᗮ.starProjection = (1 : H →L[ℂ] H) - R.starProjection := by
         ext z
-        rw [Submodule.starProjection_orthogonal_apply]
+        rw [Submodule.starProjection_orthogonal_val]
         simp
       rw [hsplit]
       show U.starProjection * ((1 : H →L[ℂ] H) - R.starProjection) =

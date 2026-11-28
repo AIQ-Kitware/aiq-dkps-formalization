@@ -64,7 +64,7 @@ theorem two_smul_diagonalPair_eq_add_reflections
   ext x
   simp only [diagonalPair, ContinuousLinearMap.comp_apply, add_apply,
     smul_apply]
-  simp_rw [Submodule.starProjection_orthogonal_apply,
+  simp_rw [Submodule.starProjection_orthogonal_val,
     Submodule.reflection_apply_smul]
   simp only [map_sub, map_smul]
   module
@@ -184,7 +184,7 @@ theorem crossSineSum_eq_projectionDiff_comp_reflection
   simp only [crossSineSum, ContinuousLinearMap.comp_apply, add_apply,
     sub_apply]
   rw [Submodule.reflection_apply_smul]
-  simp_rw [Submodule.starProjection_orthogonal_apply]
+  simp_rw [Submodule.starProjection_orthogonal_val]
   simp only [map_sub, map_smul]
   have hVidem : V.starProjection (V.starProjection x) = V.starProjection x :=
     congrArg (fun T : E →L[𝕜] E => T x) V.isIdempotentElem_starProjection

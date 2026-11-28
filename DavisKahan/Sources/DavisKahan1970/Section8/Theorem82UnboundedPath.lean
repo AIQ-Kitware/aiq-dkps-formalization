@@ -330,7 +330,7 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
     have hmem : (pathBand hA hHop l r 0).starProjection x ∈ Q :=
       hle ((pathBand hA hHop l r 0).starProjection_apply_mem x)
     show Qᗮ.starProjection ((pathBand hA hHop l r 0).starProjection x) = 0
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       Submodule.starProjection_eq_self_iff.mpr hmem, sub_self]
   have hR1 : P ≤ pathBand hA hHop l r 1 := by
     have hApath : pathOperator A Hop 1 = A := pathOperator_one A Hop

@@ -53,8 +53,8 @@ theorem intertwines_orthogonal_projection_of_intertwines_projection
   apply ContinuousLinearMap.ext
   intro x
   change e (Uᗮ.starProjection x) = Vᗮ.starProjection (e x)
-  rw [Submodule.starProjection_orthogonal_apply,
-    Submodule.starProjection_orthogonal_apply, map_sub]
+  rw [Submodule.starProjection_orthogonal_val,
+    Submodule.starProjection_orthogonal_val, map_sub]
   have hx := congrArg (fun T : E →L[𝕜] E => T x) hproj
   change e (U.starProjection x) = V.starProjection (e x) at hx
   rw [hx]

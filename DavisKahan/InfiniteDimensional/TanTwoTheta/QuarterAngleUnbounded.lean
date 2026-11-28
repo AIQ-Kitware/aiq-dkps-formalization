@@ -526,7 +526,7 @@ theorem subspaceGap_le_of_orderedFormGap_unbounded_printed
       exact hHP x hx)
     (by linarith)
   have hgap : Pᗮ.projectionGap Qᗮ = P.projectionGap Q :=
-    TauCeti.DavisKahan.subspaceGap_orthogonal P Q
+    Submodule.projectionGap_orthogonal P Q
   rw [← hgap]
   exact hcompl
 
@@ -581,7 +581,7 @@ theorem maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed
       exact hHP x hx)
     (by linarith)
   have hgap : Pᗮ.projectionGap Qᗮ = P.projectionGap Q :=
-    TauCeti.DavisKahan.subspaceGap_orthogonal P Q
+    Submodule.projectionGap_orthogonal P Q
   change Real.arcsin (P.projectionGap Q) ≤ Real.pi / 4
   rw [← hgap]
   exact hcompl
@@ -635,8 +635,8 @@ theorem norm_starProjection_sub_sq_lt_of_orderedFormGap_unbounded_printed
     (by linarith) y hy
   have hnorm : ‖Pᗮ.starProjection y - Qᗮ.starProjection y‖
       = ‖P.starProjection y - Q.starProjection y‖ := by
-    rw [Submodule.starProjection_orthogonal_apply,
-      Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
+      Submodule.starProjection_orthogonal_val,
       show y - P.starProjection y - (y - Q.starProjection y)
         = Q.starProjection y - P.starProjection y by abel, norm_sub_rev]
   rwa [hnorm] at hcompl

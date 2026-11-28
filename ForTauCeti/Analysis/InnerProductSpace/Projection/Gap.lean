@@ -34,21 +34,9 @@ needs no decomposition to state or to prove. -/
 theorem directedProjectionGap_eq_one_of_inf_orthogonal_ne_bot (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : U ⊓ Vᗮ ≠ ⊥) :
     U.directedProjectionGap V = 1 := by
-  obtain ⟨x, hx, hx0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot h
-  obtain ⟨hxU, hxV⟩ := Submodule.mem_inf.mp hx
-  refine le_antisymm (directedProjectionGap_le_one U V) ?_
-  have happ : (Vᗮ.starProjection ∘L U.starProjection) x = x := by
-    rw [ContinuousLinearMap.comp_apply, Submodule.starProjection_eq_self_iff.mpr hxU,
-      Submodule.starProjection_eq_self_iff.mpr hxV]
-  have hle : ‖x‖ ≤ U.directedProjectionGap V * ‖x‖ := by
-    have hop := ContinuousLinearMap.le_opNorm
-      (Vᗮ.starProjection ∘L U.starProjection) x
-    calc
-      ‖x‖ = ‖(Vᗮ.starProjection ∘L U.starProjection) x‖ := by rw [happ]
-      _ ≤ ‖Vᗮ.starProjection ∘L U.starProjection‖ * ‖x‖ := hop
-      _ = U.directedProjectionGap V * ‖x‖ := by
-        rw [Submodule.directedProjectionGap_def]
-  exact le_of_mul_le_mul_right (by linarith) (norm_pos_iff.mpr hx0)
+  refine le_antisymm (U.directedProjectionGap_le_one V) (le_of_not_gt ?_)
+  intro hlt
+  exact h (disjoint_iff.mp (U.disjoint_orthogonal_of_directedProjectionGap_lt_one V hlt))
 
 end Submodule
 
@@ -91,11 +79,7 @@ theorem directedProjectionGap_le_of_inf_orthogonal_eq_bot (U V : Submodule 𝕜 
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : Uᗮ ⊓ V = ⊥) :
     V.directedProjectionGap U ≤ U.directedProjectionGap V := by
   set t := U.directedProjectionGap V with ht
-  have htOp : t = ‖Vᗮ.starProjection ∘L U.starProjection‖ := by
-    rw [ht, Submodule.directedProjectionGap_def]
-  have ht0 : 0 ≤ t := by
-    rw [ht, Submodule.directedProjectionGap_def]
-    exact norm_nonneg _
+  have ht0 : 0 ≤ t := U.directedProjectionGap_nonneg V
   have ht1 : t ≤ 1 := U.directedProjectionGap_le_one V
   have hk0 : (0 : ℝ) ≤ 1 - t ^ 2 := by nlinarith
   set c := Real.sqrt (1 - t ^ 2) with hc
@@ -104,16 +88,7 @@ theorem directedProjectionGap_le_of_inf_orthogonal_eq_bot (U V : Submodule 𝕜 
   -- Pythagoras turns the directed bound into a lower bound for `P_V` on `U`.
   have hstep1 : ∀ u ∈ U, c * ‖u‖ ≤ ‖V.starProjection u‖ := by
     intro u hu
-    have hperp : ‖Vᗮ.starProjection u‖ ≤ t * ‖u‖ := by
-      have hop := ContinuousLinearMap.le_opNorm
-        (Vᗮ.starProjection ∘L U.starProjection) u
-      calc
-        ‖Vᗮ.starProjection u‖ =
-            ‖(Vᗮ.starProjection ∘L U.starProjection) u‖ := by
-          rw [ContinuousLinearMap.comp_apply,
-            Submodule.starProjection_eq_self_iff.mpr hu]
-        _ ≤ ‖Vᗮ.starProjection ∘L U.starProjection‖ * ‖u‖ := hop
-        _ = t * ‖u‖ := by rw [← htOp]
+    have hperp := (U.directedProjectionGap_le_iff V ht0).mp (le_of_eq ht.symm) u hu
     have hpy : ‖u‖ ^ 2 = ‖V.starProjection u‖ ^ 2 + ‖Vᗮ.starProjection u‖ ^ 2 :=
       V.norm_sq_eq_add_norm_sq_starProjection u
     have hsq : (c * ‖u‖) ^ 2 ≤ ‖V.starProjection u‖ ^ 2 := by
@@ -194,38 +169,17 @@ theorem directedProjectionGap_le_of_inf_orthogonal_eq_bot (U V : Submodule 𝕜 
         Submodule.topologicalClosure_coe] at hvv
     exact hTclosed.closure_subset_iff.mpr hST hmem
   -- Reversing Pythagoras on `V` is the reverse directed estimate.
-  calc
-    V.directedProjectionGap U = ‖Uᗮ.starProjection ∘L V.starProjection‖ := by
-      rw [Submodule.directedProjectionGap_def]
-    _ ≤ t := by
-      refine ContinuousLinearMap.opNorm_le_bound _ ht0 fun x => ?_
-      rw [ContinuousLinearMap.comp_apply]
-      have hv : V.starProjection x ∈ V := V.starProjection_apply_mem x
-      have hpy : ‖V.starProjection x‖ ^ 2
-          = ‖U.starProjection (V.starProjection x)‖ ^ 2
-            + ‖Uᗮ.starProjection (V.starProjection x)‖ ^ 2 :=
-        U.norm_sq_eq_add_norm_sq_starProjection _
-      have hlow := hstep3 _ hv
-      have hvx : ‖V.starProjection x‖ ≤ ‖x‖ := V.norm_starProjection_apply_le x
-      have hsq : ‖Uᗮ.starProjection (V.starProjection x)‖ ^ 2 ≤ (t * ‖x‖) ^ 2 := by
-        have hc2 : (c * ‖V.starProjection x‖) ^ 2
-            ≤ ‖U.starProjection (V.starProjection x)‖ ^ 2 := by
-          nlinarith [norm_nonneg (U.starProjection (V.starProjection x)),
-            mul_nonneg hc0 (norm_nonneg (V.starProjection x))]
-        have hexpand : (c * ‖V.starProjection x‖) ^ 2
-            = ‖V.starProjection x‖ ^ 2 - (t * ‖V.starProjection x‖) ^ 2 := by
-          rw [mul_pow, mul_pow, hcsq]; ring
-        have hmono : (t * ‖V.starProjection x‖) ^ 2 ≤ (t * ‖x‖) ^ 2 := by
-          have := mul_le_mul_of_nonneg_left hvx ht0
-          nlinarith [mul_nonneg ht0 (norm_nonneg (V.starProjection x))]
-        rw [hexpand] at hc2
-        linarith
-      calc ‖Uᗮ.starProjection (V.starProjection x)‖
-          = Real.sqrt (‖Uᗮ.starProjection (V.starProjection x)‖ ^ 2) :=
-            (Real.sqrt_sq (norm_nonneg _)).symm
-        _ ≤ Real.sqrt ((t * ‖x‖) ^ 2) := Real.sqrt_le_sqrt hsq
-        _ = t * ‖x‖ := Real.sqrt_sq (mul_nonneg ht0 (norm_nonneg x))
-    _ = U.directedProjectionGap V := ht
+  apply (V.directedProjectionGap_le_iff U ht0).mpr
+  intro v hv
+  have hpy := U.norm_sq_eq_add_norm_sq_starProjection v
+  have hc2 : (c * ‖v‖) ^ 2 ≤ ‖U.starProjection v‖ ^ 2 :=
+    (sq_le_sq₀ (mul_nonneg hc0 (norm_nonneg v)) (norm_nonneg _)).mpr (hstep3 v hv)
+  have hexpand : (c * ‖v‖) ^ 2 = ‖v‖ ^ 2 - (t * ‖v‖) ^ 2 := by
+    rw [mul_pow, mul_pow, hcsq]
+    ring
+  rw [hexpand] at hc2
+  apply (sq_le_sq₀ (norm_nonneg _) (mul_nonneg ht0 (norm_nonneg v))).mp
+  linarith
 
 /-- **The two directed gaps agree exactly when the crossed intersections vanish
 together.**

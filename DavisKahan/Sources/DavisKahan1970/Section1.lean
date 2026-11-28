@@ -156,7 +156,7 @@ theorem equation1_8_residual_norm_minimized_by_rayleighQuotient
     have hzero : Pᗮ.starProjection (A₀ u : H) = 0 :=
       (Submodule.starProjection_apply_eq_zero_iff Pᗮ).mpr
         (P.le_orthogonal_orthogonal (A₀ u).property)
-    rw [hzero, sub_zero, Submodule.starProjection_orthogonal_apply]
+    rw [hzero, sub_zero, Submodule.starProjection_orthogonal_val]
   rw [hfactor]
   calc
     ‖Pᗮ.starProjection ∘L R‖ ≤ ‖Pᗮ.starProjection‖ * ‖R‖ :=

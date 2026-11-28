@@ -299,8 +299,8 @@ theorem starProjection_map_orthogonal_reflection :
   have h : (reflectedU U V)ᗮ.starProjection
       = boundedUnitaryConjugate V.reflection Uᗮ.starProjection := by
     ext x
-    rw [Submodule.starProjection_orthogonal_apply, boundedUnitaryConjugate_apply,
-      Submodule.starProjection_orthogonal_apply, map_sub,
+    rw [Submodule.starProjection_orthogonal_val, boundedUnitaryConjugate_apply,
+      Submodule.starProjection_orthogonal_val, map_sub,
       V.reflection.apply_symm_apply, Submodule.starProjection_map_apply]
   rw [h, starProjection_map_unitary Uᗮ V.reflection]
 

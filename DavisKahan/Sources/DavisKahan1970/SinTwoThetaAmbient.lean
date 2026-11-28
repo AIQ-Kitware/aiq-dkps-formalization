@@ -501,7 +501,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
   have hQV : Vᗮ.starProjection ∘L V.subtypeL = 0 := by
     ext v
     change Vᗮ.starProjection (v : E) = 0
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       V.starProjection_eq_self_iff.mpr v.property, sub_self]
   have hfactor : Vᗮ.starProjection ∘L A ∘L V.starProjection =
       (Vᗮ.starProjection ∘L A.sylvester M V.subtypeL) ∘L

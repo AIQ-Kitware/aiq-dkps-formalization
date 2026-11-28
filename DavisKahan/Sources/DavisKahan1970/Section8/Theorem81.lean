@@ -226,7 +226,7 @@ theorem theorem8_1_canonicalBranch
       exact hHP x hx
   have hquarter : IsQuarterAcute P Q := by
     have h : Pᗮ.projectionGap Qᗮ = P.projectionGap Q :=
-      TauCeti.DavisKahan.subspaceGap_orthogonal P Q
+      Submodule.projectionGap_orthogonal P Q
     show P.projectionGap Q < Real.sqrt 2 / 2
     rw [← h]
     exact hquarterPerp
@@ -259,7 +259,7 @@ theorem sqrt_two_div_two_mul_norm_le_norm_starProjection
     Real.sqrt 2 / 2 * ‖y‖ ≤ ‖P.starProjection y‖ := by
   have hMy : M.starProjection y = y := Submodule.starProjection_eq_self_iff.mpr hy
   have heq : Pᗮ.starProjection y = (M.starProjection - P.starProjection) y := by
-    rw [Submodule.starProjection_orthogonal_apply]
+    rw [Submodule.starProjection_orthogonal_val]
     simp only [sub_apply, hMy]
   have hbound : ‖Pᗮ.starProjection y‖ ≤ Real.sqrt 2 / 2 * ‖y‖ := by
     rw [heq]
@@ -331,12 +331,12 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
   have hquarter : IsQuarterAcute P Q := hconc.quarter_acute
   have hquarterPerp : IsQuarterAcute Pᗮ Qᗮ := by
     show Pᗮ.projectionGap Qᗮ < Real.sqrt 2 / 2
-    rw [TauCeti.DavisKahan.subspaceGap_orthogonal P Q]
+    rw [Submodule.projectionGap_orthogonal P Q]
     exact hquarter
   have hgapM : P.projectionGap M ≤ Real.sqrt 2 / 2 :=
     (maximalAngle_le_pi_div_four_iff P M).1 hMangle
   have hgapMperp : Pᗮ.projectionGap Mᗮ ≤ Real.sqrt 2 / 2 := by
-    rw [TauCeti.DavisKahan.subspaceGap_orthogonal P M]
+    rw [Submodule.projectionGap_orthogonal P M]
     exact hgapM
   -- the branch projection
   set F : E →L[ℂ] E :=
@@ -367,7 +367,7 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
     have huQperp : u ∈ Qᗮ := Qᗮ.starProjection_apply_mem y
     have huM : u ∈ M := by
       have hu : u = y - F y := by
-        rw [hudef, hFstar, Submodule.starProjection_orthogonal_apply]
+        rw [hudef, hFstar, Submodule.starProjection_orthogonal_val]
       have : M.starProjection u = u := by
         rw [hu, map_sub, hMy, ← hcommApply y, hMy]
       exact this ▸ M.starProjection_apply_mem u
@@ -377,7 +377,7 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
       have h2 := norm_starProjection_lt_of_mem_orthogonal hquarter huQperp hne
       linarith
     have hy' : y = Q.starProjection y := by
-      rw [hudef, Submodule.starProjection_orthogonal_apply] at hu0
+      rw [hudef, Submodule.starProjection_orthogonal_val] at hu0
       exact sub_eq_zero.mp hu0
     exact hy' ▸ Q.starProjection_apply_mem y
   · -- `Q ≤ M`
@@ -389,7 +389,7 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
     have hvMperp : v ∈ Mᗮ := Mᗮ.starProjection_apply_mem w
     have hvQ : v ∈ Q := by
       have hv : v = w - M.starProjection w := by
-        rw [hvdef, Submodule.starProjection_orthogonal_apply]
+        rw [hvdef, Submodule.starProjection_orthogonal_val]
       have hFv : F v = v := by
         rw [hv, map_sub, hFw, hcommApply w, hFw]
       rw [hFstar] at hFv
@@ -401,7 +401,7 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
         (by rw [Submodule.orthogonal_orthogonal]; exact hvQ) hne
       linarith
     have hw' : w = M.starProjection w := by
-      rw [hvdef, Submodule.starProjection_orthogonal_apply] at hv0
+      rw [hvdef, Submodule.starProjection_orthogonal_val] at hv0
       exact sub_eq_zero.mp hv0
     exact hw' ▸ M.starProjection_apply_mem w
 
@@ -477,7 +477,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
         exact hHP x hx
     have hquarter : IsQuarterAcute P M := by
       show P.projectionGap M < Real.sqrt 2 / 2
-      rw [← TauCeti.DavisKahan.subspaceGap_orthogonal P M]
+      rw [← Submodule.projectionGap_orthogonal P M]
       exact hquarterPerp
     exact le_of_lt ((maximalAngle_lt_pi_div_four_iff P M).2 hquarter)
 

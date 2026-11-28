@@ -137,7 +137,7 @@ theorem norm_beamRitzOffDiagonal_lower_le (ε : ℝ) {x : BeamL2} (hx : x ∈ be
   have h := norm_beamRitzResidual_le ε ⟨x, hx⟩
   have hres : beamResidual ε ⟨x, hx⟩ = beamPerturbation ε x := rfl
   rw [hres] at h
-  rw [Submodule.starProjection_orthogonal_apply]
+  rw [Submodule.starProjection_orthogonal_val]
   exact h
 
 /-- **The upper off-diagonal block has the same norm**, by adjointness: it is
@@ -191,7 +191,7 @@ theorem beamRitzOffDiagonal_apply (ε : ℝ) (v : BeamL2) :
       (beamTrial.diagBlock (beamPerturbation ε)) v = _
     rw [Submodule.diagBlock_apply]
   have hv : beamTrial.starProjection v + beamTrialᗮ.starProjection v = v := by
-    rw [Submodule.starProjection_orthogonal_apply]
+    rw [Submodule.starProjection_orthogonal_val]
     abel
   have hHv : beamPerturbation ε v
       = beamPerturbation ε (beamTrial.starProjection v)
@@ -200,12 +200,12 @@ theorem beamRitzOffDiagonal_apply (ε : ℝ) (v : BeamL2) :
   have e1 : beamTrialᗮ.starProjection (beamPerturbation ε (beamTrial.starProjection v))
       = beamPerturbation ε (beamTrial.starProjection v)
         - beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection v)) :=
-    Submodule.starProjection_orthogonal_apply _ _
+    Submodule.starProjection_orthogonal_val _
   have e2 : beamTrial.starProjection (beamPerturbation ε (beamTrialᗮ.starProjection v))
       = beamPerturbation ε (beamTrialᗮ.starProjection v)
         - beamTrialᗮ.starProjection
             (beamPerturbation ε (beamTrialᗮ.starProjection v)) := by
-    rw [Submodule.starProjection_orthogonal_apply beamTrial
+    rw [Submodule.starProjection_orthogonal_val (K := beamTrial)
       (beamPerturbation ε (beamTrialᗮ.starProjection v))]
     abel
   rw [h1, hHv, e1, e2]
@@ -235,7 +235,7 @@ theorem norm_beamRitzOffDiagonal_le (ε : ℝ) :
     rw [norm_add_sq (𝕜 := ℂ), hab]
     simp
   have hv : beamTrial.starProjection v + beamTrialᗮ.starProjection v = v := by
-    rw [Submodule.starProjection_orthogonal_apply]
+    rw [Submodule.starProjection_orthogonal_val]
     abel
   have hcross : ⟪beamTrial.starProjection v, beamTrialᗮ.starProjection v⟫_ℂ = 0 :=
     (beamTrialᗮ.starProjection_apply_mem v) _ (beamTrial.starProjection_apply_mem v)
@@ -307,13 +307,13 @@ theorem beamOperator_apply_mem_orthogonal (x : beamOperator.domain) :
 complementary projection vanishes. -/
 theorem starProjection_orthogonal_eq_zero_of_mem_beamTrial {x : BeamL2}
     (hx : x ∈ beamTrial) : beamTrialᗮ.starProjection x = 0 := by
-  rw [Submodule.starProjection_orthogonal_apply,
+  rw [Submodule.starProjection_orthogonal_val,
     Submodule.starProjection_eq_self_iff.2 hx, sub_self]
 
 /-- The trial projection of a vector orthogonal to the trial subspace vanishes. -/
 theorem starProjection_eq_zero_of_mem_beamTrial_orthogonal {x : BeamL2}
     (hx : x ∈ beamTrialᗮ) : beamTrial.starProjection x = 0 := by
-  have h := Submodule.starProjection_orthogonal_apply beamTrial x
+  have h := Submodule.starProjection_orthogonal_val (K := beamTrial) x
   rw [Submodule.starProjection_eq_self_iff.2 hx] at h
   have : x - beamTrial.starProjection x = x := h.symm
   simpa using this

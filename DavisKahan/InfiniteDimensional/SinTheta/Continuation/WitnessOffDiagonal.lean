@@ -59,7 +59,7 @@ theorem starProjection_map_eq_zero_of_isOffDiagonal
   rw [Submodule.isOffDiagonal_iff] at hoff
   have hdiag := congrArg (fun T : H →L[ℂ] H => T u) hoff
   have hQu : Uᗮ.starProjection u = 0 := by
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       Submodule.starProjection_eq_self_iff.mpr hu, sub_self]
   simpa only [Submodule.diagBlock_apply, ContinuousLinearMap.comp_apply,
     add_apply, zero_apply, Submodule.starProjection_eq_self_iff.mpr hu,
@@ -159,7 +159,7 @@ theorem subspaceBlockOperatorData_B10_add_of_reduces
   apply Subtype.ext
   have hAu : A (u : H) ∈ U := hU.mem_invtSubmodule u.property
   have hQAu : Uᗮ.starProjection (A (u : H)) = 0 := by
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       Submodule.starProjection_eq_self_iff.mpr hAu, sub_self]
   simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply, Submodule.coe_add,
     Submodule.coe_orthogonalProjectionOnto_apply, add_apply, map_add,

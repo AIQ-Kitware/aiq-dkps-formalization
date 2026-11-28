@@ -60,7 +60,7 @@ theorem complementaryProjection_mem_halmosGenericPart_left
     [V.HasOrthogonalProjection] {x : H}
     (hx : x ∈ halmosGenericPart U V) :
     (Uᗮ).starProjection x ∈ halmosGenericPart U V := by
-  rw [U.starProjection_orthogonal_apply]
+  rw [Submodule.starProjection_orthogonal_val (K := U)]
   exact (halmosGenericPart U V).sub_mem hx
     (projection_mem_halmosGenericPart_left U V hx)
 
@@ -71,7 +71,7 @@ theorem complementaryProjection_mem_halmosGenericPart_right
     [V.HasOrthogonalProjection] {x : H}
     (hx : x ∈ halmosGenericPart U V) :
     (Vᗮ).starProjection x ∈ halmosGenericPart U V := by
-  rw [V.starProjection_orthogonal_apply]
+  rw [Submodule.starProjection_orthogonal_val (K := V)]
   exact (halmosGenericPart U V).sub_mem hx
     (projection_mem_halmosGenericPart_right U V hx)
 

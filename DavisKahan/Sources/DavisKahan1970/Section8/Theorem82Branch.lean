@@ -253,7 +253,7 @@ theorem theorem8_2_perturbationHalfGap_complex
     ext x
     have hmem : (R 0).starProjection x ∈ Q := hR0 ((R 0).starProjection_apply_mem x)
     show Qᗮ.starProjection ((R 0).starProjection x) = 0
-    rw [Submodule.starProjection_orthogonal_apply,
+    rw [Submodule.starProjection_orthogonal_val,
       Submodule.starProjection_eq_self_iff.mpr hmem, sub_self]
   -- `P ≤ R 1`
   have hR1 : P ≤ R 1 := by
