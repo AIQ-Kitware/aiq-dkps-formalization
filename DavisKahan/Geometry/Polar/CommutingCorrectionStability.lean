@@ -96,20 +96,18 @@ theorem exists_positive_factor_diagBlock_of_canonical_correction
   rw [hinner]
   exact h
 
-/-- The canonical correction is exactly the accepted canonical factor
-of the actual diagonal block through its modulus. -/
-theorem canonical_correction_eq_diagBlock_factorThru_modulus
+/-- The canonical correction is the polar factor of the actual diagonal block. -/
+theorem canonical_correction_eq_diagBlock_polarFactor
     (K : Submodule ℂ E) [K.HasOrthogonalProjection] (A C : E ≃ₗᵢ[ℂ] E)
     (hC : (C : E →L[ℂ] E) =
       spectraCanonicalPolarFactor (K.map A.toLinearMap) K ∘L (A : E →L[ℂ] E))
     (a : ℝ) (ha : 0 < a)
     (hgap : a ^ 2 + ‖(A : E →L[ℂ] E) * K.starProjection -
       K.starProjection * (A : E →L[ℂ] E)‖ ^ 2 ≤ 1) :
-    (C : E →L[ℂ] E) = (K.diagBlock (A : E →L[ℂ] E)).factorThru
-      (K.diagBlock (A : E →L[ℂ] E)).modulus := by
+    (C : E →L[ℂ] E) = (K.diagBlock (A : E →L[ℂ] E)).polarFactor := by
   obtain ⟨H, hH, hpos, hcoerc⟩ :=
     exists_positive_factor_diagBlock_of_canonical_correction K A C hC a ha.le hgap
-  exact ContinuousLinearMap.eq_factorThru_modulus_of_unitary_factorization_of_coercive
+  exact ContinuousLinearMap.eq_polarFactor_of_unitary_factorization_of_coercive
     _ H C hH hpos a ha hcoerc
 
 /-- Two-endpoint input stability for canonical commuting corrections.

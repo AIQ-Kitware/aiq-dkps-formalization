@@ -1,5 +1,41 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 bounded polar perturbation and projection intertwining
+
+The reflection of each projection range turns projection intertwining
+into an isometric conjugation identity. The Davis–Kahan proof now uses
+`ContinuousLinearMap.polarFactor_conj` and retains the nonacute and singular
+cases. The same integration's `modulus_conj`, with the positive modulus
+identity from #16606, identifies the positive part of a unitary factorization.
+#33543 added the conjugation laws for MorseTheory M2. DKPS proof descent
+for these laws is unverified.
+[#33543 integration](https://github.com/TauCetiProject/TauCeti/commit/7e361e004a9036cf8d369f62322e8ffa1163c13a) ·
+[#16606 integration](https://github.com/TauCetiProject/TauCeti/commit/cba89f5f3f73db38aa148246fac841cfbead5e99)
+
+The commuting-correction and Schatten proofs use `polarFactor` directly.
+Its uniqueness for a coercive positive factor follows from native modulus
+inversion (#16936) and coercive invertibility from our #26821. The local
+Sylvester perturbation bound with unequal coercivity constants stays at
+its original complete `RCLike` scope.
+[#16936 integration](https://github.com/TauCetiProject/TauCeti/commit/3266a7a2637755febeecd0484d578678a508d44e) ·
+[#26821 integration](https://github.com/TauCetiProject/TauCeti/commit/d6c3a1ba75228691ecd81d6fd8c89ad620b322eb)
+
+The complete rectangular complex Gram-defect estimate uses
+`norm_sub_factorThru_le` (#15884, PD-B40) at the modulus. The new operator
+bound also covers singular modulus, and the old pointwise bounds follow
+from the operator norm. The local modulus-to-Gram comparison and the exact
+pointwise distance identity for invertible modulus remain. Mathlib's
+square-root invertibility criterion replaces the local modulus wrapper.
+#15884 cites Conway's bounded polar decomposition and describes no
+vendoring. DKPS proof descent for the factor-distance estimate is unverified.
+The extraction manifest records the retired names at DKPS `77686938f`.
+[#15884 integration](https://github.com/TauCetiProject/TauCeti/commit/49f08052cb4ccc5890997fb09407a8d58f8105dc)
+
+The focused build (10,559 jobs), default build (22,800 jobs), and Challenge
+with the semantic-surface audit (22,514 jobs) passed without warnings. All
+1,569 source-census references resolved and all 17 available comparator
+signatures matched. The name checker reported the same 28 baseline findings.
+
 ## November 28 self-adjoint completion and block-diagonal operators
 
 The damping step in the self-adjoint column completion uses the rectangular

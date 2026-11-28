@@ -16,11 +16,10 @@ import TauCeti.Analysis.Real.Sqrt
 # Quantitative rectangular polar estimates
 
 The factor is the accepted `ContinuousLinearMap.polarFactor`. This module retains
-modulus-invertibility criteria, the modulus/Gram perturbation estimate, and sharp
-rectangular near-isometry estimates over complex Hilbert spaces. The pointwise
-equality and rectangular Gram bound are not supplied by the accepted square
-operator-norm bound. The old inverse-based factor and its bundled factories are
-retired; their source remains at `e4637c3919ae` under this path.
+the Gram-defect invertibility criterion, the pointwise distance identity, and
+the rectangular Gram-perturbation bound. The latter applies the native factor
+estimate before comparing the modulus and Gram defects. The former inverse-based
+factor and its bundled factories are preserved at `e4637c3919ae` under this path.
 -/
 
 public section
@@ -31,16 +30,11 @@ variable {E F : Type*}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-/-- Invertibility of the modulus is equivalent to invertibility of the Gram operator. -/
-theorem isUnit_modulus_iff (M : E →L[ℂ] F) :
-    IsUnit M.modulus ↔ IsUnit (M.adjoint ∘L M) := by
-  rw [← M.modulus_comp_modulus, ← ContinuousLinearMap.mul_def,
-    (Commute.refl M.modulus).isUnit_mul_iff, and_self]
-
 /-- A Gram operator at distance less than one from the identity has invertible modulus. -/
 theorem isUnit_modulus_of_norm_adjoint_comp_self_sub_one_lt_one {M : E →L[ℂ] F}
     (h : ‖M.adjoint ∘L M - 1‖ < 1) : IsUnit M.modulus := by
-  rw [M.isUnit_modulus_iff]
+  rw [M.modulus_eq_sqrt, CFC.isUnit_sqrt_iff _
+    (nonneg_iff_isPositive.mpr (isPositive_adjoint_comp_self M))]
   rw [show M.adjoint ∘L M = 1 - -(M.adjoint ∘L M - 1) by abel]
   exact isUnit_one_sub_of_norm_lt_one (by rwa [norm_neg])
 
@@ -61,14 +55,6 @@ theorem norm_sub_polarFactor_apply_eq_of_isUnit_modulus {M : E →L[ℂ] F}
     _ = ‖M.modulus x - x‖ :=
       M.norm_polarFactor_apply_of_injective (injective_of_isUnit_modulus hM) _
 
-/-- Pointwise polar distance is controlled by the modulus perturbation. -/
-theorem norm_sub_polarFactor_apply_le_norm_modulus_sub_one_of_isUnit_modulus
-    {M : E →L[ℂ] F} (hM : IsUnit M.modulus) (x : E) :
-    ‖M x - M.polarFactor x‖ ≤ ‖M.modulus - 1‖ * ‖x‖ := by
-  rw [norm_sub_polarFactor_apply_eq_of_isUnit_modulus hM x,
-    show M.modulus x - x = (M.modulus - 1) x by simp]
-  exact le_opNorm _ x
-
 /-- The modulus is at least as close to the identity as the source Gram operator. -/
 theorem norm_modulus_sub_one_le (M : E →L[ℂ] F) :
     ‖M.modulus - 1‖ ≤ ‖M.adjoint ∘L M - 1‖ := by
@@ -80,7 +66,7 @@ theorem norm_modulus_sub_one_le (M : E →L[ℂ] F) :
   have hshift : cfc (fun s : ℝ => s - 1) a = a - 1 := by
     rw [cfc_sub (fun s : ℝ => s) (fun _ : ℝ => (1 : ℝ)) a, cfc_id' ℝ a, cfc_const_one ℝ a]
   have hmodsqrt : CFC.sqrt a = M.modulus :=
-    CFC.sqrt_unique M.modulus_comp_modulus M.modulus_nonneg
+    M.modulus_eq_sqrt.symm
   have hmod : cfc (fun s : ℝ => Real.sqrt s - 1) a = M.modulus - 1 := by
     rw [cfc_sub Real.sqrt (fun _ : ℝ => (1 : ℝ)) a, cfc_const_one ℝ a]
     congr 1
@@ -95,17 +81,12 @@ theorem norm_modulus_sub_one_le (M : E →L[ℂ] F) :
     _ = ‖t - 1‖ := (Real.norm_eq_abs _).symm
     _ ≤ ‖cfc (fun s : ℝ => s - 1) a‖ := norm_apply_le_norm_cfc (fun s : ℝ => s - 1) a ht
 
-/-- Sharp rectangular near-isometry estimate in terms of the Gram perturbation. -/
-theorem norm_sub_polarFactor_apply_le_of_isUnit_modulus {M : E →L[ℂ] F}
-    (hM : IsUnit M.modulus) (x : E) :
-    ‖M x - M.polarFactor x‖ ≤ ‖M.adjoint ∘L M - 1‖ * ‖x‖ :=
-  (norm_sub_polarFactor_apply_le_norm_modulus_sub_one_of_isUnit_modulus hM x).trans
-    (mul_le_mul_of_nonneg_right M.norm_modulus_sub_one_le (norm_nonneg x))
-
-/-- Operator-norm form of the rectangular Gram perturbation estimate. -/
-theorem norm_sub_polarFactor_le_of_isUnit_modulus {M : E →L[ℂ] F}
-    (hM : IsUnit M.modulus) : ‖M - M.polarFactor‖ ≤ ‖M.adjoint ∘L M - 1‖ :=
-  opNorm_le_bound _ (norm_nonneg _) fun x => by
-    simpa using norm_sub_polarFactor_apply_le_of_isUnit_modulus hM x
+/-- The rectangular polar distance is bounded by the defect of the source Gram operator. -/
+theorem norm_sub_polarFactor_le_norm_adjoint_comp_self_sub_one (M : E →L[ℂ] F) :
+    ‖M - M.polarFactor‖ ≤ ‖M.adjoint ∘L M - 1‖ := by
+  have h : ‖M - M.polarFactor‖ ≤ ‖M.modulus - 1‖ := by
+    rw [M.polarFactor_eq_factorThru]
+    exact norm_sub_factorThru_le (fun x => (M.norm_modulus_apply x).ge)
+  exact h.trans M.norm_modulus_sub_one_le
 
 end ContinuousLinearMap

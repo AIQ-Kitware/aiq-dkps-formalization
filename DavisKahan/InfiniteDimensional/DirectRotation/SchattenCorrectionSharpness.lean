@@ -108,9 +108,8 @@ private theorem gauge_planar_ne_top (p : ℝ) (hp : 1 ≤ p)
 private theorem unitary_eq_scalar_factor (c : ℝ) (hc : 0 < c)
     (U : ComplexPlane ≃ₗᵢ[ℂ] ComplexPlane) :
     (U : ComplexPlane →L[ℂ] ComplexPlane) =
-      ((c : ℂ) • (U : ComplexPlane →L[ℂ] ComplexPlane)).factorThru
-        ((c : ℂ) • (U : ComplexPlane →L[ℂ] ComplexPlane)).modulus := by
-  apply ContinuousLinearMap.eq_factorThru_modulus_of_unitary_factorization_of_coercive
+      ((c : ℂ) • (U : ComplexPlane →L[ℂ] ComplexPlane)).polarFactor := by
+  apply ContinuousLinearMap.eq_polarFactor_of_unitary_factorization_of_coercive
     _ ((c : ℂ) • (1 : ComplexPlane →L[ℂ] ComplexPlane)) U
     (by simp) (ContinuousLinearMap.isPositive_one.smul_of_nonneg
       (RCLike.ofReal_nonneg.mpr hc.le)) c hc
@@ -156,12 +155,12 @@ theorem planar_nearest_schatten_corrections
     rw [norm_commutator_scalarPhaseTransport_zero, Real.sin_pi_sub, abs_of_nonneg hsin]
     exact hsinle
   constructor
-  · apply ((schatten_correction_isMin_iff_eq_diagBlock_factorThru_modulus p hp hp1 hp2
+  · apply ((schatten_correction_isMin_iff_eq_diagBlock_polarFactor p hp hp1 hp2
       sourceLine (scalarPhaseTransport theta 0) (gauge_planar_ne_top _ hp1.le _) hnorm
       (LinearIsometryEquiv.refl ℂ ComplexPlane)).mpr ?_).2
     rw [diagBlock_scalarPhaseTransport_zero]
     exact unitary_eq_scalar_factor _ hcos (LinearIsometryEquiv.refl ℂ ComplexPlane)
-  · apply ((schatten_correction_isMin_iff_eq_diagBlock_factorThru_modulus p hp hp1 hp2
+  · apply ((schatten_correction_isMin_iff_eq_diagBlock_polarFactor p hp hp1 hp2
       sourceLine (scalarPhaseTransport (Real.pi - theta) 0) (gauge_planar_ne_top _ hp1.le _) hnormB
       (LinearIsometryEquiv.neg ℂ)).mpr ?_).2
     have hdiag : sourceLine.diagBlock

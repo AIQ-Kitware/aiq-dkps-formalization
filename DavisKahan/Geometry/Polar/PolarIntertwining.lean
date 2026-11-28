@@ -7,6 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
+public import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
 public import DavisKahan.Geometry.Polar.DirectRotation
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
@@ -15,10 +16,9 @@ public import DavisKahan.SpectralTheory.AbstractSpectrum
 
 This file isolates the functional-analytic facts used by the nonacute
 Davis--Kahan direct rotation.  The key principle is that an intertwining
-relation `T P = Q T`, together with the adjoint relation, passes from `T` to
-its polar partial isometry.  The proof is carried out first on `range |T|`,
-then on its closure, and finally on the orthogonal complement, where the polar
-factor vanishes.
+relation `T P = Q T` passes from `T` to its polar partial isometry. The
+reflections of the two projection ranges fix `T` under conjugation. TauCeti’s
+polar conjugation law gives the same symmetry for the polar factor.
 -/
 
 public section
@@ -124,36 +124,31 @@ theorem polarPartial_intertwines_of_projection_intertwining
     (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
     (hTP : T ∘L P = Q ∘L T) :
     T.polarFactor ∘L P = Q ∘L T.polarFactor := by
-  have habs : T.modulus ∘L P = P ∘L T.modulus :=
-    modulus_commutes_of_projection_intertwining T P Q hP hQ hTP
-  let V := T.polarFactor ∘L P - Q ∘L T.polarFactor
-  have hcomp : V ∘L T.modulus = 0 := by
-    calc
-      V ∘L T.modulus = T.polarFactor ∘L (P ∘L T.modulus) -
-          Q ∘L (T.polarFactor ∘L T.modulus) := by
-        simp only [V, ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_assoc]
-      _ = T.polarFactor ∘L (T.modulus ∘L P) - Q ∘L T := by
-        rw [habs, T.polarFactor_comp_modulus]
-      _ = T ∘L P - Q ∘L T := by
-        rw [← ContinuousLinearMap.comp_assoc, T.polarFactor_comp_modulus]
-      _ = 0 := sub_eq_zero.mpr hTP
-  have hker : ∀ y ∈ T.modulus.rangeᗮ, V y = 0 := by
-    intro y hy
-    rw [T.orthogonal_range_modulus] at hy
-    have hPy : P y ∈ T.ker := by
-      change T (P y) = 0
-      have h := congrArg (fun S : H →L[𝕜] H => S y) hTP
-      change T (P y) = Q (T y) at h
-      rw [show T y = 0 from hy, map_zero] at h
-      exact h
-    simp only [V, _root_.sub_apply, ContinuousLinearMap.comp_apply,
-      T.polarFactor_apply_of_mem_ker hy, T.polarFactor_apply_of_mem_ker hPy,
-      map_zero, sub_self]
-  have hV := ContinuousLinearMap.eq_factorThru
-    (T := (0 : H →L[𝕜] H)) (A := T.modulus) hcomp hker
-  have hzero := ContinuousLinearMap.eq_factorThru
-    (T := (0 : H →L[𝕜] H)) (A := T.modulus) (V := 0) (by simp) (by simp)
-  exact sub_eq_zero.mp (hV.trans hzero.symm)
+  obtain ⟨U, hU, rfl⟩ := isStarProjection_iff_eq_starProjection.mp
+    ⟨hP.1, hP.2.isSelfAdjoint⟩
+  obtain ⟨V, hV, rfl⟩ := isStarProjection_iff_eq_starProjection.mp
+    ⟨hQ.1, hQ.2.isSelfAdjoint⟩
+  let e := U.reflection
+  let f := V.reflection
+  have hReflect (x : H) : T (e x) = f (T x) := by
+    have hPoint := DFunLike.congr_fun hTP x
+    change T (U.starProjection x) = V.starProjection (T x) at hPoint
+    simp only [e, f, Submodule.reflection_apply, map_sub, map_nsmul]
+    rw [hPoint]
+  have hFixed : (f : H →L[𝕜] H) ∘L T ∘L (e.symm : H →L[𝕜] H) = T := by
+    ext x
+    change f (T (e.symm x)) = T x
+    rw [← hReflect, e.apply_symm_apply]
+  have hpolar := ContinuousLinearMap.polarFactor_conj f e T
+  rw [hFixed] at hpolar
+  ext x
+  have hx := DFunLike.congr_fun hpolar (e x)
+  change T.polarFactor (e x) = f (T.polarFactor (e.symm (e x))) at hx
+  rw [e.symm_apply_apply] at hx
+  simp only [e, f, Submodule.reflection_apply, map_sub, map_nsmul] at hx
+  have htwo := congrArg (fun y => y + T.polarFactor x) hx
+  simp only [sub_add_cancel, ← Nat.cast_smul_eq_nsmul 𝕜, Nat.cast_ofNat] at htwo
+  exact (smul_right_inj (two_ne_zero : (2 : 𝕜) ≠ 0)).mp htwo
 
 /-- The polar factor of the canonical two-projection intertwiner intertwines
 both projections without an acuteness assumption. -/

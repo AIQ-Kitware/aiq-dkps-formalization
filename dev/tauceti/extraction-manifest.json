@@ -1754,9 +1754,71 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "partially-upstreamed",
-      "upstream_pr": "#16936",
-      "migration_note": "November 1: retired inverse-defined polarIsometryOfIsUnitModulus and bundled polarLinearIsometry/polarLinearIsometryEquiv factories and construction lemmas. Callers now use canonical ContinuousLinearMap.polarFactor and native norm preservation/factorization (#16936, 3266a7a2637755febeecd0484d578678a508d44e). Retains modulus invertibility criteria, norm_modulus_sub_one_le and rectangular complex Hilbert-space pointwise equality and Gram perturbation bounds, renamed norm_sub_polarFactor_*_of_isUnit_modulus. These rectangular quantitative conclusions are not subsumed by the native square-operator norm bound. The old junk branch of the inverse constructor has no maintained consumer and is retired, not identified with the native factor there."
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "#15884, #16606, #16936",
+      "migration_note": "November 1: retired inverse-defined polarIsometryOfIsUnitModulus and bundled polarLinearIsometry/polarLinearIsometryEquiv factories and construction lemmas. Callers now use canonical ContinuousLinearMap.polarFactor and native norm preservation/factorization (#16936, 3266a7a2637755febeecd0484d578678a508d44e). Retains modulus invertibility criteria, norm_modulus_sub_one_le and rectangular complex Hilbert-space pointwise equality and Gram perturbation bounds, renamed norm_sub_polarFactor_*_of_isUnit_modulus. These rectangular quantitative conclusions are not subsumed by the native square-operator norm bound. The old junk branch of the inverse constructor has no maintained consumer and is retired, not identified with the native factor there. November 28: retire isUnit_modulus_iff using ContinuousLinearMap.modulus_eq_sqrt from #16606 (cba89f5f3f73db38aa148246fac841cfbead5e99) and Mathlib CFC.isUnit_sqrt_iff. The same native modulus identity replaces the separate square-root uniqueness proof. The rectangular complex Gram estimate now uses ContinuousLinearMap.norm_sub_factorThru_le from #15884 (49f08052cb4ccc5890997fb09407a8d58f8105dc, PD-B40) and the retained norm_modulus_sub_one_le. The strengthened norm_sub_polarFactor_le_norm_adjoint_comp_self_sub_one drops modulus invertibility. It replaces norm_sub_polarFactor_apply_le_norm_modulus_sub_one_of_isUnit_modulus, norm_sub_polarFactor_apply_le_of_isUnit_modulus and norm_sub_polarFactor_le_of_isUnit_modulus at the 77686938f source under this path. Retain the pointwise distance equality for invertible modulus and the Gram-defect invertibility criterion. #15884 cites the classical bounded polar decomposition and describes no vendoring. DKPS proof descent of its factor-distance estimate is unverified.",
+      "maintained_declarations": [
+        "ContinuousLinearMap.isUnit_modulus_of_norm_adjoint_comp_self_sub_one_lt_one",
+        "ContinuousLinearMap.norm_sub_polarFactor_apply_eq_of_isUnit_modulus",
+        "ContinuousLinearMap.norm_modulus_sub_one_le",
+        "ContinuousLinearMap.norm_sub_polarFactor_le_norm_adjoint_comp_self_sub_one"
+      ]
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Perturbation",
+      "source_declarations": [
+        "ContinuousLinearMap.IsPositive.eq_modulus_of_unitary_factorization",
+        "ContinuousLinearMap.eq_factorThru_modulus_of_unitary_factorization_of_coercive",
+        "ContinuousLinearMap.add_mul_norm_sub_unitary_le_two_mul_norm_sub"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Perturbation",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Polar.Bounded",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "Source at 77686938f under the donor path, introduced in c9338023f67cc80ad89bb9bdb35a450950fe00d4. Jon Crall and GPT-6 (Codex; configuration unspecified), Kitware copyright, Apache-2.0.",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Polar.Bounded",
+        "TauCeti.Analysis.InnerProductSpace.Coercive",
+        "TauCeti.Analysis.InnerProductSpace.Sylvester.Basic"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.Geometry.Polar.CommutingCorrectionStability",
+        "DavisKahan.InfiniteDimensional.DirectRotation.SchattenCorrectionDataStability",
+        "DavisKahan.InfiniteDimensional.DirectRotation.SchattenCorrectionSharpness"
+      ],
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "#16606, #16936, #26821, #33543",
+      "migration_note": "November 28: ContinuousLinearMap.modulus_conj from MorseTheory #33543 (7e361e004a9036cf8d369f62322e8ffa1163c13a) with IsPositive.modulus_eq from #16606 replaces the Gram proof identifying the positive part of a unitary factorization. The polar uniqueness result uses polarFactor_eq_comp_inverse from #16936 (3266a7a2637755febeecd0484d578678a508d44e) and coercive invertibility from the DKPS submission #26821 (d6c3a1ba75228691ecd81d6fd8c89ad620b322eb). Commuting-correction consumers use polarFactor directly. DKPS renames canonical_correction_eq_diagBlock_factorThru_modulus and schatten_correction_isMin_iff_eq_diagBlock_factorThru_modulus to canonical_correction_eq_diagBlock_polarFactor and schatten_correction_isMin_iff_eq_diagBlock_polarFactor. The perturbation lemma with unequal coercivity constants stays local at its full complete RCLike scope. DKPS proof descent for the conjugation law is unverified.",
+      "maintained_declarations": [
+        "ContinuousLinearMap.eq_polarFactor_of_unitary_factorization_of_coercive",
+        "ContinuousLinearMap.add_mul_norm_sub_unitary_le_two_mul_norm_sub"
+      ]
+    },
+    {
+      "source_module": "DavisKahan.Geometry.Polar.PolarIntertwining",
+      "source_declarations": [
+        "TauCeti.DavisKahan.polarPartial_intertwines_of_projection_intertwining"
+      ],
+      "current_namespace": "TauCeti.DavisKahan",
+      "staging_module": "DavisKahan.Geometry.Polar.PolarIntertwining",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Polar.Bounded",
+      "ownership_class": "davis-kahan",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "Source at 77686938f under the original path. Jon Crall and OpenAI GPT-5.6 Thinking, Kitware copyright, Apache-2.0.",
+      "direct_dependencies": [
+        "Mathlib.Analysis.InnerProductSpace.Projection.Reflection",
+        "TauCeti.Analysis.InnerProductSpace.Polar.Bounded"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "#33543",
+      "migration_note": "November 28: express projection intertwining as invariance under the two orthogonal reflections. ContinuousLinearMap.polarFactor_conj from MorseTheory #33543 (7e361e004a9036cf8d369f62322e8ffa1163c13a) gives the original theorem, including the nonacute case and nontrivial kernel. The Davis–Kahan statement is retained, and the separate uniqueness proof by range closure and kernel vanishing retires. DKPS proof descent for the native conjugation law is unverified.",
+      "maintained_declarations": [
+        "TauCeti.DavisKahan.polarPartial_intertwines_of_projection_intertwining"
+      ]
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.PositiveSqrt",

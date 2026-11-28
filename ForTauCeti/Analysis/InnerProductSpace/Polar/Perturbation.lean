@@ -6,7 +6,8 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
-public import TauCeti.Analysis.InnerProductSpace.Modulus
+public import TauCeti.Analysis.InnerProductSpace.Polar.Bounded
+public import TauCeti.Analysis.InnerProductSpace.Coercive
 public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 public import Mathlib.Analysis.Normed.Operator.NormedSpace
 
@@ -34,44 +35,19 @@ open scoped InnerProductSpace
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-/-- The positive factor in an actual unitary factorization is the
-accepted operator modulus, in arbitrary Hilbert dimension. -/
-theorem IsPositive.eq_modulus_of_unitary_factorization
-    {T H : E →L[𝕜] E} (hH : H.IsPositive) (U : E ≃ₗᵢ[𝕜] E)
-    (hT : T = (U : E →L[𝕜] E) * H) : H = T.modulus := by
-  apply eq_modulus_iff.mpr
-  refine ⟨hH, ?_⟩
-  rw [hT]
-  change H ∘L H = ((U : E →L[𝕜] E) ∘L H).adjoint ∘L ((U : E →L[𝕜] E) ∘L H)
-  rw [adjoint_comp, U.adjoint_eq_symm, hH.isSelfAdjoint.adjoint_eq]
-  apply ContinuousLinearMap.ext
-  intro x
-  change H (H x) = H (U.symm (U (H x)))
-  rw [U.symm_apply_apply]
-
-/-- Positive coercivity identifies the actual unitary factor with
-Tau Ceti's canonical factor through the modulus. No new polar-factor
-definition, finite-dimensional assumption or inverse is needed. -/
-theorem eq_factorThru_modulus_of_unitary_factorization_of_coercive
+/-- A unitary factor with a coercive positive factor is the canonical polar factor. -/
+theorem eq_polarFactor_of_unitary_factorization_of_coercive
     (T H : E →L[𝕜] E) (U : E ≃ₗᵢ[𝕜] E) (hT : T = (U : E →L[𝕜] E) * H)
     (hH : H.IsPositive) (a : ℝ) (ha : 0 < a)
     (hcoerc : ∀ x, a * ‖x‖ ^ 2 ≤ RCLike.re ⟪H x, x⟫_𝕜) :
-    (U : E →L[𝕜] E) = T.factorThru T.modulus := by
-  have hmod := hH.eq_modulus_of_unitary_factorization U hT
-  apply eq_factorThru_of_isStarNormal T.isPositive_modulus.isSelfAdjoint.isStarNormal
-  · rw [← hmod]
-    exact hT.symm
-  · intro x hx
-    have hTx : T x = 0 := hx
-    have hHx : H x = 0 := by
-      apply U.injective
-      change ((U : E →L[𝕜] E) * H) x = U 0
-      rw [← hT, hTx, map_zero]
-    have h := hcoerc x
-    rw [hHx, inner_zero_left, map_zero] at h
-    have hsq : ‖x‖ ^ 2 ≤ 0 := by nlinarith
-    have hnorm : ‖x‖ = 0 := by nlinarith [norm_nonneg x]
-    rw [norm_eq_zero.mp hnorm, map_zero]
+    (U : E →L[𝕜] E) = T.polarFactor := by
+  have hmod : T.modulus = H := by
+    rw [hT, mul_def]
+    simpa [hH.modulus_eq] using modulus_conj U (LinearIsometryEquiv.refl 𝕜 E) H
+  have hunit := H.isUnit_of_coercive ha hcoerc
+  rw [T.polarFactor_eq_comp_inverse (hmod.symm ▸ hunit), hmod, hT]
+  change (U : E →L[𝕜] E) = ((U : E →L[𝕜] E) * H) * Ring.inverse H
+  rw [mul_assoc, Ring.mul_inverse_cancel H hunit, mul_one]
 
 /-- Classical polar perturbation bound from the actual positive factors.
 The lower bounds may be unequal. No compactness or dimension hypothesis

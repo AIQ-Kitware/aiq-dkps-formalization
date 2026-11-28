@@ -122,8 +122,7 @@ private theorem eq_diagonal_factor_of_nearest
     (hmin : IsMinOn (fun W : E ≃ₗᵢ[ℂ] E =>
       (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge ((A : E →L[ℂ] E) - (W : E →L[ℂ] E)))
       {W | Commute (W : E →L[ℂ] E) K.starProjection} C) :
-    (C : E →L[ℂ] E) = (K.diagBlock (A : E →L[ℂ] E)).factorThru
-      (K.diagBlock (A : E →L[ℂ] E)).modulus := by
+    (C : E →L[ℂ] E) = (K.diagBlock (A : E →L[ℂ] E)).polarFactor := by
   have hCeq := eq_canonical_correction_of_schatten_minimal_of_commutator_le_critical
     p hp hp1 hp2 K A C hC hcomm hnorm (fun _ hW => hmin hW)
   let theta := criticalAngle p.toReal
@@ -131,14 +130,13 @@ private theorem eq_diagonal_factor_of_nearest
     rw [show Real.cos theta = (2 - p.toReal) / p.toReal from cos_criticalAngle _ hp1 hp2]
     exact div_pos (by linarith) (by linarith)
   have hsq := mul_self_le_mul_self (norm_nonneg _) hnorm
-  exact canonical_correction_eq_diagBlock_factorThru_modulus K A C hCeq _ hcos
+  exact canonical_correction_eq_diagBlock_polarFactor K A C hCeq _ hcos
     (by nlinarith [Real.sin_sq_add_cos_sq theta])
 
 /-- Exact construction of every nearest commuting correction in the
-closed canonical regime. The right side uses Tau Ceti's accepted factor
-through the modulus of `PAP + Pperp A Pperp`; feasibility and global
-minimality are equivalent to this literal operator equality. -/
-theorem schatten_correction_isMin_iff_eq_diagBlock_factorThru_modulus
+closed canonical regime. Feasibility and global minimality are equivalent
+to equality with the polar factor of `PAP + Pperp A Pperp`. -/
+theorem schatten_correction_isMin_iff_eq_diagBlock_polarFactor
     (p : ℝ≥0∞) [Fact (1 ≤ p)] (hp : p ≠ ∞)
     (hp1 : 1 < p.toReal) (hp2 : p.toReal < 2)
     (K : Submodule ℂ E) [K.HasOrthogonalProjection] (A : E ≃ₗᵢ[ℂ] E)
@@ -150,8 +148,7 @@ theorem schatten_correction_isMin_iff_eq_diagBlock_factorThru_modulus
       IsMinOn (fun W : E ≃ₗᵢ[ℂ] E =>
         (OperatorIdealFamily.schatten ℂ p.toReal hp1.le).gauge ((A : E →L[ℂ] E) - (W : E →L[ℂ] E)))
         {W | Commute (W : E →L[ℂ] E) K.starProjection} C) ↔
-      (C : E →L[ℂ] E) = (K.diagBlock (A : E →L[ℂ] E)).factorThru
-        (K.diagBlock (A : E →L[ℂ] E)).modulus := by
+      (C : E →L[ℂ] E) = (K.diagBlock (A : E →L[ℂ] E)).polarFactor := by
   constructor
   · rintro ⟨hC, hmin⟩
     exact eq_diagonal_factor_of_nearest p hp hp1 hp2 K A C hC hcomm hnorm hmin
