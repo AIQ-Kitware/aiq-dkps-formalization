@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.Sylvester.Bounded
 public import DavisKahan.OperatorIdeal.CanonicalRealView
-public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import TauCeti.Analysis.InnerProductSpace.Coercive
 public import Mathlib.Analysis.InnerProductSpace.StarOrder
 public import Mathlib.Analysis.Normed.Group.Uniform
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
@@ -142,7 +142,7 @@ structure LowerFramePolarData
     (hX : LowerFrameBound X ε) (hε : 0 < ε) where
   sqrt : F →L[𝕜] F
   invSqrt : F →L[𝕜] F
-  gramInverse : BoundedInverseData (X.adjoint ∘L X)
+  gram_isUnit : IsUnit (X.adjoint ∘L X)
   invSqrt_sqrt : invSqrt ∘L sqrt = ContinuousLinearMap.id 𝕜 F
   sqrt_invSqrt : sqrt ∘L invSqrt = ContinuousLinearMap.id 𝕜 F
   sqrt_sq : sqrt ∘L sqrt = X.adjoint ∘L X
@@ -163,11 +163,7 @@ def lowerFramePolarDataOfIsometry
   refine {
     sqrt := I
     invSqrt := I
-    gramInverse := {
-      inv := I
-      left_inv := ?_
-      right_inv := ?_
-    }
+    gram_isUnit := hgram.symm ▸ (isUnit_one : IsUnit (1 : F →L[𝕜] F))
     invSqrt_sqrt := ?_
     sqrt_invSqrt := ?_
     sqrt_sq := ?_
@@ -177,10 +173,6 @@ def lowerFramePolarDataOfIsometry
     range_normalized := ?_
     invSqrt_eq_id_of_isometry := ?_
   }
-  · rw [hgram]
-    simp [I]
-  · rw [hgram]
-    simp [I]
   · simp [I]
   · simp [I]
   · simpa [I] using hgram.symm
@@ -199,9 +191,7 @@ noncomputable def lowerFramePolarData
     LowerFramePolarData X ε hX hε := by
   let gram := X.adjoint ∘L X
   have hgram : IsUnit gram :=
-    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map gram
-      (c := ⟨ε ^ 2, sq_nonneg _⟩) (sq_pos_of_pos hε)
-      (fun z => (mul_comm _ _).le.trans ((gram_coercive hX hε.le z).trans (RCLike.re_le_norm _)))
+    gram.isUnit_of_coercive (sq_pos_of_pos hε) (gram_coercive hX hε.le)
   have hmod_sq : X.modulus * X.modulus = gram := X.modulus_comp_modulus
   have hmod : IsUnit X.modulus :=
     ((Commute.refl X.modulus).isUnit_mul_iff.mp (hmod_sq.symm ▸ hgram)).1
@@ -212,8 +202,7 @@ noncomputable def lowerFramePolarData
   refine {
     sqrt := X.modulus
     invSqrt := Ring.inverse X.modulus
-    gramInverse := ⟨Ring.inverse gram, Ring.inverse_mul_cancel gram hgram,
-      Ring.mul_inverse_cancel gram hgram⟩
+    gram_isUnit := hgram
     invSqrt_sqrt := Ring.inverse_mul_cancel _ hmod
     sqrt_invSqrt := Ring.mul_inverse_cancel _ hmod
     sqrt_sq := X.modulus_comp_modulus
@@ -256,13 +245,6 @@ theorem lowerFramePolarData_nonempty
     (hX : LowerFrameBound X ε) (hε : 0 < ε) :
     Nonempty (LowerFramePolarData X ε hX hε) :=
   ⟨lowerFramePolarData X hX hε⟩
-
-/-- Bounded inverse of the positive Gram operator. -/
-noncomputable def gramInverseData
-    (X : F →L[ℂ] E) {ε : ℝ}
-    (hX : LowerFrameBound X ε) (hε : 0 < ε) :
-    BoundedInverseData (X.adjoint ∘L X) :=
-  (lowerFramePolarData X hX hε).gramInverse
 
 /-- Inverse square root of the Gram operator. -/
 noncomputable def gramInvSqrt

@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.OpNorm
 import Mathlib.Analysis.InnerProductSpace.Semisimple
 
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
@@ -112,8 +113,8 @@ theorem norm_map_sub_midpoint_smul_le' (hT : T.IsSymmetric)
     rw [hmove, hval, abs_le]
     constructor <;> nlinarith [h1, h2, h4]
   have hnorm : ‖C‖ ≤ (β - α) / 2 :=
-    TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
-      hCsym he0 hform
+    _root_.ContinuousLinearMap.norm_le_of_forall_norm_eq_one_abs_re_inner_map_self_le
+      C hCsym he0 (fun x hx => by simpa only [hx, one_pow, mul_one] using hform x)
   have hCu : C u = S u := by
     rw [hCapp, Submodule.starProjection_eq_self_iff.mpr hu,
       Submodule.starProjection_eq_self_iff.mpr (hSW u hu)]

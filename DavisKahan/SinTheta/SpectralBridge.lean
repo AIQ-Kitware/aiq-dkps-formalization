@@ -64,17 +64,19 @@ inductive CenteredIntervalExteriorWitness
   | intervalOnLeft
       (hA : ‖A - (((β + α) / 2 : ℝ) : 𝕜) •
         ContinuousLinearMap.id 𝕜 E‖ ≤ (α - β) / 2)
-      (hB : BoundedInverseData
+      (_hB : IsUnit
         (B - (((β + α) / 2 : ℝ) : 𝕜) •
           ContinuousLinearMap.id 𝕜 F))
-      (hBnorm : ‖hB.inv‖ ≤ ((α - β) / 2 + δ)⁻¹)
+      (hBnorm : ‖Ring.inverse (B - (((β + α) / 2 : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F)‖ ≤
+        ((α - β) / 2 + δ)⁻¹)
   | intervalOnRight
       (hB : ‖B - (((β + α) / 2 : ℝ) : 𝕜) •
         ContinuousLinearMap.id 𝕜 F‖ ≤ (α - β) / 2)
-      (hA : BoundedInverseData
+      (_hA : IsUnit
         (A - (((β + α) / 2 : ℝ) : 𝕜) •
           ContinuousLinearMap.id 𝕜 E))
-      (hAnorm : ‖hA.inv‖ ≤ ((α - β) / 2 + δ)⁻¹)
+      (hAnorm : ‖Ring.inverse (A - (((β + α) / 2 : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E)‖ ≤
+        ((α - β) / 2 + δ)⁻¹)
 end ExactSinTheta
 end DavisKahan
 end TauCeti

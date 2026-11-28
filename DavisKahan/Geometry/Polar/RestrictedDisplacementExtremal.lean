@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.OpNorm
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 public import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
@@ -197,8 +198,8 @@ private theorem cosine_norm_le_on_low_range
           pow_le_pow_left₀ (norm_nonneg _) hyNorm 2
         exact mul_le_mul_of_nonneg_left hySq hc₁0
   have hCPnorm : ‖CP‖ ≤ c₁ :=
-    TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
-      hCPsym hc₁0 hform
+    _root_.ContinuousLinearMap.norm_le_of_forall_norm_eq_one_abs_re_inner_map_self_le
+      CP hCPsym hc₁0 (fun x hx => by simpa only [hx, one_pow, mul_one] using hform x)
   calc
     ‖C x‖ = ‖CP x‖ := by rw [show CP x = C x by simp [CP, hPx]]
     _ ≤ ‖CP‖ * ‖x‖ := CP.le_opNorm x

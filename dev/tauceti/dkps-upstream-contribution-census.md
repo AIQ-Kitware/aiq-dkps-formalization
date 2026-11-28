@@ -1,5 +1,39 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 bounded inverses and Rayleigh norm bounds
+
+The bounded Sylvester engine, centered spectral witness, and lower-frame
+package now express invertibility with `IsUnit` and use `Ring.inverse`.
+The parallel `BoundedInverseData` record and conversion helpers are retired.
+The paper's bound/inverse separation and both orientations retain their
+original real and complex scope. The Neumann-series terms and estimates that
+only use the inverse operator now take the operator without a proof argument.
+
+The coercive filled truncation uses our #26821 for the invertibility and
+lower norm bound, and #23186 for the same sharp bound on the inverse norm.
+The reversed Sylvester estimate uses #23186's unit and inverse laws for the
+adjoint. Its general bounded-below and injective-adjoint criterion replaces
+the closed-range argument for a non-real spectral shift. Mathlib supplies
+inverse spectral mapping and self-adjointness of the inverse. #23186 landed
+under Toeplitz T4. DKPS proof descent for its supporting lemmas is unverified.
+[#26821 integration](https://github.com/TauCetiProject/TauCeti/commit/d6c3a1ba75228691ecd81d6fd8c89ad620b322eb) ·
+[#23186 integration](https://github.com/TauCetiProject/TauCeti/commit/4ab4d9bf0d16c97a2853c7df8f2553f84edc410f)
+
+The norm bound for symmetric quadratic forms now uses AxelDlv00's
+`ContinuousLinearMap.norm_le_of_forall_norm_eq_one_abs_re_inner_map_self_le`
+from Poincare3D #44611. The local Rayleigh-quotient proof retires, including
+its uses in the Sylvester and tangent estimates. The accepted result
+works for arbitrary `RCLike` and incomplete ambient spaces. DKPS proof
+descent is unverified. The extraction manifest records the retired
+declarations and original proof anchors at DKPS `2522fcc3c`.
+[#44611 integration](https://github.com/TauCetiProject/TauCeti/commit/e1344cca7c70766f1652c083df144d1a92c1fe44)
+
+The focused build (9,839 jobs), default build (22,802 jobs), and Challenge
+with the unbounded and semantic-surface audits (22,518 jobs) passed without
+warnings. All 1,569 source-census references resolved, all 17 available
+comparator signatures matched, and the name checker reported the same 28
+baseline findings.
+
 ## November 28 bounded polar perturbation and projection intertwining
 
 The reflection of each projection range turns projection intertwining

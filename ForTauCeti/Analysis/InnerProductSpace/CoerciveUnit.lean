@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.OpNorm
 public import Mathlib.Algebra.Group.Semiconj.Units
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.InnerProductSpace.Positive
@@ -213,12 +213,12 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
       rw [hval y, hNsq y, abs_of_nonneg (by positivity)]
       rw [div_mul_eq_mul_div, le_div_iff₀ (by linarith : (0 : ℝ) < 1 + ‖B‖)]
       nlinarith [hb, hc]
-    refine norm_le_of_abs_re_inner_map_self_le hCsa.isSymmetric
-      (div_nonneg hs.le (by linarith)) ?_
-    intro z
+    refine _root_.ContinuousLinearMap.norm_le_of_forall_norm_eq_one_abs_re_inner_map_self_le
+      (1 - R) hCsa.isSymmetric (div_nonneg hs.le (by linarith)) ?_
+    intro z hz
     have h := hkey (R z)
     have hNRz : N (R z) = z := DFunLike.congr_fun hNR z
-    rwa [hNRz] at h
+    simpa only [hNRz, hz, one_pow, mul_one] using h
   have hlower : ‖B‖ / (1 + ‖B‖) ≤ ‖1 - R‖ := by
     have hstep : ∀ u : E, ‖u‖ ≤ 1 →
         RCLike.re ⟪B u, u⟫_𝕜 / (1 + RCLike.re ⟪B u, u⟫_𝕜) ≤ ‖1 - R‖ := by

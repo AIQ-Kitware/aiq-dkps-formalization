@@ -1354,7 +1354,8 @@
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.Modulus",
         "TauCeti.Analysis.InnerProductSpace.Polar.Bounded",
-        "Mathlib.Analysis.InnerProductSpace.Positive"
+        "Mathlib.Analysis.InnerProductSpace.Positive",
+        "TauCeti.Analysis.InnerProductSpace.Coercive"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -1362,8 +1363,51 @@
         "DavisKahan.SinTheta.Real.FrameFactorization"
       ],
       "status": "consumed-upstream-with-dkps-result-retained",
-      "upstream_pr": "#16606; #16936",
-      "migration_note": "The shared RCLike proof uses ContinuousLinearMap.modulus from #16606 (cba89f5f3f73db38aa148246fac841cfbead5e99) and its Ring.inverse, with polarFactor_eq_comp_inverse, norm_polarFactor_apply_of_injective, polarFactor_comp_modulus and range_polarFactor from #16936 (3266a7a2637755febeecd0484d578678a508d44e). Closed range follows from the positive lower frame bound. Mathlib supplies the coercivity-to-unit criterion and the isometry/Gram identity. The paper package retains the Gram inverse, inverse norm estimate and identity on isometric inputs. The separate power-calculus and complexification existence proofs retire."
+      "upstream_pr": "#16606, #16936, #26821",
+      "migration_note": "The shared RCLike proof uses ContinuousLinearMap.modulus from #16606 (cba89f5f3f73db38aa148246fac841cfbead5e99) and its Ring.inverse, with polarFactor_eq_comp_inverse, norm_polarFactor_apply_of_injective, polarFactor_comp_modulus and range_polarFactor from #16936 (3266a7a2637755febeecd0484d578678a508d44e). Closed range follows from the positive lower frame bound. Mathlib supplies the coercivity-to-unit criterion and the isometry/Gram identity. The paper package retains the Gram inverse, inverse norm estimate and identity on isometric inputs. The separate power-calculus and complexification existence proofs retire. The lower-frame package records Gram invertibility as IsUnit (field gram_isUnit), using ContinuousLinearMap.isUnit_of_coercive from the DKPS submission #26821 (d6c3a1ba75228691ecd81d6fd8c89ad620b322eb). Callers can take Ring.inverse of the Gram operator directly. Retire the separate gramInverseData accessor at 2522fcc3c:DavisKahan/SinTheta/FrameFactorization.lean."
+    },
+    {
+      "source_module": "DavisKahan.Sylvester.Bounded",
+      "source_declarations": [
+        "TauCeti.DavisKahan.Sylvester.BoundedInverseData",
+        "TauCeti.DavisKahan.Sylvester.BoundedInverseData.injective",
+        "TauCeti.DavisKahan.Sylvester.BoundedInverseData.surjective",
+        "TauCeti.DavisKahan.Sylvester.BoundedInverseData.inv_eq",
+        "TauCeti.DavisKahan.Sylvester.boundedInverseData_of_coercive_direct",
+        "TauCeti.DavisKahan.ExactSinTheta.boundedInverseDataOfIsUnit",
+        "TauCeti.DavisKahan.ExactSinTheta.RCLikeSpectralBridge.spectrum_inverse_of_isUnit",
+        "TauCeti.DavisKahan.ExactSinTheta.RCLikeSpectralBridge.inverse_isSymmetric",
+        "TauCeti.DavisKahan.ExactSinTheta.RCLikeSpectralBridge.inverse_isNormal",
+        "TauCeti.DavisKahan.ExactSinTheta.RCLikeSpectralBridge.isUnit_sub_smul_one_of_im_ne_zero"
+      ],
+      "current_namespace": "TauCeti.DavisKahan.Sylvester",
+      "staging_module": "DavisKahan.Sylvester.Bounded",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.Basic",
+      "ownership_class": "davis-kahan",
+      "roadmap_target": "finite-section-stability (Toeplitz T4, supporting inverse API)",
+      "provenance_class": "DKPS source at 2522fcc3c in DavisKahan/Sylvester/{Bounded,FilledTruncation}.lean and DavisKahan/InfiniteDimensional/SinTheta/RCLikeSpectralBridge.lean. Jon Crall, OpenAI GPT-5.6 Thinking (Sylvester), and Claude Opus 4.8 (RCLike spectral bridge). Kitware copyright, Apache-2.0.",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Adjoint",
+        "TauCeti.Analysis.InnerProductSpace.Coercive",
+        "TauCeti.Analysis.Normed.Operator.Basic"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.Sylvester.Unbounded.OrderedCutoff",
+        "DavisKahan.SinTheta.FrameFactorization",
+        "DavisKahan.SinTheta.SpectralBridge",
+        "DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge"
+      ],
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "#23186, #26821",
+      "migration_note": "Retire BoundedInverseData and its constructors in favor of IsUnit and Ring.inverse. The bound/inverse Sylvester and centered interval/exterior estimates retain their original mathematical scope. For coercive truncation use ContinuousLinearMap.isUnit_of_coercive and mul_norm_le_norm_apply_of_coercive from #26821 (d6c3a1ba75228691ecd81d6fd8c89ad620b322eb), then norm_ringInverse_le_of_forall_norm_le from #23186 (4ab4d9bf0d16c97a2853c7df8f2553f84edc410f) for the same sharp bound a⁻¹. TauCeti supplies apply_ringInverse_apply, isUnit_adjoint_iff and ringInverse_adjoint. Its isUnit_and_norm_ringInverse_le_of_forall_norm_le with injective_of_forall_norm_le replaces the closed-range and orthogonal-complement argument for the RCLike non-real shift. Mathlib supplies spectrum.map_inv and IsSelfAdjoint.ringInverse. DKPS proof descent for the #23186 supporting lemmas is unverified.",
+      "maintained_declarations": [
+        "TauCeti.DavisKahan.Sylvester.isUnit_and_norm_ringInverse_le_of_coercive",
+        "TauCeti.DavisKahan.Sylvester.sylvester_mem_and_gauge_le_of_bound_inverse",
+        "TauCeti.DavisKahan.Sylvester.sylvester_mem_and_gauge_le_of_bound_inverse_swapped",
+        "TauCeti.DavisKahan.ExactSinTheta.centered_isUnit_of_spectrumOutside",
+        "TauCeti.DavisKahan.ExactSinTheta.RCLikeSpectralBridge.isUnit_sub_smul_one_of_im_ne_zero"
+      ]
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion",
@@ -5927,17 +5971,18 @@
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "Mathlib"
+        "Mathlib",
+        "TauCeti.Analysis.InnerProductSpace.QuadraticForm.OpNorm"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "upstream_pr": "#44611 (norm comparison only)",
+      "migration_note": "Retire TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le, source 2522fcc3c:ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean (Jon Crall and Claude Fable 5, Kitware copyright, Apache-2.0). Directly apply ContinuousLinearMap.norm_le_of_forall_norm_eq_one_abs_re_inner_map_self_le from AxelDlv00's Poincare3D #44611 integration e1344cca7c70766f1652c083df144d1a92c1fe44 to unit vectors. The native theorem covers arbitrary RCLike and incomplete ambient spaces, including the zero space. DKPS proof descent for the Rayleigh lemma is unverified. The Lyapunov and polar-absorption bounds remain local."
     },
     {
       "source_module": "ForMathlib",

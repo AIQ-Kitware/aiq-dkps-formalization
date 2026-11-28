@@ -8,6 +8,7 @@ module
 public import DavisKahan.SinTheta.SpectralBridge
 public import DavisKahan.InfiniteDimensional.SinTheta.Restriction
 public import Mathlib.Analysis.InnerProductSpace.Rayleigh
+public import TauCeti.Analysis.InnerProductSpace.Adjoint
 
 public section
 
@@ -19,28 +20,11 @@ open TauCeti.DavisKahan.Sylvester
 /-!
 # `RCLike` spectral-bridge lemmas
 
-The affine-shift estimates in
-`DavisKahan.InfiniteDimensional.SinTheta.SpectralBridge` were written
-against a `RCLikeSpectralBridge.*` namespace (plus `centered_sylvester_equation`
-and `boundedInverseDataOfIsUnit`) that had no definitions anywhere in the tree,
-so that file could not elaborate and neither could `SinTheta/General.lean`
-downstream.  This file supplies that machinery — now with **no leaf
-obligations**:
-
-* the Sylvester recentering identity and the `IsUnit`→bounded-inverse
-  constructor (algebra);
-* the self-adjoint operator-norm/spectral-radius bound, via the `RCLike`
-  Rayleigh theorem;
-* `isUnit_sub_smul_one_of_im_ne_zero`: a symmetric pencil at a non-real
-  spectral parameter is invertible.  The numerical range of a symmetric
-  operator is real, so `A - z` and its star are bounded below by `|im z|`;
-  bounded below gives a closed range with trivial orthogonal complement, and
-  the open mapping theorem upgrades the bijection to a unit.  This yields
-  `mem_spectrum_sub_real_scalar_iff` directly over `RCLike` — no
-  complexification;
-* `spectrum_inverse_of_isUnit`, from `spectrum.map_inv` (any scalar field);
-* symmetry of the inverse of a symmetric unit, hence its norm bound through
-  the Rayleigh estimate.
+The affine-shift estimates apply over any `RCLike` scalar field. For a
+symmetric operator, a non-real shift and its adjoint are bounded below by
+the absolute imaginary part of the parameter. TauCeti's invertibility
+criterion then places the parameter in the resolvent set. The self-adjoint
+spectral-radius bound uses the `RCLike` Rayleigh theorem.
 
 A previously stated leaf `norm_le_of_normal_spectrum_norm_le` (normal-operator
 norm/spectral-radius bound over `RCLike`) was **removed as false**: over `ℝ`
@@ -74,13 +58,6 @@ theorem centered_sylvester_equation
     ContinuousLinearMap.smul_comp, ContinuousLinearMap.comp_smul,
     ContinuousLinearMap.id_comp, ContinuousLinearMap.comp_id, ← hEq]
   abel
-
-/-- A unit of the bounded-operator ring carries two-sided bounded-inverse data. -/
-noncomputable def boundedInverseDataOfIsUnit {T : E →L[𝕜] E} (hunit : IsUnit T) :
-    BoundedInverseData T where
-  inv := ↑hunit.unit⁻¹
-  left_inv := by have h := hunit.unit.inv_mul; rw [hunit.unit_spec] at h; exact h
-  right_inv := by have h := hunit.unit.mul_inv; rw [hunit.unit_spec] at h; exact h
 
 omit [CompleteSpace E] in
 /-- A real scalar multiple of the identity is a symmetric operator. -/
@@ -146,91 +123,23 @@ theorem star_sub_smul
   rw [star_sub, star_smul, hASA.star_eq, hid]
   rfl
 
-/-- **A symmetric pencil at a non-real parameter is invertible.**  Both the
-pencil and its star are bounded below, so the pencil is injective with closed
-range whose orthogonal complement is trivial; the open mapping theorem then
-provides a bounded two-sided inverse. -/
+/-- A symmetric pencil at a non-real parameter is invertible. -/
 theorem isUnit_sub_smul_one_of_im_ne_zero
     {A : E →L[𝕜] E} (hA : A.IsSymmetric) {z : 𝕜}
     (hz : RCLike.im z ≠ 0) :
     IsUnit (A - z • ContinuousLinearMap.id 𝕜 E) := by
-  set T : E →L[𝕜] E := A - z • ContinuousLinearMap.id 𝕜 E with hT
-  have himpos : (0 : ℝ) < |RCLike.im z| := abs_pos.mpr hz
-  have hTlow : ∀ x, |RCLike.im z| * ‖x‖ ≤ ‖T x‖ :=
-    abs_im_mul_norm_le_norm_sub_smul_apply hA z
-  have hstarlow : ∀ x, |RCLike.im z| * ‖x‖ ≤ ‖star T x‖ := by
-    intro x
+  let T := A - z • ContinuousLinearMap.id 𝕜 E
+  have himpos : 0 < |RCLike.im z| := abs_pos.mpr hz
+  have hTlow : ∀ x, ‖x‖ ≤ |RCLike.im z|⁻¹ * ‖T x‖ := fun x => by
+    rw [le_inv_mul_iff₀ himpos]
+    exact abs_im_mul_norm_le_norm_sub_smul_apply hA z x
+  have hAdjLow : ∀ x, ‖x‖ ≤ |RCLike.im z|⁻¹ * ‖T.adjoint x‖ := fun x => by
+    rw [le_inv_mul_iff₀ himpos, ← ContinuousLinearMap.star_eq_adjoint, show T = _ from rfl,
+      star_sub_smul hA]
     have h := abs_im_mul_norm_le_norm_sub_smul_apply hA ((starRingEnd 𝕜) z) x
-    rw [RCLike.conj_im, abs_neg] at h
-    rw [hT, star_sub_smul hA]
-    exact h
-  have hanti : AntilipschitzWith (|RCLike.im z|⁻¹).toNNReal T := by
-    apply T.antilipschitz_of_bound
-    intro x
-    rw [Real.coe_toNNReal _ (by positivity)]
-    calc ‖x‖ = |RCLike.im z|⁻¹ * (|RCLike.im z| * ‖x‖) := by
-          field_simp
-      _ ≤ |RCLike.im z|⁻¹ * ‖T x‖ := by
-          gcongr
-          exact hTlow x
-  have hker : LinearMap.ker (T : E →ₗ[𝕜] E) = ⊥ := by
-    rw [Submodule.eq_bot_iff]
-    intro x hxk
-    have hx0 : T x = 0 := LinearMap.mem_ker.mp hxk
-    have h := hTlow x
-    rw [hx0, norm_zero] at h
-    have hle : ‖x‖ ≤ 0 := by nlinarith
-    exact norm_le_zero_iff.mp hle
-  have hclosed : IsClosed ((LinearMap.range (T : E →ₗ[𝕜] E)) : Set E) := by
-    have h := hanti.isClosed_range T.uniformContinuous
-    have hset : ((LinearMap.range (T : E →ₗ[𝕜] E)) : Set E) = Set.range ⇑T := by
-      ext y
-      simp [LinearMap.mem_range]
-    rw [hset]
-    exact h
-  have hbot : (LinearMap.range (T : E →ₗ[𝕜] E))ᗮ = ⊥ := by
-    rw [Submodule.eq_bot_iff]
-    intro y hy
-    have hstary : star T y = 0 := by
-      have hall : ∀ x, ⟪x, star T y⟫_𝕜 = 0 := by
-        intro x
-        rw [ContinuousLinearMap.star_eq_adjoint,
-          ContinuousLinearMap.adjoint_inner_right]
-        exact hy (T x) ⟨x, rfl⟩
-      have h := hall (star T y)
-      rwa [inner_self_eq_zero] at h
-    have h := hstarlow y
-    rw [hstary, norm_zero] at h
-    have : ‖y‖ ≤ 0 := by
-      by_contra hpos
-      push Not at hpos
-      nlinarith
-    exact norm_le_zero_iff.mp this
-  have hrange : LinearMap.range (T : E →ₗ[𝕜] E) = ⊤ := by
-    have : (LinearMap.range (T : E →ₗ[𝕜] E)).HasOrthogonalProjection := by
-      have : CompleteSpace (LinearMap.range (T : E →ₗ[𝕜] E)) :=
-        hclosed.completeSpace_coe
-      infer_instance
-    exact (Submodule.orthogonal_eq_bot_iff).mp hbot
-  let e := ContinuousLinearEquiv.ofBijective T hker hrange
-  have hcoe : (e : E →L[𝕜] E) = T := ContinuousLinearEquiv.coe_ofBijective T hker hrange
-  refine ⟨⟨T, (e.symm : E →L[𝕜] E), ?_, ?_⟩, rfl⟩
-  · ext x
-    have h1 : T ((e.symm : E →L[𝕜] E) x) = e (e.symm x) := by
-      rw [← hcoe]; rfl
-    calc (T * (e.symm : E →L[𝕜] E)) x
-        = T ((e.symm : E →L[𝕜] E) x) := rfl
-      _ = e (e.symm x) := h1
-      _ = x := e.apply_symm_apply x
-      _ = (1 : E →L[𝕜] E) x := rfl
-  · ext x
-    have h1 : (e.symm : E →L[𝕜] E) (T x) = e.symm (e x) := by
-      rw [← hcoe]; rfl
-    calc ((e.symm : E →L[𝕜] E) * T) x
-        = (e.symm : E →L[𝕜] E) (T x) := rfl
-      _ = e.symm (e x) := h1
-      _ = x := e.symm_apply_apply x
-      _ = (1 : E →L[𝕜] E) x := rfl
+    rwa [RCLike.conj_im, abs_neg] at h
+  exact (ContinuousLinearMap.isUnit_and_norm_ringInverse_le_of_forall_norm_le
+    (inv_nonneg.mpr himpos.le) hTlow (ContinuousLinearMap.injective_of_forall_norm_le hAdjLow)).1
 
 /-- For self-adjoint `A`, every point of `σ(A - c·1)` is real and comes from
 `σ(A)`: non-real spectral parameters are excluded by
@@ -340,39 +249,6 @@ theorem norm_le_of_selfAdjoint_spectrum_subset_closedBall
   calc ‖T‖ = (‖T‖₊ : ℝ) := rfl
     _ ≤ (ρ.toNNReal : ℝ) := by exact_mod_cast hnn
     _ = ρ := Real.coe_toNNReal ρ hρ
-
-omit [CompleteSpace E] in
-/-- The spectral-mapping identity `σ(T⁻¹) = σ(T)⁻¹` for a bounded unit,
-from `spectrum.map_inv` (any scalar field). -/
-theorem spectrum_inverse_of_isUnit {T : E →L[𝕜] E} (hunit : IsUnit T) :
-    spectrum 𝕜 (boundedInverseDataOfIsUnit hunit).inv =
-      (fun z : 𝕜 => z⁻¹) '' spectrum 𝕜 T := by
-  have h := spectrum.map_inv (𝕜 := 𝕜) hunit.unit
-  rw [hunit.unit_spec] at h
-  have hinv : (boundedInverseDataOfIsUnit hunit).inv =
-      ((hunit.unit⁻¹ : (E →L[𝕜] E)ˣ) : E →L[𝕜] E) := rfl
-  rw [hinv, ← h, Set.image_inv_eq_inv]
-
-/-- The inverse of a symmetric unit is symmetric: its star is a left inverse
-of `T`, so by uniqueness it is the inverse. -/
-theorem inverse_isSymmetric {T : E →L[𝕜] E} (hTself : T.IsSymmetric)
-    (hunit : IsUnit T) :
-    ((boundedInverseDataOfIsUnit hunit).inv).IsSymmetric := by
-  set D := boundedInverseDataOfIsUnit hunit with hD
-  have hTSA : IsSelfAdjoint T := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hTself
-  have hleft : (star D.inv) ∘L T = ContinuousLinearMap.id 𝕜 E := by
-    have h := congrArg (fun S : E →L[𝕜] E => star S) D.right_inv
-    simp only [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_comp,
-      ContinuousLinearMap.adjoint_id] at h
-    rwa [hTSA.adjoint_eq] at h
-  have hself : IsSelfAdjoint D.inv := D.inv_eq hleft
-  exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hself
-
-/-- The inverse of a symmetric unit is star-normal. -/
-theorem inverse_isNormal {T : E →L[𝕜] E} (hTself : T.IsSymmetric) (hunit : IsUnit T) :
-    IsStarNormal (boundedInverseDataOfIsUnit hunit).inv :=
-  (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-    (inverse_isSymmetric hTself hunit)).isStarNormal
 
 end RCLikeSpectralBridge
 end ExactSinTheta

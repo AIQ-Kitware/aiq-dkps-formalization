@@ -7,7 +7,9 @@ module
 
 public import DavisKahan.SpectralTheory.BoundedTruncation
 public import DavisKahan.Sylvester.Bounded
-public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import TauCeti.Analysis.InnerProductSpace.Coercive
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.OpNorm
+public import TauCeti.Analysis.Normed.Operator.Basic
 public import TauCeti.Analysis.InnerProductSpace.Symmetric.Projection
 
 /-!
@@ -317,37 +319,18 @@ theorem filledTruncation_upperBound
   rw [← hproj.2]
   linarith
 
-/-- A coercive bounded operator supplies explicit inverse data with the sharp
-inverse norm bound. -/
-theorem boundedInverseData_of_coercive_direct
+/-- A coercive bounded operator is invertible, with the sharp inverse norm bound. -/
+theorem isUnit_and_norm_ringInverse_le_of_coercive
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     {A : H →L[𝕜] H} {a : ℝ} (ha : 0 < a)
     (hcoer : ∀ x, a * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) :
-    ∃ hInv : BoundedInverseData A, ‖hInv.inv‖ ≤ a⁻¹ := by
-  have hunit : IsUnit A :=
-    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
-      (c := ⟨a, by positivity⟩) ha
-      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
-  let J : H →L[𝕜] H := Ring.inverse A
-  have hJA : J ∘L A = ContinuousLinearMap.id 𝕜 H := by
-    exact Ring.inverse_mul_cancel A hunit
-  have hAJ : A ∘L J = ContinuousLinearMap.id 𝕜 H := by
-    exact Ring.mul_inverse_cancel A hunit
-  let hInv : BoundedInverseData A := ⟨J, hJA, hAJ⟩
-  refine ⟨hInv, ?_⟩
-  refine ContinuousLinearMap.opNorm_le_bound J (inv_nonneg.mpr ha.le) ?_
-  intro y
-  have hlow := _root_.ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive A
-    hcoer (J y)
-  have hJy : A (J y) = y := by
-    have h := congrArg (fun T : H →L[𝕜] H => T y) hAJ
-    simpa only [J, ContinuousLinearMap.comp_apply,
-      ContinuousLinearMap.id_apply] using h
-  rw [hJy] at hlow
-  calc
-    ‖J y‖ ≤ ‖y‖ / a := (le_div_iff₀ ha).2 (by simpa [mul_comm] using hlow)
-    _ = a⁻¹ * ‖y‖ := by rw [div_eq_mul_inv, mul_comm]
+    IsUnit A ∧ ‖Ring.inverse A‖ ≤ a⁻¹ := by
+  refine ⟨A.isUnit_of_coercive ha hcoer,
+    ContinuousLinearMap.norm_ringInverse_le_of_forall_norm_le (inv_nonneg.mpr ha.le) ?_⟩
+  intro x
+  rw [le_inv_mul_iff₀ ha]
+  exact A.mul_norm_le_norm_apply_of_coercive hcoer x
 
 /-- The negative-semidefinite shift of a bounded symmetric operator becomes a
 norm-bounded positive operator after adding its operator norm. -/
@@ -357,11 +340,12 @@ theorem norm_add_opNorm_id_le_of_nonpos_direct
     {B : H →L[𝕜] H} (hBsym : B.IsSymmetric)
     (hBnonpos : ∀ x, RCLike.re ⟪B x, x⟫_𝕜 ≤ 0) :
     ‖B + ((‖B‖ : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H‖ ≤ ‖B‖ := by
-  refine TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
+  refine _root_.ContinuousLinearMap.norm_le_of_forall_norm_eq_one_abs_re_inner_map_self_le
+    (B + ((‖B‖ : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 H)
     ?_ (norm_nonneg B) ?_
   · exact hBsym.add (LinearMap.IsSymmetric.smul
       (RCLike.conj_ofReal ‖B‖) LinearMap.IsSymmetric.id)
-  · intro x
+  · intro x hx
     have habs : |RCLike.re ⟪B x, x⟫_𝕜| ≤ ‖B‖ * ‖x‖ ^ 2 := by
       calc
         |RCLike.re ⟪B x, x⟫_𝕜| ≤ ‖⟪B x, x⟫_𝕜‖ := RCLike.abs_re_le_norm _
@@ -375,6 +359,7 @@ theorem norm_add_opNorm_id_le_of_nonpos_direct
     simp only [add_apply, smul_apply, ContinuousLinearMap.id_apply,
       inner_add_left, map_add, inner_smul_left, RCLike.conj_ofReal,
       RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
+    simp only [hx, one_pow, mul_one] at hlower hupper ⊢
     rw [abs_of_nonneg]
     · linarith
     · linarith

@@ -15,10 +15,10 @@ public section
 open TauCeti.DavisKahan.Sylvester
 
 /-!
-# Open obligations of the bounded spectral bridge
+# Bounded spectral bridge
 
-The definitions now live in `DavisKahan.SinTheta.SpectralBridge`; the four
-estimates below remain unresolved.
+Spectral interval and exterior bounds give the inverse-norm separation used
+by the bounded Sylvester estimate.
 -/
 
 namespace TauCeti
@@ -67,9 +67,9 @@ theorem centered_isUnit_of_spectrumOutside
     {A : E →L[𝕜] E} (hA : A.IsSymmetric)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hσ : SpectrumInRealSet A {x | x ≤ β - δ ∨ α + δ ≤ x}) :
-    ∃ hInv : BoundedInverseData
-      (A - (((β + α) / 2 : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E),
-      ‖hInv.inv‖ ≤ ((α - β) / 2 + δ)⁻¹ := by
+    IsUnit (A - (((β + α) / 2 : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) ∧
+      ‖Ring.inverse (A - (((β + α) / 2 : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E)‖ ≤
+        ((α - β) / 2 + δ)⁻¹ := by
   let c : ℝ := (β + α) / 2
   let γ : ℝ := (α - β) / 2 + δ
   have hγ : 0 < γ := by dsimp [γ]; linarith
@@ -98,26 +98,24 @@ theorem centered_isUnit_of_spectrumOutside
     exact absurd this (not_le_of_gt hγ)
   have hunit : IsUnit T :=
     not_not.mp fun hnu => hzero ((spectrum.zero_mem_iff 𝕜).mpr hnu)
-  let hInv := boundedInverseDataOfIsUnit hunit
-  refine ⟨hInv, ?_⟩
-  have hinvSpectrum :
-      spectrum 𝕜 hInv.inv =
-        (fun z : 𝕜 => z⁻¹) '' spectrum 𝕜 T :=
-    RCLikeSpectralBridge.spectrum_inverse_of_isUnit hunit
-  have hinvBound : ∀ z ∈ spectrum 𝕜 hInv.inv, ‖z‖ ≤ γ⁻¹ := by
+  refine ⟨hunit, ?_⟩
+  have hinvSpectrum : spectrum 𝕜 (Ring.inverse T) =
+      (fun z : 𝕜 => z⁻¹) '' spectrum 𝕜 T := by
+    rw [← hunit.unit_spec, Ring.inverse_unit, ← spectrum.map_inv, Set.image_inv_eq_inv]
+  have hinvBound : ∀ z ∈ spectrum 𝕜 (Ring.inverse T), ‖z‖ ≤ γ⁻¹ := by
     intro z hz
     obtain ⟨w, hwT, rfl⟩ := hinvSpectrum ▸ hz
     rw [norm_inv]
     simpa only [one_div] using one_div_le_one_div_of_le hγ (hdist w hwT)
-  have hInvSelf : (hInv.inv).IsSymmetric :=
-    RCLikeSpectralBridge.inverse_isSymmetric hTself hunit
-  have hinvBall : spectrum 𝕜 hInv.inv ⊆ Metric.closedBall 0 γ⁻¹ := by
+  have hInvSelf : (Ring.inverse T).IsSymmetric :=
+    (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hTself).ringInverse.isSymmetric
+  have hinvBall : spectrum 𝕜 (Ring.inverse T) ⊆ Metric.closedBall 0 γ⁻¹ := by
     intro w hw
     rw [Metric.mem_closedBall, dist_zero_right]
     exact hinvBound w hw
-  simpa [γ] using
-    RCLikeSpectralBridge.norm_le_of_selfAdjoint_spectrum_subset_closedBall
-      hInvSelf (inv_nonneg.mpr hγ.le) hinvBall
+  change ‖Ring.inverse T‖ ≤ γ⁻¹
+  exact RCLikeSpectralBridge.norm_le_of_selfAdjoint_spectrum_subset_closedBall
+    hInvSelf (inv_nonneg.mpr hγ.le) hinvBall
 
 /-- The bounded spectral theorem supplies centered norm/inverse data. -/
 noncomputable def centeredIntervalExteriorWitness_of_gap
@@ -131,13 +129,13 @@ noncomputable def centeredIntervalExteriorWitness_of_gap
   · obtain ⟨hAin, hBout⟩ := hL
     exact .intervalOnLeft
       (norm_sub_midpoint_le_of_spectrumIn_Icc hA hβα hAin)
-      (centered_isUnit_of_spectrumOutside hB hβα hδ hBout).choose
-      (centered_isUnit_of_spectrumOutside hB hβα hδ hBout).choose_spec
+      (centered_isUnit_of_spectrumOutside hB hβα hδ hBout).1
+      (centered_isUnit_of_spectrumOutside hB hβα hδ hBout).2
   · obtain ⟨hBin, hAout⟩ := hgap.resolve_left hL
     exact .intervalOnRight
       (norm_sub_midpoint_le_of_spectrumIn_Icc hB hβα hBin)
-      (centered_isUnit_of_spectrumOutside hA hβα hδ hAout).choose
-      (centered_isUnit_of_spectrumOutside hA hβα hδ hAout).choose_spec
+      (centered_isUnit_of_spectrumOutside hA hβα hδ hAout).1
+      (centered_isUnit_of_spectrumOutside hA hβα hδ hAout).2
 
 /-- Interval/exterior Sylvester estimate in every rectangular ideal family. -/
 theorem sylvester_mem_and_gauge_le_of_intervalExteriorGap

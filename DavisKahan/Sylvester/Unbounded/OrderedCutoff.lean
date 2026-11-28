@@ -286,7 +286,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     linarith
   have hρδ : 0 < ρ + δ := by linarith
   obtain ⟨hA1inv, hA1invNorm⟩ :=
-    boundedInverseData_of_coercive_direct hρδ hA1coer
+    isUnit_and_norm_ringInverse_le_of_coercive hρδ hA1coer
   have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
     sylvester_shift_invariant AF BF Xc Cc m hEqCut
   let N := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
@@ -390,7 +390,7 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     linarith
   have hρδ : 0 < ρ + δ := by linarith
   obtain ⟨hB1inv, hB1invNorm⟩ :=
-    boundedInverseData_of_coercive_direct hρδ hB1coer
+    isUnit_and_norm_ringInverse_le_of_coercive hρδ hB1coer
   have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
     sylvester_shift_invariant AF BF Xc Cc m hEqCut
   let N := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from

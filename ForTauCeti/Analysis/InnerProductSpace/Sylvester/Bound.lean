@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.OpNorm
 public import Mathlib.Analysis.InnerProductSpace.Rayleigh
 
 /-! # An operator-norm bound for the Sylvester equation
@@ -37,8 +38,6 @@ taken in the `LinearMap.IsSymmetric` sense, with no reference to adjoints.
 
 ## Main results
 
-* `TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le`: a
-  symmetric operator with `|re ⟪C x, x⟫| ≤ κ * ‖x‖ ^ 2` has `‖C‖ ≤ κ`.
 * `TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_add_comp_eq`: the
   coercive (Lyapunov) form, `‖X‖ ≤ ‖Y‖ / (2 * δ)`.
 * The separated operator-norm case is provided directly by Tau Ceti's
@@ -64,21 +63,6 @@ variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
 namespace ContinuousLinearMap
-
-/-- A symmetric operator whose quadratic form is bounded by `κ * ‖x‖ ^ 2` in
-absolute value has operator norm at most `κ`.  Quantitative counterpart of
-`ContinuousLinearMap.norm_eq_iSup_rayleighQuotient`. -/
-theorem norm_le_of_abs_re_inner_map_self_le {C : E →L[𝕜] E} (hC : C.IsSymmetric)
-    {κ : ℝ} (hκ : 0 ≤ κ) (h : ∀ x, |RCLike.re ⟪C x, x⟫_𝕜| ≤ κ * ‖x‖ ^ 2) : ‖C‖ ≤ κ := by
-  rw [C.norm_eq_iSup_rayleighQuotient hC]
-  refine ciSup_le fun x => ?_
-  -- names the application so the norm bound applies to it directly.
-  change |C.reApplyInnerSelf x / ‖x‖ ^ 2| ≤ κ
-  rcases eq_or_ne x 0 with rfl | hx
-  · simpa [ContinuousLinearMap.reApplyInnerSelf_apply] using hκ
-  · rw [ContinuousLinearMap.reApplyInnerSelf_apply, abs_div, abs_sq,
-      div_le_iff₀ (by positivity)]
-    exact h x
 
 section SylvesterBound
 
@@ -121,16 +105,18 @@ Sylvester bounds. -/
 private theorem norm_opNorm_smul_one_sub_le (hA : A.IsSymmetric) {δ : ℝ} (hδA : δ ≤ ‖A‖)
     (hAc : ∀ x, δ * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) :
     ‖(‖A‖ : 𝕜) • (1 : E →L[𝕜] E) - A‖ ≤ ‖A‖ - δ := by
-  refine norm_le_of_abs_re_inner_map_self_le (isSymmetric_ofReal_smul_one_sub hA ‖A‖)
-    (by linarith) fun x => ?_
+  refine _root_.ContinuousLinearMap.norm_le_of_forall_norm_eq_one_abs_re_inner_map_self_le
+    _ (isSymmetric_ofReal_smul_one_sub hA ‖A‖) (sub_nonneg.mpr hδA) fun x hx => ?_
   rw [re_inner_ofReal_smul_one_sub_apply_self]
   have hupper : RCLike.re ⟪A x, x⟫_𝕜 ≤ ‖A‖ * ‖x‖ ^ 2 :=
     calc RCLike.re ⟪A x, x⟫_𝕜 ≤ ‖⟪A x, x⟫_𝕜‖ := RCLike.re_le_norm _
       _ ≤ ‖A x‖ * ‖x‖ := norm_inner_le_norm _ _
       _ ≤ ‖A‖ * ‖x‖ * ‖x‖ := by gcongr; exact A.le_opNorm x
       _ = ‖A‖ * ‖x‖ ^ 2 := by ring
-  rw [abs_of_nonneg (by linarith)]
-  linarith [hAc x]
+  have hlower := hAc x
+  simp only [hx, one_pow, mul_one] at hupper hlower ⊢
+  rw [abs_of_nonneg (sub_nonneg.mpr hupper)]
+  linarith
 
 /-- The correction term in the absorption identity is small: if the quadratic
 form of `A` is at least `δ * ‖·‖ ^ 2`, then `(‖A‖ : 𝕜) • w - A w` has norm at
