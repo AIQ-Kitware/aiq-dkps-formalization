@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.OpNorm
+public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 public import Mathlib.Analysis.InnerProductSpace.Rayleigh
 
 /-! # An operator-norm bound for the Sylvester equation
@@ -38,9 +39,8 @@ taken in the `LinearMap.IsSymmetric` sense, with no reference to adjoints.
 
 ## Main results
 
-* `TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_add_comp_eq`: the
-  coercive (Lyapunov) form, `‖X‖ ≤ ‖Y‖ / (2 * δ)`.
-* The separated operator-norm case is provided directly by Tau Ceti's
+* The Lyapunov and separated operator-norm cases use TauCeti's
+  `add_mul_norm_le_norm_comp_add_comp` and
   `mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le`.
 
 ## References
@@ -427,54 +427,17 @@ theorem le_div_of_comp_sub_comp_eq_rectangular
     linarith [hBc x]
   have hXY' : (A - (r : 𝕜) • (1 : F →L[𝕜] F)) ∘L X
       + X ∘L ((r : 𝕜) • (1 : E →L[𝕜] E) - B) = Y := by
-    ext v
-    have hv : A (X v) - X (B v) = Y v := by
-      simpa [sub_apply, ContinuousLinearMap.comp_apply] using
-        congrArg (fun W : E →L[𝕜] F => W v) hXY
-    simp only [add_apply, ContinuousLinearMap.comp_apply, sub_apply, smul_apply,
-      one_apply_eq_self, map_sub, map_smul, ← hv]
-    module
+    rw [show (r : 𝕜) • (1 : E →L[𝕜] E) - B = -(B - (r : 𝕜) • 1) from (neg_sub _ _).symm,
+      ContinuousLinearMap.comp_neg, ← sub_eq_add_neg,
+      ← ContinuousLinearMap.sylvester_apply,
+      ContinuousLinearMap.sub_smul_one_sylvester_sub_smul_one,
+      ContinuousLinearMap.sylvester_apply]
+    exact hXY
   have hfin := le_div_of_comp_add_comp_eq_rectangular hadd hsmul hidealL hidealR
     hA' hB' (by linarith : (0 : ℝ) < g / 2) hAc' hBc' hXY'
   rwa [show 2 * (g / 2) = g by ring] at hfin
 
 end RectangularAbstractSylvesterBound
-
-/-! ### The operator-norm case
-
-The operator-norm bounds are the rectangular abstract bounds at `N = ‖·‖`,
-whose four hypotheses are `norm_add_le`, `norm_smul` and `opNorm_comp_le`
-twice.  Two of the three are stated below as exactly that instantiation.
-
-The third, `gap_mul_opNorm_le_of_comp_sub_comp_eq`, stays a direct proof above
-because the abstract bounds *use* it: the polar absorption is where the
-operator norm is genuinely needed, and the seminorm `N` never enters it. -/
-
-section OperatorNormSylvesterBound
-
-variable {A : E →L[𝕜] E} {B : F →L[𝕜] F} {X Y : F →L[𝕜] E}
-
-/-- **Operator-norm bound for the Sylvester equation, coercive (Lyapunov)
-form.**  If `A` and `B` are symmetric with quadratic forms at least
-`δ * ‖·‖ ^ 2`, and `A ∘L X + X ∘L B = Y`, then `‖X‖ ≤ ‖Y‖ / (2 * δ)`.
-
-The argument is integral-free: from the equation,
-`((‖A‖ + ‖B‖ : ℝ) : 𝕜) • X = Y + ((‖A‖ : 𝕜) • 1 - A) ∘L X + X ∘L ((‖B‖ : 𝕜) • 1 - B)`,
-the two correction operators have norms at most `‖A‖ - δ` and `‖B‖ - δ`, and
-taking norms lets `‖X‖` be solved for.  It is carried out once, in
-`le_div_of_comp_add_comp_eq_rectangular`; this is that bound at `N = ‖·‖`. -/
-theorem opNorm_le_div_of_comp_add_comp_eq (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ)
-    (hAc : ∀ x, δ * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (hBc : ∀ v, δ * ‖v‖ ^ 2 ≤ RCLike.re ⟪B v, v⟫_𝕜)
-    (hXY : A ∘L X + X ∘L B = Y) : ‖X‖ ≤ ‖Y‖ / (2 * δ) :=
-  le_div_of_comp_add_comp_eq_rectangular (N := fun f : F →L[𝕜] E => ‖f‖)
-    (fun f g => norm_add_le f g) (fun a f => norm_smul a f)
-    (fun C f => ContinuousLinearMap.opNorm_comp_le C f)
-    (fun f C => ContinuousLinearMap.opNorm_comp_le f C)
-    hA hB hδ hAc hBc hXY
-
-end OperatorNormSylvesterBound
 
 /-! ### The square case
 

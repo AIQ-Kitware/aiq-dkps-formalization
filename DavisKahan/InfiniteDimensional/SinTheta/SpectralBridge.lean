@@ -9,6 +9,7 @@ public import DavisKahan.SinTheta.SpectralBridge
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import DavisKahan.Sylvester.Bounded
 public import DavisKahan.InfiniteDimensional.SinTheta.RCLikeSpectralBridge
+public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 
 public section
 
@@ -152,7 +153,8 @@ theorem sylvester_mem_and_gauge_le_of_intervalExteriorGap
   let c : ℝ := (β + α) / 2
   let ρ : ℝ := (α - β) / 2
   have hρ : 0 ≤ ρ := by dsimp [ρ]; linarith
-  have hcenter := centered_sylvester_equation A B X C c hEq
+  have hcenter : (A - (c : 𝕜) • 1).sylvester (B - (c : 𝕜) • 1) X = C := by
+    rwa [ContinuousLinearMap.sub_smul_one_sylvester_sub_smul_one, ContinuousLinearMap.sylvester_apply]
   cases centeredIntervalExteriorWitness_of_gap hA hB hβα hδ hgap with
   | intervalOnLeft hAbound hBinv hBinvBound =>
       exact sylvester_mem_and_gauge_le_of_bound_inverse_swapped
@@ -160,14 +162,16 @@ theorem sylvester_mem_and_gauge_le_of_intervalExteriorGap
         (A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E)
         hρ hδ (by simpa [c, ρ] using hBinvBound)
         (by simpa [c, ρ] using hAbound)
-        (by simpa [c] using hcenter) hC
+        (by simpa only [ContinuousLinearMap.sylvester_apply, ContinuousLinearMap.one_def, c]
+          using hcenter) hC
   | intervalOnRight hBbound hAinv hAinvBound =>
       exact sylvester_mem_and_gauge_le_of_bound_inverse
         N hAinv
         (B - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F)
         hρ hδ (by simpa [c, ρ] using hAinvBound)
         (by simpa [c, ρ] using hBbound)
-        (by simpa [c] using hcenter) hC
+        (by simpa only [ContinuousLinearMap.sylvester_apply, ContinuousLinearMap.one_def, c]
+          using hcenter) hC
 
 end ExactSinTheta
 end DavisKahan

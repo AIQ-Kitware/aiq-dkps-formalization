@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.Normed.Operator.Compact.Spectrum
 public import DavisKahan.Specialized.FreeBeam.BeamSection9
 public import ForTauCeti.MeasureTheory.LpInfiniteDimensional
 public import ForTauCeti.Order.DiscreteEnumeration
@@ -235,8 +236,7 @@ theorem finite_beamEigenvalues_inter_Iic (M : ℝ) :
   · have hMpos : (0 : ℝ) < 1 + M := by linarith
     have hc : (0 : ℝ) < (1 + M)⁻¹ := inv_pos.mpr hMpos
     set F : ℝ → ℂ := fun lam => (((1 + lam : ℝ) : ℂ))⁻¹ with hFdef
-    have hfinS := TauCeti.finite_setOf_hasEigenvalue_le_norm isCompactOperator_beamResolvent
-      beamCoerciveFormData.resolvent_isSelfAdjoint hc
+    have hfinS := isCompactOperator_beamResolvent.finite_eigenvalues_norm_ge hc
     -- the image lands inside the finite set of large resolvent eigenvalues
     have himg : F '' (beamEigenvalues ∩ Set.Iic M) ⊆
         {mu : ℂ | Module.End.HasEigenvalue beamCoerciveFormData.resolvent.toLinearMap mu ∧

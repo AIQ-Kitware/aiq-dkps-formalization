@@ -46,19 +46,6 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Recentering a Sylvester equation by a real scalar leaves the right-hand side
-unchanged: `(A - c)X - X(B - c) = AX - XB`. -/
-theorem centered_sylvester_equation
-    (A : E →L[𝕜] E) (B : F →L[𝕜] F) (X C : F →L[𝕜] E) (c : ℝ)
-    (hEq : A ∘L X - X ∘L B = C) :
-    (A - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) ∘L X -
-      X ∘L (B - ((c : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F) = C := by
-  rw [ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_sub,
-    ContinuousLinearMap.smul_comp, ContinuousLinearMap.comp_smul,
-    ContinuousLinearMap.id_comp, ContinuousLinearMap.comp_id, ← hEq]
-  abel
-
 omit [CompleteSpace E] in
 /-- A real scalar multiple of the identity is a symmetric operator. -/
 theorem isSymmetric_real_smul_id (c : ℝ) :

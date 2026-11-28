@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.Sylvester.FilledTruncation
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 
 /-!
 
@@ -178,27 +179,6 @@ theorem all_kyFanApproximationGauge_le_of_cutoff_le
   exact kyFanApproximationGauge_le_of_cutoff_le hB PCB k
     (fun τ hτ => hcut τ hτ k)
 
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- **Shifting both blocks of a Sylvester equation by the same scalar leaves it
-unchanged.**
-
-`(A - m) X - X (B - m) = A X - X B`, because the two `m X` terms cancel.  Both
-semibounded-direct bounds below derived this inline. -/
-private theorem sylvester_shift_invariant
-    (AF : E →L[𝕜] E) (BF : F →L[𝕜] F) (Xc : F →L[𝕜] E) (Cc : F →L[𝕜] E)
-    (m : ℝ) (hEqCut : AF ∘L Xc - Xc ∘L BF = Cc) :
-    (AF - ((m : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 E) ∘L Xc -
-        Xc ∘L (BF - ((m : ℝ) : 𝕜) • ContinuousLinearMap.id 𝕜 F) = Cc := by
-  ext x
-  have hraw := congrArg (fun T : F →L[𝕜] E => T x) hEqCut
-  simp only [ContinuousLinearMap.comp_apply, sub_apply,
-    smul_apply, ContinuousLinearMap.id_apply, map_sub, map_smul] at hraw ⊢
-  calc
-    AF (Xc x) - ((m : ℝ) : 𝕜) • Xc x -
-        (Xc (BF x) - ((m : ℝ) : 𝕜) • Xc x) =
-      AF (Xc x) - Xc (BF x) := by module
-    _ = Cc x := hraw
-
 /-- Ky Fan estimate obtained from bounded spectral truncations. -/
 theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     {A : E →ₗ.[𝕜] E}
@@ -287,8 +267,10 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
   have hρδ : 0 < ρ + δ := by linarith
   obtain ⟨hA1inv, hA1invNorm⟩ :=
     isUnit_and_norm_ringInverse_le_of_coercive hρδ hA1coer
-  have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
-    sylvester_shift_invariant AF BF Xc Cc m hEqCut
+  have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc := by
+    rw [← ContinuousLinearMap.sylvester_apply]
+    change (AF - (m : 𝕜) • 1).sylvester (BF - (m : 𝕜) • 1) Xc = Cc
+    rwa [ContinuousLinearMap.sub_smul_one_sylvester_sub_smul_one, ContinuousLinearMap.sylvester_apply]
   let N := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
     { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
       gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint })
@@ -391,8 +373,10 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
   have hρδ : 0 < ρ + δ := by linarith
   obtain ⟨hB1inv, hB1invNorm⟩ :=
     isUnit_and_norm_ringInverse_le_of_coercive hρδ hB1coer
-  have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc :=
-    sylvester_shift_invariant AF BF Xc Cc m hEqCut
+  have hEqShift : A1 ∘L Xc - Xc ∘L B1 = Cc := by
+    rw [← ContinuousLinearMap.sylvester_apply]
+    change (AF - (m : 𝕜) • 1).sylvester (BF - (m : 𝕜) • 1) Xc = Cc
+    rwa [ContinuousLinearMap.sub_smul_one_sylvester_sub_smul_one, ContinuousLinearMap.sylvester_apply]
   let N := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
     { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
       gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint })

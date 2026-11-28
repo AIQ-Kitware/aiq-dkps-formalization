@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 module
 
+public import TauCeti.Analysis.Normed.Operator.Compact.Spectrum
 public import DavisKahan.Specialized.FreeBeam.BeamTrialReal
 public import ForTauCeti.MeasureTheory.LpInfiniteDimensional
 public import ForTauCeti.Order.DiscreteEnumeration
@@ -183,8 +184,7 @@ theorem finite_beamEigenvalues_inter_Iic (M : ℝ) :
   · have hMpos : (0 : ℝ) < 1 + M := by linarith
     have hc : (0 : ℝ) < (1 + M)⁻¹ := inv_pos.mpr hMpos
     set F : ℝ → ℝ := fun lam => (1 + lam)⁻¹ with hFdef
-    have hfinS := TauCeti.finite_setOf_hasEigenvalue_le_norm
-      isCompactOperator_beamResolvent beamCoerciveFormData.resolvent_isSelfAdjoint hc
+    have hfinS := isCompactOperator_beamResolvent.finite_eigenvalues_norm_ge hc
     have himg : F '' (beamEigenvalues ∩ Set.Iic M) ⊆
         {mu : ℝ | Module.End.HasEigenvalue beamCoerciveFormData.resolvent.toLinearMap mu ∧
           (1 + M)⁻¹ ≤ ‖mu‖} := by

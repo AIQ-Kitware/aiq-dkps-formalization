@@ -1,5 +1,52 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 Sylvester shifts, Lyapunov bounds, and compact eigenvalues
+
+The bounded interval/exterior proof, both ordered-cutoff orientations, and the
+abstract ideal-seminorm argument use the native Sylvester shift law. It holds
+over any nontrivially normed field and also covers the original real shifts
+on Hilbert spaces. #16061 introduced the law for SSP-B09/B10. That integration
+acknowledges the DKPS implementation and states that its own proof was written
+independently. #2441 moved the law to `Sylvester/Basic.lean`.
+[#16061 integration](https://github.com/TauCetiProject/TauCeti/commit/2b165f38aebf1b6b7eab7245a13bc8d09c699b93) ·
+[#2441 integration](https://github.com/TauCetiProject/TauCeti/commit/e5d890fd73f8e616241142c58517ef7212010e18)
+
+The local symmetric operator-norm Lyapunov specialization retires. #15457
+covers unequal quadratic-form bounds without symmetry or completeness and
+explicitly states that it did not use the related DKPS proposal #13873.
+#20918 broadens the codomain to seminormed spaces. The local polar-absorption
+and arbitrary operator-seminorm bounds continue to serve their distinct
+hypotheses. The retired proofs and authorship are recorded in the extraction
+manifest with source anchors at DKPS `5f6c5128d`.
+[#15457 integration](https://github.com/TauCetiProject/TauCeti/commit/62b0d68cf25a70f0dff773f6777a587f2ca62fc9) ·
+[#20918 integration](https://github.com/TauCetiProject/TauCeti/commit/05bd109a17f263f075387c6b2a7ac958f3dd3119)
+
+The real and complex free-beam eigenvalue proofs use
+`IsCompactOperator.finite_eigenvalues_norm_ge` from BanachAlgebras #30636.
+The theorem covers compact operators on incomplete normed spaces without
+self-adjointness. #45035 removes completeness of the scalar field. The same
+finiteness result serves the local proof that an injective compact
+self-adjoint operator on an infinite-dimensional Hilbert space has arbitrarily
+small nonzero eigenvalues. The retired orthogonal-eigenvector proof is at
+`5f6c5128d:ForTauCeti/Analysis/InnerProductSpace/CompactSelfAdjointClassification.lean`
+by Jon Crall and Claude Opus 5, Kitware, Apache-2.0. DKPS proof descent for the
+native result is unverified.
+[#30636 integration](https://github.com/TauCetiProject/TauCeti/commit/5307ffc99cf9c62ecc5442e1f592c4c63ffdebc9) ·
+[#45035 integration](https://github.com/TauCetiProject/TauCeti/commit/992edecfae7c95e9881c0850d1851fe66eb5bb6f)
+
+DKPS advances TauCeti to `32f43847ab4f7c49dc9b24d445f9a6e42e223e2a`
+with Mathlib `31ce06eaadf4a200c0e1407c5f10953cf606b8f8` and Lean
+v4.37.0-rc1. The real-spectrum symbol equivalence imports
+`BoundedBorel/Basic.lean` after the #40390 move.
+[#40390 integration](https://github.com/TauCetiProject/TauCeti/commit/be72fe3dca1430aace55e47bc509068181d1296e) ·
+[TauCeti pin](https://github.com/TauCetiProject/TauCeti/commit/32f43847ab4f7c49dc9b24d445f9a6e42e223e2a)
+
+The focused build (9,873 jobs), default build (22,806 jobs), and Challenge
+with the unbounded and semantic-surface audits (22,522 jobs) passed without
+warnings. A Lean probe recovered the retired divided Lyapunov bound.
+All 1,569 source-census references resolved and all 17 available comparator
+signatures matched. The name checker reported the same 28 baseline findings.
+
 ## November 28 bounded inverses and Rayleigh norm bounds
 
 The bounded Sylvester engine, centered spectral witness, and lower-frame

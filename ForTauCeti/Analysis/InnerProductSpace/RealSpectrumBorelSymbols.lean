@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.CStarAlgebra.RealSpectrumFunctionalCalculus
-public import TauCeti.MeasureTheory.Function.BoundedBorel
+public import TauCeti.MeasureTheory.Function.BoundedBorel.Basic
 
 /-!
 # Bounded Borel symbols over the real and complex spectra

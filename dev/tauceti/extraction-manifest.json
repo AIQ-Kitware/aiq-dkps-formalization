@@ -5972,7 +5972,8 @@
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
         "Mathlib",
-        "TauCeti.Analysis.InnerProductSpace.QuadraticForm.OpNorm"
+        "TauCeti.Analysis.InnerProductSpace.QuadraticForm.OpNorm",
+        "TauCeti.Analysis.InnerProductSpace.Sylvester.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -5981,8 +5982,49 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval"
       ],
       "status": "consumed-upstream-with-dkps-result-retained",
-      "upstream_pr": "#44611 (norm comparison only)",
-      "migration_note": "Retire TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le, source 2522fcc3c:ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean (Jon Crall and Claude Fable 5, Kitware copyright, Apache-2.0). Directly apply ContinuousLinearMap.norm_le_of_forall_norm_eq_one_abs_re_inner_map_self_le from AxelDlv00's Poincare3D #44611 integration e1344cca7c70766f1652c083df144d1a92c1fe44 to unit vectors. The native theorem covers arbitrary RCLike and incomplete ambient spaces, including the zero space. DKPS proof descent for the Rayleigh lemma is unverified. The Lyapunov and polar-absorption bounds remain local."
+      "upstream_pr": "#44611, #15457, #16061",
+      "migration_note": "Retire TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le, source 2522fcc3c:ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean (Jon Crall and Claude Fable 5, Kitware copyright, Apache-2.0). Directly apply ContinuousLinearMap.norm_le_of_forall_norm_eq_one_abs_re_inner_map_self_le from AxelDlv00's Poincare3D #44611 integration e1344cca7c70766f1652c083df144d1a92c1fe44 to unit vectors. The native theorem covers arbitrary RCLike and incomplete ambient spaces, including the zero space. DKPS proof descent for the Rayleigh lemma is unverified. The Lyapunov and polar-absorption bounds remain local. Retire the operator-norm specialization opNorm_le_div_of_comp_add_comp_eq at 5f6c5128d under this path. ContinuousLinearMap.add_mul_norm_le_norm_comp_add_comp from independent #15457 (62b0d68cf25a70f0dff773f6777a587f2ca62fc9) is stronger, allowing arbitrary lower bounds and omitting symmetry. The positive-constant specialization recovers the old divided form. #20918 (05bd109a17f263f075387c6b2a7ac958f3dd3119) further permits a seminormed codomain. The abstract rectangular estimate keeps its arbitrary operator seminorm with ideal inequalities and uses the accepted shift identity from independent #16061 (2b165f38aebf1b6b7eab7245a13bc8d09c699b93) in its separation proof.",
+      "retired_local_declarations": [
+        "TauCeti.ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le",
+        "TauCeti.ContinuousLinearMap.opNorm_le_div_of_comp_add_comp_eq"
+      ]
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification",
+      "source_declarations": [
+        "TauCeti.finite_setOf_hasEigenvalue_le_norm"
+      ],
+      "original_source_anchor": "5f6c5128d:ForTauCeti/Analysis/InnerProductSpace/CompactSelfAdjointClassification.lean",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware copyright, Apache-2.0.",
+      "roadmap_target": "BanachAlgebras §8.1 compact spectral decomposition",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.Compact.Spectrum",
+      "final_declarations": [
+        "IsCompactOperator.finite_eigenvalues_norm_ge"
+      ],
+      "integration": "5307ffc99cf9c62ecc5442e1f592c4c63ffdebc9",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/30636",
+      "status": "accepted-upstream-local-copy-removed",
+      "migration_note": "The native threshold theorem also applies to compact operators on arbitrary normed spaces over a nontrivially normed field. #45035 (992edecfae7c95e9881c0850d1851fe66eb5bb6f) removes scalar-field completeness. Use it directly in both free-beam scalar branches and in exists_hasEigenvalue_norm_lt. The latter still derives small nonzero eigenvalues from injectivity and infinite dimension, using the self-adjoint spectral theorem. The native threshold proof uses ascending kernel chains. DKPS proof descent is unverified."
+    },
+    {
+      "source_module": "DavisKahan.InfiniteDimensional.SinTheta.RCLikeSpectralBridge",
+      "source_declarations": [
+        "TauCeti.DavisKahan.ExactSinTheta.centered_sylvester_equation",
+        "TauCeti.DavisKahan.Sylvester.sylvester_shift_invariant"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
+      "final_declarations": [
+        "ContinuousLinearMap.sub_smul_one_sylvester_sub_smul_one",
+        "ContinuousLinearMap.sylvester_apply"
+      ],
+      "authors_license": "Jon Crall, Claude Opus 4.8 (spectral bridge), and OpenAI GPT-5.6 Thinking (ordered cutoff). Kitware copyright, Apache-2.0.",
+      "original_source_anchor": "5f6c5128d:DavisKahan/InfiniteDimensional/SinTheta/RCLikeSpectralBridge.lean and 5f6c5128d:DavisKahan/Sylvester/Unbounded/OrderedCutoff.lean.",
+      "roadmap_target": "SSP-B09/B10 supporting Sylvester shift law",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16061",
+      "integration": "2b165f38aebf1b6b7eab7245a13bc8d09c699b93",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "Consume the native bundled Sylvester shift directly in the bounded interval/exterior bridge and both ordered-cutoff orientations. Its scalar and normed-space scope is broader than the original real scalar shifts on Hilbert spaces. #16061 acknowledges the DKPS roadmap implementation and states that its own proof is independent. #2441 (e5d890fd73f8e616241142c58517ef7212010e18) moved the declaration to Sylvester/Basic.lean."
     },
     {
       "source_module": "ForMathlib",
@@ -8270,7 +8312,7 @@
       ],
       "original_source_anchor": "3bbead40e6e50a425d35db16f4fe4e898c475713:ForTauCeti/Analysis/InnerProductSpace/RealSpectrumBorelSymbols.lean; b5ef92d27f1ae6f9c1e2af3c45d25c9747d74fd3:ForTauCeti/Analysis/InnerProductSpace/RealSpectrumIntertwining.lean.",
       "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
-      "final_tauceti_module": "TauCeti.MeasureTheory.Function.BoundedBorel",
+      "final_tauceti_module": "TauCeti.MeasureTheory.Function.BoundedBorel.Basic",
       "final_declarations": [
         "TauCeti.BoundedBorelFunction",
         "TauCeti.BoundedBorelFunction.compStarAlgHom'",
@@ -8280,7 +8322,7 @@
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/14874",
       "integration": "57555a42c8b9ce4b90d39b639588cebcf07b5a7d",
       "status": "accepted-upstream-local-duplicates-retired",
-      "migration_note": "November 27. Retire the real-spectrum admissibility predicate and submodule. The local spectrum-specific realSpectrumBorelEquiv is assembled from the two native pullbacks and preserves the original reindexing as a star algebra equivalence. The set-level measurability helpers and the prepared real-coordinate bounds remain. No DKPS proof descent is established for #14874."
+      "migration_note": "November 27. Retire the real-spectrum admissibility predicate and submodule. The local spectrum-specific realSpectrumBorelEquiv is assembled from the two native pullbacks and preserves the original reindexing as a star algebra equivalence. The set-level measurability helpers and the prepared real-coordinate bounds remain. No DKPS proof descent is established for #14874. #40390 (be72fe3dca1430aace55e47bc509068181d1296e) moved the symbol carrier to BoundedBorel/Basic.lean. The real-spectrum equivalence imports this module directly."
     },
     {
       "source_module": "DavisKahan.SpectralTheory.CircleRieszEndpoints",
@@ -9145,5 +9187,5 @@
       "migration_note": "The nuclear optimizer proofs identify the Schatten-one gauge by the native trace-class endpoint, with no separate expansion of the singular-value sum. The local optimizer results keep their original scope. This consumes David Roe's accepted family result as an existing dependency."
     }
   ],
-  "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"
+  "current_consumption_pin": "32f43847ab4f7c49dc9b24d445f9a6e42e223e2a"
 }
