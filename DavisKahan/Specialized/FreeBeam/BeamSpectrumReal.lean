@@ -54,37 +54,18 @@ theorem beamResolvent_eq :
 
 /-- The real variational resolvent is compact. -/
 theorem isCompactOperator_beamResolvent :
-    IsCompactOperator beamCoerciveFormData.resolvent := by
-  rw [beamResolvent_eq]
-  exact isCompactOperator_beamEmbed.comp_clm (ContinuousLinearMap.adjoint beamEmbed)
+    IsCompactOperator beamCoerciveFormData.resolvent :=
+  beamCoerciveFormData.isCompactOperator_resolvent isCompactOperator_beamEmbed
 
 /-- Invert a nonzero resolvent eigenvalue into a beam-operator eigenvalue. -/
 theorem exists_beamOperator_apply_of_beamResolvent_smul {mu : ℝ} (hmu : mu ≠ 0)
     {u : BeamL2} (huv : beamCoerciveFormData.resolvent u = mu • u) :
     ∃ h : u ∈ beamOperator.domain,
       beamOperator ⟨u, h⟩ = (mu⁻¹ - 1) • u := by
-  set R := beamCoerciveFormData.resolvent with hR
-  have humem : u ∈ beamOperator.domain := by
-    have hmem : u ∈ LinearMap.range ((R : BeamL2 →ₗ[ℝ] BeamL2)) := by
-      refine ⟨mu⁻¹ • u, ?_⟩
-      rw [show ((R : BeamL2 →ₗ[ℝ] BeamL2)) (mu⁻¹ • u) = R (mu⁻¹ • u) from rfl,
-        map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
-    exact hmem
-  refine ⟨humem, ?_⟩
-  have hRmu : R (mu⁻¹ • u) = u := by
+  have hRmu : beamCoerciveFormData.resolvent (mu⁻¹ • u) = u := by
     rw [map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
-  have hshift : beamShiftedFormData.shiftedOperator ⟨u, humem⟩ =
-      mu⁻¹ • u := by
-    have happ := Abstract.inversePartialMap_apply_R R
-      beamCoerciveFormData.resolvent_isSelfAdjoint
-      beamCoerciveFormData.resolvent_injective (mu⁻¹ • u)
-    have hsub : (⟨R (mu⁻¹ • u), LinearMap.mem_range_self _ _⟩ :
-        beamShiftedFormData.shiftedOperator.domain) = ⟨u, humem⟩ := Subtype.ext hRmu
-    exact (congrArg beamShiftedFormData.shiftedOperator hsub).symm.trans happ
-  have h : beamOperator ⟨u, humem⟩ =
-      beamShiftedFormData.shiftedOperator ⟨u, humem⟩ - u :=
-    beamShiftedFormData.beamOperator_apply _
-  rw [h, hshift, sub_smul, one_smul]
+  obtain ⟨humem, hB⟩ := beamShiftedFormData.exists_beamOperator_apply_of_resolvent_eq hRmu
+  exact ⟨humem, hB.trans (by rw [sub_smul, one_smul])⟩
 
 /-- A fixed vector of the resolvent is an affine zero mode. -/
 theorem exists_affine_of_beamResolvent_eq_self {u : BeamL2}
@@ -141,8 +122,7 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
     have h := _root_.LinearPMap.mem_realSpectrum_iff.mp hlam
     change lam ∈ beamShiftedFormData.beamOperator.spectrum at h
     rw [beamShiftedFormData.beamOperator_eq_subScalar, _root_.LinearPMap.mem_spectrum_iff,
-      TauCeti.LinearPMap.mem_resolventSet_subScalar_iff,
-      beamShiftedFormData.shiftedOperator_eq_inverse] at h
+      TauCeti.LinearPMap.mem_resolventSet_subScalar_iff] at h
     exact (_root_.LinearPMap.mem_spectrum_iff _ _).mpr h
   have hc : c ≠ 0 := by
     intro h0

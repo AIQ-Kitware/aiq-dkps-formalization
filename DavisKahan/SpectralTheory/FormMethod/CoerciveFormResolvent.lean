@@ -6,8 +6,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 module
 
-public import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
-public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import Mathlib.Analysis.InnerProductSpace.Positive
+public import TauCeti.Analysis.InnerProductSpace.Adjoint
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Inverse
 public import Mathlib.Tactic
 
 /-!
@@ -24,8 +25,8 @@ and the ambient solution operator is
 `R = j A⁻¹ j*`.
 
 This file constructs `R`, proves the variational identity, positivity,
-self-adjointness, and injectivity, then invokes `BoundedInverseRealization` to
-produce the associated positive self-adjoint unbounded operator.
+self-adjointness, and injectivity. The associated operator is the accepted
+partial inverse of `R` on its range.
 
 The free-beam specialization takes `V` to be an `H²` form space and `A` to
 represent the shifted bending form.
@@ -61,7 +62,6 @@ structure CoerciveFormData where
   embed : V →L[𝕜] H
   embed_injective : Function.Injective embed
   embed_dense : DenseRange embed
-  embed_adjoint_injective : Function.Injective embed.adjoint
   formOperator : V →L[𝕜] V
   form_selfAdjoint : IsSelfAdjoint formOperator
   coercivityConstant : ℝ
@@ -72,6 +72,7 @@ structure CoerciveFormData where
 
 namespace CoerciveFormData
 
+omit [CompleteSpace H] in
 /-- Coercivity makes the form operator invertible in the bounded-operator
 algebra. -/
 theorem formOperator_isUnit (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
@@ -127,7 +128,7 @@ theorem solutionOperator_injective
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     Function.Injective D.solutionOperator := by
   intro f g hfg
-  apply D.embed_adjoint_injective
+  apply (ContinuousLinearMap.adjoint_injective_iff_denseRange.mpr D.embed_dense)
   rw [← D.formOperator_solutionOperator f,
     ← D.formOperator_solutionOperator g, hfg]
 
@@ -210,25 +211,19 @@ theorem resolvent_nonnegative
 noncomputable def associatedOperator
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     H →ₗ.[𝕜] H :=
-  inversePartialMap D.resolvent D.resolvent_isSelfAdjoint
-    D.resolvent_injective
+  (D.resolvent.toLinearMap.toPMap ⊤).inverse
 
 /-- The associated unbounded operator is self-adjoint. -/
 theorem associatedOperator_isSelfAdjoint
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     _root_.IsSelfAdjoint D.associatedOperator :=
-  inversePartialMap_isSelfAdjoint
-    D.resolvent D.resolvent_isSelfAdjoint D.resolvent_injective
-    D.resolvent_nonnegative
+  D.resolvent.isSelfAdjoint_inverse_toPMap_top D.resolvent_isSelfAdjoint D.resolvent_injective
 
 /-- The form resolvent is the inverse of the associated operator on its domain. -/
 @[simp] theorem associatedOperator_resolvent
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
-    D.associatedOperator
-      ⟨D.resolvent f,
-        LinearMap.mem_range_self D.resolvent.toLinearMap f⟩ = f := by
-  exact inversePartialMap_apply_R
-    D.resolvent D.resolvent_isSelfAdjoint D.resolvent_injective f
+    D.associatedOperator ⟨D.resolvent f, D.resolvent.apply_mem_domain_inverse_toPMap_top f⟩ = f :=
+  D.resolvent.inverse_toPMap_top_apply D.resolvent_injective f
 
 end CoerciveFormData
 

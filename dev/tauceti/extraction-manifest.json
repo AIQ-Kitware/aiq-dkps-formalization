@@ -8294,6 +8294,82 @@
       "integration": "edc36e596f267cb5b618f89ea9d348aa35431ed7",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "The Dirichlet operator integration added the general compact-inverse spectrum API. The beam's shifted operator agrees with the native inverse of the variational resolvent. Apply the scalar shift from #14459 (9c887749b7f41032d4ba21b2b637f083b75c91a4) and the compact-inverse eigenvalue theorem in each scalar branch. Both beam statements retain their domain and spectral parameter. The integration's roadmap target is PDE D19. No DKPS descent is established."
+    },
+    {
+      "source_module": "DavisKahan.SpectralTheory.FormMethod.{BoundedInverseRealization,CoerciveFormResolvent,ShiftedBeamRealization}",
+      "source_declarations": [
+        "TauCeti.DavisKahan.FreeBeam.Abstract.denseRange_of_adjoint_eq_self_injective",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inverseDomain",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.rangeEquiv",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.rangeInverse",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.rangeEquiv_coe_apply",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.rangeInverse_mk_apply",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.apply_rangeInverse",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.isClosed_graph_rangeInverse",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap_dense",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap_isClosed",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap_domain",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap_apply",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap_apply_R",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.R_inversePartialMap_apply",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap_isSymmetric",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap_nonnegative",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap_one_add_surjective",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.inversePartialMap_isSelfAdjoint",
+        "TauCeti.DavisKahan.FreeBeam.Analytic.ShiftedBeamFormData.shiftedOperator_eq_inverse"
+      ],
+      "original_source_anchor": "737dd6badc2731f77f6655271e203a128a1ac5b3:DavisKahan/SpectralTheory/FormMethod/{BoundedInverseRealization,CoerciveFormResolvent,ShiftedBeamRealization}.lean",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0. The dense-range lemma adapts Adam Bornemann's private proof in Spectra/Modular/Tomita/BoundedPicture.lean at Spectra 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63 (Apache-2.0).",
+      "final_tauceti_module": "TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Inverse; TauCeti.Analysis.InnerProductSpace.LinearPMap.Inverse",
+      "final_declarations": [
+        "LinearPMap.inverse",
+        "ContinuousLinearMap.mem_domain_inverse_toPMap_top_iff",
+        "ContinuousLinearMap.inverse_toPMap_top_apply",
+        "ContinuousLinearMap.apply_inverse_toPMap_top",
+        "ContinuousLinearMap.mem_graph_inverse_toPMap_top_iff",
+        "ContinuousLinearMap.isSelfAdjoint_inverse_toPMap_top",
+        "ContinuousLinearMap.zero_mem_resolventSet_inverse_toPMap_top"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/37946",
+      "integration": "edc36e596f267cb5b618f89ea9d348aa35431ed7",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "The variational realization uses Mathlib's partial inverse with TauCeti's domain and action laws. Native self-adjointness requires injectivity and self-adjointness of the bounded map. Closedness follows from the resolvent at zero, including without ambient completeness. The local positivity conclusion survives on the native carrier as inverse_toPMap_top_nonnegative, now without self-adjointness or completeness assumptions. The real-shift resolvent bound yields one-plus surjectivity for the positive self-adjoint inverse. The accepted inverse API was contributed under PDE D19. No DKPS proof descent is established."
+    },
+    {
+      "source_module": "DavisKahan.SpectralTheory.FormMethod.PositiveSurjectiveCriterion",
+      "source_declarations": [
+        "TauCeti.DavisKahan.FreeBeam.Abstract.isSelfAdjoint_of_isFormalAdjoint_nonnegative_one_add_surjective",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.DavisKahanExt.PartialMap.isSelfAdjoint_of_nonnegative_one_add_surjective"
+      ],
+      "original_source_anchor": "737dd6badc2731f77f6655271e203a128a1ac5b3:DavisKahan/SpectralTheory/FormMethod/PositiveSurjectiveCriterion.lean",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0. Adaptation of Spectra.TomitaTakesaki.modularOp_isSelfAdjoint by Adam Bornemann, Spectra/Modular/TomitaTakesaki/VonNeumannTstarT.lean at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjoint",
+      "final_declarations": ["LinearPMap.IsFormalAdjoint.isSelfAdjoint_of_surjective_add_smul"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/41886",
+      "integration": "94d4276d66dbbb71b26757b08611f297733ed424",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "The native criterion allows any real shift and needs no positivity. The independent density lemma for nonnegative operators still covers operators without symmetry. The integration credits the DKPS adaptation in SelfAdjointMaximal separately. The disclosed dependency credit does not establish descent for the real-shift proof."
+    },
+    {
+      "source_module": "DavisKahan.SpectralTheory.FormMethod.{CompactGraphEmbedding,FormCompactness}; DavisKahan.Specialized.FreeBeam.{BeamFormSpace,BeamFormSpaceScalar}",
+      "source_declarations": [
+        "TauCeti.DavisKahan.FreeBeam.Abstract.SequentiallyCompactOperator",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.SequentiallyCompactEmbedding",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.bounded_sequence_comp",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.resolvent_sequentiallyCompact",
+        "TauCeti.DavisKahan.FreeBeam.Abstract.CoerciveFormData.embed_adjoint_injective",
+        "TauCeti.DavisKahan.FreeBeam.Model.beamEmbed_adjoint_injective",
+        "TauCeti.DavisKahan.FreeBeam.Model.Scalar.beamEmbed_adjoint_injective"
+      ],
+      "original_source_anchor": "737dd6badc2731f77f6655271e203a128a1ac5b3 at the source modules above",
+      "authors_license": "Jon Crall and OpenAI GPT-5.6 Thinking for the abstract form and graph modules, Jon Crall and Claude Fable 5 for the scalar-generic beam form space, and Jon Crall, Claude Fable 5, and GPT-5.6 Sol for the complex beam form space. Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.Compact.Basic; TauCeti.Analysis.InnerProductSpace.Adjoint",
+      "final_declarations": ["IsCompactOperator", "IsCompactOperator.comp_clm", "IsCompactOperator.exists_subseq_tendsto", "isCompactOperator_iff_totallyBounded_image_closedBall", "ContinuousLinearMap.adjoint_injective_iff_denseRange"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/32253",
+      "integration": "0957a1a58e89439fc9ded61290002f81706e7b56",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "Use Mathlib compact operators and composition, and TauCeti's generalized compact-operator subsequence and totally bounded image laws. The two-way proof for the sequential graph condition remains local and uses Mathlib's separated-sequence argument. Forgejo #2801 (c9c8c1b4bff7e60811510cb89bc16221aec1ca03) supplies the adjoint injectivity equivalence for the dense embedding. The compact subsequence law originated in #2333 (b47f6bed28777951e54c5d4e8c73a46091639faf). DKPS proof descent is unestablished for these accepted helpers."
     }
   ],
   "current_consumption_pin": "fba9bfbf453bcf0d77efdde60fbce2376c2e35a8"

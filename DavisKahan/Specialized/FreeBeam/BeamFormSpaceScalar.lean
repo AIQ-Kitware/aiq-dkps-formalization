@@ -546,31 +546,6 @@ theorem denseRange_beamEmbed : DenseRange (beamEmbed (𝕜 := 𝕜)) := by
 
 /-! ## The coercive form data and its compact embedding -/
 
-/-- Injectivity of the embedding's adjoint, from density of the range. -/
-theorem beamEmbed_adjoint_injective :
-    Function.Injective (ContinuousLinearMap.adjoint (beamEmbed (𝕜 := 𝕜))) := by
-  have hker : ∀ x : (BeamL2 (𝕜 := 𝕜)), ContinuousLinearMap.adjoint beamEmbed x = 0 → x = 0 := by
-    intro x hx
-    have horth : ∀ v : (BeamV (𝕜 := 𝕜)), ⟪beamEmbed v, x⟫_𝕜 = 0 := by
-      intro v
-      rw [← ContinuousLinearMap.adjoint_inner_right beamEmbed v x, hx, inner_zero_right]
-    have hclosed : IsClosed {y : (BeamL2 (𝕜 := 𝕜)) | ⟪y, x⟫_𝕜 = 0} :=
-      isClosed_eq (continuous_id.inner continuous_const) continuous_const
-    have hall : ∀ y : (BeamL2 (𝕜 := 𝕜)), ⟪y, x⟫_𝕜 = 0 := by
-      intro y
-      have hy : y ∈ closure (Set.range beamEmbed) := denseRange_beamEmbed y
-      have hsub : Set.range beamEmbed ⊆ {y : (BeamL2 (𝕜 := 𝕜)) | ⟪y, x⟫_𝕜 = 0} := by
-        rintro _ ⟨v, rfl⟩
-        exact horth v
-      exact (hclosed.closure_subset_iff.mpr hsub) hy
-    have := hall x
-    exact inner_self_eq_zero.mp this
-  intro x y hxy
-  have : ContinuousLinearMap.adjoint beamEmbed (x - y) = 0 := by
-    rw [map_sub, hxy, sub_self]
-  have := hker _ this
-  exact sub_eq_zero.mp this
-
 /-- The concrete coercive form data of the free beam: the form space carries the shifted
 bending form as its own inner product, so the represented operator is the identity. -/
 @[expose]
@@ -578,7 +553,6 @@ def beamCoerciveFormData : Abstract.CoerciveFormData (𝕜 := 𝕜) (H := (BeamL
   embed := beamEmbed (𝕜 := 𝕜)
   embed_injective := beamEmbed_injective (𝕜 := 𝕜)
   embed_dense := denseRange_beamEmbed (𝕜 := 𝕜)
-  embed_adjoint_injective := beamEmbed_adjoint_injective (𝕜 := 𝕜)
   formOperator := ContinuousLinearMap.id 𝕜 (BeamV (𝕜 := 𝕜))
   form_selfAdjoint := by
     show star (ContinuousLinearMap.id 𝕜 (BeamV (𝕜 := 𝕜))) =

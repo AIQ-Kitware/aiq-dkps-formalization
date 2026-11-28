@@ -1,5 +1,44 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 bounded inverses in the free-beam realization
+
+The coercive-form operator is now `LinearPMap.inverse` on the range of
+the variational resolvent. The domain and inverse laws, and self-adjointness
+of the inverse of an injective bounded self-adjoint map, come from #37946.
+The real and complex beam proofs use these laws for affine modes, resolvent
+eigenvectors, and the classical graph. The local nonnegativity theorem now
+uses the native inverse and applies without ambient completeness or a
+self-adjointness hypothesis on the bounded map.
+[#37946](https://github.com/TauCetiProject/TauCeti/pull/37946)
+
+The separate one-plus self-adjointness proof retires. #41886 provides
+`LinearPMap.IsFormalAdjoint.isSelfAdjoint_of_surjective_add_smul` at every
+real shift and without a nonnegative form bound. The local density lemma
+still applies to nonnegative operators without formal self-adjointness.
+The historical density and maximality arguments credit Adam Bornemann's
+Spectra proofs at `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`.
+#41886 separately credits DKPS for its `SelfAdjointMaximal` dependency.
+The extraction manifest preserves the source notices and distinguishes
+that dependency from the accepted real-shift proof.
+[#41886](https://github.com/TauCetiProject/TauCeti/pull/41886)
+
+The form data uses `adjoint_injective_iff_denseRange` for its dense
+embedding. The local adjoint injectivity field and free-beam proofs retire.
+The form embedding and variational resolvent use Mathlib's
+`IsCompactOperator`. TauCeti #32253 supplies the subsequence and
+totally bounded image criteria used to prove equivalence with the retained
+paper condition on graph-bounded sequences. The reverse implication adapts
+the separated-sequence argument in Mathlib's `IsSeqCompact.totallyBounded`.
+[Forgejo #2801](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2801) ·
+[#32253](https://github.com/TauCetiProject/TauCeti/pull/32253)
+
+The focused build (9,575 jobs), full default build (22,792 jobs), and
+Challenge with the Section 9 and semantic-surface audits (22,500 jobs)
+passed without warnings. All 17 available comparator signatures matched,
+and all 1,573 source-census references resolved. The import policy reported
+zero violations, and the declaration-name findings stayed the same. The
+backport removes 569 net lines of Lean.
+
 ## November 27 real resolvents and the free-beam spectrum
 
 DKPS retired the residual `realResolventSet` predicate and its sign-conversion

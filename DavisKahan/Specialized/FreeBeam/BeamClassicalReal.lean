@@ -222,26 +222,8 @@ theorem beamOperator_affine_mem_and_zero (a b : ℝ) :
       rfl
     rw [ContinuousLinearMap.comp_apply, hsol]
     exact beamEmbed_affineV a b
-  have hmem : affineLp a b ∈ beamOperator.domain := by
-    rw [show beamOperator.domain =
-      LinearMap.range (beamCoerciveFormData.resolvent : BeamL2 →ₗ[ℝ] BeamL2) from rfl]
-    exact ⟨affineLp a b, hres⟩
-  refine ⟨hmem, ?_⟩
-  have hshift : beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩ =
-      affineLp a b := by
-    have happ := Abstract.inversePartialMap_apply_R beamCoerciveFormData.resolvent
-      beamCoerciveFormData.resolvent_isSelfAdjoint
-      beamCoerciveFormData.resolvent_injective (affineLp a b)
-    have hsub : (⟨beamCoerciveFormData.resolvent (affineLp a b),
-        LinearMap.mem_range_self _ (affineLp a b)⟩ :
-          beamShiftedFormData.shiftedOperator.domain) = ⟨affineLp a b, hmem⟩ :=
-      Subtype.ext hres
-    rw [← hsub]
-    exact happ
-  have happly : beamOperator ⟨affineLp a b, hmem⟩ =
-      beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩ - affineLp a b :=
-    beamShiftedFormData.beamOperator_apply _
-  rw [happly, hshift, sub_self]
+  obtain ⟨hmem, hB⟩ := beamShiftedFormData.exists_beamOperator_apply_of_resolvent_eq hres
+  exact ⟨hmem, hB.trans (sub_self _)⟩
 
 /-- Conversely, every real zero mode is affine. -/
 theorem exists_affine_of_beamOperator_eq_zero {x : beamOperator.domain}
@@ -717,30 +699,9 @@ def classicalFreeBeamCoreGraph : Set (BeamL2 × BeamL2) :=
 theorem classicalFreeBeamCoreGraph_subset_graph :
     classicalFreeBeamCoreGraph ⊆ (beamOperator.graph : Set (BeamL2 × BeamL2)) := by
   rintro z ⟨g, hg, rfl⟩
-  have hmem : beamCoerciveFormData.resolvent g ∈ beamOperator.domain :=
-    LinearMap.mem_range_self _ g
-  have hshift := Abstract.inversePartialMap_apply_R beamCoerciveFormData.resolvent
-    beamCoerciveFormData.resolvent_isSelfAdjoint beamCoerciveFormData.resolvent_injective g
-  have hsub : (⟨beamCoerciveFormData.resolvent g, LinearMap.mem_range_self _ g⟩ :
-      beamShiftedFormData.shiftedOperator.domain) =
-      ⟨beamCoerciveFormData.resolvent g, hmem⟩ := Subtype.ext rfl
-  have hshift' : beamShiftedFormData.shiftedOperator
-      ⟨beamCoerciveFormData.resolvent g, hmem⟩ = g := by
-    rw [← hsub]
-    exact hshift
-  have hsum := shifted_apply_of_beam
-    (x := ⟨beamCoerciveFormData.resolvent g, hmem⟩)
-  have hadd : beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
-      beamCoerciveFormData.resolvent g = g := by
-    calc
-      beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
-          beamCoerciveFormData.resolvent g =
-          beamShiftedFormData.shiftedOperator
-            ⟨beamCoerciveFormData.resolvent g, hmem⟩ := hsum.symm
-      _ = g := hshift'
-  have hB : beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ =
-      g - beamCoerciveFormData.resolvent g :=
-    eq_sub_of_add_eq hadd
+  obtain ⟨hmem, hB⟩ : ∃ h : beamCoerciveFormData.resolvent g ∈ beamOperator.domain,
+      beamOperator ⟨beamCoerciveFormData.resolvent g, h⟩ = g - beamCoerciveFormData.resolvent g :=
+    beamShiftedFormData.exists_beamOperator_apply_of_resolvent_eq rfl
   change beamGraphParam g ∈ beamOperator.graph
   exact (LinearPMap.mem_graph_iff beamOperator).2
     ⟨⟨beamCoerciveFormData.resolvent g, hmem⟩, rfl, hB⟩
@@ -758,30 +719,9 @@ theorem classicalFreeBeamCoreGraph_has_classical_representative
     have h := ContinuousMap.coeFn_toAEEqFun unitIocMeasure gbar.toContinuousMap
     rw [hgbar] at h
     exact h
-  have hmem : beamCoerciveFormData.resolvent g ∈ beamOperator.domain :=
-    LinearMap.mem_range_self _ g
-  have hshift := Abstract.inversePartialMap_apply_R beamCoerciveFormData.resolvent
-    beamCoerciveFormData.resolvent_isSelfAdjoint beamCoerciveFormData.resolvent_injective g
-  have hsub : (⟨beamCoerciveFormData.resolvent g, LinearMap.mem_range_self _ g⟩ :
-      beamShiftedFormData.shiftedOperator.domain) =
-      ⟨beamCoerciveFormData.resolvent g, hmem⟩ := Subtype.ext rfl
-  have hshift' : beamShiftedFormData.shiftedOperator
-      ⟨beamCoerciveFormData.resolvent g, hmem⟩ = g := by
-    rw [← hsub]
-    exact hshift
-  have hsum := shifted_apply_of_beam
-    (x := ⟨beamCoerciveFormData.resolvent g, hmem⟩)
-  have hadd : beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
-      beamCoerciveFormData.resolvent g = g := by
-    calc
-      beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
-          beamCoerciveFormData.resolvent g =
-          beamShiftedFormData.shiftedOperator
-            ⟨beamCoerciveFormData.resolvent g, hmem⟩ := hsum.symm
-      _ = g := hshift'
-  have hB : beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ =
-      g - beamCoerciveFormData.resolvent g :=
-    eq_sub_of_add_eq hadd
+  obtain ⟨hmem, hB⟩ : ∃ h : beamCoerciveFormData.resolvent g ∈ beamOperator.domain,
+      beamOperator ⟨beamCoerciveFormData.resolvent g, h⟩ = g - beamCoerciveFormData.resolvent g :=
+    beamShiftedFormData.exists_beamOperator_apply_of_resolvent_eq rfl
   obtain ⟨p, hembed, -⟩ := exists_form_representative_of_beam_apply
     ⟨beamCoerciveFormData.resolvent g, hmem⟩
   obtain ⟨a, b, hab⟩ := beamV_repr p
@@ -812,12 +752,7 @@ theorem classicalFreeBeamCoreGraph_has_classical_representative
       (g - beamCoerciveFormData.resolvent g) := by
     rw [← hB]
     exact hrep
-  refine ⟨?_, ?_, ?_⟩
-  · simpa [beamGraphParam_apply] using hmem
-  · simpa [beamGraphParam_apply] using hB
-  · simpa [beamGraphParam_apply] using (show Nonempty (ClassicalFreeBeamRepresentative
-      (beamCoerciveFormData.resolvent g)
-      (g - beamCoerciveFormData.resolvent g)) from ⟨hrep'⟩)
+  exact ⟨hmem, hB, ⟨hrep'⟩⟩
 
 /-- Every point of the continuous-forcing core belongs to the full classical free-beam
 fourth-derivative graph. -/
@@ -856,8 +791,8 @@ theorem closure_classicalFreeBeamCoreGraph_eq_graph :
         have hRinv :
             beamCoerciveFormData.resolvent
                 (beamShiftedFormData.shiftedOperator xb) = (xb : BeamL2) := by
-          exact Abstract.R_inversePartialMap_apply beamCoerciveFormData.resolvent
-            beamCoerciveFormData.resolvent_isSelfAdjoint beamCoerciveFormData.resolvent_injective xb
+          exact beamCoerciveFormData.resolvent.apply_inverse_toPMap_top
+            beamCoerciveFormData.resolvent_injective xb
         calc
           beamCoerciveFormData.resolvent g =
               beamCoerciveFormData.resolvent

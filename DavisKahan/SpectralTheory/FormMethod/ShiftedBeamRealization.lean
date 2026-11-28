@@ -10,7 +10,6 @@ public import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent
 public import DavisKahan.SpectralTheory.FormMethod.FormCompactness
 public import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
 public import DavisKahan.SinTheta.BoundedPerturbation
-public import TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Inverse
 public import TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.Shift
 public import Mathlib.Tactic
 
@@ -76,19 +75,6 @@ noncomputable def shiftedOperator
     H →ₗ.[𝕜] H :=
   D.toCoerciveFormData.associatedOperator
 
-/-- The shifted realization is the partial inverse of its variational resolvent. -/
-theorem shiftedOperator_eq_inverse
-    (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    D.shiftedOperator = (D.resolvent.toLinearMap.toPMap ⊤).inverse := by
-  have hdom : D.shiftedOperator.domain = (D.resolvent.toLinearMap.toPMap ⊤).inverse.domain := by
-    ext x
-    exact (D.resolvent.mem_domain_inverse_toPMap_top_iff).symm
-  refine _root_.LinearPMap.ext hdom fun x hx hy => ?_
-  apply D.resolvent_injective
-  exact (R_inversePartialMap_apply D.resolvent D.resolvent_isSelfAdjoint
-    D.resolvent_injective ⟨x, hx⟩).trans
-      (D.resolvent.apply_inverse_toPMap_top D.resolvent_injective ⟨x, hy⟩).symm
-
 /-- The free-beam operator is the shifted realization minus the identity. -/
 @[expose]
 noncomputable def beamOperator
@@ -108,6 +94,17 @@ noncomputable def beamOperator
     D.beamOperator x = D.shiftedOperator x - (x : H) := by
   change -(x : H) + D.shiftedOperator x = D.shiftedOperator x - (x : H)
   rw [sub_eq_add_neg, add_comm]
+
+/-- The inverse of the variational resolvent gives the shifted beam action
+at every point in its range. -/
+theorem exists_beamOperator_apply_of_resolvent_eq
+    (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
+    {f x : H} (h : D.resolvent f = x) :
+    ∃ hx : x ∈ D.beamOperator.domain, D.beamOperator ⟨x, hx⟩ = f - x := by
+  subst x
+  let v : D.beamOperator.domain := ⟨D.resolvent f, D.resolvent.apply_mem_domain_inverse_toPMap_top f⟩
+  refine ⟨v.property, (D.beamOperator_apply v).trans ?_⟩
+  exact congrArg (fun z => z - D.resolvent f) (D.toCoerciveFormData.associatedOperator_resolvent f)
 
 /-- The beam realization is the scalar shift used by the resolvent API. -/
 theorem beamOperator_eq_subScalar
@@ -140,10 +137,7 @@ theorem embed_formRepresentative
     D.embed (D.formRepresentative x) = (x : H) := by
   change D.toCoerciveFormData.resolvent
       (D.shiftedOperator x) = (x : H)
-  exact Abstract.R_inversePartialMap_apply
-    D.toCoerciveFormData.resolvent
-    D.toCoerciveFormData.resolvent_isSelfAdjoint
-    D.toCoerciveFormData.resolvent_injective x
+  exact D.resolvent.apply_inverse_toPMap_top D.resolvent_injective x
 
 /-- The shifted operator quadratic form is the represented shifted form
 energy. -/
@@ -221,7 +215,7 @@ theorem beamOperator_isSelfAdjoint
 operator. -/
 theorem shiftedOperator_graph_compact
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
-    (hcompact : Abstract.SequentiallyCompactEmbedding D.embed) :
+    (hcompact : IsCompactOperator D.embed) :
     Abstract.SequentiallyCompactGraphEmbedding D.shiftedOperator :=
   D.toCoerciveFormData.associatedOperator_graph_compact hcompact
 
@@ -229,7 +223,7 @@ theorem shiftedOperator_graph_compact
 unshifted free-beam operator. -/
 theorem beamOperator_graph_compact
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
-    (hcompact : Abstract.SequentiallyCompactEmbedding D.embed) :
+    (hcompact : IsCompactOperator D.embed) :
     Abstract.SequentiallyCompactGraphEmbedding D.beamOperator := by
   exact Abstract.graphCompact_addBounded
     D.shiftedOperator (-(1 : H →L[𝕜] H))

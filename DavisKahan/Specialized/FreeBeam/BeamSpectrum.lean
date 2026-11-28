@@ -239,29 +239,8 @@ theorem beamOperator_affine_mem_and_zero (a b : ℂ) :
       rfl
     rw [ContinuousLinearMap.comp_apply, hsol]
     exact beamEmbed_affineV a b
-  have hmem : affineLp a b ∈ beamOperator.domain := by
-    rw [show beamOperator.domain
-        = LinearMap.range (beamCoerciveFormData.resolvent :
-            BeamL2 →ₗ[ℂ] BeamL2) from rfl]
-    exact ⟨affineLp a b, hres⟩
-  refine ⟨hmem, ?_⟩
-  -- the shifted operator fixes affine elements, so the beam operator kills them
-  have hshift : beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩
-      = affineLp a b := by
-    have := Abstract.inversePartialMap_apply_R beamCoerciveFormData.resolvent
-      beamCoerciveFormData.resolvent_isSelfAdjoint
-      beamCoerciveFormData.resolvent_injective (affineLp a b)
-    have hsub : (⟨beamCoerciveFormData.resolvent (affineLp a b),
-        LinearMap.mem_range_self _ (affineLp a b)⟩ :
-          beamShiftedFormData.shiftedOperator.domain)
-        = ⟨affineLp a b, hmem⟩ := Subtype.ext hres
-    rw [← hsub]
-    exact this
-  have happly : beamOperator ⟨affineLp a b, hmem⟩
-      = beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩
-        - affineLp a b :=
-    beamShiftedFormData.beamOperator_apply _
-  rw [happly, hshift, sub_self]
+  obtain ⟨hmem, hB⟩ := beamShiftedFormData.exists_beamOperator_apply_of_resolvent_eq hres
+  exact ⟨hmem, hB.trans (sub_self _)⟩
 
 /-- Conversely, an element of the kernel is affine. -/
 theorem exists_affine_of_beamOperator_eq_zero {x : beamOperator.domain}
@@ -802,9 +781,8 @@ theorem beamResolvent_eq :
 
 /-- The variational resolvent is a compact operator. -/
 theorem isCompactOperator_beamResolvent :
-    IsCompactOperator beamCoerciveFormData.resolvent := by
-  rw [beamResolvent_eq]
-  exact isCompactOperator_beamEmbed.comp_clm (ContinuousLinearMap.adjoint beamEmbed)
+    IsCompactOperator beamCoerciveFormData.resolvent :=
+  beamCoerciveFormData.isCompactOperator_resolvent isCompactOperator_beamEmbed
 
 /-- **Inverting the resolvent eigenvalue relation.**  A nonzero scalar `mu` with
 `R u = mu • u` places `u` in the operator domain and makes it an eigenvector of the beam
@@ -814,30 +792,10 @@ theorem exists_beamOperator_apply_of_beamResolvent_smul {mu : ℂ} (hmu : mu ≠
     {u : BeamL2} (huv : beamCoerciveFormData.resolvent u = mu • u) :
     ∃ h : u ∈ beamOperator.domain,
       beamOperator ⟨u, h⟩ = (mu⁻¹ - 1) • u := by
-  set R := beamCoerciveFormData.resolvent with hR
-  -- the eigenvector is in the domain of the shifted operator
-  have humem : u ∈ beamOperator.domain := by
-    have hmem : u ∈ LinearMap.range ((R : BeamL2 →ₗ[ℂ] BeamL2)) := by
-      refine ⟨mu⁻¹ • u, ?_⟩
-      rw [show ((R : BeamL2 →ₗ[ℂ] BeamL2)) (mu⁻¹ • u) = R (mu⁻¹ • u) from rfl,
-        map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
-    exact hmem
-  refine ⟨humem, ?_⟩
-  -- the shifted operator scales the eigenvector by `mu⁻¹`
-  have hRmu : R (mu⁻¹ • u) = u := by
+  have hRmu : beamCoerciveFormData.resolvent (mu⁻¹ • u) = u := by
     rw [map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
-  have hshift : beamShiftedFormData.shiftedOperator ⟨u, humem⟩
-      = mu⁻¹ • u := by
-    have happ := Abstract.inversePartialMap_apply_R R
-      beamCoerciveFormData.resolvent_isSelfAdjoint
-      beamCoerciveFormData.resolvent_injective (mu⁻¹ • u)
-    have hsub : (⟨R (mu⁻¹ • u), LinearMap.mem_range_self _ _⟩ :
-        beamShiftedFormData.shiftedOperator.domain) = ⟨u, humem⟩ := Subtype.ext hRmu
-    exact (congrArg beamShiftedFormData.shiftedOperator hsub).symm.trans happ
-  have h : beamOperator ⟨u, humem⟩
-      = beamShiftedFormData.shiftedOperator ⟨u, humem⟩ - u :=
-    beamShiftedFormData.beamOperator_apply _
-  rw [h, hshift, sub_smul, one_smul]
+  obtain ⟨humem, hB⟩ := beamShiftedFormData.exists_beamOperator_apply_of_resolvent_eq hRmu
+  exact ⟨humem, hB.trans (by rw [sub_smul, one_smul])⟩
 
 /-- A fixed vector of the variational resolvent is affine: `1` is the resolvent eigenvalue
 that corresponds to the operator's zero mode. -/
@@ -938,8 +896,7 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
     have h := _root_.LinearPMap.mem_realSpectrum_iff.mp hlam
     change (lam : ℂ) ∈ beamShiftedFormData.beamOperator.spectrum at h
     rw [beamShiftedFormData.beamOperator_eq_subScalar, _root_.LinearPMap.mem_spectrum_iff,
-      TauCeti.LinearPMap.mem_resolventSet_subScalar_iff,
-      beamShiftedFormData.shiftedOperator_eq_inverse] at h
+      TauCeti.LinearPMap.mem_resolventSet_subScalar_iff] at h
     exact (_root_.LinearPMap.mem_spectrum_iff _ _).mpr h
   have hc : c ≠ 0 := by
     intro h0

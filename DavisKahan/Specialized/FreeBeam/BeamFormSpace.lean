@@ -160,10 +160,6 @@ theorem contToLp_polynomial_mem_range (q : Polynomial ℝ) :
 theorem denseRange_beamEmbed : DenseRange beamEmbed :=
   Scalar.denseRange_beamEmbed (𝕜 := ℂ)
 
-theorem beamEmbed_adjoint_injective :
-    Function.Injective (ContinuousLinearMap.adjoint beamEmbed) :=
-  Scalar.beamEmbed_adjoint_injective (𝕜 := ℂ)
-
 /-- Coercive bending form data for the complex model. -/
 abbrev beamCoerciveFormData :
     Abstract.CoerciveFormData (𝕜 := ℂ) (H := BeamL2) (V := BeamV) :=
