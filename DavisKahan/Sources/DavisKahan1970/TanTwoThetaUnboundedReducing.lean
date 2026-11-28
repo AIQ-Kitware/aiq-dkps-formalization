@@ -14,6 +14,9 @@ public import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+open scoped Topology
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -78,10 +81,13 @@ strongly to its identity. -/
 theorem stronglyTendsto_cutoffCorner_reducingCutoffSeq
     {A : G →ₗ.[ℂ] G} (hA : IsSelfAdjoint A) {U : Submodule ℂ G}
     [U.HasOrthogonalProjection] (hred : _root_.LinearPMap.IsReducing A U) :
-    StronglyTendsto
-      (fun n : ℕ => cutoffCorner (TauCeti.reducingCutoffSeq hA hred n))
-      atTop (ContinuousLinearMap.id ℂ U) := by
+    Tendsto
+      (fun n : ℕ => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U
+        (cutoffCorner (TauCeti.reducingCutoffSeq hA hred n))) atTop
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (ContinuousLinearMap.id ℂ U))) := by
+  apply PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mpr
   intro y
+  change Tendsto (fun n : ℕ => cutoffCorner (TauCeti.reducingCutoffSeq hA hred n) y) atTop (𝓝 y)
   apply tendsto_subtype_rng.mpr
   have h := TauCeti.tendsto_reducingCutoffSeq hA hred y.property
   simpa only [Function.comp_apply, ContinuousLinearMap.id_apply,

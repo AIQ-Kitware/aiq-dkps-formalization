@@ -25,6 +25,8 @@ retired. The accepted converse localization supplies the input uniformly over
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+
 open scoped InnerProductSpace Topology
 
 namespace TauCeti
@@ -46,8 +48,10 @@ omit [CompleteSpace F] in
 /-- Real-Hilbert-space cutoff convergence for approximation singular values. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto_real
     {ι : Type w} {P : ι → E →L[ℝ] E} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ E))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) E E ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) E E (ContinuousLinearMap.id ℝ E))))
     (n : ℕ) (K : E →L[ℝ] F) :
     Tendsto
       (fun i => ((K ∘L P i).singularValue n : ℝ))
@@ -59,8 +63,10 @@ omit [CompleteSpace F] in
 /-- Real-Hilbert-space cutoff convergence for finite Ky Fan gauges. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
     {ι : Type w} {P : ι → E →L[ℝ] E} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ E))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) E E ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) E E (ContinuousLinearMap.id ℝ E))))
     (k : ℕ) (K : E →L[ℝ] F) :
     Tendsto
       (fun i => ((K ∘L P i).kyFanGauge k : ℝ))

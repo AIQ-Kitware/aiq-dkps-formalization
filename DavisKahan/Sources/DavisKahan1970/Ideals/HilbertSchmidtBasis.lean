@@ -14,6 +14,8 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.ScalarTransp
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -104,8 +106,11 @@ omit [CompleteSpace F] in
 strongly to the identity. -/
 theorem basisProjection_stronglyTendsto {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) :
-    StronglyTendsto (fun s : Finset ι => b.projection (s : Set ι))
-      atTop (ContinuousLinearMap.id 𝕜 F) := by
+    Tendsto
+      (fun s : Finset ι => toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) F F
+        (b.projection (s : Set ι))) atTop
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) F F (ContinuousLinearMap.id 𝕜 F))) := by
+  apply PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mpr
   intro x
   have hsum := b.hasSum_repr x
   simp only [HilbertBasis.repr_apply_apply] at hsum
@@ -120,7 +125,9 @@ theorem approximationSingularValue_cutoff_tendsto {ι : Type*}
       atTop (𝓝 ((A.singularValue n : ℝ))) :=
   approximationSingularValue_comp_strongProjection_tendsto_of_minMax
     TauCeti.HasMinMaxLowerBound.of_completeSpace
-    (fun s => ⟨by rw [b.projection_comp_projection, Set.inter_self], b.isSymmetric_projection _⟩)
+    (P := fun s : Finset ι => b.projection (s : Set ι))
+    (fun s => ContinuousLinearMap.isStarProjection_iff_isSymmetricProjection.mp
+      (b.isStarProjection_projection (s : Set ι)))
     (basisProjection_stronglyTendsto b) n A
 
 /-- The square energy is the supremum over all finite coordinate cutoffs,

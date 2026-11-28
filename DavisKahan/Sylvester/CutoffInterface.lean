@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import DavisKahan.Sylvester.ClosedSylvesterEquation
+public import Mathlib.Topology.Algebra.Module.Spaces.PointwiseConvergenceCLM
 
 /-!
 # Interfaces for spectral cutoffs and bounded truncations
@@ -26,6 +27,7 @@ namespace Sylvester
 
 open scoped InnerProductSpace Topology
 open Filter
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
 
 
 universe u v
@@ -39,14 +41,14 @@ needed from a spectral cutoff family. -/
 structure SpectralCutoffInterface
     (A : E →ₗ.[𝕜] E) (hA : IsSelfAdjoint A) where
   cutoff : ℝ → E →L[𝕜] E
-  isOrthogonalProjection : ∀ τ,
-    cutoff τ ∘L cutoff τ = cutoff τ ∧ (cutoff τ).IsSymmetric
+  isOrthogonalProjection : ∀ τ, (cutoff τ).toLinearMap.IsSymmetricProjection
   range_le_domain : ∀ τ, LinearMap.range (cutoff τ).toLinearMap ≤ A.domain
   commutes_on_domain : ∀ τ (x : A.domain),
     ∃ hx : cutoff τ (x : E) ∈ A.domain,
       A ⟨cutoff τ (x : E), hx⟩ = cutoff τ (A x)
-  tendsto_identity : ∀ x,
-    Tendsto (fun τ : ℝ => cutoff τ x) atTop (𝓝 x)
+  tendsto_identity :
+    Tendsto (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E ∘ cutoff) atTop
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E (ContinuousLinearMap.id 𝕜 E)))
 
 /-- The bounded truncation laws needed after a cutoff family has been chosen. -/
 structure BoundedTruncationInterface

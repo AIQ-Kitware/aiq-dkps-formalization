@@ -20,6 +20,10 @@ import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+open scoped Topology
+open Filter
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -678,11 +682,9 @@ theorem isSelfAdjoint_cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) :
 *every* `BoundedCutoff`, so no consumer of `cutoffCorner` has to ask for it as a
 hypothesis. -/
 theorem isOrthogonalProjectionMap_cutoffCorner (Ω : TauCeti.BoundedCutoff A U τ) :
-    TauCeti.ApproximationNumber.IsOrthogonalProjectionMap (cutoffCorner Ω) := by
-  refine ⟨?_, ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-    (isSelfAdjoint_cutoffCorner Ω)⟩
-  rw [← ContinuousLinearMap.mul_def]
-  exact (isIdempotentElem_cutoffCorner Ω).eq
+    (cutoffCorner Ω).toLinearMap.IsSymmetricProjection := by
+  exact ⟨ContinuousLinearMap.isIdempotentElem_toLinearMap_iff.mpr (isIdempotentElem_cutoffCorner Ω),
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (isSelfAdjoint_cutoffCorner Ω)⟩
 
 end ScalarGenericCutoff
 
@@ -743,9 +745,10 @@ full trial subspace. -/
 theorem tendsto_sum_tanArcsin_approximationNumber_reflectionSineCorner_comp
     (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {P : ι → U →L[ℂ] U} {l : Filter ι}
-    (hPproj : ∀ i, TauCeti.ApproximationNumber.IsOrthogonalProjectionMap (P i))
-    (hP : TauCeti.ApproximationNumber.StronglyTendsto P l
-      (ContinuousLinearMap.id ℂ U))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (ContinuousLinearMap.id ℂ U))))
     (k : ℕ) :
     Filter.Tendsto
       (fun i => ∑ n ∈ Finset.range k, Real.tan (Real.arcsin

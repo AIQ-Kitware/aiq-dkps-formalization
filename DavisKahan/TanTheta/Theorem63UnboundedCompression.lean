@@ -12,6 +12,8 @@ public import DavisKahan.SpectralTheory.BoundedTruncation
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -78,7 +80,6 @@ namespace DavisKahan
 namespace TanTheta
 
 open ExactSinTheta
-open TauCeti.ApproximationNumber (IsOrthogonalProjectionMap StronglyTendsto)
 
 universe u
 
@@ -246,23 +247,23 @@ noncomputable def trunc (τ : ℝ) : Z →L[ℂ] Z :=
 omit [CompleteSpace H] in
 /-- The cutoffs are orthogonal projections. -/
 theorem isOrthogonalProjectionMap_cutoff (τ : ℝ) :
-    IsOrthogonalProjectionMap (D.cutoff τ) :=
+    (D.cutoff τ).toLinearMap.IsSymmetricProjection :=
   spectraSpectralCutoff_isOrthogonalProjection D.compression
     D.compression_isSelfAdjoint τ
 
 omit [CompleteSpace H] in
 /-- The cutoffs converge strongly to the identity as the level grows without bound. -/
 theorem stronglyTendsto_cutoff :
-    StronglyTendsto (fun τ : ℝ => D.cutoff τ) atTop
-      (ContinuousLinearMap.id ℂ (Z : Type u)) := fun x =>
-  spectraSpectralCutoff_tendsto_identity D.compression
-    D.compression_isSelfAdjoint x
+    Tendsto (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) Z Z ∘ D.cutoff) atTop
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) Z Z (ContinuousLinearMap.id ℂ Z))) :=
+  PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mpr
+    (spectraSpectralCutoff_tendsto_identity D.compression D.compression_isSelfAdjoint)
 
 omit [CompleteSpace H] in
 /-- The cutoff is idempotent. -/
 theorem cutoff_cutoff (τ : ℝ) (z : Z) : D.cutoff τ (D.cutoff τ z) = D.cutoff τ z := by
-  have h := (D.isOrthogonalProjectionMap_cutoff τ).1
-  exact congrArg (fun L : Z →L[ℂ] Z => L z) h
+  exact congrArg (fun L : Z →ₗ[ℂ] Z => L z)
+    (D.isOrthogonalProjectionMap_cutoff τ).isIdempotentElem.eq
 
 omit [CompleteSpace H] in
 /-- Every cutoff vector lies in the compression domain. -/
@@ -392,7 +393,8 @@ theorem norm_truncProj_le (τ : ℝ) : ‖D.truncProj τ‖ ≤ 1 := by
   calc ‖D.cutoff τ z‖ ≤ ‖D.cutoff τ‖ * ‖z‖ := (D.cutoff τ).le_opNorm z
     _ ≤ 1 * ‖z‖ := by
       refine mul_le_mul_of_nonneg_right ?_ (norm_nonneg z)
-      exact_mod_cast (D.isOrthogonalProjectionMap_cutoff τ).norm_le_one
+      exact (ContinuousLinearMap.isStarProjection_iff_isSymmetricProjection.mpr
+        (D.isOrthogonalProjectionMap_cutoff τ)).norm_le
     _ = ‖z‖ := one_mul _
 
 omit [CompleteSpace H] in

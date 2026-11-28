@@ -11,6 +11,9 @@ public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariant
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+open scoped Topology
+
 open TauCeti.DavisKahan.Sylvester
 
 /-!
@@ -51,12 +54,14 @@ variable {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
 spectral subspace, converge strongly to the identity of that subspace. -/
 theorem stronglyTendsto_cutoffCorner_spectralCutoffSeq
     {A : G →ₗ.[ℂ] G} (hA : IsSelfAdjoint A) (c : ℝ) :
-    StronglyTendsto
-      (fun n : ℕ => cutoffCorner (TauCeti.spectralCutoffSeq hA c n))
-      atTop
-      (ContinuousLinearMap.id ℂ
-        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)) := by
+    Tendsto
+      (fun n : ℕ => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) _ _
+        (cutoffCorner (TauCeti.spectralCutoffSeq hA c n))) atTop
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) _ _
+        (ContinuousLinearMap.id ℂ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range))) := by
+  apply PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mpr
   intro y
+  change Tendsto (fun n : ℕ => cutoffCorner (TauCeti.spectralCutoffSeq hA c n) y) atTop (𝓝 y)
   apply tendsto_subtype_rng.mpr
   have h := TauCeti.tendsto_spectralCutoff hA c y.property
   simpa only [Function.comp_apply, ContinuousLinearMap.id_apply, coe_cutoffCorner_apply] using h
@@ -128,9 +133,10 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
   have hS1 : ‖U.offDiagBlock Z‖ < 1 := lt_of_le_of_lt hSle hg1
   have hCC : IsUnit (U.diagBlock Z * U.diagBlock Z) :=
     isUnit_diagonalPart_sq_of_forall_mem hZsa hZ2 hg0 hg1 hgU
-  have hstrong : StronglyTendsto
-      (fun n : ℕ => cutoffCorner (TauCeti.spectralCutoffSeq hA c n))
-      atTop (ContinuousLinearMap.id ℂ U) := by
+  have hstrong : Tendsto
+    (fun n : ℕ => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U
+      (cutoffCorner (TauCeti.spectralCutoffSeq hA c n))) atTop
+    (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (ContinuousLinearMap.id ℂ U))) := by
     simpa [U] using stronglyTendsto_cutoffCorner_spectralCutoffSeq hA c
   have hkyFan : ∀ k : ℕ,
       (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤

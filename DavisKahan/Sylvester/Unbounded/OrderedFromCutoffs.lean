@@ -7,6 +7,7 @@ module
 
 public import DavisKahan.SpectralTheory.BoundedTruncation
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
+public import TauCeti.Analysis.InnerProductSpace.Symmetric.Projection
 
 /-!
 # Interface-level cutoff mechanics for the ordered unbounded Sylvester proof
@@ -19,6 +20,8 @@ cutoff proofs.
 -/
 
 public section
+
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
 
 open scoped InnerProductSpace Topology
 open TauCeti.DavisKahan.ExactSinTheta
@@ -58,7 +61,7 @@ theorem interfaceFilledTruncation_isSymmetric
     (a τ : ℝ) :
     (interfaceFilledTruncation P T a τ).IsSymmetric := by
   have hT := T.isSymmetric τ
-  have hP := (P.isOrthogonalProjection τ).2
+  have hP := (P.isOrthogonalProjection τ).isSymmetric
   exact hT.add (LinearMap.IsSymmetric.smul (RCLike.conj_ofReal a)
     (LinearMap.IsSymmetric.id.sub hP))
 
@@ -73,23 +76,12 @@ theorem interfaceCutoff_complement_identities
     ⟪P.cutoff τ x, x - P.cutoff τ x⟫_ℂ = 0 ∧
       ‖P.cutoff τ x‖ ^ 2 + ‖x - P.cutoff τ x‖ ^ 2 = ‖x‖ ^ 2 := by
   have hP := P.isOrthogonalProjection τ
-  have hPP : P.cutoff τ (P.cutoff τ x) = P.cutoff τ x := by
-    have h := congrArg (fun S : H →L[ℂ] H => S x) hP.1
-    simpa only [ContinuousLinearMap.comp_apply] using h
-  have hPQ : P.cutoff τ (x - P.cutoff τ x) = 0 := by
-    rw [map_sub, hPP, sub_self]
   have horth : ⟪P.cutoff τ x, x - P.cutoff τ x⟫_ℂ = 0 := by
-    calc
-      ⟪P.cutoff τ x, x - P.cutoff τ x⟫_ℂ =
-          ⟪x, P.cutoff τ (x - P.cutoff τ x)⟫_ℂ :=
-        hP.2 x (x - P.cutoff τ x)
-      _ = 0 := by simp only [hPQ, inner_zero_right]
-  refine ⟨horth, ?_⟩
-  have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
-    (P.cutoff τ x) (x - P.cutoff τ x) horth
-  rw [show P.cutoff τ x + (x - P.cutoff τ x) = x by abel] at h
-  rw [sq, sq, sq]
-  linarith
+    change ⟪(P.cutoff τ).toLinearMap x, (1 - (P.cutoff τ).toLinearMap) x⟫_ℂ = 0
+    rw [hP.isSymmetric]
+    change ⟪x, ((P.cutoff τ).toLinearMap * (1 - (P.cutoff τ).toLinearMap)) x⟫_ℂ = 0
+    rw [hP.isIdempotentElem.mul_one_sub_self, LinearMap.zero_apply, inner_zero_right]
+  exact ⟨horth, (hP.norm_sq_eq_add_norm_sq x).symm⟩
 
 /-- **The orthogonal decomposition a cutoff interface induces**, bundled.
 
@@ -113,10 +105,8 @@ private theorem interfaceCutoff_orthogonality
   have hPT : P.cutoff τ (T.truncation τ x) = T.truncation τ x := by
     have h := congrArg (fun S : H →L[ℂ] H => S x) hcomm.2
     simpa only [ContinuousLinearMap.comp_apply] using h
-  have hPP : P.cutoff τ (P.cutoff τ x) = P.cutoff τ x := by
-    have h := congrArg (fun S : H →L[ℂ] H => S x)
-      (P.isOrthogonalProjection τ).1
-    simpa only [ContinuousLinearMap.comp_apply] using h
+  have hPP : P.cutoff τ (P.cutoff τ x) = P.cutoff τ x :=
+    congrArg (fun S : H →ₗ[ℂ] H => S x) (P.isOrthogonalProjection τ).isIdempotentElem.eq
   have hPQ : P.cutoff τ (x - P.cutoff τ x) = 0 := by
     rw [map_sub, hPP, sub_self]
   have hTorth : ⟪T.truncation τ x, x - P.cutoff τ x⟫_ℂ = 0 := by
@@ -125,7 +115,7 @@ private theorem interfaceCutoff_orthogonality
           ⟪P.cutoff τ (T.truncation τ x), x - P.cutoff τ x⟫_ℂ := by
         rw [hPT]
       _ = ⟪T.truncation τ x, P.cutoff τ (x - P.cutoff τ x)⟫_ℂ :=
-        (P.isOrthogonalProjection τ).2
+        (P.isOrthogonalProjection τ).isSymmetric
           (T.truncation τ x) (x - P.cutoff τ x)
       _ = 0 := by simp only [hPQ, inner_zero_right]
   have hQorth : ⟪x - P.cutoff τ x, P.cutoff τ x⟫_ℂ = 0 := by
@@ -172,10 +162,8 @@ theorem interfaceFilledTruncation_lowerBound
   have hPT : P.cutoff τ (T.truncation τ x) = T.truncation τ x := by
     have h := congrArg (fun S : H →L[ℂ] H => S x) hcomm.2
     simpa only [ContinuousLinearMap.comp_apply] using h
-  have hPP : P.cutoff τ (P.cutoff τ x) = P.cutoff τ x := by
-    have h := congrArg (fun S : H →L[ℂ] H => S x)
-      (P.isOrthogonalProjection τ).1
-    simpa only [ContinuousLinearMap.comp_apply] using h
+  have hPP : P.cutoff τ (P.cutoff τ x) = P.cutoff τ x :=
+    congrArg (fun S : H →ₗ[ℂ] H => S x) (P.isOrthogonalProjection τ).isIdempotentElem.eq
   have hPQ : P.cutoff τ (x - P.cutoff τ x) = 0 := by
     rw [map_sub, hPP, sub_self]
   obtain ⟨hTorth, hTinner, hQinner⟩ :=
@@ -213,10 +201,8 @@ theorem interfaceFilledTruncation_upperBound
   have hPT : P.cutoff τ (T.truncation τ x) = T.truncation τ x := by
     have h := congrArg (fun S : H →L[ℂ] H => S x) hcomm.2
     simpa only [ContinuousLinearMap.comp_apply] using h
-  have hPP : P.cutoff τ (P.cutoff τ x) = P.cutoff τ x := by
-    have h := congrArg (fun S : H →L[ℂ] H => S x)
-      (P.isOrthogonalProjection τ).1
-    simpa only [ContinuousLinearMap.comp_apply] using h
+  have hPP : P.cutoff τ (P.cutoff τ x) = P.cutoff τ x :=
+    congrArg (fun S : H →ₗ[ℂ] H => S x) (P.isOrthogonalProjection τ).isIdempotentElem.eq
   have hPQ : P.cutoff τ (x - P.cutoff τ x) = 0 := by
     rw [map_sub, hPP, sub_self]
   obtain ⟨hTorth, hTinner, hQinner⟩ :=
@@ -248,16 +234,10 @@ theorem kyFan_le_of_interfaceRightCutoff_le
       δ * ((X ∘L P.cutoff τ).kyFanGauge k : ℝ) ≤
         ((C ∘L P.cutoff τ).kyFanGauge k : ℝ)) :
     δ * (X.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ) := by
-  have hPproj : ∀ τ : ℝ, IsOrthogonalProjectionMap (P.cutoff τ) :=
-    P.isOrthogonalProjection
-  have hPstrong : StronglyTendsto (fun τ : ℝ => P.cutoff τ) atTop
-      (ContinuousLinearMap.id ℂ F) := by
-    intro x
-    simpa using P.tendsto_identity x
   have hX := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hPstrong k X
+    P.isOrthogonalProjection P.tendsto_identity k X
   have hC := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hPstrong k C
+    P.isOrthogonalProjection P.tendsto_identity k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * ((X ∘L P.cutoff τ).kyFanGauge k : ℝ) ≤
         ((C ∘L P.cutoff τ).kyFanGauge k : ℝ) := by
@@ -270,8 +250,10 @@ theorem kyFan_le_of_interfaceRightCutoff_le
 side. -/
 theorem kyFan_left_comp_interfaceCutoff_tendsto
     {ι : Type} {P : ι → E →L[ℂ] E} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E E ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E E (ContinuousLinearMap.id ℂ E))))
     (k : ℕ) (K : F →L[ℂ] E) :
     Tendsto (fun i => ((P i ∘L K).kyFanGauge k : ℝ)) l
       (𝓝 ((K.kyFanGauge k : ℝ))) := by
@@ -297,14 +279,8 @@ theorem kyFan_le_of_interfaceLeftCutoff_le
       δ * ((P.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
         ((P.cutoff τ ∘L C).kyFanGauge k : ℝ)) :
     δ * (X.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ) := by
-  have hPproj : ∀ τ : ℝ, IsOrthogonalProjectionMap (P.cutoff τ) :=
-    P.isOrthogonalProjection
-  have hPstrong : StronglyTendsto (fun τ : ℝ => P.cutoff τ) atTop
-      (ContinuousLinearMap.id ℂ E) := by
-    intro x
-    simpa using P.tendsto_identity x
-  have hX := kyFan_left_comp_interfaceCutoff_tendsto hPproj hPstrong k X
-  have hC := kyFan_left_comp_interfaceCutoff_tendsto hPproj hPstrong k C
+  have hX := kyFan_left_comp_interfaceCutoff_tendsto P.isOrthogonalProjection P.tendsto_identity k X
+  have hC := kyFan_left_comp_interfaceCutoff_tendsto P.isOrthogonalProjection P.tendsto_identity k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * ((P.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
         ((P.cutoff τ ∘L C).kyFanGauge k : ℝ) := by
@@ -336,8 +312,8 @@ theorem interfaceDoubleCutoff_sylvester_equation
   let PB : F →L[ℂ] F := PBi.cutoff τB
   let TA : E →L[ℂ] E := TAi.truncation τA
   let TB : F →L[ℂ] F := TBi.truncation τB
-  have hPAidem := (PAi.isOrthogonalProjection τA).1
-  have hPBidem := (PBi.isOrthogonalProjection τB).1
+  have hPAidem := (PAi.isOrthogonalProjection τA).isIdempotentElem.eq
+  have hPBidem := (PBi.isOrthogonalProjection τB).isIdempotentElem.eq
   have hTAcomm := TAi.commutes_cutoff τA
   have hTBcomm := TBi.commutes_cutoff τB
   ext x
@@ -351,11 +327,9 @@ theorem interfaceDoubleCutoff_sylvester_equation
     TAi.eq_on_cutoff τA (X (PB x))
   obtain ⟨_hPBcutdom, hTBcut⟩ := TBi.eq_on_cutoff τB x
   have hPAPAx : PA (PA (X (PB x))) = PA (X (PB x)) := by
-    have h := congrArg (fun S : E →L[ℂ] E => S (X (PB x))) hPAidem
-    simpa only [PA, ContinuousLinearMap.comp_apply] using h
+    exact congrArg (fun S : E →ₗ[ℂ] E => S (X (PB x))) hPAidem
   have hPBPBx : PB (PB x) = PB x := by
-    have h := congrArg (fun S : F →L[ℂ] F => S x) hPBidem
-    simpa only [PB, ContinuousLinearMap.comp_apply] using h
+    exact congrArg (fun S : F →ₗ[ℂ] F => S x) hPBidem
   have hTAPA : TA (PA (X (PB x))) = TA (X (PB x)) := by
     have h := congrArg (fun S : E →L[ℂ] E => S (X (PB x))) hTAcomm.1
     simpa only [TA, PA, ContinuousLinearMap.comp_apply] using h

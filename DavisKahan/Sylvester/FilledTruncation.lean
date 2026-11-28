@@ -8,6 +8,7 @@ module
 public import DavisKahan.SpectralTheory.BoundedTruncation
 public import DavisKahan.Sylvester.Bounded
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import TauCeti.Analysis.InnerProductSpace.Symmetric.Projection
 
 /-!
 # Interface-parametric filled spectral truncations
@@ -62,7 +63,7 @@ theorem filledTruncation_isSymmetric
     (a τ : ℝ) :
     (filledTruncation A hA Pcut Tcut a τ).IsSymmetric := by
   have hT := Tcut.isSymmetric τ
-  have hP := (Pcut.isOrthogonalProjection τ).2
+  have hP := (Pcut.isOrthogonalProjection τ).isSymmetric
   exact hT.add (LinearMap.IsSymmetric.smul (RCLike.conj_ofReal a)
     (LinearMap.IsSymmetric.id.sub hP))
 
@@ -79,23 +80,13 @@ theorem cutoff_complement_identities
     let P := Pcut.cutoff τ
     ⟪P x, x - P x⟫_𝕜 = 0 ∧
       ‖P x‖ ^ 2 + ‖x - P x‖ ^ 2 = ‖x‖ ^ 2 := by
-  let P := Pcut.cutoff τ
   have hP := Pcut.isOrthogonalProjection τ
-  have hPP : P (P x) = P x := by
-    have h := congrArg (fun T : H →L[𝕜] H => T x) hP.1
-    simpa only [P, ContinuousLinearMap.comp_apply] using h
-  have hPQ : P (x - P x) = 0 := by
-    rw [map_sub, hPP, sub_self]
-  have horth : ⟪P x, x - P x⟫_𝕜 = 0 := by
-    calc
-      ⟪P x, x - P x⟫_𝕜 = ⟪x, P (x - P x)⟫_𝕜 := hP.2 x (x - P x)
-      _ = 0 := by simp only [hPQ, inner_zero_right]
-  refine ⟨horth, ?_⟩
-  have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
-    (P x) (x - P x) horth
-  rw [show P x + (x - P x) = x by abel] at h
-  rw [sq, sq, sq]
-  linarith
+  have horth : ⟪Pcut.cutoff τ x, x - Pcut.cutoff τ x⟫_𝕜 = 0 := by
+    change ⟪(Pcut.cutoff τ).toLinearMap x, (1 - (Pcut.cutoff τ).toLinearMap) x⟫_𝕜 = 0
+    rw [hP.isSymmetric]
+    change ⟪x, ((Pcut.cutoff τ).toLinearMap * (1 - (Pcut.cutoff τ).toLinearMap)) x⟫_𝕜 = 0
+    rw [hP.isIdempotentElem.mul_one_sub_self, LinearMap.zero_apply, inner_zero_right]
+  exact ⟨horth, (hP.norm_sq_eq_add_norm_sq x).symm⟩
 
 /-- A filled truncation commutes with its cutoff, and either compression
 recovers the bounded truncation. -/
@@ -113,27 +104,25 @@ theorem filledTruncation_commutes_cutoff
         Tcut.truncation τ := by
   let P := Pcut.cutoff τ
   let T := Tcut.truncation τ
-  have hP := (Pcut.isOrthogonalProjection τ).1
+  have hP := (Pcut.isOrthogonalProjection τ).isIdempotentElem.eq
   have hT := Tcut.commutes_cutoff τ
   constructor
   · ext x
-    have hPP := congrArg (fun S : H →L[𝕜] H => S x) hP
+    have hPP : P (P x) = P x := congrArg (fun S : H →ₗ[𝕜] H => S x) hP
     have hTP := congrArg (fun S : H →L[𝕜] H => S x) hT.1
     change T (P x) + ((a : ℝ) : 𝕜) • (P x - P (P x)) = T x
     rw [show T (P x) = T x by
       simpa only [P, T, ContinuousLinearMap.comp_apply] using hTP]
-    rw [show P (P x) = P x by
-      simpa only [P, ContinuousLinearMap.comp_apply] using hPP]
+    rw [hPP]
     simp
   · ext x
-    have hPP := congrArg (fun S : H →L[𝕜] H => S x) hP
+    have hPP : P (P x) = P x := congrArg (fun S : H →ₗ[𝕜] H => S x) hP
     have hPT := congrArg (fun S : H →L[𝕜] H => S x) hT.2
     change P (T x + ((a : ℝ) : 𝕜) • (x - P x)) = T x
     rw [map_add, map_smul, map_sub]
     rw [show P (T x) = T x by
       simpa only [P, T, ContinuousLinearMap.comp_apply] using hPT]
-    rw [show P (P x) = P x by
-      simpa only [P, ContinuousLinearMap.comp_apply] using hPP]
+    rw [hPP]
     simp
 
 /-- On a cutoff vector, a filled truncation agrees with the original closed
@@ -174,7 +163,8 @@ theorem filledTruncation_tendsto_on_domain
       (fun τ : ℝ => filledTruncation A hA Pcut Tcut a τ (x : H))
       atTop (𝓝 (A x)) := by
   have hT := Tcut.tendsto_on_domain x
-  have hP := Pcut.tendsto_identity (x : H)
+  have hP : Tendsto (fun τ : ℝ => Pcut.cutoff τ (x : H)) atTop (𝓝 (x : H)) :=
+    PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mp Pcut.tendsto_identity x
   have hQ : Tendsto (fun τ : ℝ => (x : H) - Pcut.cutoff τ (x : H))
       atTop (𝓝 0) := by
     have h := (tendsto_const_nhds (x := (x : H)) (f := atTop (α := ℝ))).sub hP
@@ -219,16 +209,14 @@ private theorem cutoff_orthogonality {H : Type v}
   have hPT : P (T x) = T x := by
     have h := congrArg (fun S : H →L[𝕜] H => S x) hcomm.2
     simpa only [P, T, ContinuousLinearMap.comp_apply] using h
-  have hPP : P (P x) = P x := by
-    have h := congrArg (fun S : H →L[𝕜] H => S x)
-      (Pcut.isOrthogonalProjection τ).1
-    simpa only [P, ContinuousLinearMap.comp_apply] using h
+  have hPP : P (P x) = P x :=
+    congrArg (fun S : H →ₗ[𝕜] H => S x) (Pcut.isOrthogonalProjection τ).isIdempotentElem.eq
   have hPQ : P (x - P x) = 0 := by rw [map_sub, hPP, sub_self]
   have hTorth : ⟪T x, x - P x⟫_𝕜 = 0 := by
     calc
       ⟪T x, x - P x⟫_𝕜 = ⟪P (T x), x - P x⟫_𝕜 := by rw [hPT]
       _ = ⟪T x, P (x - P x)⟫_𝕜 :=
-        (Pcut.isOrthogonalProjection τ).2 (T x) (x - P x)
+        (Pcut.isOrthogonalProjection τ).isSymmetric (T x) (x - P x)
       _ = 0 := by simp only [hPQ, inner_zero_right]
   have hQorth : ⟪x - P x, P x⟫_𝕜 = 0 := by
     rw [← inner_conj_symm, hproj.1, map_zero]
@@ -272,10 +260,8 @@ theorem filledTruncation_lowerBound
   have hPT : P (T x) = T x := by
     have h := congrArg (fun S : H →L[𝕜] H => S x) hcomm.2
     simpa only [P, T, ContinuousLinearMap.comp_apply] using h
-  have hPP : P (P x) = P x := by
-    have h := congrArg (fun S : H →L[𝕜] H => S x)
-      (Pcut.isOrthogonalProjection τ).1
-    simpa only [P, ContinuousLinearMap.comp_apply] using h
+  have hPP : P (P x) = P x :=
+    congrArg (fun S : H →ₗ[𝕜] H => S x) (Pcut.isOrthogonalProjection τ).isIdempotentElem.eq
   have hPQ : P (x - P x) = 0 := by rw [map_sub, hPP, sub_self]
   obtain ⟨hTorth, hTinner, hQinner⟩ :=
     cutoff_orthogonality A hA Pcut Tcut τ x
@@ -313,10 +299,8 @@ theorem filledTruncation_upperBound
   have hPT : P (T x) = T x := by
     have h := congrArg (fun S : H →L[𝕜] H => S x) hcomm.2
     simpa only [P, T, ContinuousLinearMap.comp_apply] using h
-  have hPP : P (P x) = P x := by
-    have h := congrArg (fun S : H →L[𝕜] H => S x)
-      (Pcut.isOrthogonalProjection τ).1
-    simpa only [P, ContinuousLinearMap.comp_apply] using h
+  have hPP : P (P x) = P x :=
+    congrArg (fun S : H →ₗ[𝕜] H => S x) (Pcut.isOrthogonalProjection τ).isIdempotentElem.eq
   have hPQ : P (x - P x) = 0 := by rw [map_sub, hPP, sub_self]
   obtain ⟨hTorth, hTinner, hQinner⟩ :=
     cutoff_orthogonality A hA Pcut Tcut τ x

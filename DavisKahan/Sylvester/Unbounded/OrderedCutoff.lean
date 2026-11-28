@@ -19,6 +19,8 @@ passages and Fan dominance endpoint.
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+
 namespace TauCeti
 namespace DavisKahan
 namespace Sylvester
@@ -52,19 +54,10 @@ theorem kyFanApproximationGauge_le_of_cutoff_le
         ((C ∘L PCB.cutoff τ).kyFanGauge k : ℝ)) :
     δ * (X.kyFanGauge k : ℝ) ≤
       (C.kyFanGauge k : ℝ) := by
-  have hPproj : ∀ τ : ℝ,
-      IsOrthogonalProjectionMap (PCB.cutoff τ) := by
-    intro τ
-    exact PCB.isOrthogonalProjection τ
-  have hPstrong : StronglyTendsto
-      (fun τ : ℝ => PCB.cutoff τ) atTop
-      (ContinuousLinearMap.id 𝕜 F) := by
-    intro x
-    simpa using PCB.tendsto_identity x
   have hX := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hPstrong k X
+    PCB.isOrthogonalProjection PCB.tendsto_identity k X
   have hC := kyFanApproximationGauge_comp_strongProjection_tendsto
-    hPproj hPstrong k C
+    PCB.isOrthogonalProjection PCB.tendsto_identity k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * ((X ∘L PCB.cutoff τ).kyFanGauge k : ℝ) ≤
         ((C ∘L PCB.cutoff τ).kyFanGauge k : ℝ) := by
@@ -77,8 +70,10 @@ theorem kyFanApproximationGauge_le_of_cutoff_le
 the target side. -/
 theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
     {ι : Type} {P : ι → E →L[𝕜] E} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E (ContinuousLinearMap.id 𝕜 E))))
     (k : ℕ) (K : F →L[𝕜] E) :
     Tendsto
       (fun i => ((P i ∘L K).kyFanGauge k : ℝ))
@@ -106,19 +101,10 @@ theorem kyFanApproximationGauge_le_of_leftCutoff_le
         ((PCA.cutoff τ ∘L C).kyFanGauge k : ℝ)) :
     δ * (X.kyFanGauge k : ℝ) ≤
       (C.kyFanGauge k : ℝ) := by
-  have hPproj : ∀ τ : ℝ,
-      IsOrthogonalProjectionMap (PCA.cutoff τ) := by
-    intro τ
-    exact PCA.isOrthogonalProjection τ
-  have hPstrong : StronglyTendsto
-      (fun τ : ℝ => PCA.cutoff τ) atTop
-      (ContinuousLinearMap.id 𝕜 E) := by
-    intro x
-    simpa using PCA.tendsto_identity x
   have hX := kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
-    hPproj hPstrong k X
+    PCA.isOrthogonalProjection PCA.tendsto_identity k X
   have hC := kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
-    hPproj hPstrong k C
+    PCA.isOrthogonalProjection PCA.tendsto_identity k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
       δ * ((PCA.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
         ((PCA.cutoff τ ∘L C).kyFanGauge k : ℝ) := by
@@ -154,8 +140,8 @@ theorem doubleCutoff_filled_sylvester_equation
   let PB : F →L[𝕜] F := PCB.cutoff τB
   let TA : E →L[𝕜] E := TCA.truncation τA
   let TB : F →L[𝕜] F := TCB.truncation τB
-  have hPAidem := (PCA.isOrthogonalProjection τA).1
-  have hPBidem := (PCB.isOrthogonalProjection τB).1
+  have hPAidem := (PCA.isOrthogonalProjection τA).isIdempotentElem.eq
+  have hPBidem := (PCB.isOrthogonalProjection τB).isIdempotentElem.eq
   have hTAcomm := TCA.commutes_cutoff τA
   have hTBcomm := TCB.commutes_cutoff τB
   ext x
@@ -170,11 +156,9 @@ theorem doubleCutoff_filled_sylvester_equation
   obtain ⟨_hPBcutdom, hTBcut⟩ :=
     TCB.eq_on_cutoff τB x
   have hPAPAx : PA (PA (X (PB x))) = PA (X (PB x)) := by
-    have h := congrArg (fun S : E →L[𝕜] E => S (X (PB x))) hPAidem
-    simpa only [PA, ContinuousLinearMap.comp_apply] using h
+    exact congrArg (fun S : E →ₗ[𝕜] E => S (X (PB x))) hPAidem
   have hPBPBx : PB (PB x) = PB x := by
-    have h := congrArg (fun S : F →L[𝕜] F => S x) hPBidem
-    simpa only [PB, ContinuousLinearMap.comp_apply] using h
+    exact congrArg (fun S : F →ₗ[𝕜] F => S x) hPBidem
   have hTAPA : TA (PA (X (PB x))) = TA (X (PB x)) := by
     have h := congrArg (fun S : E →L[𝕜] E => S (X (PB x))) hTAcomm.1
     simpa only [TA, PA, ContinuousLinearMap.comp_apply] using h

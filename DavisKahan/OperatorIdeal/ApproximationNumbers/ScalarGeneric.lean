@@ -27,6 +27,8 @@ completeness separately. Real estimates use `SymmetricOperatorIdealFamily.gaugeR
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+
 namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
@@ -54,8 +56,10 @@ class HasApproximationNumberStrongCutoff
       [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
       {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι},
-      (∀ i, IsOrthogonalProjectionMap (P i)) →
-      StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E) →
+      (∀ i, (P i).toLinearMap.IsSymmetricProjection) →
+      Tendsto
+        (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E ∘ P) l
+        (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E (ContinuousLinearMap.id 𝕜 E))) →
       ∀ (n : ℕ) (K : E →L[𝕜] F),
         Tendsto
           (fun i => ((K ∘L P i).singularValue n : ℝ))
@@ -81,8 +85,10 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_real
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [CompleteSpace ER]
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [CompleteSpace FR]
     {ι : Type w} {P : ι → ER →L[ℝ] ER} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ ER))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) ER ER ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) ER ER (ContinuousLinearMap.id ℝ ER))))
     (n : ℕ) (K : ER →L[ℝ] FR) :
     Tendsto
       (fun i => ((K ∘L P i).singularValue n : ℝ))
@@ -97,8 +103,10 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [CompleteSpace ER]
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [CompleteSpace FR]
     {ι : Type w} {P : ι → ER →L[ℝ] ER} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ ER))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) ER ER ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) ER ER (ContinuousLinearMap.id ℝ ER))))
     (k : ℕ) (K : ER →L[ℝ] FR) :
     Tendsto
       (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
@@ -111,8 +119,10 @@ orthogonal cutoffs. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto
     [HasApproximationNumberStrongCutoff.{u, v, w} 𝕜]
     {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E (ContinuousLinearMap.id 𝕜 E))))
     (n : ℕ) (K : E →L[𝕜] F) :
     Tendsto
       (fun i => ((K ∘L P i).singularValue n : ℝ))
@@ -124,8 +134,10 @@ theorem approximationSingularValue_comp_strongProjection_tendsto
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto
     [HasApproximationNumberStrongCutoff.{u, v, w} 𝕜]
     {ι : Type w} {P : ι → E →L[𝕜] E} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E E (ContinuousLinearMap.id 𝕜 E))))
     (k : ℕ) (K : E →L[𝕜] F) :
     Tendsto
       (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
@@ -194,12 +206,12 @@ adjoint.**
 in `Sylvester/Unbounded/OrderedCutoff.lean` and
 `Sylvester/Unbounded/OrderedFromCutoffs.lean`, which share no import edge. -/
 theorem kyFanApproximationGauge_proj_comp_eq_adjoint_comp
-    {k : ℕ} {P : F →L[𝕜] F} (hP : IsOrthogonalProjectionMap P) (K : E →L[𝕜] F) :
+    {k : ℕ} {P : F →L[𝕜] F} (hP : P.toLinearMap.IsSymmetricProjection) (K : E →L[𝕜] F) :
     ((P ∘L K).kyFanGauge k : ℝ) =
       ((K.adjoint ∘L P).kyFanGauge k : ℝ) := by
   rw [← ContinuousLinearMap.kyFanGauge_adjoint (P ∘L K) k]
   simp only [ContinuousLinearMap.adjoint_comp]
-  rw [hP.2.clm_adjoint_eq]
+  rw [hP.isSymmetric.clm_adjoint_eq]
 
 end ExactSinTheta
 end DavisKahan

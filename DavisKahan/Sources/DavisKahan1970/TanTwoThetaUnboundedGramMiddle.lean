@@ -11,6 +11,10 @@ public import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+open scoped Topology
+open Filter
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -1063,10 +1067,10 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan
     (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hproj : ∀ i, TauCeti.ApproximationNumber.IsOrthogonalProjectionMap
-      (cutoffCorner (Ω i)))
-    (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
-      (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
+    (hproj : ∀ i, (cutoffCorner (Ω i)).toLinearMap.IsSymmetricProjection)
+    (hstrong : Tendsto
+      (fun i => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (cutoffCorner (Ω i))) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (ContinuousLinearMap.id ℂ U))))
     (k : ℕ) :
     (b - a) * ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
         (((reflectionSineCorner U Z).singularValue p : ℝ))) ≤
@@ -1107,8 +1111,9 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan
     (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
-      (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
+    (hstrong : Tendsto
+      (fun i => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (cutoffCorner (Ω i))) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (ContinuousLinearMap.id ℂ U))))
     (k : ℕ) :
     (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
       2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
@@ -1170,8 +1175,9 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient
     (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
-      (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
+    (hstrong : Tendsto
+      (fun i => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (cutoffCorner (Ω i))) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (ContinuousLinearMap.id ℂ U))))
     (k : ℕ) :
     (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
       2 * (B.kyFanGauge k : ℝ) := by
@@ -1206,8 +1212,9 @@ theorem mem_and_gauge_le_reflectionTangentCorner
     (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
-      (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
+    (hstrong : Tendsto
+      (fun i => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (cutoffCorner (Ω i))) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (ContinuousLinearMap.id ℂ U))))
     (hBmem : N.Mem (reflectionResidualCorner U B)) :
     N.Mem ((((b - a) / 2 : ℝ) : ℂ) • reflectionTangentCorner U Z) ∧
       N.gaugeReal ((((b - a) / 2 : ℝ) : ℂ) • reflectionTangentCorner U Z) ≤

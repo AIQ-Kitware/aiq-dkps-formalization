@@ -17,6 +17,9 @@ public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+open scoped Topology
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -314,9 +317,10 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
   have hS1 : ‖U.offDiagBlock Z‖ < 1 := lt_of_le_of_lt hSle hg1
   have hCC : IsUnit (U.diagBlock Z * U.diagBlock Z) :=
     isUnit_diagonalPart_sq_of_forall_mem hZsa hZ2 hg0 hg1 hgU
-  have hstrong : StronglyTendsto
-      (fun n : ℕ => cutoffCorner (TauCeti.spectralCutoffSeq hA c n)) atTop
-      (ContinuousLinearMap.id ℂ U) := by
+  have hstrong : Tendsto
+    (fun n : ℕ => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U
+      (cutoffCorner (TauCeti.spectralCutoffSeq hA c n))) atTop
+    (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) U U (ContinuousLinearMap.id ℂ U))) := by
     simpa [U] using stronglyTendsto_cutoffCorner_spectralCutoffSeq hA c
   have hcorner : ∀ k : ℕ,
       (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤

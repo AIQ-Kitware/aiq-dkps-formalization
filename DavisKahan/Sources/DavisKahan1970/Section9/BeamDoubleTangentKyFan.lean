@@ -55,6 +55,9 @@ do.
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+open scoped Topology
+
 open scoped InnerProductSpace
 
 namespace TauCeti
@@ -131,8 +134,11 @@ theorem cutoffCorner_beamTrialCutoff (ε : ℝ) :
 
 /-- The constant cutoff family converges strongly to the identity. -/
 theorem stronglyTendsto_cutoffCorner_beamTrialCutoff (ε : ℝ) :
-    StronglyTendsto (fun _ : ℕ => DavisKahan1970.cutoffCorner (beamTrialCutoff ε))
-      Filter.atTop (ContinuousLinearMap.id ℂ beamTrial) := by
+    Filter.Tendsto
+      (fun _ : ℕ => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) beamTrial beamTrial
+        (DavisKahan1970.cutoffCorner (beamTrialCutoff ε))) Filter.atTop
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) beamTrial beamTrial (ContinuousLinearMap.id ℂ beamTrial))) := by
+  apply PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mpr
   intro z
   simp only [cutoffCorner_beamTrialCutoff]
   exact tendsto_const_nhds

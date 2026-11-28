@@ -53,15 +53,9 @@ variable {H : Type v}
 theorem spectraSpectralCutoff_isOrthogonalProjection
     (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) (τ : ℝ) :
-    spectraSpectralCutoff A hA τ ∘L spectraSpectralCutoff A hA τ =
-        spectraSpectralCutoff A hA τ ∧
-      (spectraSpectralCutoff A hA τ).IsSymmetric := by
-  rw [spectraSpectralCutoff, selfAdjointSpectralProjection]
-  constructor
-  · exact (A.spectralPVM hA).proj_idem (Set.Icc (-τ) τ) measurableSet_Icc
-  · exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp
-      ((A.spectralPVM hA).isSelfAdjoint_proj
-        (Set.Icc (-τ) τ) measurableSet_Icc)
+    (spectraSpectralCutoff A hA τ).toLinearMap.IsSymmetricProjection :=
+  ContinuousLinearMap.isStarProjection_iff_isSymmetricProjection.mp
+    ((A.spectralPVM hA).isStarProjection_proj (Set.Icc (-τ) τ) measurableSet_Icc)
 
 /-- Every spectral-cutoff vector lies in the closed-operator domain. -/
 theorem spectraSpectralCutoff_range_le_domain
@@ -101,7 +95,8 @@ theorem spectraSpectralCutoff_tendsto_identity
   isOrthogonalProjection := spectraSpectralCutoff_isOrthogonalProjection A hA
   range_le_domain := spectraSpectralCutoff_range_le_domain A hA
   commutes_on_domain := spectraSpectralCutoff_commutes_on_domain A hA
-  tendsto_identity := spectraSpectralCutoff_tendsto_identity A hA
+  tendsto_identity := PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mpr
+    (spectraSpectralCutoff_tendsto_identity A hA)
 
 end ExactSinTheta
 end DavisKahan

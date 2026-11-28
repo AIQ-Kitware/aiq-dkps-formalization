@@ -96,14 +96,13 @@ theorem complexify_realSpectralCutoff
 /-- Real spectral cutoffs are orthogonal projections. -/
 theorem realSpectralCutoff_isOrthogonalProjection
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (τ : ℝ) :
-    realSpectralCutoff A hA τ ∘L realSpectralCutoff A hA τ =
-        realSpectralCutoff A hA τ ∧
-      (realSpectralCutoff A hA τ).IsSymmetric := by
-  constructor
-  · exact realSelfAdjointSpectralProjection_idem A hA (Set.Icc (-τ) τ) measurableSet_Icc
-  · exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp
+    (realSpectralCutoff A hA τ).toLinearMap.IsSymmetricProjection := by
+  have h : IsIdempotentElem (realSpectralCutoff A hA τ) :=
+    realSelfAdjointSpectralProjection_idem A hA (Set.Icc (-τ) τ) measurableSet_Icc
+  exact ⟨ContinuousLinearMap.isIdempotentElem_toLinearMap_iff.mpr h,
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       (realSelfAdjointSpectralProjection_isSelfAdjoint A hA (Set.Icc (-τ) τ)
-        measurableSet_Icc)
+        measurableSet_Icc)⟩
 
 /-- **Every real cutoff vector lies in the operator domain.**  Not only the
 image of the domain: the band `[-τ, τ]` is bounded, so the whole range of the
@@ -159,7 +158,8 @@ noncomputable def realSpectraSpectralCutoffInterface
   isOrthogonalProjection := realSpectralCutoff_isOrthogonalProjection A hA
   range_le_domain := realSpectralCutoff_range_le_domain A hA
   commutes_on_domain := realSpectralCutoff_commutes_on_domain A hA
-  tendsto_identity := realSpectralCutoff_tendsto_identity A hA
+  tendsto_identity := PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mpr
+    (realSpectralCutoff_tendsto_identity A hA)
 
 /-- The interface's cutoff family is the real spectral cutoff. -/
 @[simp] theorem realSpectraSpectralCutoffInterface_cutoff

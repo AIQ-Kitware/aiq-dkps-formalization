@@ -1,5 +1,37 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 28 strong operator cutoffs and projection geometry
+
+The approximation-number cutoffs use Mathlib's pointwise operator
+topology and `LinearMap.IsSymmetricProjection`. The norm bound
+comes from the orthogonal projection onto the operator's range.
+The local `StronglyTendsto`, `IsOrthogonalProjectionMap` and its
+two norm proofs retire. This preserves the result for arbitrary
+filters and for incomplete spaces supplied with the min–max
+localization hypothesis. The Sylvester cutoff interface and the
+real and complex paper endpoints use the same representations.
+[Mathlib pointwise topology](https://github.com/leanprover-community/mathlib4/blob/31ce06eaadf4a200c0e1407c5f10953cf606b8f8/Mathlib/Topology/Algebra/Module/Spaces/PointwiseConvergenceCLM.lean) ·
+[Mathlib range-projection API](https://github.com/leanprover-community/mathlib4/blob/31ce06eaadf4a200c0e1407c5f10953cf606b8f8/Mathlib/Analysis/InnerProductSpace/Projection/Basic.lean)
+
+TauCeti's symmetric-projection Pythagoras theorem now supplies
+the squared-norm identity for both filled-truncation proofs.
+That theorem landed in #46201 for the ShortGRH roadmap. The
+integration credits grh-lean for the broader development and
+Mathlib for the subspace form of Pythagoras. The complex spectral
+cutoff and the finite-basis cutoff use the star-projection facts
+from the projection-valued measure integration #17527
+(SA-B14–B23) and coordinate-projection integration #955,
+respectively. DKPS proof descent for these facts is unverified.
+[#46201 integration](https://github.com/TauCetiProject/TauCeti/commit/c690a1f9afa9f2f0f592d227b28af8329ec56017) ·
+[#17527 integration](https://github.com/TauCetiProject/TauCeti/commit/fde7c341f8e9b59c5083a87835b330d15581ad8f) ·
+[#955 integration](https://github.com/TauCetiProject/TauCeti/commit/3e24855a4c3798ddef16cfb39ab90ff2fe18247c)
+
+The focused build (10,387 jobs), default build (22,814 jobs), and
+Challenge with the semantic-surface audit (22,524 jobs) passed
+without warnings on TauCeti `007b3a1150`. All 1,569 source-census
+references resolved against `DavisKahan.All`, and all 17 available
+Davis–Kahan comparator signatures matched.
+
 ## November 28 pointwise singular-value comparison and min–max thresholds
 
 The Section 8 form-order comparison now uses

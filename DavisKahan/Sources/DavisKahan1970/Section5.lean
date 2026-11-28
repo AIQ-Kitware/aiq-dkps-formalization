@@ -25,6 +25,8 @@ as one of its two halves.
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+
 namespace TauCeti
 namespace DavisKahan1970
 
@@ -63,8 +65,10 @@ theorem lemma5_1_complex
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     {ι : Type w} {P : ι → E →L[ℂ] E} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E E ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E E (ContinuousLinearMap.id ℂ E))))
     (n : ℕ) (K : E →L[ℂ] F) :
     Tendsto (fun i => ((K ∘L P i).singularValue n : ℝ))
       l (𝓝 ((K.singularValue n : ℝ))) :=
@@ -78,8 +82,10 @@ theorem lemma5_1_real
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     {ι : Type w} {P : ι → E →L[ℝ] E} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ E))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) E E ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) E E (ContinuousLinearMap.id ℝ E))))
     (n : ℕ) (K : E →L[ℝ] F) :
     Tendsto (fun i => ((K ∘L P i).singularValue n : ℝ))
       l (𝓝 ((K.singularValue n : ℝ))) :=

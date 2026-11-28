@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import Mathlib.Topology.Algebra.Module.FiniteDimension
+public import Mathlib.Topology.Algebra.Module.Spaces.PointwiseConvergenceCLM
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
@@ -41,6 +42,8 @@ which is a different library and is not what a reader of this module wants.
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+
 namespace TauCeti
 namespace ApproximationNumber
 
@@ -54,49 +57,6 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} {F : Type vF}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-
-/-- Strong operator convergence expressed pointwise. -/
-@[expose]
-def StronglyTendsto {ι : Type w} (T : ι → E →L[𝕜] E)
-    (l : Filter ι) (S : E →L[𝕜] E) : Prop :=
-  ∀ x, Tendsto (fun i => T i x) l (𝓝 (S x))
-
-/-- Orthogonal projection predicate for bounded operators. -/
-@[expose]
-def IsOrthogonalProjectionMap (P : E →L[𝕜] E) : Prop :=
-  P ∘L P = P ∧ P.IsSymmetric
-
-omit [CompleteSpace E] in
-/-- An orthogonal projection does not increase vector norms. -/
-theorem IsOrthogonalProjectionMap.norm_apply_le
-    {P : E →L[𝕜] E} (hP : IsOrthogonalProjectionMap P) (x : E) :
-    ‖P x‖ ≤ ‖x‖ := by
-  have hPP : P (P x) = P x := by
-    have h := congrArg (fun T : E →L[𝕜] E => T x) hP.1
-    simpa only [ContinuousLinearMap.comp_apply] using h
-  have hPQ : P (x - P x) = 0 := by
-    rw [map_sub, hPP, sub_self]
-  have horth : ⟪P x, x - P x⟫_𝕜 = 0 := by
-    calc
-      ⟪P x, x - P x⟫_𝕜 = ⟪x, P (x - P x)⟫_𝕜 :=
-        hP.2 x (x - P x)
-      _ = 0 := by simp only [hPQ, inner_zero_right]
-  have hpyth : ‖P x‖ ^ 2 + ‖x - P x‖ ^ 2 = ‖x‖ ^ 2 := by
-    have h := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero
-      (P x) (x - P x) horth
-    rw [show P x + (x - P x) = x by abel] at h
-    rw [sq, sq, sq]
-    linarith
-  nlinarith [sq_nonneg ‖x - P x‖, norm_nonneg (P x), norm_nonneg x]
-
-omit [CompleteSpace E] in
-/-- An orthogonal projection has operator norm at most one. -/
-theorem IsOrthogonalProjectionMap.norm_le_one
-    {P : E →L[𝕜] E} (hP : IsOrthogonalProjectionMap P) :
-    ‖P‖ ≤ 1 := by
-  apply P.opNorm_le_bound zero_le_one
-  intro x
-  simpa only [one_mul] using hP.norm_apply_le x
 
 /-- **A finite-dimensional operator norm is controlled by the values on a basis.**  With
 `e` the coordinate isomorphism of `b`, `‖T‖ ≤ ‖e‖ * ∑ⱼ ‖T (b j)‖`.
@@ -167,16 +127,22 @@ Extracted from the convergence theorem below, where it was the `hUpper` half: it
 statement about one projection with no net in sight, and it is the half a reader can check
 without reading the localization argument. -/
 theorem approximationSingularValue_comp_le_of_isOrthogonalProjection
-    {P : E₀ →L[𝕜] E₀} (hP : IsOrthogonalProjectionMap P) (n : ℕ) (K : E₀ →L[𝕜] F₀) :
+    {P : E₀ →L[𝕜] E₀} (hP : P.toLinearMap.IsSymmetricProjection) (n : ℕ) (K : E₀ →L[𝕜] F₀) :
     ((K ∘L P).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) := by
-  have hnormNN : ‖P‖ ≤ (1 : ℝ) := by exact_mod_cast hP.norm_le_one
-  have hNN : ((K ∘L P).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) := by
-    calc ((K ∘L P).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) * ‖P‖ :=
-          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right K P n))
-      _ ≤ (K.singularValue n : ℝ) * 1 :=
-          mul_le_mul_of_nonneg_left hnormNN ((K.singularValue n).coe_nonneg)
-      _ = (K.singularValue n : ℝ) := by rw [mul_one]
-  exact_mod_cast hNN
+  obtain ⟨_, hP⟩ := LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range.mp hP
+  let V := LinearMap.range P.toLinearMap
+  have hproj : P = V.starProjection := by
+    ext x
+    exact congrArg (fun Q : E₀ →ₗ[𝕜] E₀ => Q x) hP
+  have hnorm : ‖P‖ ≤ 1 := by
+    rw [hproj]
+    exact V.starProjection_norm_le
+  calc
+    ((K ∘L P).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) * ‖P‖ :=
+      NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right K P n)
+    _ ≤ (K.singularValue n : ℝ) * 1 :=
+      mul_le_mul_of_nonneg_left hnorm ((K.singularValue n).coe_nonneg)
+    _ = (K.singularValue n : ℝ) := mul_one _
 
 omit [CompleteSpace F₀] [CompleteSpace E₀] in
 /-- **Cutoff convergence.**  Along a net of orthogonal projections converging strongly to the
@@ -190,8 +156,10 @@ supplied independently; complete sources obtain it from the accepted theorem. -/
 theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
     (hlb : TauCeti.HasMinMaxLowerBound 𝕜 E₀ F₀)
     {ι : Type w} {P : ι → E₀ →L[𝕜] E₀} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E₀))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ (ContinuousLinearMap.id 𝕜 E₀))))
     (n : ℕ) (K : E₀ →L[𝕜] F₀) :
     Tendsto
       (fun i => ((K ∘L P i).singularValue n : ℝ))
@@ -224,7 +192,8 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_of_minMax
         intro x
         have hKP : Tendsto (fun i => K (P i (V.subtypeL x))) l
             (𝓝 (K (V.subtypeL x))) :=
-          (K.continuous.tendsto (V.subtypeL x)).comp (hP (V.subtypeL x))
+          (K.continuous.tendsto (V.subtypeL x)).comp
+            (PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mp hP (V.subtypeL x))
         have hconst : Tendsto (fun _ : ι => K (V.subtypeL x)) l
             (𝓝 (K (V.subtypeL x))) := tendsto_const_nhds
         change Tendsto
@@ -271,8 +240,10 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
     [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
     {ι : Type w} {P : ι → E₀ →L[ℂ] E₀} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₀))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E₀ E₀ ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E₀ E₀ (ContinuousLinearMap.id ℂ E₀))))
     (n : ℕ) (K : E₀ →L[ℂ] F₀) :
     Tendsto
       (fun i => ((K ∘L P i).singularValue n : ℝ))
@@ -294,8 +265,10 @@ termwise statement summed over `Finset.range k`. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
     (hlb : TauCeti.HasMinMaxLowerBound 𝕜 E₀ F₀)
     {ι : Type w} {P : ι → E₀ →L[𝕜] E₀} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E₀))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM 𝕜 (RingHom.id 𝕜) E₀ E₀ (ContinuousLinearMap.id 𝕜 E₀))))
     (k : ℕ) (K : E₀ →L[𝕜] F₀) :
     Tendsto
       (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
@@ -312,8 +285,10 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_complex
     [NormedAddCommGroup E₁] [InnerProductSpace ℂ E₁] [CompleteSpace E₁]
     [NormedAddCommGroup F₁] [InnerProductSpace ℂ F₁] [CompleteSpace F₁]
     {ι : Type w} {P : ι → E₁ →L[ℂ] E₁} {l : Filter ι}
-    (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
-    (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₁))
+    (hPproj : ∀ i, (P i).toLinearMap.IsSymmetricProjection)
+    (hP : Tendsto
+      (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E₁ E₁ ∘ P) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) E₁ E₁ (ContinuousLinearMap.id ℂ E₁))))
     (k : ℕ) (K : E₁ →L[ℂ] F₁) :
     Tendsto
       (fun i => ((K ∘L P i).kyFanGauge k : ℝ))

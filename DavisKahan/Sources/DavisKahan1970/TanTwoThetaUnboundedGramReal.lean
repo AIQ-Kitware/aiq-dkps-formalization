@@ -14,6 +14,10 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
 
 public section
 
+open ContinuousLinearMap (toPointwiseConvergenceCLM)
+open scoped Topology
+open Filter
+
 open TauCeti.DavisKahan.Angle
 
 
@@ -343,13 +347,19 @@ coordinates converge separately and `‖z‖ ≤ ‖re z‖ + ‖im z‖`. -/
 theorem stronglyTendsto_complexify {ι : Type*} {l : Filter ι}
     {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     {T : ι → F →L[ℝ] F} {S : F →L[ℝ] F}
-    (h : TauCeti.ApproximationNumber.StronglyTendsto T l S) :
-    TauCeti.ApproximationNumber.StronglyTendsto (fun i => complexify (T i)) l
-      (complexify S) := by
+    (h : Tendsto
+      (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) F F ∘ T) l
+      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) F F S))) :
+    Tendsto (fun i => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) _ _ (complexify (T i))) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) _ _ (complexify S))) := by
+  apply PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mpr
   intro u
+  change Tendsto (fun i => complexify (T i) u) l (𝓝 (complexify S u))
   rw [tendsto_iff_norm_sub_tendsto_zero]
-  have hre := h (re u)
-  have him := h (im u)
+  have hv (x : F) : Tendsto (fun i => T i x) l (𝓝 (S x)) :=
+    PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mp h x
+  have hre := hv (re u)
+  have him := hv (im u)
   rw [tendsto_iff_norm_sub_tendsto_zero] at hre him
   refine squeeze_zero (fun i => norm_nonneg _) (fun i => ?_)
     (by simpa using hre.add him)
@@ -584,8 +594,9 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
     (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
-      (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℝ U))
+    (hstrong : Tendsto
+      (fun i => toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) U U (cutoffCorner (Ω i))) l
+      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) U U (ContinuousLinearMap.id ℝ U))))
     (k : ℕ) :
     (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
       2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
@@ -657,12 +668,17 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
   have hS1' : ‖(complexifySubmodule U).offDiagBlock (complexify Z)‖ < 1 := by
     rw [offDiagonalPart_complexifySubmodule, norm_complexify]
     exact hS1
-  have hstrong' : TauCeti.ApproximationNumber.StronglyTendsto
-      (fun i => cutoffCorner (complexifyBoundedCutoff (Ω i))) l
-      (ContinuousLinearMap.id ℂ (complexifySubmodule U)) := by
+  have hstrong' : Tendsto
+      (fun i => toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) _ _
+        (cutoffCorner (complexifyBoundedCutoff (Ω i)))) l
+      (𝓝 (toPointwiseConvergenceCLM ℂ (RingHom.id ℂ) _ _
+        (ContinuousLinearMap.id ℂ (complexifySubmodule U)))) := by
+    apply PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mpr
     intro z
-    have hbase := stronglyTendsto_complexify hstrong ((complexifySubmoduleEquiv U).symm z)
-    rw [complexify_id] at hbase
+    have hcomplexify := stronglyTendsto_complexify hstrong
+    rw [complexify_id] at hcomplexify
+    have hbase := PointwiseConvergenceCLM.tendsto_iff_forall_tendsto.mp hcomplexify
+      ((complexifySubmoduleEquiv U).symm z)
     have hcont := ((complexifySubmoduleEquiv U).continuous.continuousAt
       (x := (complexifySubmoduleEquiv U).symm z)).tendsto.comp hbase
     rw [(complexifySubmoduleEquiv U).apply_symm_apply z] at hcont
@@ -706,8 +722,9 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient_real
     (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
-      (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℝ U))
+    (hstrong : Tendsto
+      (fun i => toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) U U (cutoffCorner (Ω i))) l
+      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) U U (ContinuousLinearMap.id ℝ U))))
     (k : ℕ) :
     (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
       2 * (B.kyFanGauge k : ℝ) := by
@@ -740,8 +757,9 @@ theorem mem_and_gauge_le_reflectionTangentCorner_real
     (hab : a < b) (hS1 : ‖U.offDiagBlock Z‖ < 1)
     {ι : Type*} {l : Filter ι} [l.NeBot] {σ : ι → ℝ} (hσ : ∀ i, 0 ≤ σ i)
     (Ω : ∀ i, TauCeti.BoundedCutoff A U (σ i))
-    (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
-      (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℝ U))
+    (hstrong : Tendsto
+      (fun i => toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) U U (cutoffCorner (Ω i))) l
+      (𝓝 (toPointwiseConvergenceCLM ℝ (RingHom.id ℝ) U U (ContinuousLinearMap.id ℝ U))))
     (hBmem : N.Mem (reflectionResidualCorner U B)) :
     N.Mem (((b - a) / 2 : ℝ) • reflectionTangentCorner U Z) ∧
       N.gaugeReal (((b - a) / 2 : ℝ) • reflectionTangentCorner U Z) ≤
