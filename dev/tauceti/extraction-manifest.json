@@ -8639,6 +8639,27 @@
       "integration": "e36963f4148ed374ed24fcac1fe1953e93b69982, f4a3266bdf016c565840d069c5db06eb5352ddd1, 7d1da9ada3041f5e1e5d10884964da59fc89e5b9",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "The two native sine compressions identify the summands in the retained finite modulus decomposition, including unequal ranks. Our #20358 converts the finite and bounded moduli. Remove the proof-only complement and disjoint-support arguments. Replace the positive modulus facade with the native uniqueness theorem from independently written #16450. David Roe's #17050 says no external formalization was vendored."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.NuclearTrace",
+      "source_declarations": [
+        "TauCeti.norm_trace_le_nuclear",
+        "TauCeti.re_trace_isometry_comp_le_nuclear",
+        "TauCeti.re_trace_eq_nuclear_iff_isPositive",
+        "TauCeti.re_trace_isometry_comp_eq_nuclear_iff_isPositive"
+      ],
+      "original_source_anchor": "9739b81ff27f316734591630e3870af10611a1d6 (support), 2715ae0da031a06bdbae2383b7cb28cebf48d30e (equality), ee563cbb2 (pre-retirement)",
+      "authors_license": "Jon Crall and GPT-6, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Basic, TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Nuclear.Maximizers",
+      "final_declarations": [
+        "TauCeti.UnitarilyInvariantSeminorm.norm_trace_adjoint_comp_le_opNorm_mul_nuclear",
+        "TauCeti.UnitarilyInvariantSeminorm.re_trace_adjoint_comp_eq_nuclear_iff"
+      ],
+      "roadmap_targets": ["MathematicalStatisticsHighDimensional §1.4 (nuclear trace duality)", "SpectralSteepestDescent §1.2 (attaining contractions)"],
+      "upstream_pr": "#43341, #46215",
+      "integration": "b01b009b08f6340c9d6d0c383eb0095ce2b4f9ba, d81b59c694a9155b934108465cc1c824cf458226",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The native contraction trace bound replaces the local absolute trace theorem and supplies the unitary support inequality using the inverse isometry. The native equality criterion at the identity reduces the finite real-trace equality to positivity. Zero dimension and maps with kernel are preserved. Real and complex transport consumers keep their statements. DKPS proof descent for these integrations is unverified."
     }
   ],
   "current_consumption_pin": "007b3a1150fc0293b327e10238b5e097afc05c56"

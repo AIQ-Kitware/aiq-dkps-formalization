@@ -1,5 +1,29 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 finite nuclear trace support and equality
+
+The unitary trace support bound uses chrisflav's #43341 contraction
+trace inequality with the inverse isometry as the trace-pairing map.
+This retires the standalone proof of the absolute trace bound. The
+operator-norm estimate includes the zero-dimensional space. #43341
+landed under MathematicalStatisticsHighDimensional §1.4.
+[#43341 integration](https://github.com/TauCetiProject/TauCeti/commit/b01b009b08f6340c9d6d0c383eb0095ce2b4f9ba)
+
+The finite equality `re tr A = ‖A‖₁` now uses the maximizer criterion
+from jizhi-de-jichi's SpectralSteepestDescent §1.2 integration #46215.
+The identity contraction specializes the factorization criterion to
+`|A| = A`. Native positivity and uniqueness of the modulus give the
+equivalence with `A.IsPositive`, including a nontrivial kernel. The
+real and complex optimizer arguments retain their original statements.
+DKPS proof descent for #43341 and #46215 is unverified.
+[#46215 integration](https://github.com/TauCetiProject/TauCeti/commit/d81b59c694a9155b934108465cc1c824cf458226)
+
+The focused build (9,689 jobs), default build (22,814 jobs), and
+Challenge with the result semantic-surface audit (22,524 jobs)
+passed without warnings at TauCeti `007b3a1150`. All 1,572
+source-census references resolved and all 17 available comparator
+signatures matched.
+
 ## November 27 projector trace-norm and modulus trace
 
 The projector-difference modulus now splits through
